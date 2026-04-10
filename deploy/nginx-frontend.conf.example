@@ -1,0 +1,24 @@
+# Example Nginx server block for the Angular SPA (static files from dist/frontend/browser).
+# Point root to the folder produced by: cd frontend && npm run build
+
+server {
+    listen 80;
+    server_name events.example.com;
+    root /var/www/volunteer-events/frontend/browser;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Optional same-origin API (set Angular production apiUrl to "/api"):
+    # location /api/ {
+    #     proxy_pass https://api.events.example.com;
+    #     proxy_set_header Host $host;
+    #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    # }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+}

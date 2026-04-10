@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+
+# Never commit local env or keys (subprojects also define their own rules)
+**/.env
+**/.env.backup
+**/.env.production
+!**/.env.example

@@ -1,0 +1,22 @@
+# DigitalOcean App Platform – static site for the Angular build.
+# Build: npm ci && npm run build
+# Output directory: dist/frontend/browser (Angular application builder)
+#
+# Copy to your App spec and set env / domains as needed.
+
+name: volunteer-events-frontend
+region: nyc
+
+static_sites:
+  - name: web
+    github:
+      repo: your-org/volunteer-events-platform
+      branch: main
+      deploy_on_push: true
+    source_dir: frontend
+    build_command: npm ci && npm run build
+    output_dir: dist/frontend/browser
+    catchall_document: index.html
+    envs:
+      - key: NODE_VERSION
+        value: "22"

@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ve-surface: #f8f9fb;
+  --ve-card: #ffffff;
+  --ve-navy: #0b1221;
+  --ve-accent: #2563eb;
+  --ve-radius: 1rem;
+  --ve-motion-duration: 280ms;
+  --ve-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-[var(--ve-surface)] font-sans text-brand-900 antialiased;
+  }
+
+  /** Headings: slightly tighter, cleaner stacks with Cairo / Plus Jakarta */
+  h1,
+  h2,
+  h3 {
+    font-family: theme('fontFamily.display');
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  .ve-focus-ring {
+    @apply outline-none ring-2 ring-ink-900/15 ring-offset-2 ring-offset-white;
+  }
+
+  /**
+   * Hero accent: gradient emphasis — no underline (avoids wavy/rounded decoration artifacts).
+   */
+  .ve-hero-accent {
+    background-image: linear-gradient(
+      105deg,
+      theme('colors.brand.700') 0%,
+      theme('colors.brand.500') 45%,
+      rgb(14 165 233) 70%,
+      theme('colors.brand.600') 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    -webkit-text-decoration-skip: objects;
+  }
+}

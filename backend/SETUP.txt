@@ -1,0 +1,29 @@
+Volunteer Events API (Laravel 11)
+
+Prerequisites: PHP 8.2+, Composer, SQLite (default) or PostgreSQL/MySQL.
+
+1) Install dependencies
+   cd backend && composer install
+
+2) Environment
+   cp .env.example .env
+   php artisan key:generate
+
+   If migrate fails on sessions, set SESSION_DRIVER=file in .env (or run session table migration).
+
+   Set FRONTEND_URL and CORS_ALLOWED_ORIGINS to your Angular origin.
+   For local dev with defaults: FRONTEND_URL=http://localhost:4200
+
+   Tap Payments:
+   - TAP_MOCK=true uses a fake redirect URL (no network call to Tap).
+   - For real charges: TAP_MOCK=false, TAP_SECRET_KEY=sk_live_xxx, TAP_WEBHOOK_VERIFY=true
+   - APP_URL must be your public API base so Tap can POST to /api/v1/webhooks/tap
+
+3) Database
+   touch database/database.sqlite   # if using sqlite
+   php artisan migrate --seed
+
+4) Run
+   php artisan serve --host=0.0.0.0 --port=8000
+
+API base: http://localhost:8000/api/v1/...
