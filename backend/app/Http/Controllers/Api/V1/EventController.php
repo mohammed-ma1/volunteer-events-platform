@@ -29,7 +29,7 @@ class EventController extends Controller
         $events = $q
             ->orderByDesc('is_featured')
             ->orderBy('starts_at')
-            ->paginate(min((int) $request->query('per_page', 24), 100));
+            ->paginate(min((int) $request->query('per_page', 24), 200));
 
         return response()->json($events);
     }

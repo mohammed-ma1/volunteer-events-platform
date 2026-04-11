@@ -14,7 +14,14 @@ return [
         ))
     ))),
 
-    'allowed_origins_patterns' => [],
+    /**
+     * Any port — `ng serve` falls back to a random port when 4200 is busy, which breaks a fixed
+     * CORS_ALLOW_ORIGINS list (e.g. only :4200).
+     */
+    'allowed_origins_patterns' => [
+        '#^http://localhost:\d+\z#u',
+        '#^http://127\.0\.0\.1:\d+\z#u',
+    ],
 
     'allowed_headers' => ['*'],
 

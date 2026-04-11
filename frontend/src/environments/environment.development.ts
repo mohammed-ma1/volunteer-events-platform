@@ -1,7 +1,11 @@
 export const environment = {
   production: false,
-  /** Same-origin `/api` — proxied to Laravel by `proxy.conf.json` during `ng serve`. */
-  apiUrl: '/api',
+  /**
+   * Call Laravel directly so workshops load even when the dev-server proxy to :8000 fails
+   * (common `vite http proxy error` if Laravel was down or bound differently). CORS allows
+   * localhost:4200 and 127.0.0.1:4200 in `backend/config/cors.php`.
+   */
+  apiUrl: 'http://127.0.0.1:8000/api',
   /**
    * Tap redirects from the public web to FRONTEND_URL. Browsers block that when FRONTEND_URL is
    * localhost (local network access). We avoid the iframe in dev and send the whole tab to Tap;

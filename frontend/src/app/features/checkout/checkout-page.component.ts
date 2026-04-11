@@ -517,7 +517,7 @@ export class CheckoutPageComponent {
   }
 
   currencySuffix(currency: string): string {
-    return currency?.toUpperCase() === 'KWD' ? this.i18n.t('card.currencyKwd') : currency;
+    return this.i18n.currencyLabel(currency);
   }
 
   removeLine(line: CartLine): void {

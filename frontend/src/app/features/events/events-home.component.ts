@@ -1,13 +1,25 @@
 import { DOCUMENT, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
+import {
+  KU_WORKSHOP_WEEK_DAY_KEYS,
+  isKuWorkshopWeekDayKey,
+  kuWorkshopWeekNoonIso,
+} from '../../core/constants/ku-workshop-week';
+import { PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
 import { PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
 import { HOME_EXPERTS, HomeExpert } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
-import { DUMMY_HOME_EVENTS, HomeListEvent, volunteerToHome, WorkshopCategory } from '../../core/data/dummy-events';
+import {
+  DUMMY_HOME_EVENTS,
+  HomeListEvent,
+  volunteerToHome,
+  WorkshopFilterCategory,
+  eventMatchesWorkshopFilter,
+} from '../../core/data/dummy-events';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { TranslationKey } from '../../core/i18n/translations';
 import { CartService } from '../../core/services/cart.service';
@@ -16,14 +28,12 @@ import { EventCardComponent } from './event-card.component';
 import { formatCardDateLong, formatTimeKuwait } from './event-card-meta';
 import { calendarDayKeyKuwait, formatDaySubLabelKuwait } from './workshop-day-filters';
 
-const CATEGORY_ORDER: WorkshopCategory[] = [
+const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'all',
-  'leadership',
+  'soft_skills',
   'digital',
   'ai',
-  'personal',
-  'cv',
-  'career',
+  'career_prep',
 ];
 
 @Component({
@@ -338,20 +348,6 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
           role="tablist"
           [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
         >
-          <button
-            type="button"
-            role="tab"
-            [attr.aria-selected]="selectedDayKey() === null"
-            (click)="onSelectDay(null)"
-            class="shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200"
-            [ngClass]="
-              selectedDayKey() === null
-                ? 'bg-[#001A33] text-white shadow-md'
-                : 'border border-ink-200 bg-white text-[#001A33] hover:bg-white'
-            "
-          >
-            <span class="block text-sm font-bold">{{ i18n.t('workshops.allDates') }}</span>
-          </button>
           @for (b of workshopDayBuckets(); track b.key; let di = $index) {
             <button
               type="button"
@@ -440,15 +436,6 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
         </button>
       }
 
-      @if (!loading() && lastPage() > 1 && page() < lastPage() && !usingDummy()) {
-        <button
-          type="button"
-          class="ve-focus-ring mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-ink-200/80 bg-ink-100/80 py-3 text-sm font-semibold text-[#001A33] transition hover:bg-ink-200/90"
-          (click)="loadMore()"
-        >
-          {{ i18n.t('workshops.loadMore') }}
-        </button>
-      }
     </section>
 
     <section
@@ -677,9 +664,12 @@ export class EventsHomeComponent implements OnDestroy {
   readonly cart = inject(CartService);
 
   /** Initial grid size before "عرض جميع الورش". */
-  readonly WORKSHOPS_PREVIEW = 8;
+  readonly WORKSHOPS_PREVIEW = 10;
 
-  readonly EXPERT_SIDEBAR_PREVIEW = 5;
+  /** Load full workshop list in one request (backend caps per_page; must cover all seeded events). */
+  private readonly EVENTS_HOME_PER_PAGE = 200;
+
+  readonly EXPERT_SIDEBAR_PREVIEW = 10;
 
   /** Hero visual (LeadConnector-optimized WebP, user-provided). */
   readonly heroVisualUrl = PROMO_HERO_IMAGE_URL;
@@ -693,8 +683,8 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly CATEGORY_ORDER = CATEGORY_ORDER;
 
-  readonly selectedCategory = signal<WorkshopCategory>('all');
-  /** Calendar day key (Kuwait) or null = all days. */
+  readonly selectedCategory = signal<WorkshopFilterCategory>('all');
+  /** Calendar day key (Kuwait); null = all days in the current list (for non–KU-week multi-day filters). */
   readonly selectedDayKey = signal<string | null>(null);
   readonly showAllWorkshops = signal(false);
   readonly homeEvents = signal<HomeListEvent[]>([]);
@@ -710,12 +700,26 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly categoryFilteredEvents = computed(() => {
     const cat = this.selectedCategory();
-    return this.homeEvents().filter((ev) => cat === 'all' || ev.category === cat);
+    return this.homeEvents().filter(
+      (ev) =>
+        ev.slug !== PACKAGE_100_EVENT_SLUG && eventMatchesWorkshopFilter(cat, ev.category),
+    );
   });
 
   readonly workshopDayBuckets = computed(() => {
     const list = this.categoryFilteredEvents();
     const loc = this.i18n.locale() === 'ar' ? 'ar' : 'en';
+    const touchesKuWeek = list.some((ev) => isKuWorkshopWeekDayKey(calendarDayKeyKuwait(ev.starts_at)));
+    if (touchesKuWeek) {
+      return KU_WORKSHOP_WEEK_DAY_KEYS.map((key) => {
+        const iso = kuWorkshopWeekNoonIso(key);
+        return {
+          key,
+          sort: new Date(iso).getTime(),
+          sub: formatDaySubLabelKuwait(iso, loc),
+        };
+      });
+    }
     const byKey = new Map<string, { key: string; sort: number; sub: string }>();
     for (const ev of list) {
       const key = calendarDayKeyKuwait(ev.starts_at);
@@ -730,8 +734,17 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly filteredEvents = computed(() => {
     let list = this.categoryFilteredEvents();
+    const touchesKu = list.some((ev) =>
+      isKuWorkshopWeekDayKey(calendarDayKeyKuwait(ev.starts_at)),
+    );
     const dk = this.selectedDayKey();
-    if (dk) {
+    if (touchesKu) {
+      const set = new Set(KU_WORKSHOP_WEEK_DAY_KEYS);
+      list = list.filter((ev) => set.has(calendarDayKeyKuwait(ev.starts_at)));
+      if (dk) {
+        list = list.filter((ev) => calendarDayKeyKuwait(ev.starts_at) === dk);
+      }
+    } else if (dk) {
       list = list.filter((ev) => calendarDayKeyKuwait(ev.starts_at) === dk);
     }
     return list;
@@ -778,13 +791,12 @@ export class EventsHomeComponent implements OnDestroy {
     return list[0] ?? HOME_EXPERTS[0];
   });
 
+  /** Only workshops from the live list (`ms-w-*` from the schedule). No dummy placeholders. */
   readonly expertWorkshopsForSelected = computed(() => {
     const slugs = new Set(this.selectedExpert().workshopSlugs);
-    const fromHome = this.homeEvents().filter((e) => slugs.has(e.slug));
-    if (fromHome.length > 0) {
-      return fromHome;
-    }
-    return DUMMY_HOME_EVENTS.filter((e) => slugs.has(e.slug));
+    return this.homeEvents()
+      .filter((e) => slugs.has(e.slug))
+      .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime());
   });
 
   readonly features: { iconId: 'cap' | 'book' | 'users' | 'star'; titleKey: TranslationKey; descKey: TranslationKey }[] =
@@ -807,7 +819,7 @@ export class EventsHomeComponent implements OnDestroy {
   ];
 
   constructor() {
-    this.fetchPage(1, true);
+    this.fetchPage(1);
 
     this.search$
       .pipe(
@@ -820,7 +832,7 @@ export class EventsHomeComponent implements OnDestroy {
           }
           this.loading.set(true);
           this.error.set(null);
-          return this.eventsApi.list(1, { q: q || undefined, perPage: 24 });
+          return this.eventsApi.list(1, { q: q || undefined, perPage: this.EVENTS_HOME_PER_PAGE });
         }),
         takeUntil(this.destroy$),
       )
@@ -848,7 +860,7 @@ export class EventsHomeComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  categoryLabel(cat: WorkshopCategory): string {
+  categoryLabel(cat: WorkshopFilterCategory): string {
     return this.i18n.t(`cat.${cat}` as TranslationKey);
   }
 
@@ -894,14 +906,18 @@ export class EventsHomeComponent implements OnDestroy {
     return `${formatCardDateLong(ev.starts_at, loc)} · ${formatTimeKuwait(ev.starts_at, loc)}`;
   }
 
-  onSelectCategory(cat: WorkshopCategory): void {
+  onSelectCategory(cat: WorkshopFilterCategory): void {
     this.showAllWorkshops.set(false);
     this.selectedDayKey.set(null);
     this.selectedCategory.set(cat);
   }
 
-  onSelectDay(dayKey: string | null): void {
+  onSelectDay(dayKey: string): void {
     this.showAllWorkshops.set(false);
+    if (this.selectedDayKey() === dayKey) {
+      this.selectedDayKey.set(null);
+      return;
+    }
     this.selectedDayKey.set(dayKey);
   }
 
@@ -953,13 +969,6 @@ export class EventsHomeComponent implements OnDestroy {
     );
   }
 
-  loadMore(): void {
-    if (this.page() >= this.lastPage() || this.loading() || this.usingDummy()) {
-      return;
-    }
-    this.fetchPage(this.page() + 1, false);
-  }
-
   onAdd(event: HomeListEvent): void {
     if (event.id < 0) {
       this.demoHint.set(true);
@@ -971,32 +980,26 @@ export class EventsHomeComponent implements OnDestroy {
     });
   }
 
-  private fetchPage(target: number, replace: boolean): void {
+  private fetchPage(page: number): void {
     this.loading.set(true);
     this.error.set(null);
     this.demoHint.set(false);
     this.eventsApi
-      .list(target, { q: this.searchText.trim() || undefined, perPage: 24 })
+      .list(page, { q: this.searchText.trim() || undefined, perPage: this.EVENTS_HOME_PER_PAGE })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
           const mapped = res.data.map(volunteerToHome);
-          if (replace) {
-            this.showAllWorkshops.set(false);
-            this.selectedDayKey.set(null);
-            if (mapped.length === 0) {
-              this.usingDummy.set(true);
-              this.homeEvents.set([...DUMMY_HOME_EVENTS]);
-              this.page.set(1);
-              this.lastPage.set(1);
-            } else {
-              this.usingDummy.set(false);
-              this.homeEvents.set(mapped);
-              this.page.set(res.current_page);
-              this.lastPage.set(res.last_page);
-            }
+          this.showAllWorkshops.set(false);
+          this.selectedDayKey.set(null);
+          if (mapped.length === 0) {
+            this.usingDummy.set(true);
+            this.homeEvents.set([...DUMMY_HOME_EVENTS]);
+            this.page.set(1);
+            this.lastPage.set(1);
           } else {
-            this.homeEvents.update((cur) => [...cur, ...mapped]);
+            this.usingDummy.set(false);
+            this.homeEvents.set(mapped);
             this.page.set(res.current_page);
             this.lastPage.set(res.last_page);
           }

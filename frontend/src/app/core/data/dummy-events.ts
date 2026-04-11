@@ -1,13 +1,41 @@
 import { VolunteerEvent } from '../models/api.types';
 
+/** Inferred / stored on each event (keywords). */
 export type WorkshopCategory =
-  | 'all'
   | 'leadership'
   | 'digital'
   | 'ai'
   | 'personal'
   | 'cv'
   | 'career';
+
+/** Filter chips on the workshops grid (consolidated labels). */
+export type WorkshopFilterCategory = 'all' | 'soft_skills' | 'digital' | 'ai' | 'career_prep';
+
+export function workshopCategoryToFilterGroup(
+  c: WorkshopCategory,
+): Exclude<WorkshopFilterCategory, 'all'> {
+  if (c === 'leadership' || c === 'personal') {
+    return 'soft_skills';
+  }
+  if (c === 'cv' || c === 'career') {
+    return 'career_prep';
+  }
+  if (c === 'digital') {
+    return 'digital';
+  }
+  return 'ai';
+}
+
+export function eventMatchesWorkshopFilter(
+  filter: WorkshopFilterCategory,
+  c: WorkshopCategory,
+): boolean {
+  if (filter === 'all') {
+    return true;
+  }
+  return workshopCategoryToFilterGroup(c) === filter;
+}
 
 export interface HomeListEvent extends VolunteerEvent {
   category: WorkshopCategory;
@@ -37,7 +65,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-05-22T14:00:00.000Z',
     location: 'عبر الإنترنت — زوم',
     location_en: 'Online via Zoom',
-    price: 10,
+    price: 5,
     currency: 'KWD',
     capacity: 80,
     is_featured: true,
@@ -59,7 +87,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-06-04T18:00:00.000Z',
     location: 'حرم الشدادية — مختبر الابتكار',
     location_en: 'Shadadiyah Campus — Innovation Lab',
-    price: 20,
+    price: 5,
     currency: 'KWD',
     capacity: 120,
     is_featured: true,
@@ -80,7 +108,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-05-18T19:00:00.000Z',
     location: 'القاعة الرئيسية',
     location_en: 'Main Auditorium',
-    price: 0,
+    price: 5,
     currency: 'KWD',
     capacity: 300,
     is_featured: true,
@@ -101,7 +129,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-05-30T15:00:00.000Z',
     location: 'كلية إدارة الأعمال — قاعة 204',
     location_en: 'College of Business — Room 204',
-    price: 15,
+    price: 5,
     currency: 'KWD',
     capacity: 40,
     is_featured: false,
@@ -122,7 +150,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-06-10T17:00:00.000Z',
     location: 'مركز القيادة',
     location_en: 'Leadership Center',
-    price: 12,
+    price: 5,
     currency: 'KWD',
     capacity: 50,
     is_featured: false,
@@ -143,7 +171,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     ends_at: '2026-06-01T13:00:00.000Z',
     location: 'مكتب الخدمات المهنية',
     location_en: 'Career Services Office',
-    price: 8,
+    price: 5,
     currency: 'KWD',
     capacity: 30,
     is_featured: false,

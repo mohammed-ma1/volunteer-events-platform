@@ -53,13 +53,15 @@ import { CheckoutService } from '../../core/services/checkout.service';
           >
             <p class="text-xs font-medium uppercase tracking-wide text-ink-500">{{ i18n.t('complete.total') }}</p>
             <p class="mt-1 text-2xl font-bold text-brand-900">
-              {{ o.total | number: '1.2-3' }} {{ o.currency }}
+              {{ o.total | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}
             </p>
             <ul class="mt-4 space-y-2">
               @for (line of o.items; track line.event_title) {
                 <li class="flex justify-between gap-3">
                   <span class="text-brand-900">{{ line.event_title }} × {{ line.quantity }}</span>
-                  <span class="text-ink-500">{{ line.unit_price | number: '1.2-3' }}</span>
+                  <span class="text-ink-500"
+                    >{{ line.unit_price | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}</span
+                  >
                 </li>
               }
             </ul>

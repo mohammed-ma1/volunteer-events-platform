@@ -1,3 +1,3 @@
-/** Shared hero image for promo banner, modal, and workshops bundle card. */
+/** Shared hero image for promo banner, modal, and workshops bundle card (no baked-in pricing text). */
 export const PROMO_HERO_IMAGE_URL =
-  'https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YAuEX9ihHtdKDKEvbw4a/media/69d7a9d69bcdf086d1d56cdd.webp';
+  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80';

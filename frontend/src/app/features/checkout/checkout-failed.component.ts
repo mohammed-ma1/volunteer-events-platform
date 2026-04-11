@@ -34,7 +34,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
           <p class="mt-1 font-mono text-xs text-brand-900">{{ o.uuid }}</p>
           <p class="mt-3 text-xs font-medium uppercase tracking-wide text-ink-500">{{ i18n.t('complete.total') }}</p>
           <p class="mt-1 text-lg font-semibold text-brand-900">
-            {{ o.total | number: '1.2-3' }} {{ o.currency }}
+            {{ o.total | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}
           </p>
         </div>
       }

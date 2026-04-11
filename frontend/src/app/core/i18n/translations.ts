@@ -1,3 +1,5 @@
+import { WORKSHOP_PROMO_BUNDLE as PROMO } from '../constants/workshop-promo-bundle';
+
 export type Locale = 'ar' | 'en';
 
 export type TranslationKey =
@@ -74,7 +76,6 @@ export type TranslationKey =
   | 'workshops.loading'
   | 'workshops.demoHint'
   | 'workshops.empty'
-  | 'workshops.allDates'
   | 'workshops.dayWord'
   | 'workshops.showMore'
   | 'workshops.promoTitle'
@@ -94,12 +95,10 @@ export type TranslationKey =
   | 'workshops.filterDaysAria'
   | 'workshops.packageUnavailable'
   | 'cat.all'
-  | 'cat.leadership'
+  | 'cat.soft_skills'
   | 'cat.digital'
   | 'cat.ai'
-  | 'cat.personal'
-  | 'cat.cv'
-  | 'cat.career'
+  | 'cat.career_prep'
   | 'card.addCart'
   | 'card.added'
   | 'card.buyNow'
@@ -248,10 +247,9 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'banner.promoMain': 'عرض الـ 100 ورشة لطلاب جامعة الكويت! خصم خاص',
     'banner.promoDetails': 'اضغط للتفاصيل',
     'banner.modalCloseAria': 'إغلاق النافذة',
-    'banner.modalHeroTitle': 'باقة الـ 100 ورشة الجامعية',
-    'banner.modalImageBarText': 'عرض الـ 100 ورشة',
-    'banner.modalBody':
-      'احصل على وصول كامل وشامل لجميع الورش التدريبية الـ 100 بخصم حصري وخاص لطلاب جامعة الكويت. طوّر مهاراتك في مختلف المجالات مع نخبة من أفضل المدربين.',
+    'banner.modalHeroTitle': PROMO.ar.title,
+    'banner.modalImageBarText': PROMO.ar.modalBar,
+    'banner.modalBody': PROMO.ar.tagline,
     'hero.badge': 'منصة التطوير الطلابي لجامعة الكويت',
     'hero.title1': 'طوّر مهاراتك،',
     'hero.title2': 'وابنِ مستقبلك المهني',
@@ -311,40 +309,37 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.viewAll': 'عرض جميع الورش',
     'workshops.showLess': 'عرض أقل',
     'workshops.searchPlaceholder': 'ابحث عن ورشة…',
-    'workshops.loadError': 'تعذر تحميل الورش. تأكد من تشغيل الخادم على المنفذ 8000.',
+    'workshops.loadError':
+      'تعذر تحميل الورش. من مجلد backend شغّل Laravel على المنفذ 8000 (php artisan serve) ثم حدّث الصفحة.',
     'workshops.loadMore': 'تحميل المزيد',
     'workshops.loading': 'جاري التحميل…',
     'workshops.demoHint':
       'الورش أونلاين عبر زوم؛ يُرجى التأكد من تشغيل واجهة البرمجة (API) لإتمام الدفع والتسجيل عبر المنصة.',
     'workshops.empty': 'لا توجد ورش مطابقة.',
-    'workshops.allDates': 'كل التواريخ',
     'workshops.dayWord': 'اليوم',
     'workshops.showMore': 'عرض المزيد',
-    'workshops.promoTitle': 'باقة الـ 100 ورشة التدريبية',
-    'workshops.promoBadge': 'خصم 90٪',
-    'workshops.promoPrice': '50 د.ك',
-    'workshops.promoHint': 'عرض محدود لطلاب جامعة الكويت',
-    'workshops.promoCta': 'احصل على العرض الآن',
-    'workshops.promoLimitedBadge': 'عرض خاص لفترة محدودة',
-    'workshops.promoBody':
-      'وصول كامل لجميع الورش التدريبية الـ 100 مع شهادات معتمدة.',
-    'workshops.promoPriceWas': '500 د.ك',
-    'workshops.promoSavePct': 'توفير 90٪',
-    'workshops.promoTrainerLine': 'نخبة من المدربين',
-    'workshops.promoVenueLine': 'أونلاين عبر Zoom',
-    'workshops.promoInstallmentPrefix': 'قسطها على 4 دفعات مع ديمه',
-    'workshops.promoInstallmentAmount': '12.500 د.ك',
-    'workshops.promoInterestFree': 'بدون فوائد',
+    'workshops.promoTitle': PROMO.ar.title,
+    'workshops.promoBadge': PROMO.ar.badge,
+    'workshops.promoPrice': PROMO.ar.priceNow,
+    'workshops.promoHint': PROMO.ar.hint,
+    'workshops.promoCta': PROMO.ar.cta,
+    'workshops.promoLimitedBadge': PROMO.ar.limitedBadge,
+    'workshops.promoBody': PROMO.ar.tagline,
+    'workshops.promoPriceWas': PROMO.ar.priceWas,
+    'workshops.promoSavePct': PROMO.ar.savePct,
+    'workshops.promoTrainerLine': PROMO.ar.trainerLine,
+    'workshops.promoVenueLine': PROMO.ar.venueLine,
+    'workshops.promoInstallmentPrefix': PROMO.ar.installmentPrefix,
+    'workshops.promoInstallmentAmount': PROMO.ar.installmentAmount,
+    'workshops.promoInterestFree': PROMO.ar.interestFree,
     'workshops.filterDaysAria': 'تصفية الورش حسب اليوم',
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
-    'cat.leadership': 'القيادة والتطوير المهني',
+    'cat.soft_skills': 'المهارات الناعمة',
     'cat.digital': 'المهارات الرقمية',
     'cat.ai': 'الذكاء الاصطناعي',
-    'cat.personal': 'تطوير المهارات الشخصية',
-    'cat.cv': 'السيرة الذاتية والمقابلات',
-    'cat.career': 'التأهيل المهني',
+    'cat.career_prep': 'الاستعداد المهني',
     'card.addCart': 'أضف للسلة',
     'card.added': 'تمت الإضافة',
     'card.buyNow': 'شراء الآن',
@@ -501,10 +496,9 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'banner.promoMain': '100-workshop offer for Kuwait University students! Special discount',
     'banner.promoDetails': 'Click for details',
     'banner.modalCloseAria': 'Close dialog',
-    'banner.modalHeroTitle': 'The University 100 Workshops',
-    'banner.modalImageBarText': 'The 100-workshop offer',
-    'banner.modalBody':
-      'Get full access to all 100 training workshops with an exclusive discount for Kuwait University students. Develop your skills across multiple fields with top trainers.',
+    'banner.modalHeroTitle': PROMO.en.title,
+    'banner.modalImageBarText': PROMO.en.modalBar,
+    'banner.modalBody': PROMO.en.tagline,
     'hero.badge': 'Kuwait University student development platform',
     'hero.title1': 'Grow your skills,',
     'hero.title2': 'build your career',
@@ -565,40 +559,37 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.viewAll': 'View all workshops',
     'workshops.showLess': 'Show fewer',
     'workshops.searchPlaceholder': 'Search workshops…',
-    'workshops.loadError': 'Could not load workshops. Is the API running on port 8000?',
+    'workshops.loadError':
+      'Could not load workshops. From the backend folder run Laravel on port 8000 (`php artisan serve`), then refresh.',
     'workshops.loadMore': 'Load more',
     'workshops.loading': 'Loading…',
     'workshops.demoHint':
       'Workshops are hosted on Zoom; keep the API running to complete checkout and enrollment through this demo app.',
     'workshops.empty': 'No workshops match your filters.',
-    'workshops.allDates': 'All dates',
     'workshops.dayWord': 'Day',
     'workshops.showMore': 'Show more',
-    'workshops.promoTitle': 'The 100 training workshops bundle',
-    'workshops.promoBadge': '90% off',
-    'workshops.promoPrice': '50 K.D.',
-    'workshops.promoHint': 'Limited offer for Kuwait University students',
-    'workshops.promoCta': 'Get the offer now',
-    'workshops.promoLimitedBadge': 'Special offer for a limited time',
-    'workshops.promoBody':
-      'Full access to all 100 training workshops with certified certificates.',
-    'workshops.promoPriceWas': '500 K.D.',
-    'workshops.promoSavePct': 'Save 90%',
-    'workshops.promoTrainerLine': 'Elite trainers',
-    'workshops.promoVenueLine': 'Online via Zoom',
-    'workshops.promoInstallmentPrefix': 'Split into 4 payments with Deema',
-    'workshops.promoInstallmentAmount': '12.500 K.D.',
-    'workshops.promoInterestFree': 'Interest-free',
+    'workshops.promoTitle': PROMO.en.title,
+    'workshops.promoBadge': PROMO.en.badge,
+    'workshops.promoPrice': PROMO.en.priceNow,
+    'workshops.promoHint': PROMO.en.hint,
+    'workshops.promoCta': PROMO.en.cta,
+    'workshops.promoLimitedBadge': PROMO.en.limitedBadge,
+    'workshops.promoBody': PROMO.en.tagline,
+    'workshops.promoPriceWas': PROMO.en.priceWas,
+    'workshops.promoSavePct': PROMO.en.savePct,
+    'workshops.promoTrainerLine': PROMO.en.trainerLine,
+    'workshops.promoVenueLine': PROMO.en.venueLine,
+    'workshops.promoInstallmentPrefix': PROMO.en.installmentPrefix,
+    'workshops.promoInstallmentAmount': PROMO.en.installmentAmount,
+    'workshops.promoInterestFree': PROMO.en.interestFree,
     'workshops.filterDaysAria': 'Filter workshops by day',
     'workshops.packageUnavailable':
       'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',
-    'cat.leadership': 'Leadership & professional development',
-    'cat.digital': 'Digital skills',
-    'cat.ai': 'Artificial intelligence',
-    'cat.personal': 'Personal skills',
-    'cat.cv': 'CV & interviewing',
-    'cat.career': 'Career readiness',
+    'cat.soft_skills': 'Soft Skills',
+    'cat.digital': 'Digital Skills',
+    'cat.ai': 'Artificial Intelligence',
+    'cat.career_prep': 'Career Prep',
     'card.addCart': 'Add to cart',
     'card.added': 'Added',
     'card.buyNow': 'Buy now',

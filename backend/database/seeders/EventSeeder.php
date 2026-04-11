@@ -18,11 +18,12 @@ class EventSeeder extends Seeder
         Event::query()->delete();
 
         foreach ($pack['rows'] as [$slug, $title, $presenter, $date, $time, $featured]) {
-            $starts = Carbon::parse($date.' '.$time, 'Asia/Kuwait');
+            // Parse wall time in Kuwait, then store UTC so API ISO strings and frontend Asia/Kuwait formatting match.
+            $starts = Carbon::parse($date.' '.$time, 'Asia/Kuwait')->utc();
             $ends = (clone $starts)->addHours(2);
             $img = $images[crc32($slug) % count($images)];
             $titleEn = $titleEnBySlug[$slug] ?? $slug;
-            $summaryEn = 'Facilitator: '.$presenter.' · Online via Zoom · 5 KWD';
+            $summaryEn = 'Facilitator: '.$presenter.' · Online via Zoom · 5 K.D.';
 
             Event::query()->create([
                 'slug' => $slug,
@@ -55,11 +56,11 @@ class EventSeeder extends Seeder
             'summary_en' => 'Full bundle for Kuwait University students in partnership with Next Level.',
             'description' => 'تشمل الوصول إلى مكتبة ورش محددة وفق الشروط المعتمدة على المنصة.',
             'image_url' => $images[0] ?? null,
-            'starts_at' => Carbon::parse('2026-04-26 09:00', 'Asia/Kuwait'),
-            'ends_at' => Carbon::parse('2026-04-30 18:00', 'Asia/Kuwait'),
+            'starts_at' => Carbon::parse('2026-04-26 09:00', 'Asia/Kuwait')->utc(),
+            'ends_at' => Carbon::parse('2026-04-30 18:00', 'Asia/Kuwait')->utc(),
             'location' => 'أونلاين عبر المنصة',
             'location_en' => 'Online via platform',
-            'price' => 50,
+            'price' => 5,
             'currency' => 'KWD',
             'capacity' => 500,
             'is_featured' => true,

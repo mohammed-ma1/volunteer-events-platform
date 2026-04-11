@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Behind nginx (TLS termination): Laravel must see https / correct host for URLs and webhooks.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'cart' => \App\Http\Middleware\EnsureCartToken::class,
         ]);

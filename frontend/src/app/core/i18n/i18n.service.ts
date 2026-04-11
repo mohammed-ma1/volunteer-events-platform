@@ -58,4 +58,13 @@ export class I18nService {
   t(key: TranslationKey): string {
     return TRANSLATIONS[this.locale()][key] ?? key;
   }
+
+  /** ISO currency from API (e.g. KWD) → localized label (e.g. K.D. / د.ك). */
+  currencyLabel(currency: string | undefined | null): string {
+    const c = currency?.toUpperCase();
+    if (c === 'KWD') {
+      return this.t('card.currencyKwd');
+    }
+    return currency?.trim() ?? '';
+  }
 }

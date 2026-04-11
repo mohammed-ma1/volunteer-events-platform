@@ -1,4 +1,5 @@
-import { TranslationKey } from '../i18n/translations';
+import type { TranslationKey } from '../i18n/translations';
+import kuWorkshopSchedule from './ku_student_week_workshops_schedule_full.json';
 
 export type ExpertSocial = { href: string; aria: TranslationKey; kind: 'mail' | 'linkedin' | 'x' };
 
@@ -16,79 +17,139 @@ export interface HomeExpert {
   workshopSlugs: string[];
 }
 
-export const HOME_EXPERTS: HomeExpert[] = [
-  {
-    id: 'ahmed',
-    nameAr: 'د. أحمد عبدالله',
-    nameEn: 'Dr. Ahmed Abdullah',
-    specialtyAr: 'خبير الذكاء الاصطناعي',
-    specialtyEn: 'AI specialist',
-    bioAr:
-      'أكاديمي وباحث في تطبيقات التعلم الآلي واللغة الطبيعية، يقدّم ورشاً تطبيقية للطلاب حول الأدوات الحديثة والممارسات الأخلاقية للذكاء الاصطناعي.',
-    bioEn:
-      'Academic and researcher in applied machine learning and NLP, delivering hands-on student workshops on modern tooling and responsible AI practice.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=720&q=80',
-    socials: [
+/** Mirror of `backend/database/data/ku_student_week_workshops_schedule_full.json` — copy when the backend file changes. */
+const SCHEDULE = kuWorkshopSchedule as {
+  workshops: { n: number; presenter_ar: string }[];
+};
+
+/**
+ * English names for schedule presenters. Only keys that exist in the schedule JSON are used (see `presenterNameEnForSchedule`).
+ */
+const PRESENTER_NAME_EN_SOURCE: Record<string, string> = {
+  'آلاء النصار': 'Alaa Al-Nassar',
+  'أبرار أشكناني': 'Abrar Ashkanani',
+  'أحمد سعيد': 'Ahmed Saeed',
+  'المحامي إبراهيم السماعيل': 'Lawyer Ibrahim Al-Samaeel',
+  'بدر الفيلكاوي': 'Bader Al-Failakawi',
+  'حسن سيد': 'Hassan Sayed',
+  'خالد الشمري': 'Khalid Al-Shammari',
+  'د. بسام الجزاف': 'Dr. Bassam Al-Jazzaf',
+  'د. جواد أبو الحسن': 'Dr. Jawad Abu Al-Hasan',
+  'د. رفيدة الميعان': 'Dr. Rafida Al-Mian',
+  'د. محمد إسماعيل': 'Dr. Mohammed Ismail',
+  'دانا العوضي': 'Dana Al-Awadi',
+  'دلال الحشاش': 'Dalal Al-Hashash',
+  'دلال النخيلان': 'Dalal Al-Nakhelan',
+  'ريم العلي': 'Reem Al-Ali',
+  'ريم الفرحان': 'Reem Al-Farhan',
+  'زينب الغضبان': 'Zainab Al-Ghadhban',
+  'سارة المنيس': 'Sarah Al-Munais',
+  'سليمان المراغي': 'Sulaiman Al-Muraghi',
+  'سنابل المسلم': 'Sanabel Al-Muslim',
+  'شهد العطار و حمزه فيصل': 'Shahd Al-Attar & Hamza Faisal',
+  'شيماء الطباخ': 'Shaima Al-Tabbakh',
+  'عبدالرحمن التركيت': 'Abdulrahman Al-Turkait',
+  'عبدالرحمن حماد': 'Abdulrahman Hammad',
+  'عبدالرحمن خاجه': 'Abdulrahman Khaja',
+  'علي الأنصاري': 'Ali Al-Ansari',
+  'غدير الكندري': 'Ghadeer Al-Kandari',
+  'فاطمة تقي': 'Fatima Taqi',
+  'فاطمة عباس': 'Fatima Abbas',
+  'محمد الجيماز': 'Mohammed Al-Jaimaz',
+  'مرزوق السعيد': 'Marzouq Al-Saeed',
+  'منيرة النخيلان': 'Munira Al-Nakhelan',
+  'هيا النصار': 'Haya Al-Nassar',
+  'هيا بوراشد': 'Haya Bourashed',
+};
+
+/** Only `presenter_ar` values that appear in the schedule file. */
+function presenterNameEnForSchedule(schedule: { workshops: { presenter_ar: string }[] }): Record<string, string> {
+  const present = new Set(schedule.workshops.map((w) => w.presenter_ar));
+  const out: Record<string, string> = {};
+  for (const p of present) {
+    const en = PRESENTER_NAME_EN_SOURCE[p];
+    if (en) {
+      out[p] = en;
+    }
+  }
+  return out;
+}
+
+const PRESENTER_NAME_EN = presenterNameEnForSchedule(SCHEDULE);
+
+const PORTRAIT_IMAGES = [
+  'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=720&q=80',
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=720&q=80',
+];
+
+const DEFAULT_SOCIALS: ExpertSocial[] = [
       { href: 'mailto:hello@example.com', aria: 'experts.socialEmail', kind: 'mail' },
       { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
       { href: 'https://x.com', aria: 'experts.socialX', kind: 'x' },
-    ],
-    workshopSlugs: ['basics-of-artificial-intelligence', 'student-innovation-hackathon'],
-  },
-  {
-    id: 'sarah',
-    nameAr: 'م. سارة محمد',
-    nameEn: 'Eng. Sarah Mohammed',
-    specialtyAr: 'مدربة مهارات العرض والتواصل',
-    specialtyEn: 'Presentation & communication trainer',
-    bioAr:
-      'تساعد الفرق الطلابية على بناء ثقة بالعام وبناء محتوى واضح، مع تغذية راجعة عملية بعد كل جلسة تدريبية.',
-    bioEn:
-      'Helps student teams build confident delivery and clear narratives, with practical feedback after every training block.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=720&q=80',
-    socials: [
-      { href: 'mailto:sarah@example.com', aria: 'experts.socialEmail', kind: 'mail' },
-      { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
-    ],
-    workshopSlugs: ['presentation-and-communication-skills', 'career-path-planning-forum'],
-  },
-  {
-    id: 'khalid',
-    nameAr: 'م. خالد الدوسري',
-    nameEn: 'Eng. Khalid Al-Dosari',
-    specialtyAr: 'ميسّر ورش الابتكار والعمل الجماعي',
-    specialtyEn: 'Innovation & teamwork facilitator',
-    bioAr:
-      'يركّز على تحويل الأفكار إلى تجارب قابلة للاختبار عبر ورش مكثفة وجلسات عصف ذهني منظّمة.',
-    bioEn:
-      'Focuses on turning ideas into testable experiences through intensive workshops and structured ideation sessions.',
-    imageUrl:
-      'https://images.leadconnectorhq.com/image/f_webp/q_80/r_800/u_https://assets.cdn.filesafe.space/YAuEX9ihHtdKDKEvbw4a/media/69d7a8ef982fd67a35d9f15e.webp',
-    socials: [
-      { href: 'mailto:khalid@example.com', aria: 'experts.socialEmail', kind: 'mail' },
-      { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
-      { href: 'https://x.com', aria: 'experts.socialX', kind: 'x' },
-    ],
-    workshopSlugs: ['leadership-essentials-student-teams', 'cv-clinic-mock-interviews'],
-  },
-  {
-    id: 'norah',
-    nameAr: 'د. نورة العجمي',
-    nameEn: 'Dr. Norah Al-Ajmi',
-    specialtyAr: 'خبيرة المسارات المهنية والتوجيه الأكاديمي',
-    specialtyEn: 'Career pathways & academic advising',
-    bioAr:
-      'تربط بين احتياجات سوق العمل وخيارات الطلاب الأكاديمية من خلال جلسات إرشاد جماعية وفردية.',
-    bioEn:
-      'Connects labour-market signals with student academic choices through group and one-to-one advising sessions.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=720&q=80',
-    socials: [
-      { href: 'mailto:norah@example.com', aria: 'experts.socialEmail', kind: 'mail' },
-      { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
-    ],
-    workshopSlugs: ['career-path-planning-forum', 'presentation-and-communication-skills'],
-  },
 ];
+
+function presenterId(name: string): string {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) {
+    h = ((h << 5) - h + name.charCodeAt(i)) | 0;
+  }
+  return `p${String(Math.abs(h) % 100000).padStart(5, '0')}`;
+}
+
+function specialtyFor(name: string): { ar: string; en: string } {
+  if (name.startsWith('المحامي')) {
+    return { ar: 'مستشار قانوني', en: 'Lawyer' };
+  }
+  if (name.startsWith('د. ')) {
+    return { ar: 'أكاديمي ومقدّم ورش', en: 'Academic & workshop facilitator' };
+  }
+  return { ar: 'مقدّم ورش تدريبية', en: 'Workshop facilitator' };
+}
+
+function buildHomeExperts(): HomeExpert[] {
+  const byPresenter = new Map<string, string[]>();
+  for (const w of SCHEDULE.workshops) {
+    const slug = `ms-w-${String(w.n).padStart(3, '0')}`;
+    const list = byPresenter.get(w.presenter_ar) ?? [];
+    list.push(slug);
+    byPresenter.set(w.presenter_ar, list);
+  }
+
+  const names = [...byPresenter.keys()].sort((a, b) => a.localeCompare(b, 'ar'));
+
+  return names.map((nameAr, i) => {
+    const slugs = [...(byPresenter.get(nameAr) ?? [])].sort();
+    const nw = slugs.length;
+    const { ar: specialtyAr, en: specialtyEn } = specialtyFor(nameAr);
+    const bioAr =
+      nw === 1
+        ? 'يقدّم ورشة ضمن أسبوع التدريب لطلاب جامعة الكويت (26–30 أبريل 2026).'
+        : `يقدّم ${nw} ورشاً ضمن أسبوع التدريب لطلاب جامعة الكويت (26–30 أبريل 2026).`;
+    const bioEn =
+      nw === 1
+        ? 'Delivers a workshop in the Kuwait University student training week (26–30 April 2026).'
+        : `Delivers ${nw} workshops in the Kuwait University student training week (26–30 April 2026).`;
+
+    return {
+      id: presenterId(nameAr),
+      nameAr,
+      nameEn: PRESENTER_NAME_EN[nameAr] ?? nameAr,
+      specialtyAr,
+      specialtyEn,
+      bioAr,
+      bioEn,
+      imageUrl: PORTRAIT_IMAGES[i % PORTRAIT_IMAGES.length],
+      socials: DEFAULT_SOCIALS,
+      workshopSlugs: slugs,
+    };
+  });
+}
+
+/** Facilitators grouped by `presenter_ar` from `ku_student_week_workshops_schedule_full.json`. */
+export const HOME_EXPERTS: HomeExpert[] = buildHomeExperts();

@@ -69,7 +69,7 @@ import { CartService } from '../../core/services/cart.service';
                 <div class="text-end">
                   <p class="text-xs text-ink-500">{{ i18n.t('cart.lineTotal') }}</p>
                   <p class="text-lg font-bold text-brand-900">
-                    {{ line.line_total | number: '1.2-3' }} {{ snap.currency }}
+                    {{ line.line_total | number: '1.0-3' }} {{ i18n.currencyLabel(snap.currency) }}
                   </p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ import { CartService } from '../../core/services/cart.service';
               <div>
                 <p class="text-xs font-medium uppercase tracking-wide text-ink-500">{{ i18n.t('cart.subtotal') }}</p>
                 <p class="text-2xl font-bold text-brand-900">
-                  {{ snap.subtotal | number: '1.2-3' }} {{ snap.currency }}
+                  {{ snap.subtotal | number: '1.0-3' }} {{ i18n.currencyLabel(snap.currency) }}
                 </p>
               </div>
               <a

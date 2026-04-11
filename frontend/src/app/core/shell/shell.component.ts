@@ -15,8 +15,9 @@ import { CartDrawerComponent } from './cart-drawer.component';
   animations: [routeFade, cartIconBump],
   template: `
     <div class="flex min-h-dvh flex-col bg-[var(--ve-surface)]">
+      <div class="sticky top-0 z-40 isolate flex shrink-0 flex-col">
       <div
-        class="relative z-40 shrink-0 border-x-0 border-b border-white/10 bg-[#0f1624] text-white"
+        class="relative shrink-0 border-x-0 border-b border-white/10 bg-[#0f1624] text-white"
         role="region"
         [attr.aria-label]="i18n.t('banner.promoAria')"
       >
@@ -36,7 +37,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </div>
       </div>
       <header
-        class="sticky top-0 z-30 shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md"
+        class="shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md"
       >
         <div
           class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:gap-6 md:py-4"
@@ -142,6 +143,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
           </div>
         </div>
       </header>
+      </div>
 
       <main
         class="mx-auto flex w-full min-w-0 max-w-6xl flex-1 flex-col px-4 pb-8 pt-6 md:pb-12 md:pt-8"
@@ -305,6 +307,15 @@ import { CartDrawerComponent } from './cart-drawer.component';
               </div>
             </div>
             <div class="space-y-5 px-6 pb-7 pt-6" [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'">
+              <span
+                class="mx-auto flex w-fit items-center gap-2 rounded-full border border-ink-200/80 bg-ink-50/90 px-3 py-1.5 text-xs font-semibold text-ink-800"
+              >
+                <span class="h-2 w-2 shrink-0 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                {{ i18n.t('workshops.promoLimitedBadge') }}
+              </span>
+              <h2 class="text-center text-lg font-extrabold leading-tight tracking-tight text-brand-900 sm:text-xl">
+                {{ i18n.t('workshops.promoTitle') }}
+              </h2>
               <p class="text-center text-[0.8125rem] leading-relaxed text-ink-600 sm:text-sm">
                 {{ i18n.t('banner.modalBody') }}
               </p>

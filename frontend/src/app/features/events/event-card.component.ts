@@ -1,7 +1,7 @@
 import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HomeListEvent } from '../../core/data/dummy-events';
+import { HomeListEvent, workshopCategoryToFilterGroup } from '../../core/data/dummy-events';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { CartService } from '../../core/services/cart.service';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
@@ -260,7 +260,8 @@ export class EventCardComponent {
   }
 
   categoryLabel(): string {
-    const key = `cat.${this.event.category}` as TranslationKey;
+    const group = workshopCategoryToFilterGroup(this.event.category);
+    const key = `cat.${group}` as TranslationKey;
     return this.i18n.t(key);
   }
 

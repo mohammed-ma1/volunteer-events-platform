@@ -102,8 +102,8 @@ import { CartService } from '../services/cart.service';
           <div class="mb-3 flex items-center justify-between text-sm text-ink-600">
             <span>{{ i18n.t('cart.subtotal') }}</span>
             <span class="font-bold text-brand-900">
-              {{ cart.snapshot()?.subtotal ?? 0 | number: '1.2-3' }}
-              {{ cart.snapshot()?.currency }}
+              {{ cart.snapshot()?.subtotal ?? 0 | number: '1.0-3' }}
+              {{ i18n.currencyLabel(cart.snapshot()?.currency) }}
             </span>
           </div>
           <a
