@@ -59,4 +59,16 @@
     text-decoration-line: none !important;
     -webkit-text-decoration-skip: objects;
   }
+
+  /** Subtle shimmer bar (section accents) */
+  .ve-shimmer-bar {
+    background: linear-gradient(
+      90deg,
+      theme('colors.brand.500') 0%,
+      theme('colors.coral.500') 35%,
+      theme('colors.mint.500') 65%,
+      theme('colors.brand.600') 100%
+    );
+    background-size: 200% 100%;
+  }
 }

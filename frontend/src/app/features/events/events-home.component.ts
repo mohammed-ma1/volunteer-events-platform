@@ -61,13 +61,19 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
           >
             {{ i18n.t('hero.body') }}
           </p>
+          <p
+            class="motion-safe:animate-ve-fade-up mt-3 inline-flex max-w-xl flex-wrap items-center gap-2 rounded-2xl border border-brand-200/80 bg-gradient-to-br from-white/95 to-brand-50/80 px-4 py-2.5 text-xs font-semibold text-brand-900 shadow-sm ring-1 ring-brand-100/60 motion-safe:[animation-delay:150ms] md:text-sm"
+          >
+            <span class="text-base motion-safe:animate-ve-float-slow" aria-hidden="true">🔥</span>
+            <span>{{ i18n.t('hero.promoLine') }}</span>
+          </p>
           <div
             class="motion-safe:animate-ve-fade-up flex flex-wrap gap-3 motion-safe:[animation-delay:180ms]"
           >
             <a
               routerLink="/"
               fragment="workshops"
-              class="ve-focus-ring group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
+              class="ve-focus-ring motion-safe:animate-ve-cta-ring group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
             >
               <span
                 class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition duration-500 group-hover:translate-x-full motion-reduce:group-hover:translate-x-0"
@@ -92,7 +98,7 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
             aria-hidden="true"
           ></div>
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80"
+            [src]="heroVisualUrl"
             [alt]="i18n.t('hero.imageAlt')"
             class="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100 md:aspect-[5/4]"
             width="800"
@@ -133,7 +139,11 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
           <h2 class="text-2xl font-extrabold tracking-tight text-brand-900 md:text-3xl">
             {{ i18n.t('workshops.title') }}
           </h2>
-          <p class="mt-1 max-w-xl text-sm text-ink-600 md:text-base">{{ i18n.t('workshops.subtitle') }}</p>
+          <div
+            class="ve-shimmer-bar mt-2 h-1 w-24 rounded-full opacity-90 motion-safe:animate-ve-shimmer md:w-32"
+            aria-hidden="true"
+          ></div>
+          <p class="mt-3 max-w-xl text-sm text-ink-600 md:text-base">{{ i18n.t('workshops.subtitle') }}</p>
         </div>
         <a
           routerLink="/"
@@ -289,6 +299,10 @@ export class EventsHomeComponent implements OnDestroy {
   readonly i18n = inject(I18nService);
   private readonly eventsApi = inject(EventsService);
   readonly cart = inject(CartService);
+
+  /** Hero visual from Media Solution preview CDN (same asset bundle as workshop cards). */
+  readonly heroVisualUrl =
+    'https://assets.cdn.filesafe.space/YAuEX9ihHtdKDKEvbw4a/media/69d74677e15295eb807a8820.webp';
 
   private readonly destroy$ = new Subject<void>();
   private readonly search$ = new Subject<string>();

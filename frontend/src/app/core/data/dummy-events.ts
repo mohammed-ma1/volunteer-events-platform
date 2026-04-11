@@ -156,12 +156,56 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
 ];
 
 const CATEGORY_KEYWORDS: { cat: WorkshopCategory; keys: string[] }[] = [
-  { cat: 'ai', keys: ['ai', 'artificial', 'machine learning', 'ذكاء'] },
-  { cat: 'digital', keys: ['digital', 'code', 'hack', 'tech', 'ابتكار', 'برمج'] },
-  { cat: 'leadership', keys: ['leadership', 'lead', 'team', 'قيادة'] },
-  { cat: 'personal', keys: ['communication', 'presentation', 'personal', 'عرض', 'تواصل'] },
-  { cat: 'cv', keys: ['cv', 'interview', 'resume', 'سيرة', 'مقابلة'] },
-  { cat: 'career', keys: ['career', 'path', 'forum', 'mentor', 'مسار', 'مهني'] },
+  {
+    cat: 'ai',
+    keys: [
+      'ai',
+      'artificial',
+      'machine learning',
+      'ذكاء',
+      'اصطناعي',
+      'python',
+      'react',
+      'سايبر',
+      'أمن',
+      'تحليل البيانات',
+    ],
+  },
+  {
+    cat: 'digital',
+    keys: ['digital', 'code', 'hack', 'tech', 'ابتكار', 'برمج', 'فيديو', 'زوايا', 'لقطات', 'ui'],
+  },
+  { cat: 'leadership', keys: ['leadership', 'lead', 'team', 'قيادة', 'إدارة', 'وقت', 'ضغط', '90 يوم'] },
+  {
+    cat: 'personal',
+    keys: [
+      'communication',
+      'presentation',
+      'personal',
+      'عرض',
+      'تواصل',
+      'رسم',
+      'مشاعر',
+      'استرخاء',
+      'صمود',
+      'توتر',
+      'غذاء',
+      'سناكات',
+      'عطر',
+      'عاطفي',
+      'شخصيات',
+      'اتيكيت',
+      'علاقات',
+    ],
+  },
+  {
+    cat: 'cv',
+    keys: ['cv', 'interview', 'resume', 'سيرة', 'مقابلة', 'smart', 'star', 'أهداف', 'سيرة'],
+  },
+  {
+    cat: 'career',
+    keys: ['career', 'path', 'forum', 'mentor', 'مسار', 'مهني', 'قانون', 'تسويق', 'مسؤولية', 'مجتمع'],
+  },
 ];
 
 export function inferCategory(ev: VolunteerEvent): WorkshopCategory {

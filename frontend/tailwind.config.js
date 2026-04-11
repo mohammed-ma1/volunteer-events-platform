@@ -78,6 +78,18 @@ module.exports = {
           '50%': { transform: 'scale(1.1) rotate(0deg)', opacity: '1' },
           '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
         },
+        veCtaRing: {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(29, 78, 216, 0.42)' },
+          '55%': { boxShadow: '0 0 0 14px rgba(29, 78, 216, 0)' },
+        },
+        veFloatSlow: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        veShimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
       },
       animation: {
         've-fade-up': 'veFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
@@ -88,6 +100,9 @@ module.exports = {
         've-added-check': 'veAddedCheck 0.4s cubic-bezier(0.34, 1.3, 0.64, 1) both',
         've-success-pop': 'veSuccessPop 0.55s cubic-bezier(0.34, 1.2, 0.64, 1) both',
         've-success-check': 'veSuccessCheck 0.5s ease-out 0.12s both',
+        've-cta-ring': 'veCtaRing 2.75s ease-out infinite',
+        've-float-slow': 'veFloatSlow 6s ease-in-out infinite',
+        've-shimmer': 'veShimmer 2.4s linear infinite',
       },
       boxShadow: {
         lift: '0 18px 50px -24px rgba(12, 14, 20, 0.45)',

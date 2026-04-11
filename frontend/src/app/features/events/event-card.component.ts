@@ -12,7 +12,7 @@ import type { TranslationKey } from '../../core/i18n/translations';
   imports: [RouterLink, DatePipe, DecimalPipe, NgClass],
   template: `
     <article
-      class="group flex h-full flex-col overflow-hidden rounded-3xl border-0 bg-white shadow-[0_2px_16px_-4px_rgba(15,23,42,0.07),0_4px_24px_-8px_rgba(15,23,42,0.06)] transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-12px_rgba(15,23,42,0.14)] motion-reduce:hover:translate-y-0"
+      class="group flex h-full flex-col overflow-hidden rounded-3xl border border-ink-100/80 bg-white shadow-[0_2px_16px_-4px_rgba(15,23,42,0.07),0_4px_24px_-8px_rgba(15,23,42,0.06)] transition duration-500 ease-out hover:-translate-y-1 hover:border-brand-200/90 hover:shadow-lift motion-reduce:hover:translate-y-0"
     >
       <a
         [routerLink]="['/events', event.slug]"
