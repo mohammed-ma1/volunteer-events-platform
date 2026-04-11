@@ -44,7 +44,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
         >
           <a routerLink="/" class="group flex items-center gap-2.5">
             <img
-              src="/favicon.svg"
+              [src]="faviconSrc"
               alt=""
               width="40"
               height="40"
@@ -161,7 +161,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
           <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             <div class="space-y-3">
               <img
-                src="/favicon.svg"
+                [src]="faviconSrc"
                 alt=""
                 width="40"
                 height="40"
@@ -384,6 +384,15 @@ export class ShellComponent {
   readonly i18n = inject(I18nService);
   private readonly router = inject(Router);
   private readonly checkoutFlow = inject(CheckoutFlowService);
+
+  /**
+   * Same scheme + host as the document (matches ngrok/cloudflared HTTPS) so Tap return does not
+   * trigger mixed-content when the dev page is served over HTTPS.
+   */
+  readonly faviconSrc =
+    typeof globalThis !== 'undefined' && typeof globalThis.location?.origin === 'string'
+      ? `${globalThis.location.origin}/favicon.svg`
+      : '/favicon.svg';
 
   readonly promoModalOpen = signal(false);
   readonly promoHeroUrl = PROMO_HERO_IMAGE_URL;

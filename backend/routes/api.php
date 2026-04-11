@@ -25,9 +25,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/orders/{uuid}/sync-tap', [CheckoutController::class, 'syncFromTap'])
         ->middleware('throttle:60,1');
 
-    if (config('services.tap.mock')) {
-        Route::post('/orders/{uuid}/mock-complete', [CheckoutController::class, 'mockComplete']);
-    }
+    // Always register so `route:cache` does not drop the route when TAP_MOCK was off at cache time.
+    // CheckoutController::mockComplete returns 404 when TAP_MOCK is false.
+    Route::post('/orders/{uuid}/mock-complete', [CheckoutController::class, 'mockComplete']);
 
     Route::post('/webhooks/tap', [TapWebhookController::class, 'handle'])
         ->middleware('throttle:120,1')
