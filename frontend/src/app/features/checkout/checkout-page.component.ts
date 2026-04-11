@@ -6,7 +6,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap, take, timer } from 'rxjs';
 import { I18nService } from '../../core/i18n/i18n.service';
-import { isTapCheckoutCompleteMessage } from '../../core/payment/tap-messages';
+import { isLocalBrowserOrigin, isTapCheckoutCompleteMessage } from '../../core/payment/tap-messages';
 import { CartLine } from '../../core/models/api.types';
 import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
@@ -334,7 +334,9 @@ export class CheckoutPageComponent {
   private pollSub?: Subscription;
 
   private readonly onWindowMessage = (ev: MessageEvent): void => {
-    if (ev.origin !== window.location.origin) {
+    const sameOrigin = ev.origin === window.location.origin;
+    const devLocalTapFrame = !environment.production && isLocalBrowserOrigin(ev.origin);
+    if (!sameOrigin && !devLocalTapFrame) {
       return;
     }
     if (!isTapCheckoutCompleteMessage(ev.data)) {

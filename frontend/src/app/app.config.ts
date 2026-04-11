@@ -18,9 +18,10 @@ function patchFaviconLinksToAbsoluteOrigin(): void {
   }
   document.querySelectorAll<HTMLLinkElement>('link[rel="icon"]').forEach((el) => {
     const href = el.getAttribute('href');
-    if (href?.startsWith('/')) {
-      el.setAttribute('href', `${origin}${href}`);
+    if (!href?.startsWith('/') || href.startsWith('//')) {
+      return;
     }
+    el.setAttribute('href', `${origin}${href}`);
   });
 }
 

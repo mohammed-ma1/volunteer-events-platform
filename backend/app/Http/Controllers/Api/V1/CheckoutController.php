@@ -123,10 +123,17 @@ class CheckoutController extends Controller
     public function mockComplete(string $uuid): JsonResponse|Response
     {
         if (! config('services.tap.mock')) {
-            return response()->json(['message' => 'Not found.'], 404);
+            return response()->json([
+                'message' => 'TAP_MOCK is disabled. Set TAP_MOCK=true in .env, then run php artisan config:clear.',
+            ], 403);
         }
 
-        $order = Order::query()->where('uuid', $uuid)->firstOrFail();
+        $order = Order::query()->where('uuid', $uuid)->first();
+        if ($order === null) {
+            return response()->json([
+                'message' => 'No order with this id. Create checkout on this same API/database, or clear stale order ids.',
+            ], 404);
+        }
         $order->update([
             'status' => Order::STATUS_PAID,
             'paid_at' => now(),

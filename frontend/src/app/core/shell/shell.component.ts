@@ -43,14 +43,20 @@ import { CartDrawerComponent } from './cart-drawer.component';
           class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:gap-6 md:py-4"
         >
           <a routerLink="/" class="group flex items-center gap-2.5">
-            <img
-              [src]="faviconSrc"
-              alt=""
-              width="40"
-              height="40"
-              class="h-10 w-10 shrink-0 object-contain"
+            <svg
+              class="h-10 w-10 shrink-0 text-[#0f172a]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
               aria-hidden="true"
-            />
+            >
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
+            </svg>
             <div class="hidden leading-tight sm:block">
               <p class="text-sm font-semibold text-brand-900">KU</p>
               <p class="text-xs text-ink-500">{{ i18n.t('hero.badge') }}</p>
@@ -160,14 +166,20 @@ import { CartDrawerComponent } from './cart-drawer.component';
         <div class="mx-auto max-w-6xl px-4 py-12 md:py-14">
           <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             <div class="space-y-3">
-              <img
-                [src]="faviconSrc"
-                alt=""
-                width="40"
-                height="40"
-                class="h-10 w-10 shrink-0 rounded-lg bg-white/10 p-1.5 object-contain brightness-0 invert"
+              <svg
+                class="h-10 w-10 shrink-0 rounded-lg bg-white/10 p-1.5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
                 aria-hidden="true"
-              />
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                <path d="M6 12v5c3 3 9 3 12 0v-5" />
+              </svg>
               <p class="text-sm leading-relaxed text-white/85">{{ i18n.t('footer.brand') }}</p>
             </div>
             <div>
@@ -384,15 +396,6 @@ export class ShellComponent {
   readonly i18n = inject(I18nService);
   private readonly router = inject(Router);
   private readonly checkoutFlow = inject(CheckoutFlowService);
-
-  /**
-   * Same scheme + host as the document (matches ngrok/cloudflared HTTPS) so Tap return does not
-   * trigger mixed-content when the dev page is served over HTTPS.
-   */
-  readonly faviconSrc =
-    typeof globalThis !== 'undefined' && typeof globalThis.location?.origin === 'string'
-      ? `${globalThis.location.origin}/favicon.svg`
-      : '/favicon.svg';
 
   readonly promoModalOpen = signal(false);
   readonly promoHeroUrl = PROMO_HERO_IMAGE_URL;

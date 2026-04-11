@@ -16,3 +16,16 @@ export function isTapCheckoutCompleteMessage(data: unknown): data is TapCheckout
     (o['orderUuid'] as string).length > 0
   );
 }
+
+/** Tap return URL may be http://localhost in an iframe while checkout runs on an HTTPS tunnel. */
+export function isLocalBrowserOrigin(origin: string): boolean {
+  try {
+    const u = new URL(origin);
+    if (u.hostname !== 'localhost' && u.hostname !== '127.0.0.1') {
+      return false;
+    }
+    return u.protocol === 'http:' || u.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
