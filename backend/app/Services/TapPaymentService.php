@@ -15,7 +15,11 @@ class TapPaymentService
      */
     public function createChargeForOrder(Order $order, ?string $langCode = null): array
     {
-        $frontend = rtrim((string) config('app.frontend_url'), '/');
+        if (config('services.tap.mock') && ! app()->isLocal()) {
+            Log::warning('TAP_MOCK is enabled outside local; disable in production .env.');
+        }
+
+        $frontend = $this->resolvePublicFrontendBaseUrl();
         $returnUrl = $frontend.'/checkout/tap-return?order='.$order->uuid;
 
         if (config('services.tap.mock')) {
@@ -92,6 +96,46 @@ class TapPaymentService
         }
 
         return $response->json();
+    }
+
+    /**
+     * Tap redirect / iframe must use the real public HTTPS origin. A wrong FRONTEND_URL (e.g. leftover
+     * http://localhost:4200) embeds blocked mixed content when checkout runs on https://kw...
+     */
+    private function resolvePublicFrontendBaseUrl(): string
+    {
+        $configured = rtrim((string) config('app.frontend_url'), '/');
+        if ($configured === '') {
+            $configured = rtrim((string) config('app.url'), '/');
+        }
+
+        if ($this->urlLooksLikeLocalDevServer($configured) && ! app()->isLocal()) {
+            $fallback = rtrim((string) config('app.url'), '/');
+            if ($fallback !== '' && ! $this->urlLooksLikeLocalDevServer($fallback)) {
+                Log::warning('FRONTEND_URL points to localhost; using APP_URL for Tap return URL.', [
+                    'FRONTEND_URL' => $configured,
+                    'APP_URL' => $fallback,
+                ]);
+
+                return $fallback;
+            }
+        }
+
+        return $configured;
+    }
+
+    private function urlLooksLikeLocalDevServer(string $url): bool
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+        if (! is_string($host) || $host === '') {
+            return false;
+        }
+
+        $host = strtolower($host);
+
+        return $host === 'localhost'
+            || $host === '127.0.0.1'
+            || str_ends_with($host, '.localhost');
     }
 
     /**
