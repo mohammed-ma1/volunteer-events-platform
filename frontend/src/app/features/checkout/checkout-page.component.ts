@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, NgZone, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap, take, timer } from 'rxjs';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { isTapCheckoutCompleteMessage } from '../../core/payment/tap-messages';
+import { CartLine } from '../../core/models/api.types';
 import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
 import { environment } from '../../../environments/environment';
@@ -34,25 +36,40 @@ function createClientUuid(): string {
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, DecimalPipe],
   template: `
-    <div class="relative mx-auto min-h-[14rem] max-w-xl">
-      @if (busy()) {
+    <div class="relative mx-auto max-w-6xl px-4 py-8 md:py-10">
+      @if (busy() && !paymentActive()) {
         <div
-          class="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 rounded-2xl bg-white/90 backdrop-blur-sm"
+          class="pointer-events-none fixed inset-0 z-20 flex items-center justify-center bg-white/40 backdrop-blur-[2px]"
           role="status"
           aria-live="polite"
         >
-          <div
-            class="h-11 w-11 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600"
-            aria-hidden="true"
-          ></div>
-          <p class="text-sm font-medium text-brand-900">{{ i18n.t('checkout.preparingTap') }}</p>
+          <div class="flex flex-col items-center gap-3 rounded-2xl border border-ink-200 bg-white px-8 py-6 shadow-lg">
+            <div
+              class="h-10 w-10 animate-spin rounded-full border-2 border-ink-200 border-t-[#001A33]"
+              aria-hidden="true"
+            ></div>
+            <p class="text-sm font-semibold text-[#001A33]">{{ i18n.t('checkout.preparingTap') }}</p>
+          </div>
         </div>
       }
 
-      <h1 class="text-3xl font-bold text-brand-900">{{ i18n.t('checkout.title') }}</h1>
-      <p class="mt-2 text-sm text-ink-600">{{ i18n.t('checkout.subtitle') }}</p>
+      <a
+        routerLink="/"
+        fragment="workshops"
+        class="ve-focus-ring mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#001A33] transition hover:text-brand-700"
+      >
+        @if (i18n.isRtl()) {
+          <span aria-hidden="true">→</span>
+        } @else {
+          <span aria-hidden="true">←</span>
+        }
+        {{ i18n.t('checkout.backWorkshops') }}
+      </a>
+
+      <h1 class="text-2xl font-extrabold tracking-tight text-[#0a1628] md:text-3xl">{{ i18n.t('checkout.title') }}</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-600">{{ i18n.t('checkout.subtitle') }}</p>
 
       @if (showTapLocalDevBanner()) {
         <div
@@ -70,13 +87,13 @@ function createClientUuid(): string {
       } @else if (snap.items.length === 0) {
         <p class="mt-6 rounded-2xl border border-ink-200 bg-white px-4 py-4 text-sm text-ink-600 shadow-sm">
           {{ i18n.t('cart.empty') }}
-          <a routerLink="/" fragment="workshops" class="ms-1 font-semibold text-brand-700 hover:text-brand-900">{{
+          <a routerLink="/" fragment="workshops" class="ms-1 font-semibold text-[#001A33] hover:underline">{{
             i18n.t('cart.browseWorkshops')
           }}</a>
         </p>
       } @else if (paymentActive()) {
         <div class="mt-8 space-y-4">
-          <h2 class="text-lg font-semibold text-brand-900">{{ i18n.t('checkout.paySecureBelow') }}</h2>
+          <h2 class="text-lg font-semibold text-[#001A33]">{{ i18n.t('checkout.paySecureBelow') }}</h2>
           <p class="text-sm text-ink-600">{{ i18n.t('checkout.processingPayment') }}</p>
 
           @if (safePaymentUrl(); as src) {
@@ -88,10 +105,10 @@ function createClientUuid(): string {
                   aria-live="polite"
                 >
                   <div
-                    class="h-11 w-11 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600"
+                    class="h-11 w-11 animate-spin rounded-full border-2 border-ink-200 border-t-[#001A33]"
                     aria-hidden="true"
                   ></div>
-                  <p class="text-sm font-medium text-brand-900">{{ i18n.t('checkout.loadingTapFrame') }}</p>
+                  <p class="text-sm font-medium text-[#001A33]">{{ i18n.t('checkout.loadingTapFrame') }}</p>
                 </div>
               }
               <iframe
@@ -105,7 +122,7 @@ function createClientUuid(): string {
           }
 
           <a
-            class="inline-flex w-full items-center justify-center rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm font-semibold text-brand-900 shadow-sm transition hover:border-ink-300 ve-focus-ring"
+            class="ve-focus-ring inline-flex w-full items-center justify-center rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm font-semibold text-[#001A33] shadow-sm transition hover:border-ink-300"
             [href]="paymentUrlRaw() ?? '#'"
             target="_blank"
             rel="noopener noreferrer"
@@ -119,66 +136,177 @@ function createClientUuid(): string {
           }
         </div>
       } @else {
-        <form class="mt-8 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
-          <div>
-            <label class="text-xs font-medium uppercase tracking-wide text-ink-500" for="name">{{
-              i18n.t('checkout.labelName')
-            }}</label>
-            <input
-              id="name"
-              class="mt-1 w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-brand-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
-              type="text"
-              formControlName="customer_name"
-              autocomplete="name"
-            />
-          </div>
-          <div>
-            <label class="text-xs font-medium uppercase tracking-wide text-ink-500" for="email">{{
-              i18n.t('checkout.labelEmail')
-            }}</label>
-            <input
-              id="email"
-              class="mt-1 w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-brand-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
-              type="email"
-              formControlName="email"
-              autocomplete="email"
-            />
-          </div>
-          <div>
-            <label class="text-xs font-medium uppercase tracking-wide text-ink-500" for="phone">{{
-              i18n.t('checkout.labelPhone')
-            }}</label>
-            <input
-              id="phone"
-              class="mt-1 w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-brand-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
-              type="tel"
-              formControlName="phone"
-              autocomplete="tel"
-            />
+        <div class="mt-8 grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-10">
+          <div class="rounded-2xl border border-ink-200/90 bg-white p-5 shadow-sm md:p-7">
+            <h2 class="text-lg font-bold text-[#0a1628]">{{ i18n.t('checkout.personalTitle') }}</h2>
+            <p class="mt-1 text-sm text-ink-600">{{ i18n.t('checkout.personalSubtitle') }}</p>
+
+            <form id="checkout-personal-form" class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label class="text-sm font-bold text-[#0a1628]" for="fn">{{ i18n.t('checkout.labelFirstName') }}</label>
+                  <input
+                    id="fn"
+                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                    type="text"
+                    formControlName="firstName"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div>
+                  <label class="text-sm font-bold text-[#0a1628]" for="ln">{{ i18n.t('checkout.labelLastName') }}</label>
+                  <input
+                    id="ln"
+                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                    type="text"
+                    formControlName="lastName"
+                    autocomplete="family-name"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="text-sm font-bold text-[#0a1628]" for="ph">{{ i18n.t('checkout.labelPhone') }}</label>
+                <input
+                  id="ph"
+                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                  type="tel"
+                  formControlName="phone"
+                  autocomplete="tel"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-bold text-[#0a1628]" for="em">{{ i18n.t('checkout.labelEmail') }}</label>
+                <input
+                  id="em"
+                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                  type="email"
+                  formControlName="email"
+                  autocomplete="email"
+                />
+              </div>
+
+              @if (error()) {
+                <p class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+                  {{ error() }}
+                </p>
+              }
+            </form>
           </div>
 
-          @if (error()) {
-            <p class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
-              {{ error() }}
+          <aside class="rounded-2xl border border-ink-200/90 bg-white p-5 shadow-sm md:p-7">
+            <h2 class="text-lg font-bold text-[#0a1628]">{{ i18n.t('checkout.orderSummary') }}</h2>
+
+            <ul class="mt-5 space-y-4">
+              @for (line of snap.items; track line.id) {
+                <li class="flex gap-3 border-b border-ink-100 pb-4 last:border-0 last:pb-0">
+                  @if (line.event?.image_url) {
+                    <img
+                      [src]="line.event!.image_url"
+                      alt=""
+                      class="h-16 w-20 shrink-0 rounded-lg object-cover ring-1 ring-ink-100"
+                    />
+                  } @else {
+                    <div
+                      class="h-16 w-20 shrink-0 rounded-lg bg-ink-100 ring-1 ring-ink-100"
+                      aria-hidden="true"
+                    ></div>
+                  }
+                  <div class="min-w-0 flex-1 text-start">
+                    <p class="text-sm font-bold leading-snug text-[#0a1628]">{{ line.event?.title ?? '—' }}</p>
+                    <p class="mt-1 text-sm font-semibold text-[#001A33]">
+                      {{ line.event?.price ?? 0 | number: '1.0-3' }}
+                      {{ currencySuffix(snap.currency) }}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    class="ve-focus-ring self-start rounded-lg p-2 text-ink-400 transition hover:bg-red-50 hover:text-red-600"
+                    (click)="removeLine(line)"
+                    [attr.aria-label]="i18n.t('checkout.removeLine')"
+                  >
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              }
+            </ul>
+
+            <div class="mt-6 space-y-2 border-t border-ink-100 pt-4 text-sm">
+              <div class="flex justify-between text-ink-600">
+                <span>{{ i18n.t('checkout.subtotalLine') }}</span>
+                <span class="font-semibold text-[#0a1628]"
+                  >{{ snap.subtotal | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
+                >
+              </div>
+              <div class="flex justify-between text-ink-600">
+                <span>{{ i18n.t('checkout.extraFees') }}</span>
+                <span class="font-semibold text-[#0a1628]">{{ i18n.t('checkout.feesZero') }}</span>
+              </div>
+              <div class="flex items-baseline justify-between pt-2">
+                <span class="text-base font-bold text-[#0a1628]">{{ i18n.t('checkout.total') }}</span>
+                <span class="text-xl font-black text-[#001A33]"
+                  >{{ snap.subtotal | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
+                >
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              form="checkout-personal-form"
+              class="ve-focus-ring mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#001A33] px-4 py-3.5 text-sm font-bold text-white shadow-md transition enabled:hover:bg-[#002a4d] disabled:cursor-not-allowed disabled:opacity-40"
+              [disabled]="form.invalid || busy()"
+            >
+              @if (busy()) {
+                <span
+                  class="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/30 border-t-white"
+                  aria-hidden="true"
+                ></span>
+                <span>{{ i18n.t('checkout.paying') }}</span>
+              } @else {
+                {{ i18n.t('checkout.payNow') }}
+              }
+            </button>
+
+            <p class="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-emerald-700">
+              <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
+              {{ i18n.t('checkout.securePayment') }}
             </p>
-          }
 
-          <button
-            type="submit"
-            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition enabled:hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-40 ve-focus-ring"
-            [disabled]="form.invalid || busy()"
-          >
-            @if (busy()) {
+            <div
+              class="mt-4 flex flex-wrap items-center justify-center gap-2 opacity-80"
+              aria-label="Payment methods"
+            >
               <span
-                class="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-white/30 border-t-white"
-                aria-hidden="true"
-              ></span>
-              <span>{{ i18n.t('checkout.paying') }}</span>
-            } @else {
-              {{ i18n.t('checkout.payTap') }}
-            }
-          </button>
-        </form>
+                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
+                >VISA</span
+              >
+              <span
+                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
+                >MC</span
+              >
+              <span
+                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
+                >AMEX</span
+              >
+              <span
+                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
+                >KNET</span
+              >
+            </div>
+
+            <p
+              class="mx-auto mt-5 max-w-sm rounded-full border border-ink-200 bg-ink-50/80 px-4 py-2 text-center text-xs font-medium text-ink-700"
+            >
+              {{ i18n.t('checkout.installmentPill') }}
+            </p>
+          </aside>
+        </div>
       }
     </div>
   `,
@@ -220,9 +348,10 @@ export class CheckoutPageComponent {
   };
 
   readonly form = this.fb.nonNullable.group({
-    customer_name: ['', [Validators.required, Validators.maxLength(255)]],
+    firstName: ['', [Validators.required, Validators.maxLength(120)]],
+    lastName: ['', [Validators.required, Validators.maxLength(120)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: [''],
+    phone: ['', [Validators.maxLength(32)]],
   });
 
   constructor() {
@@ -242,8 +371,9 @@ export class CheckoutPageComponent {
     this.error.set(null);
 
     const v = this.form.getRawValue();
+    const customer_name = `${v.firstName.trim()} ${v.lastName.trim()}`.trim();
     const body = {
-      customer_name: v.customer_name,
+      customer_name,
       email: v.email,
       phone: v.phone?.trim() ? v.phone.trim() : undefined,
     };
@@ -257,7 +387,11 @@ export class CheckoutPageComponent {
           this.busy.set(false);
           return;
         }
-        if (environment.tapPreferFullPageRedirectOnLocalhost && this.hostIsLocal()) {
+        if (
+          !environment.production &&
+          environment.tapPreferFullPageRedirectOnLocalhost &&
+          this.hostIsLocal()
+        ) {
           window.location.assign(res.payment_url);
           return;
         }
@@ -349,7 +483,11 @@ export class CheckoutPageComponent {
   }
 
   showTapLocalDevBanner(): boolean {
-    return environment.tapPreferFullPageRedirectOnLocalhost && this.hostIsLocal();
+    return (
+      !environment.production &&
+      environment.tapPreferFullPageRedirectOnLocalhost &&
+      this.hostIsLocal()
+    );
   }
 
   private hostIsLocal(): boolean {
@@ -376,5 +514,13 @@ export class CheckoutPageComponent {
       }
     }
     return this.i18n.t('checkout.failed');
+  }
+
+  currencySuffix(currency: string): string {
+    return currency?.toUpperCase() === 'KWD' ? this.i18n.t('card.currencyKwd') : currency;
+  }
+
+  removeLine(line: CartLine): void {
+    this.cart.removeItem(line.id).subscribe({ error: () => this.error.set(this.i18n.t('checkout.failed')) });
   }
 }

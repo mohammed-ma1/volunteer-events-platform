@@ -1,13 +1,16 @@
 export interface VolunteerEvent {
   id: number;
   title: string;
+  title_en?: string | null;
   slug: string;
   summary: string | null;
+  summary_en?: string | null;
   description: string | null;
   image_url: string | null;
   starts_at: string;
   ends_at: string | null;
   location: string | null;
+  location_en?: string | null;
   price: number;
   currency: string;
   capacity: number;

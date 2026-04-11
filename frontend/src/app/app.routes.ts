@@ -17,6 +17,13 @@ export const routes: Routes = [
           import('./features/pages/about-page.component').then((m) => m.AboutPageComponent),
       },
       {
+        path: 'facilitator-workshops',
+        loadComponent: () =>
+          import('./features/events/facilitator-workshops-page.component').then(
+            (m) => m.FacilitatorWorkshopsPageComponent,
+          ),
+      },
+      {
         path: 'career',
         loadComponent: () =>
           import('./features/pages/career-page.component').then((m) => m.CareerPageComponent),

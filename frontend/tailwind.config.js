@@ -36,9 +36,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        /** Latin first for EN; Cairo provides Arabic glyphs. */
-        sans: ['"Plus Jakarta Sans"', 'Cairo', 'system-ui', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', 'Cairo', 'system-ui', 'sans-serif'],
+        sans: ['Tajawal', 'sans-serif'],
+        display: ['Tajawal', 'sans-serif'],
       },
       keyframes: {
         veFadeUp: {

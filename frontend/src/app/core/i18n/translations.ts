@@ -5,15 +5,24 @@ export type TranslationKey =
   | 'nav.workshops'
   | 'nav.career'
   | 'nav.about'
+  | 'nav.facilitatorWorkshops'
   | 'nav.searchAria'
   | 'nav.langShortAr'
   | 'nav.langShortEn'
+  | 'banner.promoAria'
+  | 'banner.promoMain'
+  | 'banner.promoDetails'
+  | 'banner.modalCloseAria'
+  | 'banner.modalHeroTitle'
+  | 'banner.modalImageBarText'
+  | 'banner.modalBody'
   | 'hero.badge'
   | 'hero.title1'
   | 'hero.title2'
   | 'hero.body'
   | 'hero.ctaBrowse'
   | 'hero.ctaPaths'
+  | 'hero.ctaFacilitators'
   | 'hero.stat'
   | 'hero.imageAlt'
   | 'hero.promoLine'
@@ -25,15 +34,65 @@ export type TranslationKey =
   | 'feat3.desc'
   | 'feat4.title'
   | 'feat4.desc'
+  | 'trainers.badge'
+  | 'trainers.title'
+  | 'trainers.subtitle'
+  | 'trainers.day1'
+  | 'trainers.day2'
+  | 'trainers.day3'
+  | 'trainers.day4'
+  | 'trainers.day5'
+  | 'trainers.featuredName'
+  | 'trainers.featuredBio'
+  | 'trainers.ctaBrowse'
+  | 'trainers.socialTiktok'
+  | 'trainers.socialX'
+  | 'trainers.socialInstagram'
+  | 'experts.badge'
+  | 'experts.titleBefore'
+  | 'experts.titleHighlight'
+  | 'experts.titleAfter'
+  | 'experts.subtitle'
+  | 'experts.searchPh'
+  | 'experts.workshopsHeading'
+  | 'experts.connect'
+  | 'experts.showMore'
+  | 'experts.showLess'
+  | 'experts.socialEmail'
+  | 'experts.socialLinkedin'
+  | 'experts.socialX'
+  | 'facilitatorsPage.title'
+  | 'facilitatorsPage.subtitle'
+  | 'facilitatorsPage.back'
   | 'workshops.title'
   | 'workshops.subtitle'
   | 'workshops.viewAll'
+  | 'workshops.showLess'
   | 'workshops.searchPlaceholder'
   | 'workshops.loadError'
   | 'workshops.loadMore'
   | 'workshops.loading'
   | 'workshops.demoHint'
   | 'workshops.empty'
+  | 'workshops.allDates'
+  | 'workshops.dayWord'
+  | 'workshops.showMore'
+  | 'workshops.promoTitle'
+  | 'workshops.promoBadge'
+  | 'workshops.promoPrice'
+  | 'workshops.promoHint'
+  | 'workshops.promoCta'
+  | 'workshops.promoLimitedBadge'
+  | 'workshops.promoBody'
+  | 'workshops.promoPriceWas'
+  | 'workshops.promoSavePct'
+  | 'workshops.promoTrainerLine'
+  | 'workshops.promoVenueLine'
+  | 'workshops.promoInstallmentPrefix'
+  | 'workshops.promoInstallmentAmount'
+  | 'workshops.promoInterestFree'
+  | 'workshops.filterDaysAria'
+  | 'workshops.packageUnavailable'
   | 'cat.all'
   | 'cat.leadership'
   | 'cat.digital'
@@ -45,6 +104,11 @@ export type TranslationKey =
   | 'card.added'
   | 'card.buyNow'
   | 'card.free'
+  | 'card.currencyKwd'
+  | 'card.presenterLabel'
+  | 'card.locationLabel'
+  | 'card.timeLabel'
+  | 'card.priceLabel'
   | 'faq.title'
   | 'faq.subtitle'
   | 'faq.q1'
@@ -86,6 +150,20 @@ export type TranslationKey =
   | 'checkout.title'
   | 'checkout.subtitle'
   | 'checkout.labelName'
+  | 'checkout.backWorkshops'
+  | 'checkout.personalTitle'
+  | 'checkout.personalSubtitle'
+  | 'checkout.labelFirstName'
+  | 'checkout.labelLastName'
+  | 'checkout.orderSummary'
+  | 'checkout.subtotalLine'
+  | 'checkout.extraFees'
+  | 'checkout.feesZero'
+  | 'checkout.total'
+  | 'checkout.payNow'
+  | 'checkout.removeLine'
+  | 'checkout.securePayment'
+  | 'checkout.installmentPill'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
   | 'checkout.payTap'
@@ -162,9 +240,18 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.workshops': 'الورش التدريبية',
     'nav.career': 'المسار المهني',
     'nav.about': 'عن المنصة',
+    'nav.facilitatorWorkshops': 'ورش المدرب',
     'nav.searchAria': 'بحث',
     'nav.langShortAr': 'ع',
     'nav.langShortEn': 'EN',
+    'banner.promoAria': 'عرض ترويجي لخصم الورش لطلاب جامعة الكويت',
+    'banner.promoMain': 'عرض الـ 100 ورشة لطلاب جامعة الكويت! خصم خاص',
+    'banner.promoDetails': 'اضغط للتفاصيل',
+    'banner.modalCloseAria': 'إغلاق النافذة',
+    'banner.modalHeroTitle': 'باقة الـ 100 ورشة الجامعية',
+    'banner.modalImageBarText': 'عرض الـ 100 ورشة',
+    'banner.modalBody':
+      'احصل على وصول كامل وشامل لجميع الورش التدريبية الـ 100 بخصم حصري وخاص لطلاب جامعة الكويت. طوّر مهاراتك في مختلف المجالات مع نخبة من أفضل المدربين.',
     'hero.badge': 'منصة التطوير الطلابي لجامعة الكويت',
     'hero.title1': 'طوّر مهاراتك،',
     'hero.title2': 'وابنِ مستقبلك المهني',
@@ -172,6 +259,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'استكشف مجموعة واسعة من الورش والفعاليات المصممة لتعزيز قدراتك وإعدادك لسوق العمل—ورش مخصصة لطلاب جامعة الكويت بالتعاون مع شركة نكست لفل. تسجيل آمن عبر المنصة.',
     'hero.ctaBrowse': 'تصفح الورش المتاحة',
     'hero.ctaPaths': 'تعرف على المسارات',
+    'hero.ctaFacilitators': 'تعرّف على المدربين',
     'hero.stat': '+100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
     'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٦–٤–٢٠٢٦ حتى الخميس ٣٠–٤–٢٠٢٦',
@@ -183,10 +271,45 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'feat3.desc': 'تعلّم من نخبة الأكاديميين والمختصين في سوق العمل.',
     'feat4.title': 'شهادات معتمدة',
     'feat4.desc': 'احصل على شهادات موثقة تعزز سيرتك الذاتية.',
-    'workshops.title': 'سجّل الآن في الورش',
+    'trainers.badge': 'تعرّف على مقدمي الورش',
+    'trainers.title': 'نخبة من المدربين والخبراء',
+    'trainers.subtitle':
+      'يقدم الورش مجموعة من المدربين المتخصصين في مجالات متنوعة، بهدف نقل خبرات عملية ومحتوى تدريبي عالي القيمة.',
+    'trainers.day1': 'اليوم الأول (14)',
+    'trainers.day2': 'اليوم الثاني (15)',
+    'trainers.day3': 'اليوم الثالث (14)',
+    'trainers.day4': 'اليوم الرابع (15)',
+    'trainers.day5': 'اليوم الخامس (15)',
+    'trainers.featuredName': 'م. خالد الدوسري',
+    'trainers.featuredBio':
+      'مهندس وميسّر لورش الابتكار والعمل الجماعي، يساعد الفرق الطلابية على تحويل أفكارهم إلى مشاريع قابلة للتنفيذ.',
+    'trainers.ctaBrowse': 'تصفح ورشات المدرب',
+    'trainers.socialInstagram': 'إنستغرام',
+    'trainers.socialTiktok': 'تيك توك',
+    'trainers.socialX': 'إكس',
+    'experts.badge': 'خبرائنا',
+    'experts.titleBefore': 'تعلّم من',
+    'experts.titleHighlight': 'نخبة',
+    'experts.titleAfter': 'من المدربين',
+    'experts.subtitle':
+      'اختر المدرب لعرض نبذة عنه وورشه التدريبية، وتواصل عبر القنوات المتاحة عند الحاجة.',
+    'experts.searchPh': 'ابحث بالاسم أو التخصص…',
+    'experts.workshopsHeading': 'الورش التدريبية للمدرب',
+    'experts.connect': 'تواصل مع المدرب',
+    'experts.showMore': 'عرض المزيد',
+    'experts.showLess': 'عرض أقل',
+    'experts.socialEmail': 'البريد',
+    'experts.socialLinkedin': 'لينكدإن',
+    'experts.socialX': 'إكس',
+    'facilitatorsPage.title': 'ورشات المدرب',
+    'facilitatorsPage.subtitle':
+      'تصفّح الورش التي يقدّمها م. خالد الدوسري والمدربون المشاركون، وسجّل مباشرة من البطاقات أدناه.',
+    'facilitatorsPage.back': 'العودة للرئيسية',
+    'workshops.title': 'أحدث الورش المتاحة',
     'workshops.subtitle':
       'اختر من بين مجموعة متنوعة من البرامج لتطوير مهاراتك. جميع الورش مباشرة في التوقيت المحدد ومسجّلة للمشاهدة لاحقاً عبر المنصة التعليمية.',
     'workshops.viewAll': 'عرض جميع الورش',
+    'workshops.showLess': 'عرض أقل',
     'workshops.searchPlaceholder': 'ابحث عن ورشة…',
     'workshops.loadError': 'تعذر تحميل الورش. تأكد من تشغيل الخادم على المنفذ 8000.',
     'workshops.loadMore': 'تحميل المزيد',
@@ -194,6 +317,27 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.demoHint':
       'الورش أونلاين عبر زوم؛ يُرجى التأكد من تشغيل واجهة البرمجة (API) لإتمام الدفع والتسجيل عبر المنصة.',
     'workshops.empty': 'لا توجد ورش مطابقة.',
+    'workshops.allDates': 'كل التواريخ',
+    'workshops.dayWord': 'اليوم',
+    'workshops.showMore': 'عرض المزيد',
+    'workshops.promoTitle': 'باقة الـ 100 ورشة التدريبية',
+    'workshops.promoBadge': 'خصم 90٪',
+    'workshops.promoPrice': '50 د.ك',
+    'workshops.promoHint': 'عرض محدود لطلاب جامعة الكويت',
+    'workshops.promoCta': 'احصل على العرض الآن',
+    'workshops.promoLimitedBadge': 'عرض خاص لفترة محدودة',
+    'workshops.promoBody':
+      'وصول كامل لجميع الورش التدريبية الـ 100 مع شهادات معتمدة.',
+    'workshops.promoPriceWas': '500 د.ك',
+    'workshops.promoSavePct': 'توفير 90٪',
+    'workshops.promoTrainerLine': 'نخبة من المدربين',
+    'workshops.promoVenueLine': 'أونلاين عبر Zoom',
+    'workshops.promoInstallmentPrefix': 'قسطها على 4 دفعات مع ديمه',
+    'workshops.promoInstallmentAmount': '12.500 د.ك',
+    'workshops.promoInterestFree': 'بدون فوائد',
+    'workshops.filterDaysAria': 'تصفية الورش حسب اليوم',
+    'workshops.packageUnavailable':
+      'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
     'cat.leadership': 'القيادة والتطوير المهني',
     'cat.digital': 'المهارات الرقمية',
@@ -203,8 +347,13 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'cat.career': 'التأهيل المهني',
     'card.addCart': 'أضف للسلة',
     'card.added': 'تمت الإضافة',
-    'card.buyNow': 'اشتري مباشرة',
+    'card.buyNow': 'شراء الآن',
     'card.free': 'مجاناً',
+    'card.currencyKwd': 'د.ك',
+    'card.presenterLabel': 'مقدم الورشة:',
+    'card.locationLabel': 'المكان:',
+    'card.timeLabel': 'الساعة:',
+    'card.priceLabel': 'السعر:',
     'faq.title': 'الأسئلة الشائعة',
     'faq.subtitle': 'كل ما تحتاج معرفته عن التسجيل والمشاركة في الورش التدريبية',
     'faq.q1': 'هل يمكنني التسجيل في أكثر من ورشة؟',
@@ -247,6 +396,20 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.title': 'إتمام الدفع',
     'checkout.subtitle': 'لا نجمع بيانات البطاقة هنا — الدفع يتم عبر Tap بشكل آمن.',
     'checkout.labelName': 'الاسم الكامل',
+    'checkout.backWorkshops': 'العودة للورش',
+    'checkout.personalTitle': 'المعلومات الشخصية',
+    'checkout.personalSubtitle': 'يرجى إدخال بياناتك الشخصية لإتمام الطلب',
+    'checkout.labelFirstName': 'الاسم الأول',
+    'checkout.labelLastName': 'الاسم الأخير',
+    'checkout.orderSummary': 'ملخص الطلب',
+    'checkout.subtotalLine': 'المجموع الفرعي',
+    'checkout.extraFees': 'الرسوم الإضافية',
+    'checkout.feesZero': '0 د.ك',
+    'checkout.total': 'الإجمالي',
+    'checkout.payNow': 'ادفع الآن',
+    'checkout.removeLine': 'إزالة من السلة',
+    'checkout.securePayment': 'الدفع آمن ومحمي',
+    'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'الهاتف (اختياري)',
     'checkout.payTap': 'الدفع عبر Tap',
@@ -330,9 +493,18 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.workshops': 'Training workshops',
     'nav.career': 'Career path',
     'nav.about': 'About',
+    'nav.facilitatorWorkshops': 'Facilitator workshops',
     'nav.searchAria': 'Search',
     'nav.langShortAr': 'AR',
     'nav.langShortEn': 'EN',
+    'banner.promoAria': 'Promotion: discounted workshops for Kuwait University students',
+    'banner.promoMain': '100-workshop offer for Kuwait University students! Special discount',
+    'banner.promoDetails': 'Click for details',
+    'banner.modalCloseAria': 'Close dialog',
+    'banner.modalHeroTitle': 'The University 100 Workshops',
+    'banner.modalImageBarText': 'The 100-workshop offer',
+    'banner.modalBody':
+      'Get full access to all 100 training workshops with an exclusive discount for Kuwait University students. Develop your skills across multiple fields with top trainers.',
     'hero.badge': 'Kuwait University student development platform',
     'hero.title1': 'Grow your skills,',
     'hero.title2': 'build your career',
@@ -340,6 +512,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'Explore certified workshops and events built for KU students—in partnership with Next Level. Practical tracks for employability, with a simple and secure registration flow.',
     'hero.ctaBrowse': 'Browse workshops',
     'hero.ctaPaths': 'Explore learning paths',
+    'hero.ctaFacilitators': 'Meet facilitators',
     'hero.stat': '100+ certified workshops',
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
@@ -352,10 +525,45 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'feat3.desc': 'Learn from academics and practitioners active in the market.',
     'feat4.title': 'Recognized certificates',
     'feat4.desc': 'Credentials that strengthen your CV when requirements are met.',
-    'workshops.title': 'Register for workshops',
+    'trainers.badge': 'Meet the workshop presenters',
+    'trainers.title': 'Expert facilitators',
+    'trainers.subtitle':
+      'Workshops are delivered by specialists across multiple domains—bringing practical experience and high-value training content.',
+    'trainers.day1': 'Day 1 (14 sessions)',
+    'trainers.day2': 'Day 2 (15 sessions)',
+    'trainers.day3': 'Day 3 (14 sessions)',
+    'trainers.day4': 'Day 4 (15 sessions)',
+    'trainers.day5': 'Day 5 (15 sessions)',
+    'trainers.featuredName': 'Eng. Khaled Al-Dosari',
+    'trainers.featuredBio':
+      'Engineer and facilitator of innovation and teamwork workshops—helping student teams turn ideas into actionable projects.',
+    'trainers.ctaBrowse': "Browse this facilitator's workshops",
+    'trainers.socialInstagram': 'Instagram',
+    'trainers.socialTiktok': 'TikTok',
+    'trainers.socialX': 'X',
+    'experts.badge': 'Our experts',
+    'experts.titleBefore': 'Learn from an',
+    'experts.titleHighlight': 'elite',
+    'experts.titleAfter': 'line-up of trainers',
+    'experts.subtitle':
+      'Pick a trainer to read their bio and browse their workshops—reach out through the links when you need to.',
+    'experts.searchPh': 'Search by name or specialty…',
+    'experts.workshopsHeading': 'Workshops by this trainer',
+    'experts.connect': 'Connect with the trainer',
+    'experts.showMore': 'Show more',
+    'experts.showLess': 'Show fewer',
+    'experts.socialEmail': 'Email',
+    'experts.socialLinkedin': 'LinkedIn',
+    'experts.socialX': 'X',
+    'facilitatorsPage.title': 'Facilitator workshops',
+    'facilitatorsPage.subtitle':
+      'Browse sessions led by Eng. Khaled Al-Dosari and fellow facilitators—register directly from the cards below.',
+    'facilitatorsPage.back': 'Back to home',
+    'workshops.title': 'Latest available workshops',
     'workshops.subtitle':
       'Pick the sessions that fit your schedule—live on Zoom at the listed times, with recordings available later on the learning platform.',
     'workshops.viewAll': 'View all workshops',
+    'workshops.showLess': 'Show fewer',
     'workshops.searchPlaceholder': 'Search workshops…',
     'workshops.loadError': 'Could not load workshops. Is the API running on port 8000?',
     'workshops.loadMore': 'Load more',
@@ -363,6 +571,27 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.demoHint':
       'Workshops are hosted on Zoom; keep the API running to complete checkout and enrollment through this demo app.',
     'workshops.empty': 'No workshops match your filters.',
+    'workshops.allDates': 'All dates',
+    'workshops.dayWord': 'Day',
+    'workshops.showMore': 'Show more',
+    'workshops.promoTitle': 'The 100 training workshops bundle',
+    'workshops.promoBadge': '90% off',
+    'workshops.promoPrice': '50 K.D.',
+    'workshops.promoHint': 'Limited offer for Kuwait University students',
+    'workshops.promoCta': 'Get the offer now',
+    'workshops.promoLimitedBadge': 'Special offer for a limited time',
+    'workshops.promoBody':
+      'Full access to all 100 training workshops with certified certificates.',
+    'workshops.promoPriceWas': '500 K.D.',
+    'workshops.promoSavePct': 'Save 90%',
+    'workshops.promoTrainerLine': 'Elite trainers',
+    'workshops.promoVenueLine': 'Online via Zoom',
+    'workshops.promoInstallmentPrefix': 'Split into 4 payments with Deema',
+    'workshops.promoInstallmentAmount': '12.500 K.D.',
+    'workshops.promoInterestFree': 'Interest-free',
+    'workshops.filterDaysAria': 'Filter workshops by day',
+    'workshops.packageUnavailable':
+      'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',
     'cat.leadership': 'Leadership & professional development',
     'cat.digital': 'Digital skills',
@@ -374,6 +603,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'card.added': 'Added',
     'card.buyNow': 'Buy now',
     'card.free': 'Free',
+    'card.currencyKwd': 'K.D.',
+    'card.presenterLabel': 'Presenter:',
+    'card.locationLabel': 'Venue:',
+    'card.timeLabel': 'Time:',
+    'card.priceLabel': 'Price:',
     'faq.title': 'Frequently asked questions',
     'faq.subtitle': 'Everything you need to know about signing up and joining training workshops',
     'faq.q1': 'Can I register for more than one workshop?',
@@ -419,6 +653,20 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.title': 'Checkout',
     'checkout.subtitle': 'We never collect card details in this app—Tap handles payment securely.',
     'checkout.labelName': 'Full name',
+    'checkout.backWorkshops': 'Back to workshops',
+    'checkout.personalTitle': 'Personal information',
+    'checkout.personalSubtitle': 'Please enter your details to complete the order',
+    'checkout.labelFirstName': 'First name',
+    'checkout.labelLastName': 'Last name',
+    'checkout.orderSummary': 'Order summary',
+    'checkout.subtotalLine': 'Subtotal',
+    'checkout.extraFees': 'Additional fees',
+    'checkout.feesZero': '0 K.D.',
+    'checkout.total': 'Total',
+    'checkout.payNow': 'Pay now',
+    'checkout.removeLine': 'Remove from cart',
+    'checkout.securePayment': 'Secure, protected checkout',
+    'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone (optional)',
     'checkout.payTap': 'Pay with Tap',

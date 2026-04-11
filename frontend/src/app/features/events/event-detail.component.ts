@@ -49,7 +49,7 @@ import { EventsService } from '../../core/services/events.service';
           <h1 class="mt-3 text-3xl font-bold text-brand-900 md:text-4xl">{{ title(ev) }}</h1>
           <div class="mt-4 flex flex-wrap gap-2 text-xs text-ink-600">
             <span class="rounded-full border border-ink-200 bg-ink-50 px-2 py-0.5">{{
-              ev.starts_at | date: 'fullDate'
+              ev.starts_at | date: 'fullDate' : undefined : dateLocale()
             }}</span>
             @if (location(ev)) {
               <span class="rounded-full border border-ink-200 bg-ink-50 px-2 py-0.5">{{ location(ev) }}</span>
@@ -67,7 +67,7 @@ import { EventsService } from '../../core/services/events.service';
                   {{ i18n.t('card.free') }}
                 } @else {
                   {{ ev.price | number: '1.2-3' }}
-                  <span class="text-base font-semibold text-ink-600">{{ priceSuffix(ev) }}</span>
+                  <span class="text-base font-semibold text-ink-600">{{ priceSuffix() }}</span>
                 }
               </p>
             </div>
@@ -129,32 +129,51 @@ export class EventDetailComponent implements OnInit {
     });
   }
 
+  dateLocale(): string {
+    return this.i18n.locale() === 'ar' ? 'ar-KW' : 'en-GB';
+  }
+
   title(ev: VolunteerEvent): string {
     const h = ev as HomeListEvent;
-    return this.i18n.locale() === 'ar' && h.titleAr ? h.titleAr : ev.title;
+    if (this.i18n.locale() === 'ar') {
+      return h.titleAr ?? ev.title;
+    }
+    const en = ev.title_en?.trim();
+    return en && en.length > 0 ? en : ev.title;
   }
 
   location(ev: VolunteerEvent): string | null {
     const h = ev as HomeListEvent;
-    if (this.i18n.locale() === 'ar' && h.locationAr) {
-      return h.locationAr;
+    if (this.i18n.locale() === 'ar') {
+      return h.locationAr ?? ev.location;
+    }
+    const en = ev.location_en?.trim();
+    if (en && en.length > 0) {
+      return en;
     }
     return ev.location;
   }
 
   body(ev: VolunteerEvent): string {
     const h = ev as HomeListEvent;
-    const desc = ev.description || ev.summary;
-    if (this.i18n.locale() === 'ar' && h.summaryAr && !ev.description) {
-      return h.summaryAr;
+    if (this.i18n.locale() === 'ar') {
+      return ev.description ?? h.summaryAr ?? ev.summary ?? '';
     }
-    return desc ?? '';
+    const en = ev.summary_en?.trim();
+    if (en && en.length > 0) {
+      return en;
+    }
+    return ev.summary ?? ev.description ?? '';
   }
 
-  priceSuffix(ev: VolunteerEvent): string {
+  priceSuffix(): string {
+    const ev = this.event();
+    if (!ev) {
+      return '';
+    }
     const c = ev.currency?.toUpperCase();
     if (c === 'KWD') {
-      return 'K.D.';
+      return this.i18n.t('card.currencyKwd');
     }
     return ev.currency;
   }

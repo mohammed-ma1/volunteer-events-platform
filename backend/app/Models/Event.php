@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Event extends Model
 {
     protected $fillable = [
-        'title', 'slug', 'summary', 'description', 'image_url',
-        'starts_at', 'ends_at', 'location', 'price', 'currency',
+        'title', 'title_en', 'slug', 'summary', 'summary_en', 'description', 'image_url',
+        'starts_at', 'ends_at', 'location', 'location_en', 'price', 'currency',
         'capacity', 'is_featured', 'is_published',
     ];
 

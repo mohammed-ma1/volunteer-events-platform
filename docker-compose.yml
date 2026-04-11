@@ -1,0 +1,31 @@
+# Local MySQL for Laravel — matches backend/.env (DB_*).
+# Start: docker compose up -d
+# Stop:  docker compose down
+# If port 3306 is busy (e.g. Homebrew MySQL): brew services stop mysql
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ve-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: volunteer_events
+      MYSQL_USER: ve_app
+      MYSQL_PASSWORD: adawi123
+      MYSQL_ROOT_PASSWORD: ve_root_local_only
+    ports:
+      - "3306:3306"
+    volumes:
+      - ve_mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pve_root_local_only"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+volumes:
+  ve_mysql_data:
