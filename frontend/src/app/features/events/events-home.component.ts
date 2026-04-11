@@ -65,7 +65,8 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
             class="motion-safe:animate-ve-fade-up flex flex-wrap gap-3 motion-safe:[animation-delay:180ms]"
           >
             <a
-              href="#workshops"
+              routerLink="/"
+              fragment="workshops"
               class="ve-focus-ring group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
             >
               <span
@@ -135,7 +136,8 @@ const CATEGORY_ORDER: WorkshopCategory[] = [
           <p class="mt-1 max-w-xl text-sm text-ink-600 md:text-base">{{ i18n.t('workshops.subtitle') }}</p>
         </div>
         <a
-          href="#workshops-grid"
+          routerLink="/"
+          fragment="workshops-grid"
           class="motion-safe:animate-ve-fade-up group inline-flex items-center gap-1.5 text-sm font-bold text-brand-700 transition hover:gap-2.5 hover:text-brand-900"
         >
           @if (i18n.isRtl()) {

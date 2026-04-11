@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { PRIMARY_OUTLET, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { cartIconBump } from '../animations/cart-animations';
 import { routeFade } from '../animations/route-animations';
 import { I18nService } from '../i18n/i18n.service';
@@ -202,7 +202,13 @@ export class ShellComponent {
   readonly i18n = inject(I18nService);
   private readonly router = inject(Router);
 
+  /** Path only — omit `#fragment` so hash-only navigations do not re-run routeFade (invisible absolute layer would steal clicks). */
   animationKey(): string {
-    return this.router.url;
+    const tree = this.router.parseUrl(this.router.url);
+    const primary = tree.root.children[PRIMARY_OUTLET];
+    if (!primary?.segments.length) {
+      return '/';
+    }
+    return '/' + primary.segments.map((s) => s.path).join('/');
   }
 }
