@@ -10,7 +10,7 @@ region: nyc
 static_sites:
   - name: web
     github:
-      repo: your-org/volunteer-events-platform
+      repo: mohammed-ma1/volunteer-events-platform
       branch: main
       deploy_on_push: true
     source_dir: frontend

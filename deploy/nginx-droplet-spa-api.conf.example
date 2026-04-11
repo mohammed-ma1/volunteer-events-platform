@@ -1,0 +1,59 @@
+# Single Droplet: Angular SPA at / and Laravel API at /api (same origin as production apiUrl: '/api').
+# Copy to /etc/nginx/sites-available/ and symlink to sites-enabled; adjust paths, server_name, and PHP socket.
+#
+# Layout (example):
+#   /var/www/volunteer-events/frontend/dist/frontend/browser   ← Angular build output
+#   /var/www/volunteer-events/backend/public                 ← Laravel index.php
+#
+# Build frontend once on the server: cd frontend && npm ci && npm run build
+# Backend: cd backend && composer install --no-dev && cp .env.example .env && php artisan key:generate
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name events.example.com;
+
+    # Angular SPA (production build: dist/frontend/browser)
+    root /var/www/volunteer-events/frontend/dist/frontend/browser;
+    index index.html;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+
+    # Laravel health (not under /api) — used by probes and Laravel's /up route
+    location = /up {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /var/www/volunteer-events/backend/public/index.php;
+        fastcgi_param DOCUMENT_ROOT /var/www/volunteer-events/backend/public;
+        fastcgi_param REQUEST_URI $request_uri;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+
+    # Laravel API (prefix /api from bootstrap; routes in routes/api.php)
+    location ^~ /api/ {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /var/www/volunteer-events/backend/public/index.php;
+        fastcgi_param DOCUMENT_ROOT /var/www/volunteer-events/backend/public;
+        fastcgi_param REQUEST_URI $request_uri;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+
+    # SPA — client-side routes
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+}
+
+# After HTTP works, obtain TLS (example):
+#   sudo apt install certbot python3-certbot-nginx
+#   sudo certbot --nginx -d events.example.com
+#
+# Certbot will add listen 443 ssl and certificate paths to this server block (or a duplicate).
+# Ubuntu 24.04 PHP-FPM socket: /run/php/php8.3-fpm.sock — use php8.2-fpm.sock if you installed 8.2.
