@@ -10,6 +10,27 @@ import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
 import { environment } from '../../../environments/environment';
 
+/** `randomUUID` is missing on non-HTTPS origins (e.g. http://droplet-ip); use RFC4122 v4 via getRandomValues when needed. */
+function createClientUuid(): string {
+  const c = globalThis.crypto;
+  if (c?.randomUUID) {
+    return c.randomUUID();
+  }
+  if (c?.getRandomValues) {
+    const b = new Uint8Array(16);
+    c.getRandomValues(b);
+    b[6] = (b[6] & 0x0f) | 0x40;
+    b[8] = (b[8] & 0x3f) | 0x80;
+    const h = [...b].map((x) => x.toString(16).padStart(2, '0')).join('');
+    return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (ch) => {
+    const r = (Math.random() * 16) | 0;
+    const v = ch === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
@@ -181,7 +202,7 @@ export class CheckoutPageComponent {
   readonly tapFrameLoading = signal(false);
   private readonly activeOrderUuid = signal<string | null>(null);
 
-  private idempotencyKey = crypto.randomUUID();
+  private idempotencyKey = createClientUuid();
   private pollSub?: Subscription;
 
   private readonly onWindowMessage = (ev: MessageEvent): void => {
