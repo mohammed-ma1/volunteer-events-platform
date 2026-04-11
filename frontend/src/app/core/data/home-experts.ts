@@ -77,16 +77,8 @@ function presenterNameEnForSchedule(schedule: { workshops: { presenter_ar: strin
 
 const PRESENTER_NAME_EN = presenterNameEnForSchedule(SCHEDULE);
 
-const PORTRAIT_IMAGES = [
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=720&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=720&q=80',
-];
+/** Served from `frontend/public/` → `/images/experts/...` at runtime. */
+const EXPERT_PORTRAIT_URL = '/images/experts/trump_coach_style.svg';
 
 const DEFAULT_SOCIALS: ExpertSocial[] = [
       { href: 'mailto:hello@example.com', aria: 'experts.socialEmail', kind: 'mail' },
@@ -123,7 +115,7 @@ function buildHomeExperts(): HomeExpert[] {
 
   const names = [...byPresenter.keys()].sort((a, b) => a.localeCompare(b, 'ar'));
 
-  return names.map((nameAr, i) => {
+  return names.map((nameAr) => {
     const slugs = [...(byPresenter.get(nameAr) ?? [])].sort();
     const nw = slugs.length;
     const { ar: specialtyAr, en: specialtyEn } = specialtyFor(nameAr);
@@ -144,7 +136,7 @@ function buildHomeExperts(): HomeExpert[] {
       specialtyEn,
       bioAr,
       bioEn,
-      imageUrl: PORTRAIT_IMAGES[i % PORTRAIT_IMAGES.length],
+      imageUrl: EXPERT_PORTRAIT_URL,
       socials: DEFAULT_SOCIALS,
       workshopSlugs: slugs,
     };
