@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class CheckoutController extends Controller
@@ -99,7 +100,11 @@ class CheckoutController extends Controller
 
         try {
             $charge = $this->tapPaymentService->createChargeForOrder($order, $langCode, $request);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
+            Log::error('Checkout Tap create charge failed', [
+                'order_uuid' => $order->uuid,
+                'exception' => $e->getMessage(),
+            ]);
             $order->update(['status' => Order::STATUS_FAILED]);
 
             return response()->json(['message' => 'Payment provider error.'], 502);
