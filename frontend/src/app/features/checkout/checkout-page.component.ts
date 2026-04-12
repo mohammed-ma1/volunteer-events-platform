@@ -33,6 +33,19 @@ function createClientUuid(): string {
   });
 }
 
+/**
+ * Tap's hosted checkout sets CSP `frame-ancestors 'self'`, so it cannot be embedded in a merchant
+ * iframe — use full-page navigation to `payment_url` instead. Return flow uses `/checkout/tap-return`.
+ */
+function isTapHostedPaymentUrl(url: string): boolean {
+  try {
+    const host = new URL(url).hostname;
+    return host === 'checkout.tap.company' || host.endsWith('.tap.company');
+  } catch {
+    return false;
+  }
+}
+
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
@@ -390,9 +403,10 @@ export class CheckoutPageComponent {
           return;
         }
         if (
-          !environment.production &&
-          environment.tapPreferFullPageRedirectOnLocalhost &&
-          this.hostIsLocal()
+          isTapHostedPaymentUrl(res.payment_url) ||
+          (!environment.production &&
+            environment.tapPreferFullPageRedirectOnLocalhost &&
+            this.hostIsLocal())
         ) {
           window.location.assign(res.payment_url);
           return;
