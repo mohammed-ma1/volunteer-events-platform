@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendGhlWebhookJob;
 use App\Models\Order;
 use App\Services\OrderReceiptMailer;
 
@@ -18,5 +19,9 @@ class OrderObserver
         }
 
         $this->receiptMailer->sendIfPaidAndNotSent($order);
+
+        if (config('services.ghl.webhook_url')) {
+            SendGhlWebhookJob::dispatch($order);
+        }
     }
 }

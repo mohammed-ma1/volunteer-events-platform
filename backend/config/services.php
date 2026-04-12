@@ -35,6 +35,10 @@ return [
         ],
     ],
 
+    'ghl' => [
+        'webhook_url' => env('GHL_WEBHOOK_URL'),
+    ],
+
     'tap' => [
         'secret' => env('TAP_SECRET_KEY'),
         'public_key' => env('TAP_PUBLIC_KEY'),

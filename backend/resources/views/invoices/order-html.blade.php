@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Invoice {{ $reference }}</title>
   <style>
@@ -13,6 +14,7 @@
     table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.875rem; }
     th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; }
     th { background: #0b1221; color: #fff; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td.item-title { unicode-bidi: embed; }
     .total { margin-top: 20px; font-size: 1.25rem; font-weight: 700; }
   </style>
 </head>
@@ -40,8 +42,9 @@
       </thead>
       <tbody>
         @foreach($order->items as $line)
+          @php $isAr = (bool) preg_match('/[\x{0600}-\x{06FF}]/u', $line->event_title); @endphp
           <tr>
-            <td>{{ $line->event_title }}</td>
+            <td class="item-title" dir="{{ $isAr ? 'rtl' : 'ltr' }}" style="{{ $isAr ? 'text-align:right;' : '' }}">{{ $line->event_title }}</td>
             <td style="text-align:center;">{{ $line->quantity }}</td>
             <td style="text-align:right;">{{ number_format((float) $line->unit_price, 3) }} {{ $order->currency }}</td>
             <td style="text-align:right;">{{ number_format((float) $line->unit_price * $line->quantity, 3) }} {{ $order->currency }}</td>
