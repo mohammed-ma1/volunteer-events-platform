@@ -59,6 +59,8 @@ export interface CheckoutResponse {
 
 export interface OrderSummary {
   uuid: string;
+  /** Display reference e.g. KW-000471 */
+  reference_code?: string;
   status: string;
   total: number;
   currency: string;

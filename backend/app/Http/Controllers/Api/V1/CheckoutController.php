@@ -182,10 +182,37 @@ class CheckoutController extends Controller
         return $this->orderSummaryJson($order->fresh(['items']));
     }
 
+    /**
+     * Downloadable HTML invoice (paid orders only). Browser saves/opens as .html; user can print to PDF.
+     */
+    public function invoice(string $uuid): JsonResponse|Response
+    {
+        $order = Order::query()->where('uuid', $uuid)->with('items')->first();
+        if ($order === null) {
+            return response()->json(['message' => 'Order not found.'], 404);
+        }
+        if ($order->status !== Order::STATUS_PAID) {
+            return response()->json(['message' => 'Invoice is only available for paid orders.'], 403);
+        }
+
+        $html = view('invoices.order-html', [
+            'order' => $order,
+            'reference' => $order->invoiceReference(),
+        ])->render();
+
+        $filename = 'invoice-'.$order->invoiceReference().'.html';
+
+        return response($html, 200, [
+            'Content-Type' => 'text/html; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ]);
+    }
+
     private function orderSummaryJson(Order $order): JsonResponse
     {
         return response()->json([
             'uuid' => $order->uuid,
+            'reference_code' => $order->invoiceReference(),
             'status' => $order->status,
             'total' => (float) $order->total,
             'currency' => $order->currency,

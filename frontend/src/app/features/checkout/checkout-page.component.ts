@@ -46,6 +46,10 @@ function isTapHostedPaymentUrl(url: string): boolean {
   }
 }
 
+/** Tap / card network logos (hosted asset). */
+const TAP_PAYMENT_METHODS_BANNER_URL =
+  'https://vibe.filesafe.space/1775667546795098704/attachments/1155c919-726e-476b-ba42-a821af443073.webp';
+
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
@@ -291,26 +295,15 @@ function isTapHostedPaymentUrl(url: string): boolean {
               {{ i18n.t('checkout.securePayment') }}
             </p>
 
-            <div
-              class="mt-4 flex flex-wrap items-center justify-center gap-2 opacity-80"
-              aria-label="Payment methods"
-            >
-              <span
-                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
-                >VISA</span
-              >
-              <span
-                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
-                >MC</span
-              >
-              <span
-                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
-                >AMEX</span
-              >
-              <span
-                class="rounded border border-ink-200 bg-ink-50 px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-600"
-                >KNET</span
-              >
+            <div class="mt-4 flex justify-center" aria-label="Payment methods">
+              <img
+                [src]="tapPaymentMethodsBannerUrl"
+                width="560"
+                height="72"
+                alt=""
+                class="h-auto max-h-14 w-full max-w-md object-contain opacity-95"
+                loading="lazy"
+              />
             </div>
 
             <p
@@ -325,6 +318,8 @@ function isTapHostedPaymentUrl(url: string): boolean {
   `,
 })
 export class CheckoutPageComponent {
+  readonly tapPaymentMethodsBannerUrl = TAP_PAYMENT_METHODS_BANNER_URL;
+
   private readonly fb = inject(FormBuilder);
   private readonly checkoutApi = inject(CheckoutService);
   private readonly sanitizer = inject(DomSanitizer);

@@ -22,6 +22,8 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/orders/{uuid}', [CheckoutController::class, 'show']);
+    Route::get('/orders/{uuid}/invoice', [CheckoutController::class, 'invoice'])
+        ->middleware('throttle:30,1');
     Route::post('/orders/{uuid}/sync-tap', [CheckoutController::class, 'syncFromTap'])
         ->middleware('throttle:60,1');
 

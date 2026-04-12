@@ -194,6 +194,13 @@ export type TranslationKey =
   | 'complete.paidBadge'
   | 'complete.capturedHint'
   | 'complete.notPaidYet'
+  | 'complete.headingSuccess'
+  | 'complete.confirmSubtitle'
+  | 'complete.confirmEmailIntro'
+  | 'complete.orderNumberLabel'
+  | 'complete.downloadInvoice'
+  | 'complete.backHome'
+  | 'complete.detailsHeading'
   | 'failed.title'
   | 'failed.reasonTimeout'
   | 'failed.reasonError'
@@ -437,6 +444,13 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.paidBadge': 'تم الدفع بنجاح',
     'complete.capturedHint': 'تمت عملية الدفع وتسجيل طلبك.',
     'complete.notPaidYet': 'هذا الطلب لم يُدفع بعد. يمكنك إكمال الدفع من صفحة الدفع.',
+    'complete.headingSuccess': 'تم تأكيد طلبك بنجاح!',
+    'complete.confirmSubtitle': 'شكراً لك،',
+    'complete.confirmEmailIntro': 'تم إرسال تفاصيل التسجيل إلى',
+    'complete.orderNumberLabel': 'رقم الطلب',
+    'complete.downloadInvoice': 'تحميل الفاتورة',
+    'complete.backHome': 'العودة للرئيسية',
+    'complete.detailsHeading': 'تفاصيل الطلب',
     'failed.title': 'لم يكتمل الدفع',
     'failed.reasonTimeout': 'استغرق التأكيد وقتاً طويلاً أو انقطع الاتصال. إن خُصم مبلغ من بطاقتك ولم يُؤكد الطلب، تواصل مع الدعم مع رقم الطلب.',
     'failed.reasonError': 'حدث خطأ أثناء التحقق من حالة الدفع. حاول مرة أخرى.',
@@ -690,6 +704,13 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.paidBadge': 'Payment successful',
     'complete.capturedHint': 'Your payment was captured and your order is confirmed.',
     'complete.notPaidYet': 'This order has not been paid yet. Complete checkout to continue.',
+    'complete.headingSuccess': 'Your order has been confirmed!',
+    'complete.confirmSubtitle': 'Thank you,',
+    'complete.confirmEmailIntro': 'registration details have been sent to',
+    'complete.orderNumberLabel': 'Order number',
+    'complete.downloadInvoice': 'Download invoice',
+    'complete.backHome': 'Back to home',
+    'complete.detailsHeading': 'Order details',
     'failed.title': 'Payment not completed',
     'failed.reasonTimeout': 'Confirmation took too long or the connection dropped. If you were charged but the order did not confirm, contact support with your order reference.',
     'failed.reasonError': 'Something went wrong while checking payment status. Please try again.',

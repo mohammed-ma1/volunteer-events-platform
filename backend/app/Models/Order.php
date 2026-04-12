@@ -46,4 +46,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /** Human-friendly reference for receipts (e.g. KW-000471). */
+    public function invoiceReference(): string
+    {
+        return 'KW-'.str_pad((string) $this->getKey(), 6, '0', STR_PAD_LEFT);
+    }
 }
