@@ -25,3 +25,4 @@ systemctl reload "php${PHP_VERSION}-fpm"
 systemctl reload nginx
 
 echo "Deploy finished. Test: curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1/up"
+echo "Checkout/Tap (issues often appear on server only): set APP_URL and FRONTEND_URL to the public https origin, CORS to match, TAP_MOCK=false; after .env changes run config:cache (or config:clear then this script)."
