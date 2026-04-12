@@ -1,6 +1,7 @@
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { I18nService } from '../i18n/i18n.service';
 import { CartService } from '../services/cart.service';
 
@@ -8,15 +9,37 @@ import { CartService } from '../services/cart.service';
   selector: 'app-cart-drawer',
   standalone: true,
   imports: [RouterLink, DecimalPipe, DatePipe],
+  animations: [
+    trigger('backdropFade', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('280ms ease-out', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0 })),
+      ]),
+    ]),
+    trigger('drawerSlide', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0.5 }),
+        animate('320ms cubic-bezier(0.22, 1, 0.36, 1)', style({ transform: 'translateX(0)', opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('250ms cubic-bezier(0.4, 0, 1, 1)', style({ transform: 'translateX(100%)', opacity: 0.5 })),
+      ]),
+    ]),
+  ],
   template: `
     @if (cart.drawerOpen()) {
       <div
+        @backdropFade
         class="fixed inset-0 z-40 bg-brand-900/40 backdrop-blur-sm"
         (click)="cart.closeDrawer()"
         role="presentation"
       ></div>
 
       <aside
+        @drawerSlide
         class="fixed inset-y-0 end-0 z-50 flex w-full max-w-md flex-col border-s border-ink-200 bg-white shadow-xl"
         role="dialog"
         aria-modal="true"

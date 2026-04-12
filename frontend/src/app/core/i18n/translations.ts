@@ -124,16 +124,22 @@ export type TranslationKey =
   | 'footer.linkWorkshops'
   | 'footer.linkCareer'
   | 'footer.linkAbout'
+  | 'footer.linkStudentLogin'
   | 'footer.policies'
   | 'footer.terms'
   | 'footer.privacy'
   | 'footer.refund'
   | 'footer.contact'
+  | 'footer.contactAddress'
+  | 'footer.contactPhone'
+  | 'footer.contactWhatsapp'
+  | 'footer.contactEmail'
   | 'footer.newsletter'
   | 'footer.newsletterHint'
   | 'footer.emailPlaceholder'
   | 'footer.subscribe'
   | 'footer.copyright'
+  | 'footer.poweredBy'
   | 'cart.title'
   | 'cart.subtitle'
   | 'cart.close'
@@ -367,22 +373,28 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.q4': 'هل الورشات مسجلة؟',
     'faq.a4': 'نعم، سيتم تسجيل جميع الورش لتكون متاحة أونلاين وللمشاهدة في أي وقت عبر المنصة التعليمية.',
     'footer.brand':
-      'منصة لتطوير المهارات الطلابية في جامعة الكويت—ورش معتمدة، مسارات مهنية، وتجربة تسجيل سلسة.',
+      'المنصة الرسمية لجامعة الكويت لتقديم الورش التدريبية وتطوير مهارات الطلاب لإعدادهم لسوق العمل.',
     'footer.quick': 'روابط سريعة',
     'footer.linkHome': 'الرئيسية',
     'footer.linkWorkshops': 'الورش التدريبية',
     'footer.linkCareer': 'المسار المهني',
     'footer.linkAbout': 'عن المنصة',
+    'footer.linkStudentLogin': 'تسجيل دخول الطلاب',
     'footer.policies': 'الشروط والسياسات',
     'footer.terms': 'شروط الاستخدام',
     'footer.privacy': 'سياسة الخصوصية',
     'footer.refund': 'سياسة الاسترجاع',
     'footer.contact': 'تواصل معنا',
+    'footer.contactAddress': 'مدينة صباح السالم الجامعية، الشدادية، الكويت',
+    'footer.contactPhone': '+965 1234 5678',
+    'footer.contactWhatsapp': '+965 9876 5432',
+    'footer.contactEmail': 'info@ku.edu.kw',
     'footer.newsletter': 'النشرة البريدية',
-    'footer.newsletterHint': 'اشترك ليصلك جديد الورش والفعاليات',
+    'footer.newsletterHint': 'اشترك في نشرتنا البريدية لتصلك آخر المستجدات حول الورش والبرامج التدريبية.',
     'footer.emailPlaceholder': 'البريد الإلكتروني',
     'footer.subscribe': 'اشتراك',
-    'footer.copyright': '© جامعة الكويت — منصة التطوير الطلابي',
+    'footer.copyright': 'جميع الحقوق محفوظة © 2026 جامعة الكويت',
+    'footer.poweredBy': 'Media Solution',
     'cart.title': 'سلة التسجيل',
     'cart.subtitle': 'عناصر محجوزة',
     'cart.close': 'إغلاق',
@@ -628,22 +640,28 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.a4':
       'Yes—sessions are recorded so you can watch online later on the learning platform when recordings are published.',
     'footer.brand':
-      'A student skills platform for Kuwait University—certified workshops, career paths, and smooth registration.',
-    'footer.quick': 'Quick links',
+      'The official platform of Kuwait University for offering training workshops and developing student skills to prepare them for the job market.',
+    'footer.quick': 'Quick Links',
     'footer.linkHome': 'Home',
     'footer.linkWorkshops': 'Workshops',
-    'footer.linkCareer': 'Career path',
+    'footer.linkCareer': 'Career Path',
     'footer.linkAbout': 'About',
+    'footer.linkStudentLogin': 'Student Login',
     'footer.policies': 'Terms & policies',
     'footer.terms': 'Terms of use',
     'footer.privacy': 'Privacy policy',
     'footer.refund': 'Refund policy',
-    'footer.contact': 'Contact us',
+    'footer.contact': 'Contact Us',
+    'footer.contactAddress': 'Sabah Al-Salem University City, Al-Shadadiya, Kuwait',
+    'footer.contactPhone': '+965 1234 5678',
+    'footer.contactWhatsapp': '+965 9876 5432',
+    'footer.contactEmail': 'info@ku.edu.kw',
     'footer.newsletter': 'Newsletter',
-    'footer.newsletterHint': 'Get new workshops and events in your inbox',
-    'footer.emailPlaceholder': 'Email address',
+    'footer.newsletterHint': 'Subscribe to our newsletter to receive the latest updates on workshops and training programs.',
+    'footer.emailPlaceholder': 'Email Address',
     'footer.subscribe': 'Subscribe',
-    'footer.copyright': '© Kuwait University — student development platform',
+    'footer.copyright': 'All Rights Reserved © 2026 Kuwait University',
+    'footer.poweredBy': 'Media Solution',
     'cart.title': 'Your cart',
     'cart.subtitle': 'items reserved',
     'cart.close': 'Close',

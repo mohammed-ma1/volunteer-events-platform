@@ -18,7 +18,7 @@ import {
   imports: [RouterLink, DecimalPipe, NgClass],
   template: `
     <article
-      class="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink-200/90 bg-white text-start shadow-sm transition duration-300 hover:border-ink-300 hover:shadow-md motion-reduce:transition-none"
+      class="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink-200/90 bg-white text-start shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.15)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
       <a
         [routerLink]="['/events', event.slug]"

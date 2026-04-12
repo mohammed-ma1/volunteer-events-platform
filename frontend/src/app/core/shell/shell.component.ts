@@ -37,14 +37,23 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </div>
       </div>
       <header
-        class="shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md"
+        class="shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md transition-[box-shadow] duration-300"
+        [class.shadow-sm]="headerCompact()"
       >
         <div
-          class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 md:gap-6 md:py-4"
+          class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 transition-[padding] duration-300 md:gap-6"
+          [class.py-3]="!headerCompact()"
+          [class.py-1.5]="headerCompact()"
+          [class.md:py-4]="!headerCompact()"
+          [class.md:py-2]="headerCompact()"
         >
           <a routerLink="/" class="group flex items-center gap-2.5">
             <svg
-              class="h-10 w-10 shrink-0 text-[#0f172a]"
+              class="shrink-0 text-[#0f172a] transition-[height,width] duration-300"
+              [class.h-10]="!headerCompact()"
+              [class.w-10]="!headerCompact()"
+              [class.h-8]="headerCompact()"
+              [class.w-8]="headerCompact()"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
@@ -163,17 +172,18 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </div>
       </main>
 
-      <footer class="mt-auto shrink-0 border-t border-brand-900/20 bg-brand-900 text-white">
-        <div class="mx-auto max-w-6xl px-4 py-12 md:py-14">
+      <footer class="mt-auto shrink-0 border-t border-white/5 bg-[#0b1221] text-white">
+        <div class="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-14">
           <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            <div class="space-y-3">
+
+            <div class="space-y-4">
               <svg
-                class="h-10 w-10 shrink-0 rounded-lg bg-white/10 p-1.5 text-white"
+                class="h-14 w-14 shrink-0 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 aria-hidden="true"
@@ -181,78 +191,84 @@ import { CartDrawerComponent } from './cart-drawer.component';
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                 <path d="M6 12v5c3 3 9 3 12 0v-5" />
               </svg>
-              <p class="text-sm leading-relaxed text-white/85">{{ i18n.t('footer.brand') }}</p>
+              <p class="max-w-[17rem] text-sm leading-relaxed text-white/65">{{ i18n.t('footer.brand') }}</p>
+              <div class="flex items-center gap-2.5 pt-1">
+                <a href="#" class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="Twitter" (click)="$event.preventDefault()">
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="#" class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="Instagram" (click)="$event.preventDefault()">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="#" class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="LinkedIn" (click)="$event.preventDefault()">
+                  <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5H12v2.1h.06c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.4 4.34 5.52V24h-4v-6.84c0-1.63-.03-3.73-2.27-3.73-2.27 0-2.62 1.78-2.62 3.6V24h-4V8.5z"/></svg>
+                </a>
+              </div>
             </div>
+
             <div>
-              <p class="mb-3 text-sm font-semibold">{{ i18n.t('footer.quick') }}</p>
-              <ul class="space-y-2 text-sm text-white/80">
+              <p class="mb-4 text-sm font-bold">{{ i18n.t('footer.quick') }}</p>
+              <ul class="space-y-3 text-sm text-white/65">
                 <li>
                   <a routerLink="/" class="transition hover:text-white">{{ i18n.t('footer.linkHome') }}</a>
                 </li>
                 <li>
-                  <a routerLink="/" fragment="workshops" class="transition hover:text-white">{{
-                    i18n.t('footer.linkWorkshops')
-                  }}</a>
-                </li>
-                <li>
-                  <a routerLink="/facilitator-workshops" class="transition hover:text-white">{{
-                    i18n.t('nav.facilitatorWorkshops')
-                  }}</a>
+                  <a routerLink="/" fragment="workshops" class="transition hover:text-white">{{ i18n.t('footer.linkWorkshops') }}</a>
                 </li>
                 <li>
                   <a routerLink="/career" class="transition hover:text-white">{{ i18n.t('footer.linkCareer') }}</a>
                 </li>
                 <li>
-                  <a routerLink="/about" class="transition hover:text-white">{{ i18n.t('footer.linkAbout') }}</a>
+                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{ i18n.t('footer.linkStudentLogin') }}</a>
                 </li>
               </ul>
             </div>
+
             <div>
-              <p class="mb-3 text-sm font-semibold">{{ i18n.t('footer.policies') }}</p>
-              <ul class="space-y-2 text-sm text-white/80">
-                <li>
-                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{
-                    i18n.t('footer.terms')
-                  }}</a>
+              <p class="mb-4 text-sm font-bold">{{ i18n.t('footer.contact') }}</p>
+              <ul class="space-y-4 text-sm text-white/65">
+                <li class="flex items-start gap-3">
+                  <svg class="mt-0.5 h-5 w-5 shrink-0 text-white/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+                  <span>{{ i18n.t('footer.contactAddress') }}</span>
                 </li>
                 <li>
-                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{
-                    i18n.t('footer.privacy')
-                  }}</a>
+                  <a href="tel:+96512345678" class="flex items-center gap-3 transition hover:text-white">
+                    <svg class="h-5 w-5 shrink-0 text-white/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+                    <span>{{ i18n.t('footer.contactPhone') }}</span>
+                  </a>
                 </li>
                 <li>
-                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{
-                    i18n.t('footer.refund')
-                  }}</a>
+                  <a href="https://wa.me/96598765432" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 transition hover:text-white">
+                    <svg class="h-5 w-5 shrink-0 text-white/40" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <span>{{ i18n.t('footer.contactWhatsapp') }}</span>
+                  </a>
                 </li>
                 <li>
-                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{
-                    i18n.t('footer.contact')
-                  }}</a>
+                  <a href="mailto:info@ku.edu.kw" class="flex items-center gap-3 transition hover:text-white">
+                    <svg class="h-5 w-5 shrink-0 text-white/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+                    <span>{{ i18n.t('footer.contactEmail') }}</span>
+                  </a>
                 </li>
               </ul>
             </div>
+
             <div>
-              <p class="mb-2 text-sm font-semibold">{{ i18n.t('footer.newsletter') }}</p>
-              <p class="mb-3 text-sm text-white/75">{{ i18n.t('footer.newsletterHint') }}</p>
-              <div class="flex flex-wrap items-stretch gap-2">
+              <p class="mb-2 text-sm font-bold">{{ i18n.t('footer.newsletter') }}</p>
+              <p class="mb-4 text-sm leading-relaxed text-white/55">{{ i18n.t('footer.newsletterHint') }}</p>
+              <label class="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5">
+                <svg class="h-4 w-4 shrink-0 text-white/35" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
                 <input
                   type="email"
-                  class="min-w-0 flex-1 rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                  class="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40"
                   [placeholder]="i18n.t('footer.emailPlaceholder')"
                 />
-                <button
-                  type="button"
-                  class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-900 transition hover:bg-ink-100"
-                >
-                  {{ i18n.t('footer.subscribe') }}
-                </button>
-              </div>
+              </label>
             </div>
+
           </div>
-          <p class="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/55">
-            {{ i18n.t('footer.copyright') }}
-          </p>
+
+          <div class="mt-10 border-t border-white/8 pt-6">
+            <p class="text-center text-xs text-white/45">{{ i18n.t('footer.copyright') }}</p>
+          </div>
         </div>
       </footer>
 
@@ -388,6 +404,24 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </div>
       }
 
+      <button
+        type="button"
+        class="fixed bottom-6 end-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0f172a] text-white shadow-lg transition-all duration-300 ease-out hover:bg-[#1e293b] hover:shadow-xl active:scale-90 motion-reduce:transition-none"
+        [class.scale-100]="showScrollTop()"
+        [class.opacity-100]="showScrollTop()"
+        [class.scale-0]="!showScrollTop()"
+        [class.opacity-0]="!showScrollTop()"
+        [class.pointer-events-none]="!showScrollTop()"
+        [attr.aria-label]="'Scroll to top'"
+        [attr.aria-hidden]="!showScrollTop()"
+        [tabIndex]="showScrollTop() ? 0 : -1"
+        (click)="scrollToTop()"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+
       <app-cart-drawer />
     </div>
   `,
@@ -399,16 +433,29 @@ export class ShellComponent {
   private readonly checkoutFlow = inject(CheckoutFlowService);
 
   readonly promoModalOpen = signal(false);
+  readonly showScrollTop = signal(false);
+  readonly headerCompact = signal(false);
   readonly promoHeroUrl = PROMO_HERO_IMAGE_URL;
 
   /** Decorative icons on modal hero (design reference). */
   readonly promoModalIcons = ['📚', '💡', '👤', '🎤'] as const;
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    const y = window.scrollY;
+    this.showScrollTop.set(y > 400);
+    this.headerCompact.set(y > 60);
+  }
 
   @HostListener('document:keydown.escape')
   onEscapeClosePromo(): void {
     if (this.promoModalOpen()) {
       this.closePromoModal();
     }
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onSearchClick(): void {
