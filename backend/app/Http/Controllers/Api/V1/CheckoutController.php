@@ -72,10 +72,12 @@ class CheckoutController extends Controller
                     $lineTotal = round($unit * $qty, 3);
                     $subtotal += $lineTotal;
 
+                    $enTitle = trim((string) $event->title_en);
+
                     OrderItem::query()->create([
                         'order_id' => $order->id,
                         'event_id' => $event->id,
-                        'event_title' => $event->title,
+                        'event_title' => $enTitle !== '' ? $enTitle : $event->title,
                         'unit_price' => $unit,
                         'quantity' => $qty,
                     ]);
