@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\TapPaymentService;
 use App\Support\TapChargePayload;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -183,7 +184,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Downloadable HTML invoice (paid orders only). Browser saves/opens as .html; user can print to PDF.
+     * PDF invoice (paid orders only).
      */
     public function invoice(string $uuid): JsonResponse|Response
     {
@@ -195,17 +196,14 @@ class CheckoutController extends Controller
             return response()->json(['message' => 'Invoice is only available for paid orders.'], 403);
         }
 
-        $html = view('invoices.order-html', [
+        $pdf = Pdf::loadView('invoices.order-html', [
             'order' => $order,
             'reference' => $order->invoiceReference(),
-        ])->render();
-
-        $filename = 'invoice-'.$order->invoiceReference().'.html';
-
-        return response($html, 200, [
-            'Content-Type' => 'text/html; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
+        $pdf->setPaper('a4', 'portrait');
+        $filename = 'invoice-'.$order->invoiceReference().'.pdf';
+
+        return $pdf->download($filename);
     }
 
     private function orderSummaryJson(Order $order): JsonResponse

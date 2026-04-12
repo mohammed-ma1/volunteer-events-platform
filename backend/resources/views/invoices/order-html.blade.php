@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Invoice {{ $reference }}</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 32px; color: #0a1628; background: #f8fafc; }
-    .card { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+    body { font-family: DejaVu Sans, sans-serif; margin: 0; padding: 24px; color: #0a1628; background: #f8fafc; font-size: 12px; }
+    .card { max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 28px; }
     h1 { font-size: 1.25rem; margin: 0 0 8px; }
     .muted { color: #64748b; font-size: 0.875rem; margin: 0 0 24px; }
-    .ref { font-family: ui-monospace, monospace; font-size: 1.125rem; font-weight: 700; }
+    .ref { font-family: DejaVu Sans, sans-serif; font-size: 13px; font-weight: 700; }
     table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.875rem; }
     th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; }
     th { background: #0b1221; color: #fff; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
