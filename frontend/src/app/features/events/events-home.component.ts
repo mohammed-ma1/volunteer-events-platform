@@ -220,6 +220,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             />
           </svg>
           <input
+            id="workshop-search-input"
             class="min-w-0 flex-1 bg-transparent text-sm text-[#001A33] outline-none placeholder:text-ink-400"
             [placeholder]="i18n.t('workshops.searchPlaceholder')"
             [(ngModel)]="searchText"
@@ -426,14 +427,24 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       }
 
       @if (!loading() && filteredEvents().length > WORKSHOPS_PREVIEW) {
-        <button
-          type="button"
-          class="ve-focus-ring mt-8 flex w-full items-center justify-center gap-2 rounded-2xl border border-ink-200 bg-white py-3.5 text-sm font-bold text-[#001A33] shadow-sm transition hover:bg-ink-50"
-          (click)="showAllWorkshops() ? collapseWorkshopsGrid() : expandWorkshopsGrid()"
-        >
-          <span>{{ showAllWorkshops() ? i18n.t('workshops.showLess') : i18n.t('workshops.showMore') }}</span>
-          <span class="text-ink-500" aria-hidden="true">{{ showAllWorkshops() ? '▲' : '▼' }}</span>
-        </button>
+        <div class="mt-8 flex justify-center">
+          <button
+            type="button"
+            class="ve-focus-ring inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-8 py-2.5 text-sm font-medium text-[#001A33] shadow-sm transition hover:border-slate-400 hover:bg-slate-50/90"
+            (click)="showAllWorkshops() ? collapseWorkshopsGrid() : expandWorkshopsGrid()"
+          >
+            <span>{{ showAllWorkshops() ? i18n.t('workshops.showLess') : i18n.t('workshops.showMore') }}</span>
+            @if (showAllWorkshops()) {
+              <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+              </svg>
+            } @else {
+              <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            }
+          </button>
+        </div>
       }
 
     </section>
@@ -501,11 +512,19 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             @if (filteredExperts().length > EXPERT_SIDEBAR_PREVIEW) {
               <button
                 type="button"
-                class="ve-focus-ring flex w-full items-center justify-center gap-1 rounded-2xl border border-ink-200 bg-white py-2.5 text-sm font-semibold text-[#001A33] transition hover:bg-ink-50"
+                class="ve-focus-ring flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-2.5 text-sm font-medium text-[#001A33] shadow-sm transition hover:border-slate-400 hover:bg-slate-50/90"
                 (click)="toggleExpertListExpand()"
               >
-                {{ showAllExpertTabs() ? i18n.t('experts.showLess') : i18n.t('experts.showMore') }}
-                <span class="text-ink-500" aria-hidden="true">{{ showAllExpertTabs() ? '⌃' : '⌵' }}</span>
+                <span>{{ showAllExpertTabs() ? i18n.t('experts.showLess') : i18n.t('experts.showMore') }}</span>
+                @if (showAllExpertTabs()) {
+                  <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                  </svg>
+                } @else {
+                  <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                }
               </button>
             }
           </aside>

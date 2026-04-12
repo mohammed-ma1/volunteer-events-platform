@@ -104,6 +104,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
               type="button"
               class="ve-focus-ring hidden rounded-full p-2 text-ink-500 transition hover:bg-ink-100 hover:text-brand-900 md:inline-flex"
               [attr.aria-label]="i18n.t('nav.searchAria')"
+              (click)="onSearchClick()"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path
@@ -408,6 +409,18 @@ export class ShellComponent {
     if (this.promoModalOpen()) {
       this.closePromoModal();
     }
+  }
+
+  onSearchClick(): void {
+    this.router.navigate(['/'], { fragment: 'workshops' }).then(() => {
+      setTimeout(() => {
+        const input = document.querySelector<HTMLInputElement>('#workshop-search-input');
+        if (input) {
+          input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => input.focus(), 350);
+        }
+      }, 100);
+    });
   }
 
   openPromoModal(): void {
