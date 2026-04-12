@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Support\TapMoney;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -13,7 +14,7 @@ class TapPaymentService
     /**
      * @param  string|null  $langCode  Tap redirect page language: en or ar (from X-Checkout-Locale)
      */
-    public function createChargeForOrder(Order $order, ?string $langCode = null): array
+    public function createChargeForOrder(Order $order, ?string $langCode = null, ?Request $request = null): array
     {
         $tapMock = (bool) config('services.tap.mock');
         if ($tapMock && ! app()->isLocal()) {
@@ -21,7 +22,7 @@ class TapPaymentService
         }
         $useTapMock = $tapMock && app()->isLocal();
 
-        $frontend = $this->resolvePublicFrontendBaseUrl();
+        $frontend = $this->resolvePublicFrontendBaseUrl($request);
         $returnUrl = $frontend.'/checkout/tap-return?order='.$order->uuid;
 
         if ($useTapMock) {
@@ -103,8 +104,11 @@ class TapPaymentService
     /**
      * Tap redirect / iframe must use the real public HTTPS origin. A wrong FRONTEND_URL (e.g. leftover
      * http://localhost:4200) embeds blocked mixed content when checkout runs on https://kw...
+     *
+     * If .env still points at localhost but the browser sends a trusted CORS Origin (e.g. https://kw...),
+     * use that origin so payment_url and Tap redirect targets match the real site.
      */
-    private function resolvePublicFrontendBaseUrl(): string
+    private function resolvePublicFrontendBaseUrl(?Request $request = null): string
     {
         $configured = rtrim((string) config('app.frontend_url'), '/');
         if ($configured === '') {
@@ -119,11 +123,64 @@ class TapPaymentService
                     'APP_URL' => $fallback,
                 ]);
 
-                return $fallback;
+                $configured = $fallback;
             }
         }
 
+        if ($request !== null && $this->shouldPreferRequestOriginForTapReturn($configured, $request)) {
+            $origin = rtrim((string) $request->headers->get('Origin'), '/');
+            Log::warning('Tap return URL used browser Origin (configured URL was still a local dev host).', [
+                'origin' => $origin,
+                'configured' => $configured,
+            ]);
+
+            return $origin;
+        }
+
         return $configured;
+    }
+
+    /**
+     * Prefer the request Origin when the resolved base is still localhost-like but the client is not
+     * (typical misconfiguration: FRONTEND_URL=http://localhost:4200 on the server while users hit https://production).
+     */
+    private function shouldPreferRequestOriginForTapReturn(string $configuredBase, Request $request): bool
+    {
+        if (! $this->urlLooksLikeLocalDevServer($configuredBase)) {
+            return false;
+        }
+
+        $origin = $request->headers->get('Origin');
+        if (! is_string($origin) || $origin === '') {
+            return false;
+        }
+
+        $origin = rtrim($origin, '/');
+        if ($this->urlLooksLikeLocalDevServer($origin)) {
+            return false;
+        }
+
+        return $this->isAllowedCorsOrigin($origin);
+    }
+
+    private function isAllowedCorsOrigin(string $origin): bool
+    {
+        /** @var list<string> $allowed */
+        $allowed = config('cors.allowed_origins', []);
+
+        if (in_array($origin, $allowed, true)) {
+            return true;
+        }
+
+        /** @var list<string> $patterns */
+        $patterns = config('cors.allowed_origins_patterns', []);
+        foreach ($patterns as $pattern) {
+            if (is_string($pattern) && @preg_match($pattern, $origin) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function urlLooksLikeLocalDevServer(string $url): bool

@@ -98,7 +98,7 @@ class CheckoutController extends Controller
             : null;
 
         try {
-            $charge = $this->tapPaymentService->createChargeForOrder($order, $langCode);
+            $charge = $this->tapPaymentService->createChargeForOrder($order, $langCode, $request);
         } catch (Throwable) {
             $order->update(['status' => Order::STATUS_FAILED]);
 
