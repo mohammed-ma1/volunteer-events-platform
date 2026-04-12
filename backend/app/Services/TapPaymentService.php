@@ -15,14 +15,16 @@ class TapPaymentService
      */
     public function createChargeForOrder(Order $order, ?string $langCode = null): array
     {
-        if (config('services.tap.mock') && ! app()->isLocal()) {
-            Log::warning('TAP_MOCK is enabled outside local; disable in production .env.');
+        $tapMock = (bool) config('services.tap.mock');
+        if ($tapMock && ! app()->isLocal()) {
+            Log::warning('TAP_MOCK is set in .env but only applies when APP_ENV=local; using live Tap API.');
         }
+        $useTapMock = $tapMock && app()->isLocal();
 
         $frontend = $this->resolvePublicFrontendBaseUrl();
         $returnUrl = $frontend.'/checkout/tap-return?order='.$order->uuid;
 
-        if (config('services.tap.mock')) {
+        if ($useTapMock) {
             return [
                 'id' => 'chg_mock_'.$order->uuid,
                 'transaction' => ['url' => $returnUrl.'&mock=1'],
@@ -145,7 +147,7 @@ class TapPaymentService
      */
     public function retrieveCharge(string $chargeId): array
     {
-        if (config('services.tap.mock') && str_starts_with($chargeId, 'chg_mock_')) {
+        if (app()->isLocal() && config('services.tap.mock') && str_starts_with($chargeId, 'chg_mock_')) {
             $uuid = substr($chargeId, strlen('chg_mock_'));
 
             return [

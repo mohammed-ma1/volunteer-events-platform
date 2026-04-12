@@ -123,6 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'frontend_url' => env('FRONTEND_URL', 'http://localhost:4200'),
+    // Prefer explicit FRONTEND_URL (Angular dev server, ngrok, etc.). When unset, use APP_URL so
+    // production never falls back to a hardcoded http://localhost:4200 from an omitted env key.
+    'frontend_url' => env('FRONTEND_URL') ?: env('APP_URL', 'http://localhost'),
 
 ];

@@ -122,9 +122,9 @@ class CheckoutController extends Controller
      */
     public function mockComplete(string $uuid): JsonResponse|Response
     {
-        if (! config('services.tap.mock')) {
+        if (! app()->isLocal() || ! config('services.tap.mock')) {
             return response()->json([
-                'message' => 'TAP_MOCK is disabled. Set TAP_MOCK=true in .env, then run php artisan config:clear.',
+                'message' => 'mock-complete is only available when APP_ENV=local and TAP_MOCK=true.',
             ], 403);
         }
 
