@@ -2,6 +2,7 @@ import { Directive, ElementRef, OnDestroy, inject } from '@angular/core';
 
 /**
  * Fades/slides the host into view once when it crosses the viewport (respects reduced motion).
+ * Includes a safety timeout so content is never permanently hidden.
  */
 @Directive({
   selector: '[veScrollReveal]',
@@ -13,6 +14,7 @@ import { Directive, ElementRef, OnDestroy, inject } from '@angular/core';
 export class ScrollRevealDirective implements OnDestroy {
   private readonly el = inject(ElementRef<HTMLElement>);
   private observer: IntersectionObserver | null = null;
+  private fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     const prefersReduced =
@@ -25,24 +27,40 @@ export class ScrollRevealDirective implements OnDestroy {
     }
 
     const root = this.el.nativeElement;
+
+    this.fallbackTimer = setTimeout(() => {
+      if (!root.classList.contains('ve-reveal-visible')) {
+        root.classList.add('ve-reveal-visible');
+      }
+      this.observer?.disconnect();
+      this.observer = null;
+    }, 2500);
+
     this.observer = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
             root.classList.add('ve-reveal-visible');
-            this.observer?.disconnect();
-            this.observer = null;
+            this.cleanup();
             break;
           }
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+      { threshold: 0.04, rootMargin: '0px 0px 0px 0px' },
     );
     this.observer.observe(root);
   }
 
   ngOnDestroy(): void {
+    this.cleanup();
+  }
+
+  private cleanup(): void {
     this.observer?.disconnect();
     this.observer = null;
+    if (this.fallbackTimer) {
+      clearTimeout(this.fallbackTimer);
+      this.fallbackTimer = null;
+    }
   }
 }
