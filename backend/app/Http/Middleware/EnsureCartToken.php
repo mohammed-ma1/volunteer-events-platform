@@ -15,18 +15,25 @@ class EnsureCartToken
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->header(self::HEADER);
-        if (! is_string($token) || $token === '') {
-            Log::warning('Cart middleware: missing token header', ['url' => $request->fullUrl()]);
+        Log::info('Cart middleware hit', [
+            'method' => $request->method(),
+            'url' => $request->path(),
+            'has_token' => is_string($token) && $token !== '',
+            'token' => is_string($token) ? substr($token, 0, 12).'...' : null,
+        ]);
 
+        if (! is_string($token) || $token === '') {
             return response()->json(['message' => 'Missing cart token.'], 401);
         }
 
         $cart = Cart::query()->where('token', $token)->first();
         if (! $cart) {
-            Log::warning('Cart middleware: token not found in DB', ['token' => $token, 'url' => $request->fullUrl()]);
+            Log::warning('Cart middleware: token not found in DB', ['token' => $token]);
 
             return response()->json(['message' => 'Cart not found.'], 404);
         }
+
+        Log::info('Cart middleware: found cart', ['cart_id' => $cart->id, 'items' => $cart->items()->count()]);
 
         $request->attributes->set('cart', $cart);
 
