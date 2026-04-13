@@ -88,8 +88,6 @@ class CheckoutController extends Controller
                     'total' => round($subtotal, 3),
                 ]);
 
-                $cart->items()->delete();
-
                 return $order->fresh(['items']);
             });
         } catch (Throwable) {

@@ -471,6 +471,7 @@ export class CheckoutPageComponent {
   private handleTerminalOrder(status: string, uuid: string): boolean {
     if (status === 'paid') {
       this.stopPolling();
+      this.cart.clear().subscribe({ error: () => this.cart.clearLocalCart() });
       void this.router.navigate(['/checkout/complete'], { queryParams: { order: uuid } });
       return true;
     }

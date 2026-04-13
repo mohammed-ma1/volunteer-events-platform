@@ -5,6 +5,7 @@ import { catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { OrderSummary } from '../../core/models/api.types';
+import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
 
 @Component({
@@ -144,6 +145,7 @@ export class CheckoutCompleteComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly checkoutApi = inject(CheckoutService);
+  private readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
 
   readonly order = signal<OrderSummary | null>(null);
@@ -161,6 +163,9 @@ export class CheckoutCompleteComponent implements OnInit {
       .subscribe({
         next: (o) => {
           this.order.set(o);
+          if (o.status === 'paid') {
+            this.cart.clear().subscribe({ error: () => this.cart.clearLocalCart() });
+          }
           if (o.status === 'failed' || o.status === 'cancelled') {
             void this.router.navigate(['/checkout/failed'], { queryParams: { order: uuid } });
           }
