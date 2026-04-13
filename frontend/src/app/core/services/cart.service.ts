@@ -4,6 +4,8 @@ import { Observable, of, switchMap, tap } from 'rxjs';
 import { CartSnapshot } from '../models/api.types';
 
 const STORAGE_KEY = 've_cart_token';
+const COOKIE_KEY = 've_cart_token';
+const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -48,7 +50,7 @@ export class CartService {
     return this.http.post<{ token: string }>('v1/carts', {}).pipe(
       tap((res) => {
         this.token.set(res.token);
-        localStorage.setItem(STORAGE_KEY, res.token);
+        this.persistToken(res.token);
       }),
       switchMap(() => of(void 0)),
     );
@@ -116,9 +118,32 @@ export class CartService {
     this.token.set(null);
     this.snapshot.set(null);
     localStorage.removeItem(STORAGE_KEY);
+    this.deleteCookie();
+  }
+
+  private persistToken(token: string): void {
+    localStorage.setItem(STORAGE_KEY, token);
+    document.cookie = `${COOKIE_KEY}=${encodeURIComponent(token)}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
   }
 
   private readToken(): string | null {
-    return localStorage.getItem(STORAGE_KEY);
+    const ls = localStorage.getItem(STORAGE_KEY);
+    if (ls) {
+      return ls;
+    }
+    const cookie = this.readCookie();
+    if (cookie) {
+      localStorage.setItem(STORAGE_KEY, cookie);
+    }
+    return cookie;
+  }
+
+  private readCookie(): string | null {
+    const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${COOKIE_KEY}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+  private deleteCookie(): void {
+    document.cookie = `${COOKIE_KEY}=; path=/; max-age=0`;
   }
 }
