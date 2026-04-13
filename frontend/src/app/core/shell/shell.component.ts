@@ -4,6 +4,7 @@ import { cartIconBump } from '../animations/cart-animations';
 import { routeFade } from '../animations/route-animations';
 import { PROMO_HERO_IMAGE_URL } from '../constants/promo-hero';
 import { I18nService } from '../i18n/i18n.service';
+import { AuthService } from '../auth/auth.service';
 import { CartService } from '../services/cart.service';
 import { CheckoutFlowService } from '../services/checkout-flow.service';
 import { CartDrawerComponent } from './cart-drawer.component';
@@ -149,6 +150,25 @@ import { CartDrawerComponent } from './cart-drawer.component';
               </button>
             </span>
 
+            @if (auth.isAuthenticated()) {
+              <a routerLink="/dashboard"
+                 class="ve-focus-ring hidden items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-900 hover:bg-brand-100 transition md:inline-flex">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                My Workshops
+              </a>
+              <button type="button" (click)="auth.logout()"
+                      class="ve-focus-ring hidden rounded-full p-2 text-ink-500 transition hover:bg-ink-100 hover:text-red-600 md:inline-flex"
+                      aria-label="Logout">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              </button>
+            } @else {
+              <a routerLink="/login"
+                 class="ve-focus-ring hidden items-center gap-1.5 rounded-full bg-brand-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-brand-800 transition shadow-sm md:inline-flex">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                Sign In
+              </a>
+            }
+
             <button
               type="button"
               (click)="i18n.toggleLocale()"
@@ -218,7 +238,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
                   <a routerLink="/career" class="transition hover:text-white">{{ i18n.t('footer.linkCareer') }}</a>
                 </li>
                 <li>
-                  <a href="#" class="transition hover:text-white" (click)="$event.preventDefault()">{{ i18n.t('footer.linkStudentLogin') }}</a>
+                  <a routerLink="/login" class="transition hover:text-white">{{ i18n.t('footer.linkStudentLogin') }}</a>
                 </li>
               </ul>
             </div>
@@ -427,6 +447,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
   `,
 })
 export class ShellComponent {
+  readonly auth = inject(AuthService);
   readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
   private readonly router = inject(Router);

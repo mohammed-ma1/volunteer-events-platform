@@ -3,11 +3,16 @@
 use App\Http\Controllers\Api\V1\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Api\V1\Admin\EnrollmentController as AdminEnrollmentController;
+use App\Http\Controllers\Api\V1\Admin\ExpertController as AdminExpertController;
+use App\Http\Controllers\Api\V1\Admin\LessonController as AdminLessonController;
 use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CheckoutController;
 use App\Http\Controllers\Api\V1\EventController;
+use App\Http\Controllers\Api\V1\LearnController;
+use App\Http\Controllers\Api\V1\LearnerAuthController;
 use App\Http\Controllers\Api\V1\TapWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +56,25 @@ Route::prefix('v1/admin')->group(function () {
         Route::delete('/events/{id}', [AdminEventController::class, 'destroy']);
         Route::patch('/events/{id}/status', [AdminEventController::class, 'changeStatus']);
 
+        // Event Lessons
+        Route::get('/events/{eventId}/lessons', [AdminLessonController::class, 'index']);
+        Route::post('/events/{eventId}/lessons', [AdminLessonController::class, 'store']);
+        Route::put('/events/{eventId}/lessons/{lessonId}', [AdminLessonController::class, 'update']);
+        Route::delete('/events/{eventId}/lessons/{lessonId}', [AdminLessonController::class, 'destroy']);
+
+        // Event Enrollments
+        Route::get('/events/{eventId}/enrollments', [AdminEnrollmentController::class, 'index']);
+        Route::post('/events/{eventId}/enrollments', [AdminEnrollmentController::class, 'store']);
+        Route::delete('/events/{eventId}/enrollments/{enrollmentId}', [AdminEnrollmentController::class, 'destroy']);
+
+        // Experts
+        Route::get('/experts', [AdminExpertController::class, 'index']);
+        Route::get('/experts/{id}', [AdminExpertController::class, 'show']);
+        Route::post('/experts', [AdminExpertController::class, 'store']);
+        Route::patch('/experts/{id}', [AdminExpertController::class, 'update']);
+        Route::patch('/experts/{id}/toggle-active', [AdminExpertController::class, 'toggleActive']);
+        Route::delete('/experts/{id}', [AdminExpertController::class, 'destroy']);
+
         // Orders
         Route::get('/orders', [AdminOrderController::class, 'index']);
         Route::get('/orders/export', [AdminOrderController::class, 'export']);
@@ -59,6 +83,26 @@ Route::prefix('v1/admin')->group(function () {
         Route::get('/orders/{uuid}/tap-details', [AdminOrderController::class, 'tapDetails']);
         Route::post('/orders/{uuid}/refund', [AdminOrderController::class, 'refund']);
     });
+});
+
+// ── Learner Auth ─────────────────────────────────────────────────
+Route::prefix('v1/auth')->group(function () {
+    Route::post('/register', [LearnerAuthController::class, 'register']);
+    Route::post('/login', [LearnerAuthController::class, 'login']);
+
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [LearnerAuthController::class, 'logout']);
+        Route::post('/refresh', [LearnerAuthController::class, 'refresh']);
+        Route::get('/me', [LearnerAuthController::class, 'me']);
+        Route::patch('/me', [LearnerAuthController::class, 'updateProfile']);
+    });
+});
+
+// ── Learner Platform ─────────────────────────────────────────────
+Route::prefix('v1/learn')->middleware('auth:api')->group(function () {
+    Route::get('/my-workshops', [LearnController::class, 'myWorkshops']);
+    Route::get('/workshops/{id}', [LearnController::class, 'workshopDetail']);
+    Route::post('/progress', [LearnController::class, 'updateProgress']);
 });
 
 // ── Public API ───────────────────────────────────────────────────
