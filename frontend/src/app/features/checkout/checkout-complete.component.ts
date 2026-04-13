@@ -164,7 +164,11 @@ export class CheckoutCompleteComponent implements OnInit {
         next: (o) => {
           this.order.set(o);
           if (o.status === 'paid') {
-            this.cart.clear().subscribe({ error: () => this.cart.clearLocalCart() });
+            if (this.cart.token()) {
+              this.cart.clear().subscribe({ error: () => this.cart.clearLocalCart() });
+            } else {
+              this.cart.clearLocalCart();
+            }
           }
           if (o.status === 'failed' || o.status === 'cancelled') {
             void this.router.navigate(['/checkout/failed'], { queryParams: { order: uuid } });

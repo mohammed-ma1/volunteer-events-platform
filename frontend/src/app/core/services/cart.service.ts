@@ -114,6 +114,12 @@ export class CartService {
     );
   }
 
+  restoreToken(token: string): void {
+    this.token.set(token);
+    this.persistToken(token);
+    this.refresh().subscribe();
+  }
+
   clearLocalCart(): void {
     this.token.set(null);
     this.snapshot.set(null);

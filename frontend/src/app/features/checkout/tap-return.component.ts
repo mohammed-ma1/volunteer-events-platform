@@ -5,6 +5,7 @@ import { Observable, catchError, map, of, shareReplay } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { TAP_CHECKOUT_COMPLETE } from '../../core/payment/tap-messages';
+import { CartService } from '../../core/services/cart.service';
 
 /** One HTTP call per order id (iframe reloads / HMR were spamming mock-complete). */
 const mockComplete$ = new Map<string, Observable<void>>();
@@ -40,11 +41,16 @@ export class TapReturnComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
+  private readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
 
   ngOnInit(): void {
     const order = this.route.snapshot.queryParamMap.get('order');
     const mock = this.route.snapshot.queryParamMap.get('mock');
+    const ct = this.route.snapshot.queryParamMap.get('ct');
+    if (ct && !this.cart.token()) {
+      this.cart.restoreToken(ct);
+    }
 
     if (!order) {
       void this.router.navigate(['/checkout']);

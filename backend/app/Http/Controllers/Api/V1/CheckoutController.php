@@ -100,7 +100,7 @@ class CheckoutController extends Controller
             : null;
 
         try {
-            $charge = $this->tapPaymentService->createChargeForOrder($order, $langCode, $request);
+            $charge = $this->tapPaymentService->createChargeForOrder($order, $langCode, $request, $cart->token);
         } catch (Throwable $e) {
             Log::error('Checkout Tap create charge failed', [
                 'order_uuid' => $order->uuid,

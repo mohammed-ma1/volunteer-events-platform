@@ -14,7 +14,7 @@ class TapPaymentService
     /**
      * @param  string|null  $langCode  Tap redirect page language: en or ar (from X-Checkout-Locale)
      */
-    public function createChargeForOrder(Order $order, ?string $langCode = null, ?Request $request = null): array
+    public function createChargeForOrder(Order $order, ?string $langCode = null, ?Request $request = null, ?string $cartToken = null): array
     {
         $tapMock = (bool) config('services.tap.mock');
         if ($tapMock && ! app()->isLocal()) {
@@ -24,6 +24,9 @@ class TapPaymentService
 
         $frontend = $this->resolvePublicFrontendBaseUrl($request);
         $returnUrl = $frontend.'/checkout/tap-return?order='.$order->uuid;
+        if (is_string($cartToken) && $cartToken !== '') {
+            $returnUrl .= '&ct='.urlencode($cartToken);
+        }
 
         if ($useTapMock) {
             return [
