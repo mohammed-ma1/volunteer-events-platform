@@ -49,6 +49,9 @@ class SendGhlWebhookJob implements ShouldQueue
             'currency' => $order->currency,
             'paid_at' => $order->paid_at?->toIso8601String(),
             'tags' => ['ku-workshop-buyer'],
+            'items_summary' => $order->items->map(fn ($item) =>
+                $item->event_title . ' (x' . $item->quantity . ' — ' . number_format((float) $item->unit_price, 3) . ' ' . $order->currency . ')'
+            )->implode(', '),
             'items' => $order->items->map(fn ($item) => [
                 'event_title' => $item->event_title,
                 'quantity' => $item->quantity,
