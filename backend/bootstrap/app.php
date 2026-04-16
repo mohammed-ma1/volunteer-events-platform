@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'cart' => \App\Http\Middleware\EnsureCartToken::class,
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'token.version' => \App\Http\Middleware\ValidateTokenVersion::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

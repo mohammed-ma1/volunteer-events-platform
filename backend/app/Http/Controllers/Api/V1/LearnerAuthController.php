@@ -32,7 +32,11 @@ class LearnerAuthController extends Controller
             return response()->json(['message' => 'Account deactivated.'], 403);
         }
 
+        $user->increment('token_version');
         $user->update(['last_login_at' => now()]);
+        $user->refresh();
+
+        $token = Auth::guard('api')->login($user);
 
         return $this->respondWithToken($token, $user);
     }

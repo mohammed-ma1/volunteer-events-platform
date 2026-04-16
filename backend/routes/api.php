@@ -89,7 +89,7 @@ Route::prefix('v1/admin')->group(function () {
 Route::prefix('v1/auth')->group(function () {
     Route::post('/login', [LearnerAuthController::class, 'login']);
 
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'token.version'])->group(function () {
         Route::post('/logout', [LearnerAuthController::class, 'logout']);
         Route::post('/refresh', [LearnerAuthController::class, 'refresh']);
         Route::get('/me', [LearnerAuthController::class, 'me']);
@@ -99,7 +99,7 @@ Route::prefix('v1/auth')->group(function () {
 });
 
 // ── Learner Platform ─────────────────────────────────────────────
-Route::prefix('v1/learn')->middleware('auth:api')->group(function () {
+Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(function () {
     Route::get('/my-workshops', [LearnController::class, 'myWorkshops']);
     Route::get('/workshops/{id}', [LearnController::class, 'workshopDetail']);
     Route::post('/progress', [LearnController::class, 'updateProgress']);

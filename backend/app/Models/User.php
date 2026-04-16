@@ -47,7 +47,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims(): array
     {
-        return ['role' => $this->role];
+        return [
+            'role' => $this->role,
+            'tv' => $this->token_version ?? 0,
+        ];
     }
 
     // ── Role helpers ─────────────────────────────────────────────
