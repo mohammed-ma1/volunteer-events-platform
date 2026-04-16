@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 
 let isRefreshing = false;
 
-const NEEDS_AUTH = ['/v1/auth/me', '/v1/auth/logout', '/v1/auth/refresh', '/v1/learn/'];
+const NEEDS_AUTH = ['/v1/auth/me', '/v1/auth/logout', '/v1/auth/refresh', '/v1/auth/password', '/v1/learn/'];
 
 function needsAuthHeader(url: string): boolean {
   return NEEDS_AUTH.some(p => url.includes(p));
@@ -25,7 +25,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         error.status === 401 &&
         needsAuthHeader(req.url) &&
         !req.url.includes('/auth/login') &&
-        !req.url.includes('/auth/register') &&
         !req.url.includes('/auth/refresh')
       ) {
         if (!isRefreshing) {

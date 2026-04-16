@@ -64,10 +64,10 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
         >
           <div class="flex flex-col items-center gap-3 rounded-2xl border border-ink-200 bg-white px-8 py-6 shadow-lg">
             <div
-              class="h-10 w-10 animate-spin rounded-full border-2 border-ink-200 border-t-[#001A33]"
+              class="h-10 w-10 animate-spin rounded-full border-2 border-ink-200 border-t-brand-900"
               aria-hidden="true"
             ></div>
-            <p class="text-sm font-semibold text-[#001A33]">{{ i18n.t('checkout.preparingTap') }}</p>
+            <p class="text-sm font-semibold text-brand-900">{{ i18n.t('checkout.preparingTap') }}</p>
           </div>
         </div>
       }
@@ -75,7 +75,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
       <a
         routerLink="/"
         fragment="workshops"
-        class="ve-focus-ring mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#001A33] transition hover:text-brand-700"
+        class="ve-focus-ring mb-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-900 transition hover:text-brand-700"
       >
         @if (i18n.isRtl()) {
           <span aria-hidden="true">→</span>
@@ -104,13 +104,13 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
       } @else if (snap.items.length === 0) {
         <p class="mt-6 rounded-2xl border border-ink-200 bg-white px-4 py-4 text-sm text-ink-600 shadow-sm">
           {{ i18n.t('cart.empty') }}
-          <a routerLink="/" fragment="workshops" class="ms-1 font-semibold text-[#001A33] hover:underline">{{
+          <a routerLink="/" fragment="workshops" class="ms-1 font-semibold text-brand-900 hover:underline">{{
             i18n.t('cart.browseWorkshops')
           }}</a>
         </p>
       } @else if (paymentActive()) {
         <div class="mt-8 space-y-4">
-          <h2 class="text-lg font-semibold text-[#001A33]">{{ i18n.t('checkout.paySecureBelow') }}</h2>
+          <h2 class="text-lg font-semibold text-brand-900">{{ i18n.t('checkout.paySecureBelow') }}</h2>
           <p class="text-sm text-ink-600">{{ i18n.t('checkout.processingPayment') }}</p>
 
           @if (safePaymentUrl(); as src) {
@@ -122,10 +122,10 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                   aria-live="polite"
                 >
                   <div
-                    class="h-11 w-11 animate-spin rounded-full border-2 border-ink-200 border-t-[#001A33]"
+                    class="h-11 w-11 animate-spin rounded-full border-2 border-ink-200 border-t-brand-900"
                     aria-hidden="true"
                   ></div>
-                  <p class="text-sm font-medium text-[#001A33]">{{ i18n.t('checkout.loadingTapFrame') }}</p>
+                  <p class="text-sm font-medium text-brand-900">{{ i18n.t('checkout.loadingTapFrame') }}</p>
                 </div>
               }
               <iframe
@@ -139,7 +139,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
           }
 
           <a
-            class="ve-focus-ring inline-flex w-full items-center justify-center rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm font-semibold text-[#001A33] shadow-sm transition hover:border-ink-300"
+            class="ve-btn-secondary ve-btn-secondary--block border-ink-200"
             [href]="paymentUrlRaw() ?? '#'"
             target="_blank"
             rel="noopener noreferrer"
@@ -164,7 +164,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                   <label class="text-sm font-bold text-[#0a1628]" for="fn">{{ i18n.t('checkout.labelFirstName') }}</label>
                   <input
                     id="fn"
-                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
                     type="text"
                     formControlName="firstName"
                     autocomplete="given-name"
@@ -174,7 +174,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                   <label class="text-sm font-bold text-[#0a1628]" for="ln">{{ i18n.t('checkout.labelLastName') }}</label>
                   <input
                     id="ln"
-                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                    class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
                     type="text"
                     formControlName="lastName"
                     autocomplete="family-name"
@@ -185,7 +185,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                 <label class="text-sm font-bold text-[#0a1628]" for="ph">{{ i18n.t('checkout.labelPhone') }}</label>
                 <input
                   id="ph"
-                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
                   type="tel"
                   formControlName="phone"
                   autocomplete="tel"
@@ -195,7 +195,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                 <label class="text-sm font-bold text-[#0a1628]" for="em">{{ i18n.t('checkout.labelEmail') }}</label>
                 <input
                   id="em"
-                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-[#001A33]/40 focus:ring-2 focus:ring-[#001A33]/10"
+                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
                   type="email"
                   formControlName="email"
                   autocomplete="email"
@@ -230,7 +230,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                   }
                   <div class="min-w-0 flex-1 text-start">
                     <p class="text-sm font-bold leading-snug text-[#0a1628]">{{ line.event?.title ?? '—' }}</p>
-                    <p class="mt-1 text-sm font-semibold text-[#001A33]">
+                    <p class="mt-1 text-sm font-semibold text-brand-900">
                       {{ line.event?.price ?? 0 | number: '1.0-3' }}
                       {{ currencySuffix(snap.currency) }}
                     </p>
@@ -267,7 +267,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
               </div>
               <div class="flex items-baseline justify-between pt-2">
                 <span class="text-base font-bold text-[#0a1628]">{{ i18n.t('checkout.total') }}</span>
-                <span class="text-xl font-black text-[#001A33]"
+                <span class="text-xl font-black text-brand-900"
                   >{{ snap.subtotal | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
                 >
               </div>
@@ -276,7 +276,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
             <button
               type="submit"
               form="checkout-personal-form"
-              class="ve-focus-ring mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#001A33] px-4 py-3.5 text-sm font-bold text-white shadow-md transition enabled:hover:bg-[#002a4d] disabled:cursor-not-allowed disabled:opacity-40"
+              class="ve-btn-primary ve-btn-primary--block ve-btn-primary--lg mt-6 disabled:cursor-not-allowed disabled:opacity-40"
               [disabled]="form.invalid || busy()"
             >
               @if (busy()) {

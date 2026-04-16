@@ -60,6 +60,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'An introductory workshop covering core AI concepts, practical use cases, and ethical considerations for students entering the field.',
     description: null,
+    description_en: null,
     image_url: img('photo-1677442136019-21780ecad995'),
     starts_at: '2026-05-22T10:00:00.000Z',
     ends_at: '2026-05-22T14:00:00.000Z',
@@ -82,6 +83,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'Team up for a weekend of building prototypes, mentorship rounds, and a friendly demo day with industry guests.',
     description: null,
+    description_en: null,
     image_url: img('photo-1540575467063-178a50c2df87'),
     starts_at: '2026-06-03T09:00:00.000Z',
     ends_at: '2026-06-04T18:00:00.000Z',
@@ -103,6 +105,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'Panel discussions with alumni and recruiters on choosing majors, internships, and long-term career planning.',
     description: null,
+    description_en: null,
     image_url: img('photo-1524178232363-1fb2b075b655'),
     starts_at: '2026-05-18T16:00:00.000Z',
     ends_at: '2026-05-18T19:00:00.000Z',
@@ -124,6 +127,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'Practice storytelling, slide design, and confident delivery with peer feedback in small breakout groups.',
     description: null,
+    description_en: null,
     image_url: img('photo-1552664730-d307ca884978'),
     starts_at: '2026-05-30T11:00:00.000Z',
     ends_at: '2026-05-30T15:00:00.000Z',
@@ -145,6 +149,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'Frameworks for delegation, feedback, and running effective student clubs and volunteer initiatives.',
     description: null,
+    description_en: null,
     image_url: img('photo-1517245386807-bb43f82c33c4'),
     starts_at: '2026-06-10T14:00:00.000Z',
     ends_at: '2026-06-10T17:00:00.000Z',
@@ -166,6 +171,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     summary_en:
       'One-on-one CV reviews and recorded mock interviews with structured feedback from career advisors.',
     description: null,
+    description_en: null,
     image_url: img('photo-1560250097-0b93528c311a'),
     starts_at: '2026-06-01T09:00:00.000Z',
     ends_at: '2026-06-01T13:00:00.000Z',
@@ -233,7 +239,7 @@ const CATEGORY_KEYWORDS: { cat: WorkshopCategory; keys: string[] }[] = [
   },
 ];
 
-export function inferCategory(ev: VolunteerEvent): WorkshopCategory {
+export function inferCategory(ev: { title: string; title_en?: string | null; summary?: string | null }): WorkshopCategory {
   const blob = `${ev.title} ${ev.title_en ?? ''} ${ev.summary ?? ''}`.toLowerCase();
   for (const { cat, keys } of CATEGORY_KEYWORDS) {
     if (keys.some((k) => blob.includes(k))) {

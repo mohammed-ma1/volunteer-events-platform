@@ -28,14 +28,13 @@ const SCHEDULE = kuWorkshopSchedule as {
 const PRESENTER_NAME_EN_SOURCE: Record<string, string> = {
   'آلاء النصار': 'Alaa Al-Nassar',
   'أبرار أشكناني': 'Abrar Ashkanani',
-  'أحمد سعيد': 'Ahmed Saeed',
+  'أحمد سمير': 'Ahmed Sameer',
   'المحامي إبراهيم السماعيل': 'Lawyer Ibrahim Al-Samaeel',
   'بدر الفيلكاوي': 'Bader Al-Failakawi',
   'حسن سيد': 'Hassan Sayed',
   'خالد الشمري': 'Khalid Al-Shammari',
   'د. بسام الجزاف': 'Dr. Bassam Al-Jazzaf',
   'د. جواد أبو الحسن': 'Dr. Jawad Abu Al-Hasan',
-  'د. رفيدة الميعان': 'Dr. Rafida Al-Mian',
   'د. محمد إسماعيل': 'Dr. Mohammed Ismail',
   'دانا العوضي': 'Dana Al-Awadi',
   'دلال الحشاش': 'Dalal Al-Hashash',
@@ -51,14 +50,16 @@ const PRESENTER_NAME_EN_SOURCE: Record<string, string> = {
   'عبدالرحمن التركيت': 'Abdulrahman Al-Turkait',
   'عبدالرحمن حماد': 'Abdulrahman Hammad',
   'عبدالرحمن خاجه': 'Abdulrahman Khaja',
+  'عبدالعزيز الضبيب': 'Abdulaziz Al-Dhabib',
   'علي الأنصاري': 'Ali Al-Ansari',
   'غدير الكندري': 'Ghadeer Al-Kandari',
-  'فاطمة تقي': 'Fatima Taqi',
+  'فاطمة القطان': 'Fatima Al-Qattan',
   'فاطمة عباس': 'Fatima Abbas',
+  'فيصل الدويسان': 'Faisal Al-Duwaisan',
   'محمد الجيماز': 'Mohammed Al-Jaimaz',
   'مرزوق السعيد': 'Marzouq Al-Saeed',
   'منيرة النخيلان': 'Munira Al-Nakhelan',
-  'هيا النصار': 'Haya Al-Nassar',
+  'هاجر النصار': 'Hajar Al-Nassar',
   'هيا بوراشد': 'Haya Bourashed',
 };
 
@@ -77,14 +78,39 @@ function presenterNameEnForSchedule(schedule: { workshops: { presenter_ar: strin
 
 const PRESENTER_NAME_EN = presenterNameEnForSchedule(SCHEDULE);
 
-/** Served from `frontend/public/` → `/images/experts/...` at runtime. */
-const EXPERT_PORTRAIT_URL = '/images/experts/trump_coach_style.svg';
+const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
+  'د. بسام الجزاف': '/images/presenters/bassam-al-jazzaf.jpg',
+  'بدر الفيلكاوي': '/images/presenters/badr-al-failakawi.jpg',
+  'حسن سيد': '/images/presenters/hassan-syed.jpg',
+  'أحمد سمير': '/images/presenters/ahmed-sameer.jpg',
+  'دلال النخيلان': '/images/presenters/dalal-al-nakhelan.jpg',
+  'علي الأنصاري': '/images/presenters/ali-al-ansari.jpg',
+  'سليمان المراغي': '/images/presenters/sulaiman-al-maraghi.jpg',
+  'المحامي إبراهيم السماعيل': '/images/presenters/ibrahim-al-samael.jpg',
+  'عبدالرحمن التركيت': '/images/presenters/abdulrahman-al-turkait.jpg',
+  'آلاء النصار': '/images/presenters/alaa-al-nassar.jpg',
+  'عبدالرحمن خاجه': '/images/presenters/abdulrahman-khajah.jpg',
+  'د. محمد إسماعيل': '/images/presenters/mohammed-ismail.jpg',
+  'دانا العوضي': '/images/presenters/dana-al-awadi.jpg',
+  'شيماء الطباخ': '/images/presenters/shaimaa-al-tabbakh.jpg',
+  'محمد الجيماز': '/images/presenters/mohammed-al-jaimaz.jpg',
+  'أبرار أشكناني': '/images/presenters/abrar-ashkanani.jpg',
+  'سارة المنيس': '/images/presenters/sarah-al-munais.jpg',
+  'فاطمة القطان': '/images/presenters/fatima-al-qattan.jpg',
+  'فيصل الدويسان': '/images/presenters/faisal-al-duwaisan.jpg',
+};
 
-const DEFAULT_SOCIALS: ExpertSocial[] = [
-      { href: 'mailto:hello@example.com', aria: 'experts.socialEmail', kind: 'mail' },
-      { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
-      { href: 'https://x.com', aria: 'experts.socialX', kind: 'x' },
-];
+/** Brand-aligned palette for UI Avatars (deterministic per expert id). */
+const AVATAR_BG_COLORS = ['001a33', '0c4a6e', '164e63', '1e3a5f', '312e81', '3730a3', '4c1d95', '831843'];
+
+function professionalExpertAvatarUrl(expertId: string, nameEn: string): string {
+  const label = nameEn.trim() || 'Expert';
+  const idx = Math.abs(parseInt(expertId.replace(/\D/g, '') || '0', 10)) % AVATAR_BG_COLORS.length;
+  const bg = AVATAR_BG_COLORS[idx];
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(label)}&size=512&background=${bg}&color=ffffff&bold=true&format=png`;
+}
+
+const DEFAULT_SOCIALS: ExpertSocial[] = [];
 
 function presenterId(name: string): string {
   let h = 0;
@@ -128,15 +154,18 @@ function buildHomeExperts(): HomeExpert[] {
         ? 'Delivers a workshop in the Kuwait University student training week (26–30 April 2026).'
         : `Delivers ${nw} workshops in the Kuwait University student training week (26–30 April 2026).`;
 
+    const id = presenterId(nameAr);
+    const nameEn = PRESENTER_NAME_EN[nameAr] ?? nameAr;
+    const avatarOverride = PRESENTER_AVATAR_OVERRIDES[nameAr];
     return {
-      id: presenterId(nameAr),
+      id,
       nameAr,
-      nameEn: PRESENTER_NAME_EN[nameAr] ?? nameAr,
+      nameEn,
       specialtyAr,
       specialtyEn,
       bioAr,
       bioEn,
-      imageUrl: EXPERT_PORTRAIT_URL,
+      imageUrl: avatarOverride ?? professionalExpertAvatarUrl(id, nameEn),
       socials: DEFAULT_SOCIALS,
       workshopSlugs: slugs,
     };

@@ -39,7 +39,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
               <p class="mt-3 text-xs font-medium uppercase tracking-wide text-slate-500">
                 {{ i18n.t('complete.total') }}
               </p>
-              <p class="mt-1 text-lg font-bold text-[#001A33]">
+              <p class="mt-1 text-lg font-bold text-brand-900">
                 {{ o.total | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}
               </p>
             </div>
@@ -48,20 +48,20 @@ import { CheckoutService } from '../../core/services/checkout.service';
           <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <a
               routerLink="/checkout"
-              class="ve-focus-ring inline-flex justify-center rounded-xl bg-[#001A33] px-5 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[#002a4d]"
+              class="ve-btn-primary"
               >{{ i18n.t('failed.tryAgain') }}</a
             >
             <a
               routerLink="/"
               fragment="workshops"
-              class="ve-focus-ring inline-flex justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#0a1628] shadow-sm transition hover:border-slate-400"
+              class="ve-btn-secondary"
               >{{ i18n.t('failed.browseWorkshops') }}</a
             >
           </div>
 
           <a
             routerLink="/"
-            class="ve-focus-ring mt-6 inline-flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-[#001A33]"
+            class="ve-focus-ring mt-6 inline-flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-brand-900"
           >
             {{ i18n.t('complete.backHome') }}
           </a>

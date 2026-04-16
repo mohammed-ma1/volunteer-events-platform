@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { AuthResponse, LearnerUser, LoginRequest, RegisterRequest } from './auth.types';
+import { AuthResponse, ChangePasswordRequest, LearnerUser, LoginRequest } from './auth.types';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -22,13 +22,6 @@ export class AuthService {
     );
   }
 
-  register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>('/v1/auth/register', data).pipe(
-      tap(res => this.storeSession(res)),
-      catchError(err => throwError(() => err))
-    );
-  }
-
   logout(): void {
     this.http.post('/v1/auth/logout', {}).subscribe({ error: () => {} });
     this.clearSession();
@@ -41,6 +34,12 @@ export class AuthService {
         this.clearSession();
         return throwError(() => err);
       })
+    );
+  }
+
+  changePassword(data: ChangePasswordRequest): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>('/v1/auth/password', data).pipe(
+      catchError(err => throwError(() => err))
     );
   }
 

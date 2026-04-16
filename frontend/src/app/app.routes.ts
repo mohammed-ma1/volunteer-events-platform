@@ -8,11 +8,6 @@ export const routes: Routes = [
     canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
-  {
-    path: 'register',
-    canActivate: [guestGuard],
-    loadComponent: () => import('./features/auth/register.component').then((m) => m.RegisterComponent),
-  },
   // Main shell
   {
     path: '',
@@ -28,6 +23,21 @@ export const routes: Routes = [
         path: 'about',
         loadComponent: () =>
           import('./features/pages/about-page.component').then((m) => m.AboutPageComponent),
+      },
+      {
+        path: 'faq',
+        loadComponent: () =>
+          import('./features/pages/faq-page.component').then((m) => m.FaqPageComponent),
+      },
+      {
+        path: 'privacy',
+        loadComponent: () =>
+          import('./features/pages/privacy-page.component').then((m) => m.PrivacyPageComponent),
+      },
+      {
+        path: 'terms',
+        loadComponent: () =>
+          import('./features/pages/terms-page.component').then((m) => m.TermsPageComponent),
       },
       {
         path: 'facilitator-workshops',
@@ -79,11 +89,13 @@ export const routes: Routes = [
           import('./features/learn/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
-        path: 'learn/:eventId',
+        path: 'change-password',
         canActivate: [authGuard],
         loadComponent: () =>
-          import('./features/learn/workshop-player.component').then((m) => m.WorkshopPlayerComponent),
+          import('./features/auth/change-password.component').then((m) => m.ChangePasswordComponent),
       },
+      // Video player route kept for future use but not active
+      // { path: 'learn/:eventId', canActivate: [authGuard], loadComponent: () => import('./features/learn/workshop-player.component').then((m) => m.WorkshopPlayerComponent) },
     ],
   },
 ];

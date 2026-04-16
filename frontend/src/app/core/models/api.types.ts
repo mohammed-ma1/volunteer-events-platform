@@ -6,6 +6,7 @@ export interface VolunteerEvent {
   summary: string | null;
   summary_en?: string | null;
   description: string | null;
+  description_en?: string | null;
   image_url: string | null;
   starts_at: string;
   ends_at: string | null;

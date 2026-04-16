@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call(EventSeeder::class);
+        $this->call(ExpertSeeder::class);
         $this->call(AdminUserSeeder::class);
     }
 }

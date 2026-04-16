@@ -3,35 +3,14 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class LearnerAuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => ['required', 'confirmed', Password::min(8)],
-        ]);
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'role' => 'user',
-            'is_active' => true,
-        ]);
-
-        $token = Auth::guard('api')->login($user);
-
-        return $this->respondWithToken($token, $user, 201);
-    }
-
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
@@ -111,6 +90,26 @@ class LearnerAuthController extends Controller
             'is_active' => $user->is_active,
             'created_at' => $user->created_at->toIso8601String(),
         ]);
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $user = Auth::guard('api')->user();
+
+        if (! Hash::check($validated['current_password'], $user->password)) {
+            return response()->json(['message' => 'Current password is incorrect.'], 422);
+        }
+
+        $user->update([
+            'password' => $validated['password'],
+        ]);
+
+        return response()->json(['message' => 'Password updated successfully.']);
     }
 
     private function respondWithToken(string $token, $user, int $status = 200): JsonResponse

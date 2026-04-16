@@ -3,6 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../core/auth/auth.service';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { OrderSummary } from '../../core/models/api.types';
 import { CheckoutService } from '../../core/services/checkout.service';
@@ -21,7 +22,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
             <p class="text-sm text-red-800">{{ error() }}</p>
             <a
               routerLink="/"
-              class="mt-6 inline-flex rounded-xl bg-[#001A33] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#002a4d]"
+              class="ve-btn-primary mt-6"
               >{{ i18n.t('complete.backHome') }}</a
             >
           </div>
@@ -54,7 +55,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
                   {{ i18n.t('complete.confirmSubtitle') }}
                   <span class="font-semibold text-[#0a1628]">{{ o.customer_name }}</span>
                   — {{ i18n.t('complete.confirmEmailIntro') }}
-                  <span class="font-semibold text-[#001A33]">{{ o.email }}</span>
+                  <span class="font-semibold text-brand-900">{{ o.email }}</span>
                 </p>
 
                 <div
@@ -68,7 +69,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
                   </div>
                   <button
                     type="button"
-                    class="ve-focus-ring inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-[#0a1628] shadow-sm transition hover:border-slate-400 hover:bg-slate-50 sm:w-auto"
+                    class="ve-btn-secondary w-full shrink-0 border-slate-200 text-ink-900 sm:w-auto"
                     (click)="downloadInvoice(o.uuid)"
                   >
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -89,7 +90,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
                   <p class="mt-2 text-xs font-medium uppercase tracking-wide text-slate-500">
                     {{ i18n.t('complete.total') }}
                   </p>
-                  <p class="mt-1 text-2xl font-bold text-[#001A33]">
+                  <p class="mt-1 text-2xl font-bold text-brand-900">
                     {{ o.total | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}
                   </p>
                   <ul class="mt-4 space-y-2 border-t border-slate-100 pt-4">
@@ -104,9 +105,37 @@ import { CheckoutService } from '../../core/services/checkout.service';
                   </ul>
                 </div>
 
+                <!-- Workshop Access -->
+                <div class="mt-8 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50/60 to-indigo-50/60 px-5 py-5 text-start">
+                  <div class="flex items-start gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                      @if (auth.isAuthenticated()) {
+                        <span class="text-sm font-semibold text-slate-800 block">Workshop added to your dashboard!</span>
+                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">Your new workshop is ready. Go to your dashboard to view session details and Zoom links.</span>
+                        <a routerLink="/dashboard"
+                           class="ve-btn-primary mt-3">
+                          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                          Go to My Workshops
+                        </a>
+                      } @else {
+                        <span class="text-sm font-semibold text-slate-800 block">Your workshop account is ready!</span>
+                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">We've sent your login credentials to <strong class="text-slate-700">{{ o.email }}</strong>. Log in to access your workshop details, schedule, and Zoom links.</span>
+                        <a routerLink="/login"
+                           class="ve-btn-primary mt-3">
+                          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                          Log In to Access Workshops
+                        </a>
+                      }
+                    </div>
+                  </div>
+                </div>
+
                 <a
                   routerLink="/"
-                  class="ve-focus-ring mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[#001A33] px-5 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-[#002a4d]"
+                  class="ve-btn-primary ve-btn-primary--block ve-btn-primary--lg mt-6"
                 >
                   @if (i18n.isRtl()) {
                     <span aria-hidden="true">←</span>
@@ -121,7 +150,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
                 <p class="text-sm text-slate-600">{{ i18n.t('complete.notPaidYet') }}</p>
                 <a
                   routerLink="/checkout"
-                  class="mt-6 inline-flex rounded-xl bg-[#001A33] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#002a4d]"
+                  class="ve-btn-primary mt-6"
                   >{{ i18n.t('failed.tryAgain') }}</a
                 >
               </div>
@@ -129,7 +158,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
           } @else {
             <div class="flex flex-col items-center gap-4 rounded-3xl bg-white py-12 shadow-lg">
               <div
-                class="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-[#001A33]"
+                class="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-brand-900"
                 aria-hidden="true"
               ></div>
               <p class="text-sm text-slate-500">{{ i18n.t('complete.loading') }}</p>
@@ -144,6 +173,7 @@ export class CheckoutCompleteComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly checkoutApi = inject(CheckoutService);
+  readonly auth = inject(AuthService);
   readonly i18n = inject(I18nService);
 
   readonly order = signal<OrderSummary | null>(null);

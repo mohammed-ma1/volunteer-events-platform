@@ -1,6 +1,5 @@
 import { DecimalPipe, NgClass } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { HomeListEvent, workshopCategoryToFilterGroup } from '../../core/data/dummy-events';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { CartService } from '../../core/services/cart.service';
@@ -15,15 +14,12 @@ import {
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [RouterLink, DecimalPipe, NgClass],
+  imports: [DecimalPipe, NgClass],
   template: `
     <article
       class="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink-200/90 bg-white text-start shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.15)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <a
-        [routerLink]="['/events', event.slug]"
-        class="relative isolate block aspect-[16/10] overflow-hidden bg-ink-100"
-      >
+      <div class="relative isolate block aspect-[16/10] overflow-hidden bg-ink-100">
         @if (event.image_url) {
           <img
             [src]="event.image_url"
@@ -37,12 +33,12 @@ import {
           aria-hidden="true"
         ></div>
         <span
-          class="absolute start-3 top-3 z-10 max-w-[min(100%-1.5rem,11rem)] rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold leading-tight text-[#001A33] shadow-sm ring-1 ring-ink-200/70"
+          class="absolute start-3 top-3 z-10 max-w-[min(100%-1.5rem,11rem)] rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold leading-tight text-brand-900 shadow-sm ring-1 ring-ink-200/70"
         >
           <span class="line-clamp-2">{{ categoryLabel() }}</span>
         </span>
         <span
-          class="absolute bottom-3 left-3 z-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-bold text-[#001A33] shadow-sm ring-1 ring-ink-200/70 rtl:left-auto rtl:right-3"
+          class="absolute bottom-3 left-3 z-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-bold text-brand-900 shadow-sm ring-1 ring-ink-200/70 rtl:left-auto rtl:right-3"
         >
           @if (event.price <= 0) {
             {{ i18n.t('card.free') }}
@@ -50,20 +46,24 @@ import {
             {{ event.price | number: '1.0-0' }} {{ priceSuffix() }}
           }
         </span>
-      </a>
+      </div>
 
       <div class="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-4 pt-3.5 sm:px-4 lg:px-3 xl:px-4">
         <div class="min-h-0 flex-1 space-y-2">
-          <a [routerLink]="['/events', event.slug]" class="block min-w-0 focus:outline-none">
+          <div class="block min-w-0">
             <h3
-              class="line-clamp-2 text-[1.05rem] font-bold leading-snug tracking-tight text-[#0a1628] transition-colors group-hover:text-[#001A33] md:text-lg"
+              class="line-clamp-2 text-[1.05rem] font-bold leading-snug tracking-tight text-[#0a1628] transition-colors group-hover:text-brand-900 md:text-lg"
             >
               {{ displayTitle() }}
             </h3>
-          </a>
-          @if (displaySummary()) {
-            <p class="line-clamp-3 text-[13px] leading-relaxed text-ink-600">
-              {{ displaySummary() }}
+          </div>
+          @if (displayDescription()) {
+            <p
+              class="line-clamp-3 text-[13px] leading-relaxed text-ink-600"
+              [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+              [attr.lang]="i18n.locale()"
+            >
+              {{ displayDescription() }}
             </p>
           }
         </div>
@@ -155,7 +155,7 @@ import {
         >
           <button
             type="button"
-            class="ve-focus-ring flex min-h-[2.75rem] min-w-0 flex-1 basis-0 items-center justify-center gap-1.5 rounded-lg bg-[#001A33] px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white shadow-sm transition hover:bg-[#002a4d] active:bg-[#00101f] sm:min-h-[3rem] sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-sm lg:min-h-0 lg:gap-1 lg:rounded-md lg:px-1.5 lg:py-[5px] lg:text-[9px] lg:shadow-none xl:px-2 xl:py-1.5 xl:text-[10px] 2xl:gap-1.5 2xl:px-2.5 2xl:py-1.5 2xl:text-[11px]"
+            class="ve-focus-ring flex min-h-[2.75rem] min-w-0 flex-1 basis-0 items-center justify-center gap-1.5 rounded-full bg-brand-900 px-2 py-2 text-center text-[11px] font-semibold leading-tight text-white shadow-md shadow-brand-900/25 transition hover:bg-brand-800 active:bg-brand-950 sm:min-h-[3rem] sm:gap-2 sm:rounded-full sm:px-3 sm:py-2.5 sm:text-sm lg:min-h-0 lg:gap-1 lg:rounded-full lg:px-1.5 lg:py-[5px] lg:text-[9px] lg:shadow-md xl:px-2 xl:py-1.5 xl:text-[10px] 2xl:gap-1.5 2xl:px-2.5 2xl:py-1.5 2xl:text-[11px]"
             (click)="buyNow()"
           >
             <svg
@@ -178,7 +178,7 @@ import {
           </button>
           <button
             type="button"
-            class="ve-focus-ring flex min-h-[2.75rem] min-w-0 flex-1 basis-0 items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-2 py-2 text-center text-[11px] font-semibold leading-tight text-[#001A33] shadow-sm transition hover:border-slate-400 hover:bg-slate-50/90 active:bg-slate-100 sm:min-h-[3rem] sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2.5 sm:text-sm lg:min-h-0 lg:gap-1 lg:rounded-md lg:border-0 lg:px-1.5 lg:py-[5px] lg:text-[9px] lg:shadow-none xl:px-2 xl:py-1.5 xl:text-[10px] 2xl:gap-1.5 2xl:px-2.5 2xl:py-1.5 2xl:text-[11px]"
+            class="ve-focus-ring flex min-h-[2.75rem] min-w-0 flex-1 basis-0 items-center justify-center gap-1.5 rounded-full border border-ink-200 bg-white px-2 py-2 text-center text-[11px] font-semibold leading-tight text-brand-900 shadow-sm transition hover:border-ink-300 hover:bg-ink-50 active:bg-ink-100 sm:min-h-[3rem] sm:gap-2 sm:rounded-full sm:px-3 sm:py-2.5 sm:text-sm lg:min-h-0 lg:gap-1 lg:rounded-full lg:border lg:px-1.5 lg:py-[5px] lg:text-[9px] xl:px-2 xl:py-1.5 xl:text-[10px] 2xl:gap-1.5 2xl:px-2.5 2xl:py-1.5 2xl:text-[11px]"
             [ngClass]="
               cart.lastAddedEventId() === event.id
                 ? 'border-emerald-400 bg-emerald-50 text-emerald-900 motion-safe:animate-ve-added-pop'
@@ -203,7 +203,7 @@ import {
             } @else {
               <ng-container>
                 <svg
-                  class="h-4 w-4 shrink-0 text-[#001A33] sm:h-[18px] sm:w-[18px] lg:h-2.5 lg:w-2.5 xl:h-3 xl:w-3 2xl:h-3.5 2xl:w-3.5"
+                  class="h-4 w-4 shrink-0 text-brand-900 sm:h-[18px] sm:w-[18px] lg:h-2.5 lg:w-2.5 xl:h-3 xl:w-3 2xl:h-3.5 2xl:w-3.5"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.75"
@@ -264,15 +264,42 @@ export class EventCardComponent {
     return en && en.length > 0 ? en : this.event.title;
   }
 
-  displaySummary(): string | null {
-    if (this.i18n.locale() === 'ar') {
-      return this.event.summaryAr ?? this.event.summary;
+  /** One language per UI locale: Arabic UI → Arabic only; English UI → English only. */
+  displayDescription(): string | null {
+    return this.i18n.locale() === 'ar' ? this.arabicDescription() : this.englishDescription();
+  }
+
+  arabicDescription(): string | null {
+    const direct = this.cleanDescription(this.event.description);
+    const summaryAr = this.cleanDescription(this.event.summaryAr ?? this.event.summary);
+
+    if (direct && this.looksArabic(direct)) {
+      return direct;
     }
-    const en = this.event.summary_en?.trim();
-    if (en && en.length > 0) {
-      return en;
+    if (summaryAr && this.looksArabic(summaryAr)) {
+      return summaryAr;
     }
-    return this.event.summary;
+    return direct ?? summaryAr;
+  }
+
+  englishDescription(): string | null {
+    const enDesc = this.cleanDescription(this.event.description_en);
+    const enSummary = this.cleanDescription(this.event.summary_en);
+    const direct = this.cleanDescription(this.event.description);
+    const fallback = this.cleanDescription(this.event.summary);
+
+    let line: string | null = enDesc;
+    if (!line) {
+      line = enSummary;
+    }
+    if (!line && direct && this.looksEnglish(direct)) {
+      line = direct;
+    }
+    if (!line && fallback && this.looksEnglish(fallback)) {
+      line = fallback;
+    }
+
+    return line;
   }
 
   displayLocation(): string | null {
@@ -303,4 +330,27 @@ export class EventCardComponent {
   buyNow(): void {
     this.checkoutFlow.startEventCheckout(this.event.id, this.event.slug);
   }
+
+  private cleanDescription(value: string | null | undefined): string | null {
+    if (!value) {
+      return null;
+    }
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return null;
+    }
+    if (/^facilitator:\s*.+·/i.test(trimmed) || /^مقدم الورشة:\s*.+·/.test(trimmed)) {
+      return null;
+    }
+    return trimmed;
+  }
+
+  private looksArabic(value: string): boolean {
+    return /[\u0600-\u06FF]/.test(value);
+  }
+
+  private looksEnglish(value: string): boolean {
+    return /[A-Za-z]/.test(value);
+  }
+
 }

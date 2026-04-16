@@ -87,7 +87,6 @@ Route::prefix('v1/admin')->group(function () {
 
 // ── Learner Auth ─────────────────────────────────────────────────
 Route::prefix('v1/auth')->group(function () {
-    Route::post('/register', [LearnerAuthController::class, 'register']);
     Route::post('/login', [LearnerAuthController::class, 'login']);
 
     Route::middleware('auth:api')->group(function () {
@@ -95,6 +94,7 @@ Route::prefix('v1/auth')->group(function () {
         Route::post('/refresh', [LearnerAuthController::class, 'refresh']);
         Route::get('/me', [LearnerAuthController::class, 'me']);
         Route::patch('/me', [LearnerAuthController::class, 'updateProfile']);
+        Route::put('/password', [LearnerAuthController::class, 'changePassword']);
     });
 });
 

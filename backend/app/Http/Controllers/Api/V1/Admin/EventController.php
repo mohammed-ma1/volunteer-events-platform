@@ -25,7 +25,8 @@ class EventController extends Controller
             $query->where(function ($qb) use ($q) {
                 $qb->where('title', 'like', "%{$q}%")
                     ->orWhere('title_en', 'like', "%{$q}%")
-                    ->orWhere('summary', 'like', "%{$q}%");
+                    ->orWhere('summary', 'like', "%{$q}%")
+                    ->orWhere('summary_en', 'like', "%{$q}%");
             });
         }
 
@@ -161,11 +162,13 @@ class EventController extends Controller
             'summary' => 'sometimes|nullable|string|max:1000',
             'summary_en' => 'sometimes|nullable|string|max:1000',
             'description' => 'sometimes|nullable|string',
+            'description_en' => 'sometimes|nullable|string',
             'image_url' => 'sometimes|nullable|url|max:500',
             'starts_at' => 'sometimes|required|date',
             'ends_at' => 'sometimes|required|date|after:starts_at',
             'location' => 'sometimes|nullable|string|max:255',
             'location_en' => 'sometimes|nullable|string|max:255',
+            'zoom_link' => 'sometimes|nullable|string|max:500',
             'price' => 'sometimes|required|numeric|min:0',
             'currency' => 'sometimes|string|size:3',
             'capacity' => 'sometimes|nullable|integer|min:1',

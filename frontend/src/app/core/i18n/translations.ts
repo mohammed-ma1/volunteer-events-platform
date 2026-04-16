@@ -9,15 +9,64 @@ export type TranslationKey =
   | 'nav.about'
   | 'nav.facilitatorWorkshops'
   | 'nav.searchAria'
+  | 'nav.langAria'
+  | 'nav.langOptionArabic'
+  | 'nav.langOptionEnglish'
   | 'nav.langShortAr'
   | 'nav.langShortEn'
+  | 'nav.changePassword'
+  | 'nav.myWorkshops'
+  | 'nav.browseWorkshops'
+  | 'nav.trainers'
+  | 'nav.faq'
+  | 'nav.studentLogin'
+  | 'nav.signOut'
+  | 'hero.titleNavy1'
+  | 'hero.titleGold1'
+  | 'hero.titleNavy2'
+  | 'hero.titleGold2'
+  | 'workshops.titleBefore'
+  | 'workshops.titleHighlight'
+  | 'workshops.titleAfter'
+  | 'workshops.programsBadge'
+  | 'workshops.promoCertBanner'
+  | 'footer.linkTrainers'
+  | 'footer.linkFaq'
+  | 'footer.copyrightNextLevel'
+  | 'footer.mediaSolution'
+  | 'legal.privacyTitle'
+  | 'legal.privacyBody'
+  | 'legal.termsTitle'
+  | 'legal.termsBody'
+  | 'login.title'
+  | 'login.subtitle'
+  | 'login.email'
+  | 'login.password'
+  | 'login.signIn'
+  | 'login.signingIn'
+  | 'login.forgot'
+  | 'changePassword.title'
+  | 'changePassword.subtitle'
+  | 'changePassword.labelCurrent'
+  | 'changePassword.labelNew'
+  | 'changePassword.labelConfirm'
+  | 'changePassword.submit'
+  | 'changePassword.submitting'
+  | 'changePassword.backDashboard'
+  | 'changePassword.errCurrentRequired'
+  | 'changePassword.errNewRequired'
+  | 'changePassword.errMinLength'
+  | 'changePassword.errMismatch'
+  | 'changePassword.errGeneric'
   | 'banner.promoAria'
   | 'banner.promoMain'
   | 'banner.promoDetails'
   | 'banner.modalCloseAria'
-  | 'banner.modalHeroTitle'
+  | 'banner.modalImageEyebrow'
+  | 'banner.modalHeroBanner'
   | 'banner.modalImageBarText'
   | 'banner.modalBody'
+  | 'banner.modalCheckoutCta'
   | 'hero.badge'
   | 'hero.title1'
   | 'hero.title2'
@@ -254,20 +303,71 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.about': 'عن المنصة',
     'nav.facilitatorWorkshops': 'ورش المدرب',
     'nav.searchAria': 'بحث',
+    'nav.langAria': 'تغيير اللغة',
+    'nav.langOptionArabic': 'العربية',
+    'nav.langOptionEnglish': 'الإنجليزية',
     'nav.langShortAr': 'ع',
     'nav.langShortEn': 'EN',
+    'nav.changePassword': 'تغيير كلمة المرور',
+    'nav.myWorkshops': 'ورشي',
+    'nav.browseWorkshops': 'تصفح الورش',
+    'nav.trainers': 'المدربون والمحاضرون',
+    'nav.faq': 'الأسئلة الشائعة',
+    'nav.studentLogin': 'دخول الطلاب',
+    'nav.signOut': 'تسجيل الخروج',
+    'hero.titleNavy1': 'طوّر',
+    'hero.titleGold1': 'مهاراتك',
+    'hero.titleNavy2': 'وابنِ',
+    'hero.titleGold2': 'مستقبلك المهني',
+    'workshops.titleBefore': 'أحدث',
+    'workshops.titleHighlight': 'الورش',
+    'workshops.titleAfter': 'المتاحة',
+    'workshops.programsBadge': '📚 البرامج التدريبية',
+    'workshops.promoCertBanner': '🎗️ سيحصل الطالب على 100 شهادة معتمدة',
+    'footer.linkTrainers': 'تعرّف على المدربين',
+    'footer.linkFaq': 'الأسئلة الشائعة',
+    'footer.copyrightNextLevel': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
+    'footer.mediaSolution': 'بدعم من Media Solution',
+    'legal.privacyTitle': 'سياسة الخصوصية',
+    'legal.privacyBody':
+      'نلتزم بحماية بياناتك وفق الأنظمة المعمول بها. تفاصيل كاملة ستُحدَّث هنا قريباً بالتنسيق مع الجهة المالكة للمنصة.',
+    'legal.termsTitle': 'الشروط والأحكام',
+    'legal.termsBody':
+      'باستخدامك للمنصة فإنك توافق على الشروط المعروضة هنا. النص الكامل قيد المراجعة وسيُنشر لاحقاً.',
+    'login.title': 'تسجيل الدخول',
+    'login.subtitle': 'سجّل دخولك للوصول إلى ورشك وحسابك التعليمي.',
+    'login.email': 'البريد الإلكتروني',
+    'login.password': 'كلمة المرور',
+    'login.signIn': 'تسجيل الدخول',
+    'login.signingIn': 'جاري الدخول…',
+    'login.forgot': 'نسيت كلمة المرور؟',
+    'changePassword.title': 'تغيير كلمة المرور',
+    'changePassword.subtitle': 'أدخل كلمة المرور الحالية ثم اختر كلمة مرور جديدة.',
+    'changePassword.labelCurrent': 'كلمة المرور الحالية',
+    'changePassword.labelNew': 'كلمة المرور الجديدة',
+    'changePassword.labelConfirm': 'تأكيد كلمة المرور الجديدة',
+    'changePassword.submit': 'تحديث كلمة المرور',
+    'changePassword.submitting': 'جاري التحديث…',
+    'changePassword.backDashboard': 'العودة إلى ورشي',
+    'changePassword.errCurrentRequired': 'كلمة المرور الحالية مطلوبة',
+    'changePassword.errNewRequired': 'كلمة المرور الجديدة مطلوبة',
+    'changePassword.errMinLength': 'يجب أن تكون كلمة المرور 8 أحرف على الأقل',
+    'changePassword.errMismatch': 'كلمتا المرور غير متطابقتين',
+    'changePassword.errGeneric': 'تعذر تحديث كلمة المرور.',
     'banner.promoAria': 'عرض ترويجي لخصم الورش لطلاب جامعة الكويت',
     'banner.promoMain': 'عرض الـ 100 ورشة لطلاب جامعة الكويت! خصم خاص',
     'banner.promoDetails': 'اضغط للتفاصيل',
     'banner.modalCloseAria': 'إغلاق النافذة',
-    'banner.modalHeroTitle': PROMO.ar.title,
+    'banner.modalImageEyebrow': 'جامعة الكويت · 100 ورشة تدريبية',
+    'banner.modalHeroBanner': 'عرض الـ 100 ورشة 🔥',
     'banner.modalImageBarText': PROMO.ar.modalBar,
     'banner.modalBody': PROMO.ar.tagline,
-    'hero.badge': 'منصة التطوير الطلابي لجامعة الكويت',
+    'banner.modalCheckoutCta': 'احصل على العرض الآن',
+    'hero.badge': 'منصة نكست لفل للتدريب — جامعة الكويت',
     'hero.title1': 'طوّر مهاراتك،',
     'hero.title2': 'وابنِ مستقبلك المهني',
     'hero.body':
-      'استكشف مجموعة واسعة من الورش والفعاليات المصممة لتعزيز قدراتك وإعدادك لسوق العمل—ورش مخصصة لطلاب جامعة الكويت بالتعاون مع شركة نكست لفل. تسجيل آمن عبر المنصة.',
+      'تقدّم المنصة ورشاً عملية لتعزيز قدراتك وإعدادك لسوق العمل، مع مسارات تعليمية وشهادات معتمدة بالتعاون مع جامعة الكويت.',
     'hero.ctaBrowse': 'تصفح الورش المتاحة',
     'hero.ctaPaths': 'تعرف على المسارات',
     'hero.ctaFacilitators': 'تعرّف على المدربين',
@@ -318,7 +418,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'facilitatorsPage.back': 'العودة للرئيسية',
     'workshops.title': 'أحدث الورش المتاحة',
     'workshops.subtitle':
-      'اختر من بين مجموعة متنوعة من البرامج لتطوير مهاراتك. جميع الورش مباشرة في التوقيت المحدد ومسجّلة للمشاهدة لاحقاً عبر المنصة التعليمية.',
+      'اختر من بين مجموعة متنوعة من الورش التدريبية التي تناسب اهتماماتك وتخصصك.',
     'workshops.viewAll': 'عرض جميع الورش',
     'workshops.showLess': 'عرض أقل',
     'workshops.searchPlaceholder': 'ابحث عن ورشة…',
@@ -349,7 +449,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
-    'cat.soft_skills': 'المهارات الناعمة',
+    'cat.soft_skills': 'الكفاءة الشخصية',
     'cat.digital': 'المهارات الرقمية',
     'cat.ai': 'الذكاء الاصطناعي',
     'cat.career_prep': 'الاستعداد المهني',
@@ -373,7 +473,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.q4': 'هل الورشات مسجلة؟',
     'faq.a4': 'نعم، سيتم تسجيل جميع الورش لتكون متاحة أونلاين وللمشاهدة في أي وقت عبر المنصة التعليمية.',
     'footer.brand':
-      'المنصة الرسمية لجامعة الكويت لتقديم الورش التدريبية وتطوير مهارات الطلاب لإعدادهم لسوق العمل.',
+      'مركز نكست لفل للتدريب يقدّم برامج وورشاً عملية لطلاب جامعة الكويت لبناء المهارات والاستعداد لسوق العمل.',
     'footer.quick': 'روابط سريعة',
     'footer.linkHome': 'الرئيسية',
     'footer.linkWorkshops': 'الورش التدريبية',
@@ -393,7 +493,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.newsletterHint': 'اشترك في نشرتنا البريدية لتصلك آخر المستجدات حول الورش والبرامج التدريبية.',
     'footer.emailPlaceholder': 'البريد الإلكتروني',
     'footer.subscribe': 'اشتراك',
-    'footer.copyright': 'جميع الحقوق محفوظة © 2026 جامعة الكويت',
+    'footer.copyright': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
     'footer.poweredBy': 'Media Solution',
     'cart.title': 'سلة التسجيل',
     'cart.subtitle': 'عناصر محجوزة',
@@ -516,21 +616,72 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.about': 'About',
     'nav.facilitatorWorkshops': 'Facilitator workshops',
     'nav.searchAria': 'Search',
+    'nav.langAria': 'Change language',
+    'nav.langOptionArabic': 'Arabic',
+    'nav.langOptionEnglish': 'English',
     'nav.langShortAr': 'AR',
     'nav.langShortEn': 'EN',
+    'nav.changePassword': 'Change password',
+    'nav.myWorkshops': 'My workshops',
+    'nav.browseWorkshops': 'Browse workshops',
+    'nav.trainers': 'Trainers',
+    'nav.faq': 'FAQ',
+    'nav.studentLogin': 'Student login',
+    'nav.signOut': 'Sign out',
+    'hero.titleNavy1': 'Grow',
+    'hero.titleGold1': 'your skills',
+    'hero.titleNavy2': 'and build',
+    'hero.titleGold2': 'your career',
+    'workshops.titleBefore': 'Latest',
+    'workshops.titleHighlight': 'workshops',
+    'workshops.titleAfter': 'available',
+    'workshops.programsBadge': '📚 Training programs',
+    'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'footer.linkTrainers': 'Meet the trainers',
+    'footer.linkFaq': 'FAQ',
+    'footer.copyrightNextLevel': 'All rights reserved © 2026 Next Level Company',
+    'footer.mediaSolution': 'Supported by Media Solution',
+    'legal.privacyTitle': 'Privacy policy',
+    'legal.privacyBody':
+      'We are committed to protecting your data in line with applicable regulations. Full details will be published here soon in coordination with the platform owner.',
+    'legal.termsTitle': 'Terms and conditions',
+    'legal.termsBody':
+      'By using the platform you agree to the terms shown here. The full legal text is under review and will be published later.',
+    'login.title': 'Sign in',
+    'login.subtitle': 'Sign in to access your workshops and account.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.signIn': 'Sign in',
+    'login.signingIn': 'Signing in…',
+    'login.forgot': 'Forgot password?',
+    'changePassword.title': 'Change password',
+    'changePassword.subtitle': 'Enter your current password and choose a new one.',
+    'changePassword.labelCurrent': 'Current password',
+    'changePassword.labelNew': 'New password',
+    'changePassword.labelConfirm': 'Confirm new password',
+    'changePassword.submit': 'Update password',
+    'changePassword.submitting': 'Updating…',
+    'changePassword.backDashboard': 'Back to my workshops',
+    'changePassword.errCurrentRequired': 'Current password is required',
+    'changePassword.errNewRequired': 'New password is required',
+    'changePassword.errMinLength': 'Password must be at least 8 characters',
+    'changePassword.errMismatch': 'Passwords do not match',
+    'changePassword.errGeneric': 'Could not update password.',
     'banner.promoAria':
       '100-workshop offer for Kuwait University students — special discount. Click for details.',
     'banner.promoMain': '100-workshop offer for Kuwait University students! Special discount',
     'banner.promoDetails': 'Click for details',
     'banner.modalCloseAria': 'Close dialog',
-    'banner.modalHeroTitle': PROMO.en.title,
+    'banner.modalImageEyebrow': 'Kuwait University · 100 training workshops',
+    'banner.modalHeroBanner': 'The 100-workshop offer 🔥',
     'banner.modalImageBarText': PROMO.en.modalBar,
     'banner.modalBody': PROMO.en.tagline,
-    'hero.badge': 'Kuwait University student development platform',
+    'banner.modalCheckoutCta': 'Get the offer now',
+    'hero.badge': 'Next Level training platform — Kuwait University',
     'hero.title1': 'Grow your skills,',
     'hero.title2': 'build your career',
     'hero.body':
-      'Explore certified workshops and events built for KU students—in partnership with Next Level. Practical tracks for employability, with a simple and secure registration flow.',
+      'The platform offers practical workshops to strengthen your skills and prepare you for the job market, with learning paths and recognized certificates in cooperation with Kuwait University.',
     'hero.ctaBrowse': 'Browse workshops',
     'hero.ctaPaths': 'Explore learning paths',
     'hero.ctaFacilitators': 'Meet facilitators',
@@ -582,7 +733,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'facilitatorsPage.back': 'Back to home',
     'workshops.title': 'Latest available workshops',
     'workshops.subtitle':
-      'Pick the sessions that fit your schedule—live on Zoom at the listed times, with recordings available later on the learning platform.',
+      'Choose from a wide range of training workshops that match your interests and major.',
     'workshops.viewAll': 'View all workshops',
     'workshops.showLess': 'Show fewer',
     'workshops.searchPlaceholder': 'Search workshops…',
@@ -613,10 +764,10 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.packageUnavailable':
       'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',
-    'cat.soft_skills': 'Soft Skills',
+    'cat.soft_skills': 'Personal Competence',
     'cat.digital': 'Digital Skills',
     'cat.ai': 'Artificial Intelligence',
-    'cat.career_prep': 'Career Prep',
+    'cat.career_prep': 'Professional Readiness',
     'card.addCart': 'Add to cart',
     'card.added': 'Added',
     'card.buyNow': 'Buy now',
@@ -640,7 +791,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.a4':
       'Yes—sessions are recorded so you can watch online later on the learning platform when recordings are published.',
     'footer.brand':
-      'The official platform of Kuwait University for offering training workshops and developing student skills to prepare them for the job market.',
+      'Next Level Training Center delivers programs and practical workshops for Kuwait University students to build skills and prepare for the job market.',
     'footer.quick': 'Quick Links',
     'footer.linkHome': 'Home',
     'footer.linkWorkshops': 'Workshops',
@@ -660,7 +811,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.newsletterHint': 'Subscribe to our newsletter to receive the latest updates on workshops and training programs.',
     'footer.emailPlaceholder': 'Email Address',
     'footer.subscribe': 'Subscribe',
-    'footer.copyright': 'All Rights Reserved © 2026 Kuwait University',
+    'footer.copyright': 'All rights reserved © 2026 Next Level Company',
     'footer.poweredBy': 'Media Solution',
     'cart.title': 'Your cart',
     'cart.subtitle': 'items reserved',

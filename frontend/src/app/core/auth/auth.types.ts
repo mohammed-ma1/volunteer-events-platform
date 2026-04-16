@@ -3,9 +3,8 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface RegisterRequest {
-  name: string;
-  email: string;
+export interface ChangePasswordRequest {
+  current_password: string;
   password: string;
   password_confirmation: string;
 }

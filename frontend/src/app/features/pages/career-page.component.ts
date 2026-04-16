@@ -61,7 +61,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
         <a
           routerLink="/"
           fragment="workshops"
-          class="ve-focus-ring inline-flex rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800"
+          class="ve-btn-primary"
         >
           {{ i18n.t('careerPage.ctaBrowse') }}
         </a>

@@ -6,8 +6,9 @@ import {
   isKuWorkshopWeekDayKey,
   kuWorkshopWeekNoonIso,
 } from '../../core/constants/ku-workshop-week';
-import { PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
-import { PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
+import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
+import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
+import { HOME_HERO_IMAGE_URL, PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
 import { HOME_EXPERTS, HomeExpert } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
@@ -46,32 +47,37 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       class="ve-scroll-reveal relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-white via-brand-50/25 to-white px-5 py-10 shadow-sm ring-1 ring-ink-200/60 md:px-10 md:py-12"
     >
       <div
-        class="pointer-events-none absolute -start-32 -top-28 h-72 w-72 rounded-full bg-gradient-to-br from-brand-400/25 to-sky-400/10 blur-3xl motion-safe:animate-ve-blob"
+        class="pointer-events-none absolute -start-32 -top-28 h-72 w-72 rounded-full bg-gradient-to-br from-gold-400/20 via-accent-500/10 to-brand-900/5 blur-3xl motion-safe:animate-ve-blob"
         aria-hidden="true"
       ></div>
       <div
-        class="pointer-events-none absolute -end-24 bottom-0 h-56 w-56 rounded-full bg-gradient-to-tl from-brand-500/15 to-transparent blur-3xl motion-safe:animate-ve-blob motion-safe:[animation-delay:-9s]"
+        class="pointer-events-none absolute -end-24 bottom-0 h-56 w-56 rounded-full bg-gradient-to-tl from-accent-500/12 to-transparent blur-3xl motion-safe:animate-ve-blob motion-safe:[animation-delay:-9s]"
         aria-hidden="true"
       ></div>
 
       <div class="relative grid gap-10 md:grid-cols-2 md:items-center md:gap-12">
         <div class="space-y-5">
           <span
-            class="motion-safe:animate-ve-fade-up inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-brand-800 shadow-sm ring-1 ring-ink-200/80 backdrop-blur-sm"
+            class="motion-safe:animate-ve-fade-up inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-brand-900 shadow-sm ring-1 ring-ink-200/80 backdrop-blur-sm"
           >
             <span class="relative flex h-2 w-2" aria-hidden="true">
               <span
-                class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-40 motion-reduce:animate-none"
+                class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-400 opacity-45 motion-reduce:animate-none"
               ></span>
-              <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-gold-500"></span>
             </span>
             {{ i18n.t('hero.badge') }}
           </span>
           <h1
-            class="motion-safe:animate-ve-fade-up text-3xl font-extrabold leading-[1.2] tracking-tight text-brand-900 motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.45rem]"
+            class="motion-safe:animate-ve-fade-up text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.45rem]"
           >
-            {{ i18n.t('hero.title1') }}
-            <span class="ve-hero-accent block pt-1 sm:inline sm:pt-0">{{ i18n.t('hero.title2') }}</span>
+            <span class="text-brand-900">{{ i18n.t('hero.titleNavy1') }}</span
+            ><span class="ve-hero-accent">{{ i18n.t('hero.titleGold1') }}</span
+            ><span class="text-brand-900">، </span>
+            <span class="block pt-1 sm:inline sm:pt-0">
+              <span class="text-brand-900">{{ i18n.t('hero.titleNavy2') }} </span
+              ><span class="ve-hero-accent">{{ i18n.t('hero.titleGold2') }}</span>
+            </span>
           </h1>
           <p
             class="motion-safe:animate-ve-fade-up max-w-xl text-base leading-relaxed text-ink-600 motion-safe:[animation-delay:120ms]"
@@ -84,20 +90,42 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             <a
               routerLink="/"
               fragment="workshops"
-              class="ve-focus-ring motion-safe:animate-ve-cta-ring group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
+              class="ve-btn-primary motion-safe:animate-ve-cta-ring group relative overflow-hidden transition duration-300 hover:scale-[1.02] active:scale-[0.98]"
             >
               <span
                 class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition duration-500 group-hover:translate-x-full motion-reduce:group-hover:translate-x-0"
                 aria-hidden="true"
               ></span>
-              <span class="relative">{{ i18n.t('hero.ctaBrowse') }}</span>
+              <span class="relative inline-flex items-center gap-2">
+                <span>{{ i18n.t('hero.ctaBrowse') }}</span>
+                <svg
+                  class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
             </a>
             <a
               routerLink="/"
               fragment="trainers"
-              class="ve-focus-ring inline-flex items-center justify-center rounded-xl bg-ink-100/90 px-5 py-3 text-sm font-semibold text-brand-900 transition duration-300 hover:bg-ink-200/90 active:scale-[0.98]"
+              class="ve-btn-secondary group transition duration-300 hover:scale-[1.01] active:scale-[0.98]"
             >
-              {{ i18n.t('hero.ctaFacilitators') }}
+              <span class="inline-flex items-center gap-2">
+                <span>{{ i18n.t('hero.ctaFacilitators') }}</span>
+                <svg
+                  class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
             </a>
           </div>
         </div>
@@ -110,7 +138,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             aria-hidden="true"
           ></div>
           <img
-            [src]="heroVisualUrl"
+            [src]="homeHeroImageUrl"
             [alt]="i18n.t('hero.imageAlt')"
             class="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100 md:aspect-[5/4]"
             width="800"
@@ -134,7 +162,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         @for (f of featuresDisplayOrder(); track f.titleKey) {
           <div class="group flex flex-col items-center px-2 text-center">
             <div
-              class="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#EBF5FF] text-[#001A33] transition duration-300 group-hover:scale-[1.06] group-hover:bg-[#dfeefc] motion-reduce:group-hover:scale-100"
+              class="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-violet-100/90 text-brand-900 transition duration-300 group-hover:scale-[1.06] group-hover:bg-violet-100 motion-reduce:group-hover:scale-100"
             >
               @switch (f.iconId) {
                 @case ('cap') {
@@ -185,7 +213,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                 }
               }
             </div>
-            <h2 class="text-sm font-bold text-[#001A33] md:text-[0.95rem]">{{ i18n.t(f.titleKey) }}</h2>
+            <h2 class="text-sm font-bold text-brand-900 md:text-[0.95rem]">{{ i18n.t(f.titleKey) }}</h2>
             <p class="mt-2 max-w-[17rem] text-xs leading-relaxed text-ink-600 md:text-sm">
               {{ i18n.t(f.descKey) }}
             </p>
@@ -199,45 +227,31 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       veScrollReveal
       class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-8 shadow-inner ring-1 ring-ink-200/60 md:px-8 md:py-10"
     >
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
-        <div class="motion-safe:animate-ve-fade-up min-w-0 flex-1">
-          <h2 class="text-2xl font-extrabold tracking-tight text-[#001A33] md:text-3xl">
-            {{ i18n.t('workshops.title') }}
-          </h2>
-          <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-600 md:text-base">
-            {{ i18n.t('workshops.subtitle') }}
-          </p>
-        </div>
-        <label
-          class="motion-safe:animate-ve-fade-up flex w-full shrink-0 items-center gap-2.5 rounded-2xl border border-ink-200 bg-white px-3.5 py-2.5 shadow-sm transition focus-within:border-[#001A33]/25 focus-within:ring-2 focus-within:ring-[#001A33]/10 lg:mt-1 lg:max-w-[min(100%,22rem)]"
+      <div class="motion-safe:animate-ve-fade-up min-w-0">
+        <span
+          class="mb-3 inline-flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1.5 text-xs font-bold text-violet-900 shadow-sm ring-1 ring-violet-200/80"
         >
-          <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <input
-            id="workshop-search-input"
-            class="min-w-0 flex-1 bg-transparent text-sm text-[#001A33] outline-none placeholder:text-ink-400"
-            [placeholder]="i18n.t('workshops.searchPlaceholder')"
-            [(ngModel)]="searchText"
-            (ngModelChange)="onSearchChange($event)"
-          />
-        </label>
+          {{ i18n.t('workshops.programsBadge') }}
+        </span>
+        <h2 class="text-2xl font-extrabold tracking-tight md:text-3xl">
+          <span class="text-brand-900">{{ i18n.t('workshops.titleBefore') }}</span>
+          <span class="ve-hero-accent"> {{ i18n.t('workshops.titleHighlight') }} </span>
+          <span class="text-brand-900">{{ i18n.t('workshops.titleAfter') }}</span>
+        </h2>
+        <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-600 md:text-base">
+          {{ i18n.t('workshops.subtitle') }}
+        </p>
       </div>
 
       <div
-        class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-[#1a1f2e] text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)] ring-1 ring-white/10"
+        class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-brand-950 text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)]"
       >
         <div class="flex flex-col-reverse md:flex-row md:items-stretch" dir="ltr">
           <div
-            class="relative min-h-[14rem] w-full shrink-0 overflow-hidden md:min-h-[20rem] md:w-[min(44%,26rem)]"
+            class="relative min-h-[14rem] w-full shrink-0 overflow-hidden md:min-h-[20rem] md:w-[min(50%,32rem)]"
           >
             <img
-              [src]="heroVisualUrl"
+              [src]="promoOfferImageUrl"
               alt=""
               class="h-full min-h-[14rem] w-full object-cover md:min-h-[20rem]"
               loading="lazy"
@@ -286,7 +300,6 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             <span
               class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/90"
             >
-              <span class="h-2 w-2 shrink-0 rounded-full bg-[#00c853]" aria-hidden="true"></span>
               {{ i18n.t('workshops.promoLimitedBadge') }}
             </span>
             <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl lg:text-[1.85rem]">
@@ -295,8 +308,13 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             <p class="max-w-xl text-sm leading-relaxed text-white/65 md:text-[0.95rem]">
               {{ i18n.t('workshops.promoBody') }}
             </p>
+            <div
+              class="max-w-xl rounded-xl border border-[#eab308]/55 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-[#f5d76e] md:px-4 md:py-3"
+            >
+              {{ i18n.t('workshops.promoCertBanner') }}
+            </div>
             <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
-              <span class="text-4xl font-black tracking-tight text-[#4da6ff] md:text-[2.65rem]">{{
+              <span class="text-4xl font-black tracking-tight text-[#eab308] md:text-[2.65rem]">{{
                 i18n.t('workshops.promoPrice')
               }}</span>
               <div class="flex flex-col items-start gap-1.5">
@@ -304,44 +322,58 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                   i18n.t('workshops.promoPriceWas')
                 }}</span>
                 <span
-                  class="inline-flex rounded-md bg-[#00c853] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm"
+                  class="inline-flex rounded-md bg-[#22c55e] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm"
                   >{{ i18n.t('workshops.promoSavePct') }}</span
                 >
               </div>
             </div>
             <div
-              class="max-w-xl rounded-xl border border-fuchsia-500/45 bg-white/[0.04] p-4 shadow-[0_0_24px_rgba(168,85,247,0.12)] md:p-4"
+              class="max-w-xl rounded-xl border border-fuchsia-400/50 bg-[#2a1f3d]/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-4"
             >
               <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                 <p class="text-sm leading-relaxed text-white/85">
                   {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                  <span class="font-bold text-[#e6007e]">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
+                  <span class="font-bold text-[#ec4899]">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
                 </p>
                 <span
-                  class="inline-flex w-fit shrink-0 rounded-full bg-violet-950/90 px-2.5 py-1 text-[10px] font-bold tracking-wide text-violet-100 ring-1 ring-violet-400/30"
+                  class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-2.5 py-1 text-[10px] font-bold tracking-wide text-white"
                   >{{ i18n.t('workshops.promoInterestFree') }}</span
                 >
               </div>
             </div>
             <button
               type="button"
-              class="ve-focus-ring inline-flex w-full max-w-md items-center justify-center gap-3 rounded-xl bg-[#0b0f18] px-6 py-4 text-center text-sm font-bold text-white shadow-lg ring-1 ring-white/10 transition hover:bg-black md:py-4"
+              class="ve-btn-primary ve-btn-primary--lg inline-flex w-full max-w-md text-center md:py-4"
               [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
               (click)="onPromoCheckout()"
             >
-              <svg class="h-5 w-5 shrink-0 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                />
-              </svg>
               <span>{{ i18n.t('workshops.promoCta') }}</span>
             </button>
           </div>
         </div>
       </div>
+
+      <!-- Category Package Cards (hidden for now) -->
+
+      <label
+        class="motion-safe:animate-ve-fade-up mt-8 flex w-full max-w-xs items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3.5 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10"
+      >
+        <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input
+          id="workshop-search-input"
+          class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
+          [placeholder]="i18n.t('workshops.searchPlaceholder')"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </label>
 
       @if (workshopDayBuckets().length > 1) {
         <div
@@ -355,11 +387,11 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
               role="tab"
               [attr.aria-selected]="selectedDayKey() === b.key"
               (click)="onSelectDay(b.key)"
-              class="shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200"
+              class="shrink-0 rounded-full px-5 py-2.5 text-center transition duration-200"
               [ngClass]="
                 selectedDayKey() === b.key
-                  ? 'bg-[#001A33] text-white shadow-md'
-                  : 'border border-ink-200 bg-white text-[#001A33] hover:bg-white'
+                  ? 'bg-brand-900 text-white shadow-md'
+                  : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
               "
             >
               <span class="block text-sm font-bold">{{ i18n.t('workshops.dayWord') }} {{ di + 1 }}</span>
@@ -380,11 +412,11 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           <button
             type="button"
             (click)="onSelectCategory(cat)"
-            class="shrink-0 rounded-2xl px-4 py-2.5 text-sm font-semibold transition duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:active:scale-100"
+            class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:active:scale-100"
             [ngClass]="
               selectedCategory() === cat
-                ? 'bg-[#001A33] text-white shadow-md'
-                : 'border border-ink-200 bg-white text-[#001A33] hover:bg-white'
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
             "
           >
             {{ categoryLabel(cat) }}
@@ -430,16 +462,16 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         <div class="mt-8 flex justify-center">
           <button
             type="button"
-            class="ve-focus-ring inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-8 py-2.5 text-sm font-medium text-[#001A33] shadow-sm transition hover:border-slate-400 hover:bg-slate-50/90"
+            class="ve-btn-secondary px-8"
             (click)="showAllWorkshops() ? collapseWorkshopsGrid() : expandWorkshopsGrid()"
           >
             <span>{{ showAllWorkshops() ? i18n.t('workshops.showLess') : i18n.t('workshops.showMore') }}</span>
             @if (showAllWorkshops()) {
-              <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
               </svg>
             } @else {
-              <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             }
@@ -457,14 +489,14 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       <div class="mx-auto max-w-6xl">
         <div class="text-center">
           <span
-            class="inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-1.5 text-xs font-bold text-brand-700 ring-1 ring-sky-100/90"
+            class="inline-flex items-center gap-2 rounded-full bg-violet-100/90 px-4 py-1.5 text-xs font-bold text-brand-900 ring-1 ring-accent-400/25"
           >
             <span aria-hidden="true">🌟</span>
             {{ i18n.t('experts.badge') }}
           </span>
-          <h2 class="mt-4 text-2xl font-extrabold leading-snug tracking-tight text-[#001A33] md:text-[1.75rem]">
+          <h2 class="mt-4 text-2xl font-extrabold leading-snug tracking-tight text-brand-900 md:text-[1.75rem]">
             {{ i18n.t('experts.titleBefore') }}
-            <span class="text-brand-600">{{ i18n.t('experts.titleHighlight') }}</span>
+            <span class="ve-hero-accent">{{ i18n.t('experts.titleHighlight') }}</span>
             {{ i18n.t('experts.titleAfter') }}
           </h2>
           <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ink-600 md:text-base">
@@ -475,7 +507,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(240px,28%)_minmax(0,1fr)] lg:items-start">
           <aside class="flex flex-col gap-4">
             <label
-              class="flex items-center gap-2.5 rounded-2xl border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:ring-2 focus-within:ring-[#001A33]/10"
+              class="flex items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:ring-2 focus-within:ring-brand-900/10"
             >
               <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -487,7 +519,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
               </svg>
               <input
                 type="search"
-                class="min-w-0 flex-1 bg-transparent text-sm text-[#001A33] outline-none placeholder:text-ink-400"
+                class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
                 [placeholder]="i18n.t('experts.searchPh')"
                 [value]="expertSearch()"
                 (input)="onExpertSearch($any($event.target).value)"
@@ -498,11 +530,11 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                 <button
                   type="button"
                   (click)="selectExpert(ex.id)"
-                  class="w-full rounded-2xl px-4 py-3 text-start text-sm font-semibold transition duration-200"
+                  class="w-full rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200"
                   [ngClass]="
                     selectedExpertId() === ex.id
-                      ? 'bg-[#001A33] text-white shadow-md'
-                      : 'border border-ink-200 bg-white text-[#001A33] hover:bg-white'
+                      ? 'bg-brand-900 text-white shadow-md'
+                      : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
                   "
                 >
                   {{ expertName(ex) }}
@@ -512,16 +544,16 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             @if (filteredExperts().length > EXPERT_SIDEBAR_PREVIEW) {
               <button
                 type="button"
-                class="ve-focus-ring flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-2.5 text-sm font-medium text-[#001A33] shadow-sm transition hover:border-slate-400 hover:bg-slate-50/90"
+                class="ve-btn-secondary ve-btn-secondary--block"
                 (click)="toggleExpertListExpand()"
               >
                 <span>{{ showAllExpertTabs() ? i18n.t('experts.showLess') : i18n.t('experts.showMore') }}</span>
                 @if (showAllExpertTabs()) {
-                  <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
                   </svg>
                 } @else {
-                  <svg class="h-4 w-4 shrink-0 text-[#001A33]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 }
@@ -543,7 +575,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                   />
                 </div>
                 <div class="flex flex-col justify-center p-6 md:p-8">
-                  <h3 class="text-xl font-extrabold text-[#001A33] md:text-2xl">{{ expertName(selectedExpert()) }}</h3>
+                  <h3 class="text-xl font-extrabold text-brand-900 md:text-2xl">{{ expertName(selectedExpert()) }}</h3>
                   <p class="mt-1 text-sm font-medium text-ink-500">{{ expertSpecialty(selectedExpert()) }}</p>
                   <p class="mt-4 text-sm leading-relaxed text-ink-600">{{ expertBio(selectedExpert()) }}</p>
                   <p class="mt-6 text-xs font-bold uppercase tracking-wide text-ink-400">
@@ -555,7 +587,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                         [href]="s.href"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="ve-focus-ring flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 bg-ink-50 text-ink-600 transition hover:border-brand-200 hover:bg-white hover:text-[#001A33]"
+                        class="ve-focus-ring flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 bg-ink-50 text-ink-600 transition hover:border-brand-200 hover:bg-white hover:text-brand-900"
                         [attr.aria-label]="i18n.t(s.aria)"
                       >
                         @switch (s.kind) {
@@ -590,7 +622,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             </article>
 
             <div>
-              <h3 class="text-lg font-extrabold text-[#001A33]">{{ i18n.t('experts.workshopsHeading') }}</h3>
+              <h3 class="text-lg font-extrabold text-brand-900">{{ i18n.t('experts.workshopsHeading') }}</h3>
               <div class="mt-4 grid gap-3 sm:grid-cols-2">
                 @for (ev of expertWorkshopsForSelected(); track ev.slug) {
                   <a
@@ -610,7 +642,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                       ></div>
                     }
                     <div class="min-w-0 text-start">
-                      <p class="text-sm font-bold leading-snug text-[#0a1628] group-hover:text-[#001A33]">
+                      <p class="text-sm font-bold leading-snug text-[#0a1628] group-hover:text-brand-900">
                         {{ displayWorkshopTitle(ev) }}
                       </p>
                       <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
@@ -622,7 +654,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
 
             <a
               routerLink="/facilitator-workshops"
-              class="ve-focus-ring inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#001A33] px-4 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#002a4d] md:w-auto"
+              class="ve-btn-primary inline-flex w-full md:w-auto"
             >
               {{ i18n.t('trainers.ctaBrowse') }}
               @if (i18n.isRtl()) {
@@ -690,8 +722,9 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly EXPERT_SIDEBAR_PREVIEW = 10;
 
-  /** Hero visual (LeadConnector-optimized WebP, user-provided). */
-  readonly heroVisualUrl = PROMO_HERO_IMAGE_URL;
+  readonly homeHeroImageUrl = HOME_HERO_IMAGE_URL;
+  readonly promoOfferImageUrl = PROMO_HERO_IMAGE_URL;
+  readonly categoryPackages = CATEGORY_PACKAGES;
 
   readonly expertSearch = signal('');
   readonly selectedExpertId = signal(HOME_EXPERTS[0].id);
@@ -721,7 +754,7 @@ export class EventsHomeComponent implements OnDestroy {
     const cat = this.selectedCategory();
     return this.homeEvents().filter(
       (ev) =>
-        ev.slug !== PACKAGE_100_EVENT_SLUG && eventMatchesWorkshopFilter(cat, ev.category),
+        !ALL_PACKAGE_SLUGS.includes(ev.slug) && eventMatchesWorkshopFilter(cat, ev.category),
     );
   });
 
@@ -885,6 +918,14 @@ export class EventsHomeComponent implements OnDestroy {
 
   onPromoCheckout(): void {
     this.checkoutFlow.startPackage100Checkout(() => this.error.set(this.i18n.t('workshops.packageUnavailable')));
+  }
+
+  onCategoryPackageCheckout(slug: string): void {
+    this.checkoutFlow.startPackageCheckout(slug, () => this.error.set(this.i18n.t('workshops.packageUnavailable')));
+  }
+
+  categoryPackageCopy(pkg: CategoryPackagePromo): CategoryPackagePromo['ar'] {
+    return this.i18n.isRtl() ? pkg.ar : pkg.en;
   }
 
   onExpertSearch(value: string): void {

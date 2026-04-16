@@ -1,9 +1,11 @@
+import { NgClass } from '@angular/common';
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { PRIMARY_OUTLET, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { cartIconBump } from '../animations/cart-animations';
 import { routeFade } from '../animations/route-animations';
 import { PROMO_HERO_IMAGE_URL } from '../constants/promo-hero';
 import { I18nService } from '../i18n/i18n.service';
+import type { Locale } from '../i18n/translations';
 import { AuthService } from '../auth/auth.service';
 import { CartService } from '../services/cart.service';
 import { CheckoutFlowService } from '../services/checkout-flow.service';
@@ -12,13 +14,13 @@ import { CartDrawerComponent } from './cart-drawer.component';
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CartDrawerComponent],
+  imports: [NgClass, RouterOutlet, RouterLink, RouterLinkActive, CartDrawerComponent],
   animations: [routeFade, cartIconBump],
   template: `
     <div class="flex min-h-dvh flex-col bg-[var(--ve-surface)]">
       <div class="sticky top-0 z-40 isolate flex shrink-0 flex-col">
       <div
-        class="relative shrink-0 border-x-0 border-b border-white/10 bg-[#0f1624] text-white"
+        class="relative shrink-0 border-x-0 border-b border-white/10 bg-brand-900 text-white"
         role="region"
         [attr.aria-label]="i18n.t('banner.promoAria')"
       >
@@ -30,7 +32,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
           <span class="min-w-0">{{ i18n.t('banner.promoMain') }}</span>
           <button
             type="button"
-            class="ve-focus-ring shrink-0 rounded-sm px-0.5 text-inherit underline decoration-dotted decoration-white/90 underline-offset-[3px] transition hover:bg-white/10 hover:text-white"
+            class="shrink-0 rounded-sm border-0 bg-transparent px-0.5 text-inherit underline decoration-dotted decoration-white/90 underline-offset-[3px] transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
             (click)="openPromoModal()"
           >
             {{ i18n.t('banner.promoDetails') }}
@@ -48,96 +50,80 @@ import { CartDrawerComponent } from './cart-drawer.component';
           [class.md:py-4]="!headerCompact()"
           [class.md:py-2]="headerCompact()"
         >
-          <a routerLink="/" class="group flex items-center gap-2.5">
-            <svg
-              class="shrink-0 text-[#0f172a] transition-[height,width] duration-300"
-              [class.h-10]="!headerCompact()"
-              [class.w-10]="!headerCompact()"
-              [class.h-8]="headerCompact()"
-              [class.w-8]="headerCompact()"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-              <path d="M6 12v5c3 3 9 3 12 0v-5" />
-            </svg>
-            <div class="hidden leading-tight sm:block">
-              <p class="text-sm font-semibold text-brand-900">KU</p>
-              <p class="text-xs text-ink-500">{{ i18n.t('hero.badge') }}</p>
-            </div>
+          <a routerLink="/" class="group flex shrink-0 items-center">
+            <img
+              src="/images/branding/next-levels-logo.svg"
+              alt=""
+              class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
+              [ngClass]="
+                headerCompact()
+                  ? 'h-8 max-w-[9rem] sm:max-w-[9.5rem]'
+                  : 'h-9 max-w-[10.5rem] sm:h-10 sm:max-w-[11.5rem] md:max-w-[12.5rem]'
+              "
+              width="180"
+              height="48"
+              fetchpriority="high"
+            />
           </a>
 
-          <nav
-            class="hidden items-center gap-1 text-sm font-medium text-ink-600 md:flex md:gap-5"
-          >
+          <nav class="hidden items-center gap-1 text-sm font-medium text-ink-600 md:flex md:gap-4 lg:gap-5">
             <a
               routerLink="/"
-              routerLinkActive="text-brand-900 after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:bg-brand-900 relative"
+              routerLinkActive="relative text-brand-900 after:pointer-events-none after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:rounded-full after:bg-brand-600"
               [routerLinkActiveOptions]="{ exact: true }"
-              class="rounded-lg px-2 py-1 transition hover:text-brand-900"
+              class="relative rounded-lg px-2 py-1 transition hover:text-brand-900"
               >{{ i18n.t('nav.home') }}</a
             >
             <a
               routerLink="/"
               fragment="workshops"
-              class="rounded-lg px-2 py-1 transition hover:text-brand-900"
+              class="relative rounded-lg px-2 py-1 transition hover:text-brand-900"
               >{{ i18n.t('nav.workshops') }}</a
             >
             <a
-              routerLink="/facilitator-workshops"
-              routerLinkActive="text-brand-900 after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:bg-brand-900 relative"
-              class="rounded-lg px-2 py-1 transition hover:text-brand-900"
-              >{{ i18n.t('nav.facilitatorWorkshops') }}</a
+              routerLink="/"
+              fragment="trainers"
+              class="relative rounded-lg px-2 py-1 transition hover:text-brand-900"
+              >{{ i18n.t('nav.trainers') }}</a
             >
             <a
-              routerLink="/career"
-              routerLinkActive="text-brand-900 after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:bg-brand-900 relative"
-              class="rounded-lg px-2 py-1 transition hover:text-brand-900"
-              >{{ i18n.t('nav.career') }}</a
-            >
-            <a
-              routerLink="/about"
-              routerLinkActive="text-brand-900 after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:bg-brand-900 relative"
-              class="rounded-lg px-2 py-1 transition hover:text-brand-900"
-              >{{ i18n.t('nav.about') }}</a
+              routerLink="/faq"
+              routerLinkActive="relative text-brand-900 after:pointer-events-none after:absolute after:inset-x-1 after:-bottom-1 after:h-0.5 after:rounded-full after:bg-brand-600"
+              class="relative rounded-lg px-2 py-1 transition hover:text-brand-900"
+              >{{ i18n.t('nav.faq') }}</a
             >
           </nav>
 
-          <div class="flex items-center gap-1.5 md:gap-2">
-            <button
-              type="button"
-              class="ve-focus-ring hidden rounded-full p-2 text-ink-500 transition hover:bg-ink-100 hover:text-brand-900 md:inline-flex"
-              [attr.aria-label]="i18n.t('nav.searchAria')"
-              (click)="onSearchClick()"
-            >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
+          <div class="flex items-center gap-0.5 sm:gap-1 md:gap-1.5" dir="ltr">
+            @if (!auth.isAuthenticated()) {
+              <a
+                routerLink="/login"
+                class="ve-focus-ring inline-flex items-center gap-2 rounded-lg border border-slate-200/90 bg-slate-50/90 px-3 py-2 text-xs font-bold text-brand-900 shadow-none transition hover:bg-slate-100 sm:px-3.5"
+              >
+                <span class="max-w-[7.5rem] truncate sm:max-w-none">{{ i18n.t('nav.studentLogin') }}</span>
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.75"
+                    d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"
+                  />
+                </svg>
+              </a>
+            }
 
             <span [@cartIconBump]="cart.itemCount()" class="inline-flex">
               <button
                 type="button"
                 (click)="cart.toggleDrawer()"
-                class="ve-focus-ring relative rounded-full p-2 text-ink-500 transition hover:bg-ink-100 hover:text-brand-900"
+                class="ve-focus-ring relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-brand-900 transition-colors hover:bg-slate-100"
                 [attr.aria-label]="i18n.t('cart.title')"
               >
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg class="h-[1.15rem] w-[1.15rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"
+                    stroke-width="1.5"
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
@@ -150,32 +136,203 @@ import { CartDrawerComponent } from './cart-drawer.component';
               </button>
             </span>
 
-            @if (auth.isAuthenticated()) {
-              <a routerLink="/dashboard"
-                 class="ve-focus-ring hidden items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-900 hover:bg-brand-100 transition md:inline-flex">
-                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
-                My Workshops
-              </a>
-              <button type="button" (click)="auth.logout()"
-                      class="ve-focus-ring hidden rounded-full p-2 text-ink-500 transition hover:bg-ink-100 hover:text-red-600 md:inline-flex"
-                      aria-label="Logout">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-              </button>
-            } @else {
-              <a routerLink="/login"
-                 class="ve-focus-ring hidden items-center gap-1.5 rounded-full bg-brand-900 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-brand-800 transition shadow-sm md:inline-flex">
-                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                Sign In
-              </a>
-            }
-
             <button
               type="button"
-              (click)="i18n.toggleLocale()"
-              class="ve-focus-ring ms-1 rounded-full bg-ink-100 px-2.5 py-1 text-xs font-semibold text-brand-900 hover:bg-ink-200/90"
+              class="ve-focus-ring hidden h-9 w-9 items-center justify-center rounded-lg text-brand-900 transition-colors hover:bg-slate-100 md:inline-flex"
+              [attr.aria-label]="i18n.t('nav.searchAria')"
+              (click)="onSearchClick()"
             >
-              {{ i18n.locale() === 'ar' ? i18n.t('nav.langShortEn') : i18n.t('nav.langShortAr') }}
+              <svg class="h-[1.15rem] w-[1.15rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </button>
+
+            @if (auth.isAuthenticated()) {
+              <div class="relative hidden md:block">
+                <button
+                  type="button"
+                  (click)="userMenuOpen.set(!userMenuOpen()); langMenuOpen.set(false)"
+                  class="ve-focus-ring flex items-center gap-2 rounded-lg border border-slate-200/80 bg-slate-50/80 py-1 pe-2.5 ps-1 transition-all hover:border-slate-300 hover:bg-slate-100"
+                >
+                  <span
+                    class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-800 to-brand-900 text-xs font-bold text-white shadow-sm"
+                  >
+                    {{ userInitial() }}
+                  </span>
+                  <span class="max-w-[100px] truncate text-sm font-medium text-brand-900">{{ auth.user()?.name }}</span>
+                  <svg
+                    class="h-4 w-4 shrink-0 text-brand-900/50 transition-transform"
+                    [class.rotate-180]="userMenuOpen()"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                @if (userMenuOpen()) {
+                  <div class="fixed inset-0 z-40" (click)="userMenuOpen.set(false)"></div>
+
+                  <div
+                    class="absolute end-0 top-full z-50 mt-2 w-64 rounded-2xl border border-ink-100 bg-white py-2 shadow-xl shadow-ink-200/30 animate-ve-slide-down"
+                  >
+                    <div class="border-b border-ink-100 px-4 py-3">
+                      <div class="flex items-center gap-3">
+                        <span
+                          class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-800 to-brand-900 text-sm font-bold text-white shadow-sm"
+                        >
+                          {{ userInitial() }}
+                        </span>
+                        <div class="min-w-0">
+                          <span class="block truncate text-sm font-semibold text-ink-900">{{ auth.user()?.name }}</span>
+                          <span class="block truncate text-xs text-ink-400">{{ auth.user()?.email }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="py-1.5">
+                      <a
+                        routerLink="/dashboard"
+                        (click)="userMenuOpen.set(false)"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-ink-700 transition-colors hover:bg-brand-50 hover:text-brand-900"
+                      >
+                        <svg class="h-[18px] w-[18px] text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.8"
+                            d="M4 6h16M4 12h16M4 18h7"
+                          />
+                        </svg>
+                        {{ i18n.t('nav.myWorkshops') }}
+                      </a>
+                      <a
+                        routerLink="/"
+                        fragment="workshops"
+                        (click)="userMenuOpen.set(false)"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-ink-700 transition-colors hover:bg-brand-50 hover:text-brand-900"
+                      >
+                        <svg class="h-[18px] w-[18px] text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.8"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                        {{ i18n.t('nav.browseWorkshops') }}
+                      </a>
+                      <a
+                        routerLink="/change-password"
+                        (click)="userMenuOpen.set(false)"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-ink-700 transition-colors hover:bg-brand-50 hover:text-brand-900"
+                      >
+                        <svg class="h-[18px] w-[18px] text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.8"
+                            d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"
+                          />
+                        </svg>
+                        {{ i18n.t('nav.changePassword') }}
+                      </a>
+                    </div>
+
+                    <div class="border-t border-ink-100 pb-0.5 pt-1.5">
+                      <button
+                        type="button"
+                        (click)="userMenuOpen.set(false); auth.logout()"
+                        class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 transition-colors hover:bg-red-50"
+                      >
+                        <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.8"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
+                        </svg>
+                        {{ i18n.t('nav.signOut') }}
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="relative">
+              <button
+                type="button"
+                id="ve-lang-menu-button"
+                class="ve-focus-ring inline-flex h-9 w-9 items-center justify-center rounded-lg text-brand-900 transition-colors hover:bg-slate-100"
+                [attr.aria-label]="i18n.t('nav.langAria')"
+                [attr.aria-expanded]="langMenuOpen()"
+                aria-haspopup="menu"
+                aria-controls="ve-lang-menu"
+                (click)="toggleLangMenu()"
+              >
+                <svg class="h-[1.15rem] w-[1.15rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M12 21a9 9 0 100-18 9 9 0 000 18z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M2.25 12h19.5M12 2.25c2.815 2.815 4.5 6.646 4.5 9.75s-1.685 6.935-4.5 9.75M12 2.25c-2.815 2.815-4.5 6.646-4.5 9.75s1.685 6.935 4.5 9.75"
+                  />
+                </svg>
+              </button>
+
+              @if (langMenuOpen()) {
+                <div class="fixed inset-0 z-40" (click)="langMenuOpen.set(false)" aria-hidden="true"></div>
+                <div
+                  id="ve-lang-menu"
+                  role="menu"
+                  aria-labelledby="ve-lang-menu-button"
+                  class="absolute end-0 top-full z-50 mt-1.5 min-w-[11rem] rounded-xl border border-ink-100 bg-white py-1 shadow-xl shadow-ink-200/30 animate-ve-slide-down"
+                >
+                  <button
+                    type="button"
+                    role="menuitemradio"
+                    [attr.aria-checked]="i18n.locale() === 'ar'"
+                    class="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-start text-sm font-medium text-ink-800 transition-colors hover:bg-brand-50 hover:text-brand-900"
+                    (click)="selectLocale('ar')"
+                  >
+                    <span>{{ i18n.t('nav.langOptionArabic') }}</span>
+                    @if (i18n.locale() === 'ar') {
+                      <svg class="h-4 w-4 shrink-0 text-brand-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    }
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitemradio"
+                    [attr.aria-checked]="i18n.locale() === 'en'"
+                    class="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-start text-sm font-medium text-ink-800 transition-colors hover:bg-brand-50 hover:text-brand-900"
+                    (click)="selectLocale('en')"
+                  >
+                    <span>{{ i18n.t('nav.langOptionEnglish') }}</span>
+                    @if (i18n.locale() === 'en') {
+                      <svg class="h-4 w-4 shrink-0 text-brand-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    }
+                  </button>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </header>
@@ -197,20 +354,14 @@ import { CartDrawerComponent } from './cart-drawer.component';
           <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
 
             <div class="space-y-4">
-              <svg
-                class="h-14 w-14 shrink-0 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                <path d="M6 12v5c3 3 9 3 12 0v-5" />
-              </svg>
+              <img
+                src="/images/branding/next-levels-logo-footer.svg"
+                alt=""
+                class="h-12 w-auto max-w-[11rem] object-contain object-start opacity-95"
+                width="176"
+                height="48"
+                loading="lazy"
+              />
               <p class="max-w-[17rem] text-sm leading-relaxed text-white/65">{{ i18n.t('footer.brand') }}</p>
               <div class="flex items-center gap-2.5 pt-1">
                 <a href="#" class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition hover:bg-white/10 hover:text-white" aria-label="Twitter" (click)="$event.preventDefault()">
@@ -235,7 +386,18 @@ import { CartDrawerComponent } from './cart-drawer.component';
                   <a routerLink="/" fragment="workshops" class="transition hover:text-white">{{ i18n.t('footer.linkWorkshops') }}</a>
                 </li>
                 <li>
-                  <a routerLink="/career" class="transition hover:text-white">{{ i18n.t('footer.linkCareer') }}</a>
+                  <a routerLink="/" fragment="trainers" class="transition hover:text-white">{{
+                    i18n.t('footer.linkTrainers')
+                  }}</a>
+                </li>
+                <li>
+                  <a routerLink="/faq" class="transition hover:text-white">{{ i18n.t('footer.linkFaq') }}</a>
+                </li>
+                <li>
+                  <a routerLink="/privacy" class="transition hover:text-white">{{ i18n.t('footer.privacy') }}</a>
+                </li>
+                <li>
+                  <a routerLink="/terms" class="transition hover:text-white">{{ i18n.t('footer.terms') }}</a>
                 </li>
                 <li>
                   <a routerLink="/login" class="transition hover:text-white">{{ i18n.t('footer.linkStudentLogin') }}</a>
@@ -274,27 +436,54 @@ import { CartDrawerComponent } from './cart-drawer.component';
             <div>
               <p class="mb-2 text-sm font-bold">{{ i18n.t('footer.newsletter') }}</p>
               <p class="mb-4 text-sm leading-relaxed text-white/55">{{ i18n.t('footer.newsletterHint') }}</p>
-              <label class="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5">
-                <svg class="h-4 w-4 shrink-0 text-white/35" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-                <input
-                  type="email"
-                  class="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40"
-                  [placeholder]="i18n.t('footer.emailPlaceholder')"
-                />
-              </label>
+              <div class="flex flex-col gap-2.5 sm:flex-row sm:items-stretch">
+                <label
+                  class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5"
+                >
+                  <svg
+                    class="h-4 w-4 shrink-0 text-white/35"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                    />
+                  </svg>
+                  <input
+                    type="email"
+                    class="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40"
+                    [placeholder]="i18n.t('footer.emailPlaceholder')"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="ve-btn-primary shrink-0 px-8"
+                >
+                  {{ i18n.t('footer.subscribe') }}
+                </button>
+              </div>
             </div>
 
           </div>
 
-          <div class="mt-10 border-t border-white/8 pt-6">
-            <p class="text-center text-xs text-white/45">{{ i18n.t('footer.copyright') }}</p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-3 border-t border-white/8 pt-6 md:flex-row md:gap-4">
+            <p class="text-center text-xs text-white/60">{{ i18n.t('footer.copyrightNextLevel') }}</p>
+            <span
+              class="inline-flex items-center rounded-full border border-white/25 bg-white/5 px-3 py-1 text-[11px] font-semibold tracking-wide text-white/90"
+              >{{ i18n.t('footer.mediaSolution') }}</span
+            >
           </div>
         </div>
       </footer>
 
       @if (promoModalOpen()) {
         <div
-          class="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-sm"
+          class="fixed inset-0 z-[60] bg-black/55 backdrop-blur-[2px]"
           role="presentation"
           (click)="closePromoModal()"
         ></div>
@@ -303,13 +492,13 @@ import { CartDrawerComponent } from './cart-drawer.component';
           role="presentation"
         >
           <div
-            class="pointer-events-auto my-auto w-full max-w-[26rem] overflow-hidden rounded-3xl bg-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)]"
+            class="pointer-events-auto my-auto w-full max-w-[min(100%,42rem)] overflow-hidden rounded-[20px] bg-white shadow-[0_28px_64px_-16px_rgba(0,0,0,0.42)]"
             role="dialog"
             aria-modal="true"
             [attr.aria-label]="i18n.t('banner.promoAria')"
             (click)="$event.stopPropagation()"
           >
-            <div class="relative aspect-[16/10] min-h-[11.5rem] w-full sm:aspect-[16/9] sm:min-h-[13rem]">
+            <div class="relative aspect-[2/1] min-h-[13rem] w-full sm:aspect-[21/9] sm:min-h-[15rem] md:min-h-[16.5rem]">
               <img
                 [src]="promoHeroUrl"
                 alt=""
@@ -317,107 +506,107 @@ import { CartDrawerComponent } from './cart-drawer.component';
                 loading="lazy"
               />
               <div
-                class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/35"
+                class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/88 via-black/30 to-black/25"
                 aria-hidden="true"
               ></div>
               <button
                 type="button"
-                class="ve-focus-ring absolute end-3 top-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sky-600 text-white shadow-lg transition hover:bg-sky-700"
+                class="ve-focus-ring absolute end-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand-600 shadow-md ring-1 ring-ink-200/70 transition hover:bg-ink-50 hover:text-brand-800"
                 (click)="closePromoModal()"
                 [attr.aria-label]="i18n.t('banner.modalCloseAria')"
               >
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
               <p
-                class="absolute start-3 top-3 max-w-[58%] text-sm font-bold leading-snug tracking-tight text-white drop-shadow-md sm:text-[0.95rem]"
+                class="absolute start-3 top-3 max-w-[min(100%-5rem,14rem)] text-[11px] font-bold uppercase leading-snug tracking-wide text-white/95 drop-shadow-md sm:max-w-[16rem] sm:text-xs"
                 [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
               >
-                {{ i18n.t('banner.modalHeroTitle') }}
+                {{ i18n.t('banner.modalImageEyebrow') }}
               </p>
               <div
-                class="absolute start-2.5 top-[3.25rem] flex flex-col gap-1.5 sm:start-3 sm:top-14 sm:gap-2"
+                class="absolute start-3 top-[3.25rem] flex flex-col gap-1.5 sm:top-14 sm:gap-2"
                 aria-hidden="true"
               >
                 @for (ic of promoModalIcons; track ic) {
                   <span
-                    class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[0.95rem] shadow-md ring-1 ring-black/10 sm:h-9 sm:w-9"
+                    class="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[0.95rem] shadow-md ring-1 ring-black/10 sm:h-9 sm:w-9"
                     >{{ ic }}</span
                   >
                 }
               </div>
               <div
-                class="absolute inset-x-0 bottom-0 flex items-center gap-2 border-t border-white/10 bg-black px-4 py-2.5 text-xs font-semibold text-white sm:text-sm"
+                class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/55 to-transparent px-4 pb-5 pt-16 sm:pb-6 sm:pt-20"
+                aria-hidden="true"
+              ></div>
+              <p
+                class="absolute inset-x-0 bottom-0 px-4 pb-5 pt-10 text-center text-xl font-black leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:pb-6 sm:text-2xl"
                 [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
               >
-                <span aria-hidden="true">🔥</span>
-                <span>{{ i18n.t('banner.modalImageBarText') }}</span>
-              </div>
+                {{ i18n.t('banner.modalHeroBanner') }}
+              </p>
             </div>
-            <div class="space-y-5 px-6 pb-7 pt-6" [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'">
-              <span
-                class="mx-auto flex w-fit items-center gap-2 rounded-full border border-ink-200/80 bg-ink-50/90 px-3 py-1.5 text-xs font-semibold text-ink-800"
-              >
-                <span class="h-2 w-2 shrink-0 rounded-full bg-emerald-500" aria-hidden="true"></span>
-                {{ i18n.t('workshops.promoLimitedBadge') }}
-              </span>
-              <h2 class="text-center text-lg font-extrabold leading-tight tracking-tight text-brand-900 sm:text-xl">
-                {{ i18n.t('workshops.promoTitle') }}
-              </h2>
-              <p class="text-center text-[0.8125rem] leading-relaxed text-ink-600 sm:text-sm">
+            <div class="space-y-4 px-5 pb-6 pt-5 sm:px-7 sm:pb-7 sm:pt-6" [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'">
+              <p class="text-center text-sm leading-relaxed text-ink-600">
                 {{ i18n.t('banner.modalBody') }}
               </p>
-              <div
-                class="rounded-2xl border-2 border-sky-200/90 bg-gradient-to-b from-sky-50/90 to-white px-5 py-4 shadow-sm"
-              >
-                <div class="flex flex-wrap items-end justify-between gap-3">
-                  <span class="text-[1.65rem] font-black leading-none tracking-tight text-blue-600 sm:text-3xl">{{
-                    i18n.t('workshops.promoPrice')
-                  }}</span>
-                  <div class="flex flex-col items-end gap-1.5">
-                    <span class="text-sm font-medium text-ink-400 line-through">{{
+              <div class="rounded-xl bg-slate-100 px-4 py-4 shadow-inner shadow-black/[0.03]" dir="ltr">
+                <div class="flex items-end justify-between gap-3">
+                  <span
+                    class="inline-flex shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-800 shadow-sm ring-1 ring-emerald-200/80"
+                    >{{ i18n.t('workshops.promoSavePct') }}</span
+                  >
+                  <div class="min-w-0 text-end">
+                    <div class="text-sm font-medium text-ink-400 line-through">{{
                       i18n.t('workshops.promoPriceWas')
-                    }}</span>
-                    <span
-                      class="inline-flex rounded-full bg-emerald-500 px-2.5 py-0.5 text-[11px] font-bold text-white shadow-sm"
-                      >{{ i18n.t('workshops.promoSavePct') }}</span
-                    >
+                    }}</div>
+                    <div class="text-[1.75rem] font-black leading-none tracking-tight text-brand-900 sm:text-[2rem]">
+                      {{ i18n.t('workshops.promoPrice') }}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div
-                class="rounded-2xl border-2 border-rose-200 bg-gradient-to-br from-rose-50/90 to-white px-4 py-4 shadow-sm"
-              >
-                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p class="text-sm leading-snug text-ink-700">
+              <div class="rounded-xl border border-pink-200 bg-white px-3 py-3.5 shadow-sm sm:px-4" dir="ltr">
+                <div class="flex items-center justify-between gap-2.5 text-sm leading-snug text-ink-700">
+                  <span
+                    class="inline-flex shrink-0 rounded-full bg-pink-50 px-2.5 py-1 text-[10px] font-bold text-pink-600 ring-1 ring-pink-200/90"
+                    >{{ i18n.t('workshops.promoInterestFree') }}</span
+                  >
+                  <p class="min-w-0 flex-1 px-1 text-center">
                     {{ i18n.t('workshops.promoInstallmentPrefix') }}
                     <span class="font-bold text-pink-600">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
                   </p>
-                  <div class="flex items-center gap-2 sm:shrink-0">
-                    <span
-                      class="inline-flex rounded-full bg-pink-100 px-2.5 py-1 text-[10px] font-bold text-pink-900 ring-1 ring-pink-200/80"
-                      >{{ i18n.t('workshops.promoInterestFree') }}</span
-                    >
-                    <span class="h-2 w-2 shrink-0 rounded-full bg-pink-500" aria-hidden="true"></span>
-                  </div>
+                  <span class="h-2 w-2 shrink-0 rounded-full bg-pink-500" aria-hidden="true"></span>
                 </div>
               </div>
               <button
                 type="button"
-                class="ve-focus-ring flex w-full items-center justify-center gap-3 rounded-2xl bg-[#1a1f2e] px-5 py-4 text-sm font-bold text-white shadow-md transition hover:bg-[#121722] active:scale-[0.99]"
+                class="ve-focus-ring flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#302b85] px-5 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-[#282266] active:scale-[0.99] motion-reduce:active:scale-100"
                 [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
                 (click)="onPromoModalCheckout()"
               >
-                <svg class="h-5 w-5 shrink-0 opacity-95" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                  />
-                </svg>
-                <span>{{ i18n.t('workshops.promoCta') }}</span>
+                @if (i18n.isRtl()) {
+                  <svg class="h-5 w-5 shrink-0 opacity-95" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                  <span>{{ i18n.t('banner.modalCheckoutCta') }}</span>
+                } @else {
+                  <span>{{ i18n.t('banner.modalCheckoutCta') }}</span>
+                  <svg class="h-5 w-5 shrink-0 opacity-95" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                }
               </button>
             </div>
           </div>
@@ -426,7 +615,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
 
       <button
         type="button"
-        class="fixed bottom-6 end-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0f172a] text-white shadow-lg transition-all duration-300 ease-out hover:bg-[#1e293b] hover:shadow-xl active:scale-90 motion-reduce:transition-none"
+        class="fixed bottom-6 end-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-brand-900 text-white shadow-lg shadow-brand-900/30 transition-all duration-300 ease-out hover:bg-brand-800 hover:shadow-xl active:scale-90 motion-reduce:transition-none"
         [class.scale-100]="showScrollTop()"
         [class.opacity-100]="showScrollTop()"
         [class.scale-0]="!showScrollTop()"
@@ -454,8 +643,14 @@ export class ShellComponent {
   private readonly checkoutFlow = inject(CheckoutFlowService);
 
   readonly promoModalOpen = signal(false);
+  readonly userMenuOpen = signal(false);
+  readonly langMenuOpen = signal(false);
   readonly showScrollTop = signal(false);
   readonly headerCompact = signal(false);
+
+  userInitial(): string {
+    return (this.auth.user()?.name ?? '?').charAt(0).toUpperCase();
+  }
   readonly promoHeroUrl = PROMO_HERO_IMAGE_URL;
 
   /** Decorative icons on modal hero (design reference). */
@@ -469,10 +664,27 @@ export class ShellComponent {
   }
 
   @HostListener('document:keydown.escape')
-  onEscapeClosePromo(): void {
-    if (this.promoModalOpen()) {
+  onEscapeClose(): void {
+    if (this.langMenuOpen()) {
+      this.langMenuOpen.set(false);
+    } else if (this.userMenuOpen()) {
+      this.userMenuOpen.set(false);
+    } else if (this.promoModalOpen()) {
       this.closePromoModal();
     }
+  }
+
+  toggleLangMenu(): void {
+    const next = !this.langMenuOpen();
+    this.langMenuOpen.set(next);
+    if (next) {
+      this.userMenuOpen.set(false);
+    }
+  }
+
+  selectLocale(loc: Locale): void {
+    this.i18n.setLocale(loc);
+    this.langMenuOpen.set(false);
   }
 
   scrollToTop(): void {
@@ -492,6 +704,7 @@ export class ShellComponent {
   }
 
   openPromoModal(): void {
+    this.langMenuOpen.set(false);
     this.promoModalOpen.set(true);
     document.body.style.overflow = 'hidden';
   }

@@ -1,3 +1,5 @@
+export type WorkshopStatus = 'upcoming' | 'ongoing' | 'completed';
+
 export interface EnrolledWorkshop {
   id: number;
   event: {
@@ -8,6 +10,16 @@ export interface EnrolledWorkshop {
     image_url?: string;
     summary?: string;
     summary_en?: string;
+    description?: string;
+    description_en?: string;
+    starts_at?: string;
+    ends_at?: string;
+    location?: string;
+    location_en?: string;
+    zoom_link?: string;
+    price?: number;
+    currency?: string;
+    status: WorkshopStatus;
   };
   lessons_count: number;
   completed_lessons_count: number;
@@ -24,8 +36,15 @@ export interface WorkshopDetail {
     slug: string;
     image_url?: string;
     description?: string;
+    description_en?: string;
     summary?: string;
     summary_en?: string;
+    starts_at?: string;
+    ends_at?: string;
+    location?: string;
+    location_en?: string;
+    zoom_link?: string;
+    status: WorkshopStatus;
   };
   lessons: Lesson[];
   enrolled_at: string;

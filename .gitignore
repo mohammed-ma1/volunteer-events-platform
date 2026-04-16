@@ -1,6 +1,9 @@
 .DS_Store
 *.log
 
+# Local Python venv for tools/import_ku_workbook.py
+tools/.venv/
+
 # Never commit local env or keys (subprojects also define their own rules)
 **/.env
 **/.env.backup

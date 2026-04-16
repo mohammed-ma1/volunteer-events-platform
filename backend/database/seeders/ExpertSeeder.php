@@ -9,23 +9,45 @@ class ExpertSeeder extends Seeder
 {
     public function run(): void
     {
-        $experts = [
-            ['name' => 'Dr. Sara Al-Mutairi', 'email' => 'sara.mutairi@example.com', 'phone' => '+965 9900 1234', 'specialization' => 'Leadership', 'title' => 'Leadership Coach', 'bio' => 'Over 15 years of experience in executive coaching and organizational development across the GCC region.'],
-            ['name' => 'Ahmad Al-Fahad', 'email' => 'ahmad.fahad@example.com', 'phone' => '+965 9900 2345', 'specialization' => 'Technology', 'title' => 'Senior Software Engineer', 'bio' => 'Full-stack developer specializing in cloud architecture and AI-driven solutions. Google Developer Expert.'],
-            ['name' => 'Fatima Al-Rashidi', 'email' => 'fatima.rashidi@example.com', 'phone' => '+965 9900 3456', 'specialization' => 'Education', 'title' => 'Education Consultant', 'bio' => 'Passionate about innovative teaching methods and curriculum development for youth empowerment.'],
-            ['name' => 'Khaled Bouresli', 'email' => 'khaled.bouresli@example.com', 'phone' => '+965 9900 4567', 'specialization' => 'Business', 'title' => 'Startup Mentor', 'bio' => 'Serial entrepreneur and angel investor. Founded 3 successful startups in Kuwait and Bahrain.'],
-            ['name' => 'Nour Al-Sabah', 'email' => 'nour.sabah@example.com', 'phone' => '+965 9900 5678', 'specialization' => 'Communication', 'title' => 'Public Speaking Trainer', 'bio' => 'TEDx speaker and communication skills trainer. Helped over 500 professionals improve their presentation skills.'],
-            ['name' => 'Dr. Yousef Al-Kandari', 'email' => 'yousef.kandari@example.com', 'phone' => '+965 9900 6789', 'specialization' => 'Health', 'title' => 'Wellness Coach', 'bio' => 'Certified health coach focused on stress management and mental well-being in the workplace.'],
-            ['name' => 'Mariam Al-Enezi', 'email' => 'mariam.enezi@example.com', 'phone' => '+965 9900 7890', 'specialization' => 'Arts', 'title' => 'Creative Director', 'bio' => 'Award-winning designer and visual arts instructor with a passion for empowering young creatives.'],
-            ['name' => 'Bader Al-Ajmi', 'email' => 'bader.ajmi@example.com', 'phone' => '+965 9900 8901', 'specialization' => 'Technology', 'title' => 'Cybersecurity Expert', 'bio' => 'CISSP-certified professional with 10+ years in information security consulting for government and enterprise.'],
-            ['name' => 'Dalal Al-Shammari', 'email' => 'dalal.shammari@example.com', 'phone' => '+965 9900 9012', 'specialization' => 'Leadership', 'title' => 'HR Director', 'bio' => 'Human resources leader specializing in talent development and organizational culture transformation.'],
-            ['name' => 'Hassan Al-Otaibi', 'email' => 'hassan.otaibi@example.com', 'phone' => '+965 9900 0123', 'specialization' => 'Business', 'title' => 'Financial Consultant', 'bio' => 'CFA charterholder providing financial literacy workshops for youth and aspiring entrepreneurs.', 'is_active' => false],
-        ];
+        $path = database_path('data/ku_student_week_facilitators.json');
+        $rows = json_decode(file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
 
-        foreach ($experts as $data) {
-            Expert::query()->firstOrCreate(
-                ['email' => $data['email']],
-                $data
+        $bg = ['001a33', '0c4a6e', '164e63', '1e3a5f', '312e81', '3730a3', '4c1d95', '831843'];
+        $avatar = static function (string $name, int $i) use ($bg): string {
+            $hex = $bg[$i % count($bg)];
+
+            return 'https://ui-avatars.com/api/?'.http_build_query([
+                'name' => $name,
+                'size' => 512,
+                'background' => $hex,
+                'color' => 'ffffff',
+                'bold' => 'true',
+                'format' => 'png',
+            ]);
+        };
+
+        foreach ($rows as $i => $row) {
+            $name = $row['name_ar'];
+            $phone = $row['phone'] ?? null;
+            $digits = $phone ? preg_replace('/\D/', '', (string) $phone) : '';
+            $email = $digits !== ''
+                ? 'facilitator.'.$digits.'@ku-workshops.local'
+                : 'facilitator.'.substr(hash('sha256', $name), 0, 20).'@ku-workshops.local';
+
+            $onPlatform = $row['on_platform'] ?? null;
+            $isActive = $onPlatform !== false;
+
+            Expert::query()->updateOrCreate(
+                ['email' => $email],
+                [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'specialization' => 'KU workshop week',
+                    'title' => 'Workshop facilitator',
+                    'bio' => 'Facilitator for Kuwait University student training week (April 2026).',
+                    'avatar_url' => $avatar($name, $i),
+                    'is_active' => $isActive,
+                ]
             );
         }
     }

@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Next Levels">
+  <rect width="48" height="48" rx="10" fill="#2e2a7b" />
+  <g
+    fill="none"
+    stroke="#d4af37"
+    stroke-width="3.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    transform="translate(6.25,6) scale(0.96)"
+  >
+    <path d="M6 32c8-18 22-26 34-14s10 22-2 26" />
+    <path d="M38 8c-8 18-22 26-34 14S-6 10 6 6" />
+  </g>
 </svg>

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
+use App\Models\Event;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +57,16 @@ class LearnController extends Controller
                     'image_url' => $event->image_url,
                     'summary' => $event->summary,
                     'summary_en' => $event->summary_en,
+                    'description' => $event->description,
+                    'description_en' => $event->description_en,
+                    'starts_at' => $event->starts_at?->toIso8601String(),
+                    'ends_at' => $event->ends_at?->toIso8601String(),
+                    'location' => $event->location,
+                    'location_en' => $event->location_en,
+                    'zoom_link' => $event->zoom_link,
+                    'price' => $event->price,
+                    'currency' => $event->currency,
+                    'status' => $this->computeWorkshopStatus($event),
                 ],
                 'lessons_count' => $totalLessons,
                 'completed_lessons_count' => $completedLessons,
@@ -107,8 +119,15 @@ class LearnController extends Controller
                     'slug' => $event->slug,
                     'image_url' => $event->image_url,
                     'description' => $event->description,
+                    'description_en' => $event->description_en,
                     'summary' => $event->summary,
                     'summary_en' => $event->summary_en,
+                    'starts_at' => $event->starts_at?->toIso8601String(),
+                    'ends_at' => $event->ends_at?->toIso8601String(),
+                    'location' => $event->location,
+                    'location_en' => $event->location_en,
+                    'zoom_link' => $event->zoom_link,
+                    'status' => $this->computeWorkshopStatus($event),
                 ],
                 'lessons' => $lessons,
                 'enrolled_at' => $enrollment->enrolled_at->toIso8601String(),
@@ -142,5 +161,20 @@ class LearnController extends Controller
         );
 
         return response()->json(['data' => $progress]);
+    }
+
+    private function computeWorkshopStatus(Event $event): string
+    {
+        $now = Carbon::now();
+
+        if ($event->ends_at && $now->isAfter($event->ends_at)) {
+            return 'completed';
+        }
+
+        if ($event->starts_at && $now->isAfter($event->starts_at)) {
+            return 'ongoing';
+        }
+
+        return 'upcoming';
     }
 }

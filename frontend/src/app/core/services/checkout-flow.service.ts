@@ -13,7 +13,12 @@ export class CheckoutFlowService {
 
   /** Loads the package event from the API, adds one seat to cart, then opens checkout. */
   startPackage100Checkout(onError?: () => void): void {
-    this.events.bySlug(PACKAGE_100_EVENT_SLUG).pipe(switchMap((ev) => this.cart.addItem(ev.id, 1))).subscribe({
+    this.startPackageCheckout(PACKAGE_100_EVENT_SLUG, onError);
+  }
+
+  /** Generic: resolve any package slug, add to cart, navigate to checkout. */
+  startPackageCheckout(slug: string, onError?: () => void): void {
+    this.events.bySlug(slug).pipe(switchMap((ev) => this.cart.addItem(ev.id, 1))).subscribe({
       next: () => void this.router.navigate(['/checkout']),
       error: () => {
         onError?.();

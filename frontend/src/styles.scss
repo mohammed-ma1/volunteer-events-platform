@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --ve-surface: #f8f9fb;
+  --ve-surface: #f5f6f8;
   --ve-card: #ffffff;
-  --ve-navy: #0b1221;
-  --ve-accent: #2563eb;
+  --ve-navy: #2e2a7b;
+  --ve-gold: #d4af37;
+  --ve-accent: #6366f1;
   --ve-radius: 1rem;
   --ve-motion-duration: 280ms;
   --ve-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -24,7 +25,7 @@
   }
 
   body {
-    @apply bg-[var(--ve-surface)] font-sans text-brand-900 antialiased;
+    @apply bg-[var(--ve-surface)] font-sans text-ink-800 antialiased;
   }
 
   /** Headings: Tajawal for Arabic + Latin UI */
@@ -36,9 +37,37 @@
   }
 }
 
+@layer components {
+  /**
+   * Reference UI: full pill, brand purple, soft shadow (primary CTAs site-wide).
+   */
+  .ve-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-0 bg-brand-900 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-brand-900/25 outline-none transition hover:bg-brand-800 hover:shadow-lg active:scale-[0.98] motion-reduce:active:scale-100 disabled:pointer-events-none disabled:opacity-50;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/15 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+
+  .ve-btn-primary--block {
+    @apply w-full;
+  }
+
+  .ve-btn-primary--lg {
+    @apply px-8 py-3.5 text-base font-bold shadow-lg shadow-brand-900/30;
+  }
+
+  /** Outlined / ghost on white — secondary CTAs */
+  .ve-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-6 py-3 text-sm font-semibold text-brand-900 shadow-sm outline-none transition hover:border-ink-300 hover:bg-ink-50 active:scale-[0.98] motion-reduce:active:scale-100;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/15 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+  }
+
+  .ve-btn-secondary--block {
+    @apply w-full;
+  }
+}
+
 @layer utilities {
   .ve-focus-ring {
-    @apply outline-none ring-2 ring-ink-900/15 ring-offset-2 ring-offset-white;
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-ink-900/15 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
   }
 
   /**
@@ -47,10 +76,10 @@
   .ve-hero-accent {
     background-image: linear-gradient(
       105deg,
-      theme('colors.brand.700') 0%,
-      theme('colors.brand.500') 45%,
-      rgb(14 165 233) 70%,
-      theme('colors.brand.600') 100%
+      theme('colors.gold.600') 0%,
+      theme('colors.gold.500') 40%,
+      theme('colors.gold.400') 70%,
+      theme('colors.gold.600') 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -64,10 +93,10 @@
   .ve-shimmer-bar {
     background: linear-gradient(
       90deg,
-      theme('colors.brand.500') 0%,
-      theme('colors.coral.500') 35%,
-      theme('colors.mint.500') 65%,
-      theme('colors.brand.600') 100%
+      theme('colors.gold.500') 0%,
+      theme('colors.accent.500') 40%,
+      theme('colors.gold.600') 70%,
+      theme('colors.brand.700') 100%
     );
     background-size: 200% 100%;
   }
@@ -106,6 +135,17 @@
   }
 }
 
+@keyframes ve-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes ve-vt-fade-out {
   from {
     opacity: 1;
@@ -140,4 +180,8 @@
     filter: none !important;
     transition: none !important;
   }
+}
+
+.animate-ve-slide-down {
+  animation: ve-slide-down 0.15s ease-out both;
 }
