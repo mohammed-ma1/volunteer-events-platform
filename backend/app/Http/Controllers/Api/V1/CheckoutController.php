@@ -28,7 +28,7 @@ class CheckoutController extends Controller
         $data = $request->validate([
             'email' => ['required', 'email', 'max:255'],
             'customer_name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:32'],
+            'phone' => ['required', 'string', 'max:32'],
         ]);
 
         /** @var \App\Models\Cart $cart */

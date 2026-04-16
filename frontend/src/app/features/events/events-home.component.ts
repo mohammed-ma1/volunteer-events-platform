@@ -330,20 +330,20 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             <div
               class="max-w-xl rounded-xl border border-fuchsia-400/50 bg-[#2a1f3d]/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-4"
             >
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                <p class="text-sm leading-relaxed text-white/85">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <p class="text-base leading-relaxed text-white">
                   {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                  <span class="font-bold text-[#ec4899]">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
+                  <span class="text-2xl font-extrabold text-[#ec4899]">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
                 </p>
                 <span
-                  class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-2.5 py-1 text-[10px] font-bold tracking-wide text-white"
+                  class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-3 py-1.5 text-xs font-bold tracking-wide text-white"
                   >{{ i18n.t('workshops.promoInterestFree') }}</span
                 >
               </div>
             </div>
             <button
               type="button"
-              class="ve-btn-primary ve-btn-primary--lg inline-flex w-full max-w-md text-center md:py-4"
+              class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-brand-900 shadow-lg transition hover:bg-white/90 active:scale-[0.98] md:py-4"
               [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
               (click)="onPromoCheckout()"
             >
@@ -566,11 +566,11 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
               class="overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-[0_8px_30px_-12px_rgba(0,26,51,0.12)]"
             >
               <div class="grid md:grid-cols-2">
-                <div class="relative min-h-[15rem] bg-ink-100 md:min-h-[19rem]">
+                <div class="relative min-h-[15rem] bg-ink-50 md:min-h-[19rem]">
                   <img
                     [src]="selectedExpert().imageUrl"
                     [alt]="expertName(selectedExpert())"
-                    class="h-full min-h-[15rem] w-full object-cover md:absolute md:inset-0 md:min-h-full"
+                    class="h-full min-h-[15rem] w-full object-contain md:absolute md:inset-0 md:min-h-full"
                     loading="lazy"
                   />
                 </div>
@@ -578,45 +578,6 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                   <h3 class="text-xl font-extrabold text-brand-900 md:text-2xl">{{ expertName(selectedExpert()) }}</h3>
                   <p class="mt-1 text-sm font-medium text-ink-500">{{ expertSpecialty(selectedExpert()) }}</p>
                   <p class="mt-4 text-sm leading-relaxed text-ink-600">{{ expertBio(selectedExpert()) }}</p>
-                  <p class="mt-6 text-xs font-bold uppercase tracking-wide text-ink-400">
-                    {{ i18n.t('experts.connect') }}
-                  </p>
-                  <div class="mt-2 flex flex-wrap gap-3">
-                    @for (s of selectedExpert().socials; track s.href) {
-                      <a
-                        [href]="s.href"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="ve-focus-ring flex h-10 w-10 items-center justify-center rounded-full border border-ink-200 bg-ink-50 text-ink-600 transition hover:border-brand-200 hover:bg-white hover:text-brand-900"
-                        [attr.aria-label]="i18n.t(s.aria)"
-                      >
-                        @switch (s.kind) {
-                          @case ('mail') {
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                              />
-                            </svg>
-                          }
-                          @case ('linkedin') {
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path
-                                d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5H12v2.1h.06c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.4 4.34 5.52V24h-4v-6.84c0-1.63-.03-3.73-2.27-3.73-2.27 0-2.62 1.78-2.62 3.6V24h-4V8.5z"
-                              />
-                            </svg>
-                          }
-                          @case ('x') {
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                            </svg>
-                          }
-                        }
-                      </a>
-                    }
-                  </div>
                 </div>
               </div>
             </article>
@@ -625,10 +586,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
               <h3 class="text-lg font-extrabold text-brand-900">{{ i18n.t('experts.workshopsHeading') }}</h3>
               <div class="mt-4 grid gap-3 sm:grid-cols-2">
                 @for (ev of expertWorkshopsForSelected(); track ev.slug) {
-                  <a
-                    [routerLink]="['/events', ev.slug]"
-                    class="group flex gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-ink-300 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                  >
+                  <div class="flex items-center gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm">
                     @if (ev.image_url) {
                       <img
                         [src]="ev.image_url"
@@ -641,28 +599,27 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                         aria-hidden="true"
                       ></div>
                     }
-                    <div class="min-w-0 text-start">
-                      <p class="text-sm font-bold leading-snug text-[#0a1628] group-hover:text-brand-900">
+                    <div class="min-w-0 flex-1 text-start">
+                      <p class="text-sm font-bold leading-snug text-[#0a1628]">
                         {{ displayWorkshopTitle(ev) }}
                       </p>
                       <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
                     </div>
-                  </a>
+                    <div class="flex shrink-0 flex-col items-end gap-1.5">
+                      <span class="text-sm font-extrabold text-brand-900">{{ ev.price }} {{ i18n.t('card.currencyKwd') }}</span>
+                      <button
+                        type="button"
+                        class="inline-flex items-center gap-1 rounded-lg bg-brand-900 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-brand-800 active:scale-[0.97]"
+                        (click)="addExpertWorkshopToCart(ev)"
+                      >
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        {{ i18n.t('card.addCart') }}
+                      </button>
+                    </div>
+                  </div>
                 }
               </div>
             </div>
-
-            <a
-              routerLink="/facilitator-workshops"
-              class="ve-btn-primary inline-flex w-full md:w-auto"
-            >
-              {{ i18n.t('trainers.ctaBrowse') }}
-              @if (i18n.isRtl()) {
-                <span class="text-base leading-none opacity-95" aria-hidden="true">←</span>
-              } @else {
-                <span class="text-base leading-none opacity-95" aria-hidden="true">→</span>
-              }
-            </a>
           </div>
         </div>
       </div>
@@ -715,7 +672,7 @@ export class EventsHomeComponent implements OnDestroy {
   readonly cart = inject(CartService);
 
   /** Initial grid size before "عرض جميع الورش". */
-  readonly WORKSHOPS_PREVIEW = 10;
+  readonly WORKSHOPS_PREVIEW = 4;
 
   /** Load full workshop list in one request (backend caps per_page; must cover all seeded events). */
   private readonly EVENTS_HOME_PER_PAGE = 200;
@@ -737,7 +694,7 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly selectedCategory = signal<WorkshopFilterCategory>('all');
   /** Calendar day key (Kuwait); null = all days in the current list (for non–KU-week multi-day filters). */
-  readonly selectedDayKey = signal<string | null>(null);
+  readonly selectedDayKey = signal<string | null>(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
   readonly showAllWorkshops = signal(false);
   readonly homeEvents = signal<HomeListEvent[]>([]);
   readonly usingDummy = signal(false);
@@ -896,7 +853,7 @@ export class EventsHomeComponent implements OnDestroy {
           const mapped = res.data.map(volunteerToHome);
           this.homeEvents.set(mapped);
           this.showAllWorkshops.set(false);
-          this.selectedDayKey.set(null);
+          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
           this.page.set(res.current_page);
           this.lastPage.set(res.last_page);
           this.loading.set(false);
@@ -964,6 +921,17 @@ export class EventsHomeComponent implements OnDestroy {
   workshopLineMeta(ev: HomeListEvent): string {
     const loc = this.i18n.locale() === 'ar' ? 'ar' : 'en';
     return `${formatCardDateLong(ev.starts_at, loc)} · ${formatTimeKuwait(ev.starts_at, loc)}`;
+  }
+
+  addExpertWorkshopToCart(ev: HomeListEvent): void {
+    if (ev.id < 0) {
+      this.error.set(this.i18n.t('workshops.demoHint'));
+      return;
+    }
+    this.cart.addItem(ev.id, 1).subscribe({
+      next: () => this.cart.openDrawer(),
+      error: () => this.error.set(this.i18n.t('workshops.loadError')),
+    });
   }
 
   onSelectCategory(cat: WorkshopFilterCategory): void {
@@ -1051,7 +1019,7 @@ export class EventsHomeComponent implements OnDestroy {
         next: (res) => {
           const mapped = res.data.map(volunteerToHome);
           this.showAllWorkshops.set(false);
-          this.selectedDayKey.set(null);
+          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
           if (mapped.length === 0) {
             this.usingDummy.set(true);
             this.homeEvents.set([...DUMMY_HOME_EVENTS]);
@@ -1068,7 +1036,7 @@ export class EventsHomeComponent implements OnDestroy {
         error: () => {
           this.usingDummy.set(true);
           this.homeEvents.set([...DUMMY_HOME_EVENTS]);
-          this.selectedDayKey.set(null);
+          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
           this.page.set(1);
           this.lastPage.set(1);
           this.loading.set(false);

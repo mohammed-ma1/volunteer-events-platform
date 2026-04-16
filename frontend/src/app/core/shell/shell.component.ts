@@ -52,7 +52,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
         >
           <a routerLink="/" class="group flex shrink-0 items-center">
             <img
-              src="/images/branding/next-levels-logo.svg"
+              src="/images/branding/next-levels-logo.png"
               alt=""
               class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
               [ngClass]="
@@ -355,7 +355,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
 
             <div class="space-y-4">
               <img
-                src="/images/branding/next-levels-logo-footer.svg"
+                src="/images/branding/next-levels-logo.png"
                 alt=""
                 class="h-12 w-auto max-w-[11rem] object-contain object-start opacity-95"
                 width="176"

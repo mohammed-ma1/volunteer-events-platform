@@ -361,7 +361,7 @@ export class CheckoutPageComponent {
     firstName: ['', [Validators.required, Validators.maxLength(120)]],
     lastName: ['', [Validators.required, Validators.maxLength(120)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.maxLength(32)]],
+    phone: ['', [Validators.required, Validators.maxLength(32)]],
   });
 
   constructor() {

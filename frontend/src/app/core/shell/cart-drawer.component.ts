@@ -83,7 +83,7 @@ import { CartService } from '../services/cart.service';
                         <p class="text-xs text-ink-500">
                           {{ line.event?.starts_at | date: 'mediumDate' }}
                         </p>
-                        <div class="mt-2 flex items-center gap-2">
+                        <div class="mt-2 flex items-center justify-between gap-2">
                           <button
                             type="button"
                             class="text-xs font-medium text-red-600 hover:text-red-700"
@@ -91,6 +91,9 @@ import { CartService } from '../services/cart.service';
                           >
                             {{ i18n.t('cart.remove') }}
                           </button>
+                          <span class="text-sm font-bold text-brand-900">
+                            {{ line.event?.price | number: '1.0-3' }} {{ i18n.currencyLabel(cart.snapshot()?.currency) }}
+                          </span>
                         </div>
                       </div>
                     </div>
