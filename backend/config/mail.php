@@ -80,7 +80,7 @@ return [
         ],
 
         'sendgrid' => [
-            'transport' => 'sendgrid+api',
+            'transport' => 'sendgrid',
             'key' => env('SENDGRID_API_KEY'),
         ],
 
