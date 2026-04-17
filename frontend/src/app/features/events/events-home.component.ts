@@ -672,7 +672,10 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             </article>
 
             <div>
-              <h3 class="text-lg font-extrabold text-brand-900">{{ i18n.t('experts.workshopsHeading') }}</h3>
+              <h3 class="text-lg font-extrabold text-brand-900">
+                {{ i18n.t('experts.workshopsHeading') }}
+                <span class="text-brand-700">({{ expertWorkshopsForSelected().length }})</span>
+              </h3>
               <div class="mt-4 grid gap-3 sm:grid-cols-2">
                 @for (ev of expertWorkshopsForSelected(); track ev.slug) {
                   <div class="flex items-center gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm">
@@ -694,11 +697,10 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                       </p>
                       <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
                     </div>
-                    <div class="flex shrink-0 flex-col items-end gap-1.5">
-                      <span class="text-sm font-extrabold text-brand-900">{{ ev.price }} {{ i18n.t('card.currencyKwd') }}</span>
+                    <div class="flex shrink-0">
                       <button
                         type="button"
-                        class="inline-flex items-center gap-1 rounded-lg bg-brand-900 px-3 py-1.5 text-[11px] font-bold text-white shadow-sm transition hover:bg-brand-800 active:scale-[0.97]"
+                        class="inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-semibold text-brand-900 shadow-sm transition hover:bg-ink-50 active:scale-[0.97]"
                         (click)="addExpertWorkshopToCart(ev)"
                       >
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
