@@ -461,7 +461,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
         href="https://api.whatsapp.com/send?phone=96599974367"
         target="_blank"
         rel="noopener noreferrer"
-        class="fixed bottom-6 left-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors hover:bg-[#20ba56] md:bottom-8 md:left-8"
+        class="fixed bottom-6 start-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors hover:bg-[#20ba56] md:bottom-8 md:start-8"
         aria-label="Chat on WhatsApp"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
