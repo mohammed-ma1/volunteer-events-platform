@@ -9,7 +9,7 @@ import {
 import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
 import { CATEGORY_PACKAGES, CategoryPackagePromo, findCategoryPackage } from '../../core/constants/category-packages-promo';
 import { HOME_HERO_IMAGE_URL, PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
-import { HOME_EXPERTS, HomeExpert } from '../../core/data/home-experts';
+import { HOME_EXPERTS, HomeExpert, normalizePresenterName } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ import { TranslationKey } from '../../core/i18n/translations';
 import { CartService } from '../../core/services/cart.service';
 import { EventsService } from '../../core/services/events.service';
 import { EventCardComponent } from './event-card.component';
-import { formatCardDateLong, formatTimeKuwait } from './event-card-meta';
+import { formatCardDateLong, formatTimeKuwait, parsePresenterFromSummaries } from './event-card-meta';
 import { calendarDayKeyKuwait, formatDaySubLabelKuwait } from './workshop-day-filters';
 
 const CATEGORY_ORDER: WorkshopFilterCategory[] = [
@@ -769,7 +769,7 @@ export class EventsHomeComponent implements OnDestroy {
   /** Load full workshop list in one request (backend caps per_page; must cover all seeded events). */
   private readonly EVENTS_HOME_PER_PAGE = 200;
 
-  readonly EXPERT_SIDEBAR_PREVIEW = 10;
+  readonly EXPERT_SIDEBAR_PREVIEW = 13;
 
   readonly homeHeroImageUrl = HOME_HERO_IMAGE_URL;
   readonly promoOfferImageUrl = PROMO_HERO_IMAGE_URL;
@@ -949,11 +949,25 @@ export class EventsHomeComponent implements OnDestroy {
     return list[0] ?? HOME_EXPERTS[0];
   });
 
-  /** Only workshops from the live list (`ms-w-*` from the schedule). No dummy placeholders. */
+  /**
+   * Workshops belonging to the selected trainer. Matches by parsed instructor
+   * name from each event's summary (set by the backend EventSeeder), with
+   * Arabic-name normalization so spelling variants resolve correctly.
+   */
   readonly expertWorkshopsForSelected = computed(() => {
-    const slugs = new Set(this.selectedExpert().workshopSlugs);
+    const target = normalizePresenterName(this.selectedExpert().nameAr);
+    if (!target) return [];
     return this.homeEvents()
-      .filter((e) => slugs.has(e.slug))
+      .filter((e) => {
+        if (!e.slug.startsWith('ms-w-')) return false;
+        const presenter = parsePresenterFromSummaries(
+          e.summaryAr,
+          e.summary_en,
+          e.summary,
+          true,
+        );
+        return normalizePresenterName(presenter) === target;
+      })
       .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime());
   });
 
