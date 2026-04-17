@@ -23,10 +23,8 @@ type StatusFilter = 'all' | 'upcoming' | 'ongoing' | 'completed';
 
 const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'all',
-  'soft_skills',
-  'digital',
-  'ai',
-  'career_prep',
+  'personal',
+  'professional',
 ];
 
 @Component({

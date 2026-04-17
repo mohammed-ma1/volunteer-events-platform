@@ -335,11 +335,18 @@ export class EventCardComponent {
     if (!value) {
       return null;
     }
-    const trimmed = value.trim();
+    let trimmed = value.trim();
     if (!trimmed) {
       return null;
     }
     if (/^facilitator:\s*.+·/i.test(trimmed) || /^مقدم الورشة:\s*.+·/.test(trimmed)) {
+      return null;
+    }
+    // Strip the "[personal]" / "[professional]" tag the seeder writes into summary fields.
+    trimmed = trimmed.replace(/^\[(personal|professional)\]\s*/i, '');
+    // Also drop the boilerplate "ورشة X يقدمها Y." / "X workshop led by Y." summary lines —
+    // these are tags, not real descriptions.
+    if (/^ورشة .+ يقدمها .+\.?$/.test(trimmed) || /^.+ workshop led by .+\.?$/i.test(trimmed)) {
       return null;
     }
     return trimmed;

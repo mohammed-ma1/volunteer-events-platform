@@ -63,7 +63,8 @@ class PostPaymentService
                 continue;
             }
 
-            if (in_array($slug, Event::CATEGORY_PACKAGE_SLUGS, true)) {
+            if (in_array($slug, Event::CATEGORY_PACKAGE_SLUGS, true)
+                || in_array($slug, Event::LEGACY_CATEGORY_PACKAGE_SLUGS, true)) {
                 $purchasedCategoryPackageSlugs[] = $slug;
 
                 continue;
@@ -112,13 +113,35 @@ class PostPaymentService
 
     private function enrollCategoryPackageWorkshops(int $userId, array $packageSlugs): int
     {
-        /** @var array<int, array{slug: string, workshop_slugs: string[]}> $categoryPackages */
-        $categoryPackages = require database_path('data/category_packages.php');
-        $slugMap = collect($categoryPackages)->keyBy('slug');
+        // Legacy 4 hidden bundles still in DB
+        /** @var array<int, array{slug: string, workshop_slugs: string[]}> $legacyPackages */
+        $legacyPackages = require database_path('data/category_packages.php');
+        $legacyMap = collect($legacyPackages)->keyBy('slug');
+
+        // New 2 bundles use source data: derive workshop slugs from their `category` tag
+        /** @var array<string, array{category:string}> $sourceData */
+        $sourceData = require database_path('data/source_workshop_descriptions.php');
+        $personalSlugs = [];
+        $professionalSlugs = [];
+        foreach ($sourceData as $slug => $info) {
+            if (($info['category'] ?? null) === 'personal') {
+                $personalSlugs[] = $slug;
+            } elseif (($info['category'] ?? null) === 'professional') {
+                $professionalSlugs[] = $slug;
+            }
+        }
 
         $workshopSlugs = [];
         foreach ($packageSlugs as $ps) {
-            $cp = $slugMap->get($ps);
+            if ($ps === Event::SLUG_PACKAGE_PERSONAL_50) {
+                $workshopSlugs = array_merge($workshopSlugs, $personalSlugs);
+                continue;
+            }
+            if ($ps === Event::SLUG_PACKAGE_PROFESSIONAL_50) {
+                $workshopSlugs = array_merge($workshopSlugs, $professionalSlugs);
+                continue;
+            }
+            $cp = $legacyMap->get($ps);
             if ($cp) {
                 $workshopSlugs = array_merge($workshopSlugs, $cp['workshop_slugs']);
             }

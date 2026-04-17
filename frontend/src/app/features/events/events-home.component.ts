@@ -7,7 +7,7 @@ import {
   kuWorkshopWeekNoonIso,
 } from '../../core/constants/ku-workshop-week';
 import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
-import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
+import { CATEGORY_PACKAGES, CategoryPackagePromo, findCategoryPackage } from '../../core/constants/category-packages-promo';
 import { HOME_HERO_IMAGE_URL, PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
 import { HOME_EXPERTS, HomeExpert } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
@@ -31,10 +31,8 @@ import { calendarDayKeyKuwait, formatDaySubLabelKuwait } from './workshop-day-fi
 
 const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'all',
-  'soft_skills',
-  'digital',
-  'ai',
-  'career_prep',
+  'personal',
+  'professional',
 ];
 
 @Component({
@@ -56,6 +54,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       ></div>
 
       <div class="relative grid gap-10 md:grid-cols-2 md:items-center md:gap-12">
+        <!-- Text Side (right in RTL, left in LTR) -->
         <div class="space-y-5">
           <span
             class="motion-safe:animate-ve-fade-up inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-brand-900 shadow-sm ring-1 ring-ink-200/80 backdrop-blur-sm"
@@ -69,7 +68,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             {{ i18n.t('hero.badge') }}
           </span>
           <h1
-            class="motion-safe:animate-ve-fade-up text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.45rem]"
+            class="motion-safe:animate-ve-fade-up text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.75rem]"
           >
             <span class="text-brand-900">{{ i18n.t('hero.titleNavy1') }}</span
             ><span class="ve-hero-accent">{{ i18n.t('hero.titleGold1') }}</span
@@ -98,13 +97,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
               ></span>
               <span class="relative inline-flex items-center gap-2">
                 <span>{{ i18n.t('hero.ctaBrowse') }}</span>
-                <svg
-                  class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
+                <svg class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
@@ -116,13 +109,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             >
               <span class="inline-flex items-center gap-2">
                 <span>{{ i18n.t('hero.ctaFacilitators') }}</span>
-                <svg
-                  class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
+                <svg class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
@@ -130,27 +117,32 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           </div>
         </div>
 
-        <div
-          class="motion-safe:animate-ve-fade-up group relative overflow-hidden rounded-2xl shadow-xl motion-safe:[animation-delay:100ms]"
-        >
-          <div
-            class="absolute inset-0 z-10 bg-gradient-to-t from-brand-900/20 via-transparent to-brand-500/5 opacity-0 transition duration-500 group-hover:opacity-100 motion-reduce:opacity-0"
-            aria-hidden="true"
-          ></div>
-          <img
-            [src]="homeHeroImageUrl"
-            [alt]="i18n.t('hero.imageAlt')"
-            class="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100 md:aspect-[5/4]"
-            width="800"
-            height="640"
-            fetchpriority="high"
-          />
-          <div
-            class="motion-safe:animate-ve-float absolute bottom-4 start-4 max-w-[260px] rounded-xl border border-white/60 bg-white/95 p-3 shadow-lg backdrop-blur-md md:bottom-6 md:start-6 md:p-4"
-          >
-            <div class="flex items-center gap-2">
-              <span class="text-lg drop-shadow-sm" aria-hidden="true">🏅</span>
-              <p class="text-sm font-bold text-brand-900">{{ i18n.t('hero.stat') }}</p>
+        <!-- Image Side (left in RTL, right in LTR) -->
+        <div class="motion-safe:animate-ve-fade-up relative motion-safe:[animation-delay:100ms]">
+          <div class="group relative overflow-hidden rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,26,51,0.25)]">
+            <img
+              [src]="homeHeroImageUrl"
+              [alt]="i18n.t('hero.imageAlt')"
+              class="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
+              width="800"
+              height="600"
+              fetchpriority="high"
+            />
+          </div>
+
+          <!-- Stat Badge: top-start corner, slightly outside image -->
+          <div class="motion-safe:animate-ve-float absolute -top-3 -start-3 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-8px_rgba(0,26,51,0.2)] ring-1 ring-ink-200/40 md:-top-4 md:-start-4 md:px-5 md:py-3.5">
+            <p class="text-sm font-bold text-brand-900 md:text-base">{{ i18n.t('hero.stat') }}</p>
+            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold-100 text-base shadow-inner md:h-8 md:w-8" aria-hidden="true">🏅</span>
+          </div>
+
+          <!-- Partnership Card: bottom-end corner, slightly outside image -->
+          <div class="motion-safe:animate-ve-float absolute -bottom-4 -end-3 flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-3 shadow-[0_15px_40px_-10px_rgba(0,26,51,0.25)] ring-1 ring-ink-200/40 md:-bottom-5 md:-end-4 md:px-6 md:py-3.5">
+            <span class="text-[11px] font-bold text-brand-900 md:text-xs">{{ i18n.isRtl() ? 'مشروع تَهيّأ بالتعاون مع جامعة الكويت' : 'In partnership with Kuwait University' }}</span>
+            <div class="flex items-center gap-3">
+              <img src="/images/branding/ku-university-logo.png" alt="Kuwait University" class="h-9 w-auto shrink-0 object-contain md:h-10"/>
+              <span class="h-7 w-px bg-ink-200" aria-hidden="true"></span>
+              <img src="/images/branding/next-levels-logo.png" alt="Next Levels" class="h-6 w-auto shrink-0 object-contain md:h-7"/>
             </div>
           </div>
         </div>
@@ -243,6 +235,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         </p>
       </div>
 
+      @if (!activeCategoryPromo()) {
       <div
         class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-brand-950 text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)]"
       >
@@ -352,6 +345,57 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           </div>
         </div>
       </div>
+      }
+      @if (activeCategoryPromo(); as cp) {
+        <div
+          class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-brand-950 text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)]"
+        >
+          <div
+            class="flex flex-col gap-5 p-6 md:p-9 lg:p-11"
+            [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+            [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+          >
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+              <span class="text-4xl font-black tracking-tight text-[#eab308] md:text-[2.65rem]">{{ categoryPromoCopy(cp).priceNow }}</span>
+              <span class="text-base font-medium text-white/40 line-through md:text-lg">{{ categoryPromoCopy(cp).priceWas }}</span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-[#eab308]/20 px-3 py-1 text-xs font-bold text-[#f5d76e]">
+                <span aria-hidden="true">⚡</span>
+                {{ categoryPromoCopy(cp).savePct }}
+              </span>
+            </div>
+
+            <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
+              {{ categoryPromoCopy(cp).title }}
+            </h3>
+            <p class="max-w-2xl text-sm leading-relaxed text-white/65 md:text-[0.95rem]">
+              {{ categoryPromoCopy(cp).tagline }}
+            </p>
+
+            <div class="max-w-xl rounded-xl border border-fuchsia-400/50 bg-[#2a1f3d]/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-4">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <p class="text-base leading-relaxed text-white">
+                  {{ categoryPromoCopy(cp).installmentPrefix }}
+                  <span class="text-2xl font-extrabold text-[#ec4899]">{{ categoryPromoCopy(cp).installmentAmount }}</span>
+                </p>
+                <span class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-3 py-1.5 text-xs font-bold tracking-wide text-white">
+                  {{ categoryPromoCopy(cp).interestFree }}
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-brand-700 px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-brand-800 active:scale-[0.98]"
+              (click)="onPromoCheckout()"
+            >
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
+              </svg>
+              <span>{{ categoryPromoCopy(cp).cta }}</span>
+            </button>
+          </div>
+        </div>
+      }
 
       <!-- Category Package Cards (hidden for now) -->
 
@@ -381,6 +425,33 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           role="tablist"
           [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
         >
+          <!-- All Days tab -->
+          <button
+            type="button"
+            role="tab"
+            [attr.aria-selected]="selectedDayKey() === null"
+            (click)="onSelectDay(null)"
+            class="shrink-0 rounded-full px-5 py-2.5 text-center transition duration-200"
+            [ngClass]="
+              selectedDayKey() === null
+                ? 'bg-brand-900 text-white shadow-md'
+                : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
+            "
+          >
+            <span class="flex items-center gap-1.5 text-sm font-bold">
+              {{ i18n.isRtl() ? 'كل الأيام' : 'All Days' }}
+              <span class="rounded-full bg-white/20 px-1.5 text-xs font-bold"
+                    [ngClass]="selectedDayKey() === null ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
+                ({{ categoryFilteredEvents().length }})
+              </span>
+            </span>
+            <span
+              class="mt-0.5 block text-xs font-medium"
+              [ngClass]="selectedDayKey() === null ? 'text-white/85' : 'text-ink-500'"
+              >{{ i18n.isRtl() ? 'عرض الكل' : 'Show all' }}</span
+            >
+          </button>
+
           @for (b of workshopDayBuckets(); track b.key; let di = $index) {
             <button
               type="button"
@@ -394,7 +465,13 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                   : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
               "
             >
-              <span class="block text-sm font-bold">{{ i18n.t('workshops.dayWord') }} {{ di + 1 }}</span>
+              <span class="flex items-center gap-1.5 text-sm font-bold">
+                {{ i18n.t('workshops.dayWord') }} {{ di + 1 }}
+                <span class="rounded-full px-1.5 text-xs font-bold"
+                      [ngClass]="selectedDayKey() === b.key ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
+                  ({{ b.count }})
+                </span>
+              </span>
               <span
                 class="mt-0.5 block text-xs font-medium"
                 [ngClass]="selectedDayKey() === b.key ? 'text-white/85' : 'text-ink-500'"
@@ -412,14 +489,18 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           <button
             type="button"
             (click)="onSelectCategory(cat)"
-            class="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:active:scale-100"
+            class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:active:scale-100"
             [ngClass]="
               selectedCategory() === cat
                 ? 'bg-brand-900 text-white shadow-md'
                 : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
             "
           >
-            {{ categoryLabel(cat) }}
+            <span>{{ categoryLabel(cat) }}</span>
+            <span class="rounded-full px-1.5 text-xs font-bold"
+                  [ngClass]="selectedCategory() === cat ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
+              ({{ categoryCounts()[cat] }})
+            </span>
           </button>
         }
       </div>
@@ -694,7 +775,8 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly selectedCategory = signal<WorkshopFilterCategory>('all');
   /** Calendar day key (Kuwait); null = all days in the current list (for non–KU-week multi-day filters). */
-  readonly selectedDayKey = signal<string | null>(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
+  /** null = "All Days" tab selected (shows every day in current category). */
+  readonly selectedDayKey = signal<string | null>(null);
   readonly showAllWorkshops = signal(false);
   readonly homeEvents = signal<HomeListEvent[]>([]);
   readonly usingDummy = signal(false);
@@ -707,18 +789,68 @@ export class EventsHomeComponent implements OnDestroy {
   searchText = '';
   openFaqIndex = signal<number | null>(null);
 
+  /** All visible workshop events (excludes package SKUs entirely). */
+  readonly visibleWorkshopEvents = computed(() =>
+    this.homeEvents().filter((ev) => !ALL_PACKAGE_SLUGS.includes(ev.slug)),
+  );
+
   readonly categoryFilteredEvents = computed(() => {
     const cat = this.selectedCategory();
-    return this.homeEvents().filter(
-      (ev) =>
-        !ALL_PACKAGE_SLUGS.includes(ev.slug) && eventMatchesWorkshopFilter(cat, ev.category),
+    return this.visibleWorkshopEvents().filter((ev) =>
+      eventMatchesWorkshopFilter(cat, ev.category),
     );
   });
+
+  /** Total count of workshops per filter category, for badge labels. */
+  readonly categoryCounts = computed<Record<WorkshopFilterCategory, number>>(() => {
+    const list = this.visibleWorkshopEvents();
+    const counts: Record<WorkshopFilterCategory, number> = {
+      all: list.length,
+      personal: 0,
+      professional: 0,
+    };
+    for (const ev of list) {
+      if (ev.category === 'personal') {
+        counts.personal++;
+      } else if (ev.category === 'professional') {
+        counts.professional++;
+      }
+    }
+    return counts;
+  });
+
+  /** Promo card kind: 'main' for the 100-bundle, 'category' for one of the 50-bundles. */
+  readonly activePromo = computed<{ kind: 'main' | 'category' }>(() => {
+    const cat = this.selectedCategory();
+    if ((cat === 'personal' || cat === 'professional') && findCategoryPackage(cat)) {
+      return { kind: 'category' };
+    }
+    return { kind: 'main' };
+  });
+
+  /** When activePromo() is 'category', the actual promo object — null otherwise. */
+  readonly activeCategoryPromo = computed<CategoryPackagePromo | null>(() => {
+    const cat = this.selectedCategory();
+    if (cat === 'personal' || cat === 'professional') {
+      return findCategoryPackage(cat) ?? null;
+    }
+    return null;
+  });
+
+  categoryPromoCopy(promo: CategoryPackagePromo): CategoryPackagePromo['ar'] {
+    return this.i18n.isRtl() ? promo.ar : promo.en;
+  }
 
   readonly workshopDayBuckets = computed(() => {
     const list = this.categoryFilteredEvents();
     const loc = this.i18n.locale() === 'ar' ? 'ar' : 'en';
     const touchesKuWeek = list.some((ev) => isKuWorkshopWeekDayKey(calendarDayKeyKuwait(ev.starts_at)));
+    // Pre-count workshops per day key (within the selected category).
+    const countByKey = new Map<string, number>();
+    for (const ev of list) {
+      const k = calendarDayKeyKuwait(ev.starts_at);
+      countByKey.set(k, (countByKey.get(k) ?? 0) + 1);
+    }
     if (touchesKuWeek) {
       return KU_WORKSHOP_WEEK_DAY_KEYS.map((key) => {
         const iso = kuWorkshopWeekNoonIso(key);
@@ -726,16 +858,22 @@ export class EventsHomeComponent implements OnDestroy {
           key,
           sort: new Date(iso).getTime(),
           sub: formatDaySubLabelKuwait(iso, loc),
+          count: countByKey.get(key) ?? 0,
         };
       });
     }
-    const byKey = new Map<string, { key: string; sort: number; sub: string }>();
+    const byKey = new Map<string, { key: string; sort: number; sub: string; count: number }>();
     for (const ev of list) {
       const key = calendarDayKeyKuwait(ev.starts_at);
       const t = new Date(ev.starts_at).getTime();
       const prev = byKey.get(key);
       if (!prev || t < prev.sort) {
-        byKey.set(key, { key, sort: t, sub: formatDaySubLabelKuwait(ev.starts_at, loc) });
+        byKey.set(key, {
+          key,
+          sort: t,
+          sub: formatDaySubLabelKuwait(ev.starts_at, loc),
+          count: countByKey.get(key) ?? 0,
+        });
       }
     }
     return [...byKey.values()].sort((a, b) => a.sort - b.sort);
@@ -853,7 +991,7 @@ export class EventsHomeComponent implements OnDestroy {
           const mapped = res.data.map(volunteerToHome);
           this.homeEvents.set(mapped);
           this.showAllWorkshops.set(false);
-          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
+          this.selectedDayKey.set(null);
           this.page.set(res.current_page);
           this.lastPage.set(res.last_page);
           this.loading.set(false);
@@ -874,6 +1012,13 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   onPromoCheckout(): void {
+    const cp = this.activeCategoryPromo();
+    if (cp) {
+      this.checkoutFlow.startPackageCheckout(cp.slug, () =>
+        this.error.set(this.i18n.t('workshops.packageUnavailable')),
+      );
+      return;
+    }
     this.checkoutFlow.startPackage100Checkout(() => this.error.set(this.i18n.t('workshops.packageUnavailable')));
   }
 
@@ -940,8 +1085,12 @@ export class EventsHomeComponent implements OnDestroy {
     this.selectedCategory.set(cat);
   }
 
-  onSelectDay(dayKey: string): void {
+  onSelectDay(dayKey: string | null): void {
     this.showAllWorkshops.set(false);
+    if (dayKey === null) {
+      this.selectedDayKey.set(null);
+      return;
+    }
     if (this.selectedDayKey() === dayKey) {
       this.selectedDayKey.set(null);
       return;
@@ -1019,7 +1168,7 @@ export class EventsHomeComponent implements OnDestroy {
         next: (res) => {
           const mapped = res.data.map(volunteerToHome);
           this.showAllWorkshops.set(false);
-          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
+          this.selectedDayKey.set(null);
           if (mapped.length === 0) {
             this.usingDummy.set(true);
             this.homeEvents.set([...DUMMY_HOME_EVENTS]);
@@ -1036,7 +1185,7 @@ export class EventsHomeComponent implements OnDestroy {
         error: () => {
           this.usingDummy.set(true);
           this.homeEvents.set([...DUMMY_HOME_EVENTS]);
-          this.selectedDayKey.set(KU_WORKSHOP_WEEK_DAY_KEYS[0]);
+          this.selectedDayKey.set(null);
           this.page.set(1);
           this.lastPage.set(1);
           this.loading.set(false);

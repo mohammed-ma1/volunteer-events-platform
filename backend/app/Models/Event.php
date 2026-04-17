@@ -20,17 +20,30 @@ class Event extends Model
 
     public const SLUG_PACKAGE_DIGITAL = 'package-digital';
 
-    /** All category package slugs (excludes the 100-workshop mega-bundle). */
+    /** Source-aligned 50-workshop bundles (Personal Competence + Professional & Technical). */
+    public const SLUG_PACKAGE_PERSONAL_50 = 'package-personal-50';
+
+    public const SLUG_PACKAGE_PROFESSIONAL_50 = 'package-professional-50';
+
+    /** Active category package slugs (the 2 visible 50-workshop bundles). */
     public const CATEGORY_PACKAGE_SLUGS = [
+        self::SLUG_PACKAGE_PERSONAL_50,
+        self::SLUG_PACKAGE_PROFESSIONAL_50,
+    ];
+
+    /** Legacy category packages (kept in DB for backward compat, not shown in UI). */
+    public const LEGACY_CATEGORY_PACKAGE_SLUGS = [
         self::SLUG_PACKAGE_CAREER_PREP,
         self::SLUG_PACKAGE_SOFT_SKILLS,
         self::SLUG_PACKAGE_AI,
         self::SLUG_PACKAGE_DIGITAL,
     ];
 
-    /** Every purchasable package slug (category + 100-workshop). */
+    /** Every purchasable package slug. */
     public const ALL_PACKAGE_SLUGS = [
         self::SLUG_100_WORKSHOPS_PACKAGE,
+        self::SLUG_PACKAGE_PERSONAL_50,
+        self::SLUG_PACKAGE_PROFESSIONAL_50,
         self::SLUG_PACKAGE_CAREER_PREP,
         self::SLUG_PACKAGE_SOFT_SKILLS,
         self::SLUG_PACKAGE_AI,

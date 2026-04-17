@@ -45,14 +45,22 @@ export function parsePresenterFromSummaries(
     if (!s) {
       return null;
     }
-    const m = s.match(/مقدم الورشة:\s*([^·]+)/);
+    // Old format: "مقدم الورشة: NAME · ..."
+    let m = s.match(/مقدم الورشة:\s*([^·]+)/);
+    if (m) return m[1].trim();
+    // New format from EventSeeder: "[personal] ورشة TITLE يقدمها NAME."
+    m = s.match(/يقدمها\s+([^.·]+)\.?/);
     return m ? m[1].trim() : null;
   };
   const tryEn = (s: string | null | undefined) => {
     if (!s) {
       return null;
     }
-    const m = s.match(/Facilitator:\s*([^·]+)/i);
+    // Old format
+    let m = s.match(/Facilitator:\s*([^·]+)/i);
+    if (m) return m[1].trim();
+    // New format: "[personal] TITLE workshop led by NAME."
+    m = s.match(/led by\s+([^.·]+)\.?/i);
     return m ? m[1].trim() : null;
   };
   if (preferAr) {

@@ -144,10 +144,8 @@ export type TranslationKey =
   | 'workshops.filterDaysAria'
   | 'workshops.packageUnavailable'
   | 'cat.all'
-  | 'cat.soft_skills'
-  | 'cat.digital'
-  | 'cat.ai'
-  | 'cat.career_prep'
+  | 'cat.personal'
+  | 'cat.professional'
   | 'card.addCart'
   | 'card.added'
   | 'card.buyNow'
@@ -449,13 +447,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
-    'cat.soft_skills': 'الكفاءة الشخصية',
-    'cat.digital': 'المهارات الرقمية',
-    'cat.ai': 'الذكاء الاصطناعي',
-    'cat.career_prep': 'الاستعداد المهني',
+    'cat.personal': 'مهارات الكفاءة الشخصية',
+    'cat.professional': 'الاستعداد المهني والتقني',
     'card.addCart': 'أضف للسلة',
-    'card.added': 'تمت الإضافة',
     'card.buyNow': 'شراء الآن',
+    'card.added': 'تمت الإضافة',
     'card.free': 'مجاناً',
     'card.currencyKwd': 'د.ك',
     'card.presenterLabel': 'مقدم الورشة:',
@@ -764,13 +760,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.packageUnavailable':
       'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',
-    'cat.soft_skills': 'Personal Competence',
-    'cat.digital': 'Digital Skills',
-    'cat.ai': 'Artificial Intelligence',
-    'cat.career_prep': 'Professional Readiness',
+    'cat.personal': 'Personal Competence Skills',
+    'cat.professional': 'Professional & Technical Readiness',
     'card.addCart': 'Add to cart',
-    'card.added': 'Added',
     'card.buyNow': 'Buy now',
+    'card.added': 'Added',
     'card.free': 'Free',
     'card.currencyKwd': 'K.D.',
     'card.presenterLabel': 'Presenter:',

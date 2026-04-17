@@ -1,30 +1,15 @@
 import { VolunteerEvent } from '../models/api.types';
 
 /** Inferred / stored on each event (keywords). */
-export type WorkshopCategory =
-  | 'leadership'
-  | 'digital'
-  | 'ai'
-  | 'personal'
-  | 'cv'
-  | 'career';
+export type WorkshopCategory = 'personal' | 'professional';
 
-/** Filter chips on the workshops grid (consolidated labels). */
-export type WorkshopFilterCategory = 'all' | 'soft_skills' | 'digital' | 'ai' | 'career_prep';
+/** Filter chips on the workshops grid (matches source project's 2-category system). */
+export type WorkshopFilterCategory = 'all' | 'personal' | 'professional';
 
 export function workshopCategoryToFilterGroup(
   c: WorkshopCategory,
 ): Exclude<WorkshopFilterCategory, 'all'> {
-  if (c === 'leadership' || c === 'personal') {
-    return 'soft_skills';
-  }
-  if (c === 'cv' || c === 'career') {
-    return 'career_prep';
-  }
-  if (c === 'digital') {
-    return 'digital';
-  }
-  return 'ai';
+  return c;
 }
 
 export function eventMatchesWorkshopFilter(
@@ -34,7 +19,7 @@ export function eventMatchesWorkshopFilter(
   if (filter === 'all') {
     return true;
   }
-  return workshopCategoryToFilterGroup(c) === filter;
+  return c === filter;
 }
 
 export interface HomeListEvent extends VolunteerEvent {
@@ -71,7 +56,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     capacity: 80,
     is_featured: true,
     is_published: true,
-    category: 'ai',
+    category: 'professional',
   },
   {
     id: -2,
@@ -94,7 +79,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     capacity: 120,
     is_featured: true,
     is_published: true,
-    category: 'digital',
+    category: 'professional',
   },
   {
     id: -3,
@@ -116,7 +101,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     capacity: 300,
     is_featured: true,
     is_published: true,
-    category: 'career',
+    category: 'professional',
   },
   {
     id: -4,
@@ -160,7 +145,7 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     capacity: 50,
     is_featured: false,
     is_published: true,
-    category: 'leadership',
+    category: 'personal',
   },
   {
     id: -6,
@@ -182,71 +167,49 @@ export const DUMMY_HOME_EVENTS: HomeListEvent[] = [
     capacity: 30,
     is_featured: false,
     is_published: true,
-    category: 'cv',
+    category: 'professional',
   },
 ];
 
-const CATEGORY_KEYWORDS: { cat: WorkshopCategory; keys: string[] }[] = [
-  {
-    cat: 'ai',
-    keys: [
-      'ai',
-      'artificial',
-      'machine learning',
-      'ذكاء',
-      'اصطناعي',
-      'python',
-      'react',
-      'سايبر',
-      'أمن',
-      'تحليل البيانات',
-    ],
-  },
-  {
-    cat: 'digital',
-    keys: ['digital', 'code', 'hack', 'tech', 'ابتكار', 'برمج', 'فيديو', 'زوايا', 'لقطات', 'ui'],
-  },
-  { cat: 'leadership', keys: ['leadership', 'lead', 'team', 'قيادة', 'إدارة', 'وقت', 'ضغط', '90 يوم'] },
-  {
-    cat: 'personal',
-    keys: [
-      'communication',
-      'presentation',
-      'personal',
-      'عرض',
-      'تواصل',
-      'رسم',
-      'مشاعر',
-      'استرخاء',
-      'صمود',
-      'توتر',
-      'غذاء',
-      'سناكات',
-      'عطر',
-      'عاطفي',
-      'شخصيات',
-      'اتيكيت',
-      'علاقات',
-    ],
-  },
-  {
-    cat: 'cv',
-    keys: ['cv', 'interview', 'resume', 'سيرة', 'مقابلة', 'smart', 'star', 'أهداف', 'سيرة'],
-  },
-  {
-    cat: 'career',
-    keys: ['career', 'path', 'forum', 'mentor', 'مسار', 'مهني', 'قانون', 'تسويق', 'مسؤولية', 'مجتمع'],
-  },
+/** Keyword fallback when seeder hasn't tagged the summary with [personal]/[professional]. */
+const PERSONAL_KEYWORDS = [
+  'رسم', 'فن', 'مشاعر', 'استرخاء', 'صمود', 'توتر', 'غذاء', 'سناكات', 'عاطفي', 'شخصيات',
+  'اتيكيت', 'لغة', 'إلقاء', 'سأكتب', 'تسويق', 'إنتاج فني', 'سيناريو', 'فيلم', 'كرة',
+  'تحكيم', 'صناعة الحظ', 'عقلية', 'الذكاء العاطفي', 'الشموع', 'مسئولية', 'السبع عادات',
+  'تخطيط', 'بوصلة', 'كسر قيود', 'محطة', 'صناعة الأثر',
 ];
 
-export function inferCategory(ev: { title: string; title_en?: string | null; summary?: string | null }): WorkshopCategory {
-  const blob = `${ev.title} ${ev.title_en ?? ''} ${ev.summary ?? ''}`.toLowerCase();
-  for (const { cat, keys } of CATEGORY_KEYWORDS) {
-    if (keys.some((k) => blob.includes(k))) {
-      return cat;
+const PROFESSIONAL_KEYWORDS = [
+  'مقابلة', 'سيرة', 'مهني', 'قانون', 'تجاري', 'موظف', 'وظيفة', 'بايثون', 'ذكاء اصطناعي',
+  'ai ', 'أمن سيبراني', 'بيانات', 'تحليل', 'mvp', 'تداول', 'أتمتة', 'ui', 'tech',
+  'تصميم', 'جرافيك', 'ديجتال', 'تصوير', 'فيديو', 'الايميل', 'إيميل', 'العمل',
+];
+
+export function inferCategory(ev: {
+  title: string;
+  title_en?: string | null;
+  summary?: string | null;
+}): WorkshopCategory {
+  // Prefer explicit tag from seeder ("[personal] ..." or "[professional] ...").
+  const summary = (ev.summary ?? '').trim();
+  if (summary.startsWith('[personal]')) {
+    return 'personal';
+  }
+  if (summary.startsWith('[professional]')) {
+    return 'professional';
+  }
+  const blob = `${ev.title} ${ev.title_en ?? ''} ${summary}`.toLowerCase();
+  for (const k of PERSONAL_KEYWORDS) {
+    if (blob.includes(k)) {
+      return 'personal';
     }
   }
-  return 'career';
+  for (const k of PROFESSIONAL_KEYWORDS) {
+    if (blob.includes(k)) {
+      return 'professional';
+    }
+  }
+  return 'professional';
 }
 
 export function volunteerToHome(ev: VolunteerEvent): HomeListEvent {

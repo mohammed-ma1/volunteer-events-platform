@@ -1,100 +1,98 @@
 import {
-  PACKAGE_CAREER_PREP_SLUG,
-  PACKAGE_SOFT_SKILLS_SLUG,
-  PACKAGE_AI_SLUG,
-  PACKAGE_DIGITAL_SLUG,
+  PACKAGE_PERSONAL_50_SLUG,
+  PACKAGE_PROFESSIONAL_50_SLUG,
 } from './package-offer';
 
 export interface CategoryPackagePromo {
   slug: string;
   workshopCount: number;
+  /** Filter category this bundle is associated with. */
+  filterCategory: 'personal' | 'professional';
   ar: {
     title: string;
+    tagline: string;
     priceNow: string;
     priceWas: string;
     savePct: string;
+    installmentPrefix: string;
+    installmentAmount: string;
+    interestFree: string;
     cta: string;
   };
   en: {
     title: string;
+    tagline: string;
     priceNow: string;
     priceWas: string;
     savePct: string;
+    installmentPrefix: string;
+    installmentAmount: string;
+    interestFree: string;
     cta: string;
   };
 }
 
 export const CATEGORY_PACKAGES: readonly CategoryPackagePromo[] = [
   {
-    slug: PACKAGE_CAREER_PREP_SLUG,
-    workshopCount: 26,
+    slug: PACKAGE_PERSONAL_50_SLUG,
+    workshopCount: 50,
+    filterCategory: 'personal',
     ar: {
-      title: 'الاستعداد المهني',
-      priceNow: '179 د.ك',
-      priceWas: '260 د.ك',
-      savePct: 'توفير 31%',
-      cta: 'اشترِ الباقة',
+      title: 'باقة مهارات الكفاءة الشخصية',
+      tagline:
+        'بدلاً من شراء كل ورشة على حدة، احصل على وصول فوري لجميع الـ 50 ورشة في هذا التصنيف مع 50 شهادة معتمدة.',
+      priceNow: '50 د.ك',
+      priceWas: '500 د.ك',
+      savePct: 'وفر 90%',
+      installmentPrefix: 'قسطها على 4 دفعات مع ديمه',
+      installmentAmount: '12.500 د.ك',
+      interestFree: 'بدون فوائد',
+      cta: 'احصل على الباقة الآن',
     },
     en: {
-      title: 'Career Readiness',
-      priceNow: '179 K.D.',
-      priceWas: '260 K.D.',
-      savePct: 'Save 31%',
-      cta: 'Get this bundle',
+      title: 'Personal Competence Skills Bundle',
+      tagline:
+        'Instead of buying each workshop separately, get instant access to all 50 workshops in this category with 50 certified certificates.',
+      priceNow: '50 K.D.',
+      priceWas: '500 K.D.',
+      savePct: 'Save 90%',
+      installmentPrefix: 'Split into 4 payments with Deema',
+      installmentAmount: '12.500 K.D.',
+      interestFree: 'Interest-free',
+      cta: 'Get the bundle now',
     },
   },
   {
-    slug: PACKAGE_SOFT_SKILLS_SLUG,
-    workshopCount: 48,
+    slug: PACKAGE_PROFESSIONAL_50_SLUG,
+    workshopCount: 50,
+    filterCategory: 'professional',
     ar: {
-      title: 'الكفاءة الشخصية',
-      priceNow: '299 د.ك',
-      priceWas: '480 د.ك',
-      savePct: 'توفير 38%',
-      cta: 'اشترِ الباقة',
+      title: 'باقة الاستعداد المهني والتقني',
+      tagline:
+        'بدلاً من شراء كل ورشة على حدة، احصل على وصول فوري لجميع الـ 50 ورشة في هذا التصنيف مع 50 شهادة معتمدة.',
+      priceNow: '50 د.ك',
+      priceWas: '500 د.ك',
+      savePct: 'وفر 90%',
+      installmentPrefix: 'قسطها على 4 دفعات مع ديمه',
+      installmentAmount: '12.500 د.ك',
+      interestFree: 'بدون فوائد',
+      cta: 'احصل على الباقة الآن',
     },
     en: {
-      title: 'Personal Competence',
-      priceNow: '299 K.D.',
-      priceWas: '480 K.D.',
-      savePct: 'Save 38%',
-      cta: 'Get this bundle',
-    },
-  },
-  {
-    slug: PACKAGE_AI_SLUG,
-    workshopCount: 11,
-    ar: {
-      title: 'الذكاء الاصطناعي',
-      priceNow: '79 د.ك',
-      priceWas: '110 د.ك',
-      savePct: 'توفير 28%',
-      cta: 'اشترِ الباقة',
-    },
-    en: {
-      title: 'Artificial Intelligence',
-      priceNow: '79 K.D.',
-      priceWas: '110 K.D.',
-      savePct: 'Save 28%',
-      cta: 'Get this bundle',
-    },
-  },
-  {
-    slug: PACKAGE_DIGITAL_SLUG,
-    workshopCount: 15,
-    ar: {
-      title: 'المهارات الرقمية',
-      priceNow: '99 د.ك',
-      priceWas: '150 د.ك',
-      savePct: 'توفير 34%',
-      cta: 'اشترِ الباقة',
-    },
-    en: {
-      title: 'Digital Skills',
-      priceNow: '99 K.D.',
-      priceWas: '150 K.D.',
-      savePct: 'Save 34%',
-      cta: 'Get this bundle',
+      title: 'Professional & Technical Readiness Bundle',
+      tagline:
+        'Instead of buying each workshop separately, get instant access to all 50 workshops in this category with 50 certified certificates.',
+      priceNow: '50 K.D.',
+      priceWas: '500 K.D.',
+      savePct: 'Save 90%',
+      installmentPrefix: 'Split into 4 payments with Deema',
+      installmentAmount: '12.500 K.D.',
+      interestFree: 'Interest-free',
+      cta: 'Get the bundle now',
     },
   },
 ];
+
+export function findCategoryPackage(filterCategory: 'personal' | 'professional'): CategoryPackagePromo | undefined {
+  return CATEGORY_PACKAGES.find((p) => p.filterCategory === filterCategory);
+}
