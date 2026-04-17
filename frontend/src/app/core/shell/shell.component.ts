@@ -57,8 +57,8 @@ import { CartDrawerComponent } from './cart-drawer.component';
               class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
               [ngClass]="
                 headerCompact()
-                  ? 'h-8 max-w-[9rem] sm:max-w-[9.5rem]'
-                  : 'h-9 max-w-[10.5rem] sm:h-10 sm:max-w-[11.5rem] md:max-w-[12.5rem]'
+                  ? 'h-6 max-w-[7rem] sm:max-w-[7.5rem]'
+                  : 'h-7 max-w-[8rem] sm:h-8 sm:max-w-[9rem] md:max-w-[9.5rem]'
               "
               width="180"
               height="48"
@@ -358,7 +358,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
               <img
                 src="/images/branding/next-levels-logo.png"
                 alt="Next Levels"
-                class="mb-6 h-10 w-auto max-w-[12rem] object-contain"
+                class="mb-6 h-10 w-auto max-w-[12rem] object-contain brightness-0 invert"
                 width="176"
                 height="40"
                 loading="lazy"
