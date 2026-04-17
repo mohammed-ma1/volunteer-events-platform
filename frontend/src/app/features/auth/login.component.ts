@@ -21,7 +21,7 @@ import { I18nService } from '../../core/i18n/i18n.service';
             class="mx-auto flex w-max max-w-full shrink-0 justify-center outline-none focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-brand-900/25 focus-visible:ring-offset-2"
           >
             <img
-              src="/images/branding/next-levels-logo.svg"
+              src="/images/branding/next-levels-logo.png"
               alt=""
               class="block h-14 w-auto max-w-full object-contain object-center sm:h-16"
               width="126"
