@@ -7,9 +7,11 @@ use App\Models\ActivityLog;
 use App\Models\Enrollment;
 use App\Models\Event;
 use App\Models\User;
+use App\Services\PackageEnrollmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class EnrollmentController extends Controller
 {
@@ -100,5 +102,29 @@ class EnrollmentController extends Controller
         $enrollment->delete();
 
         return response()->json(null, 204);
+    }
+
+    /**
+     * Enroll every paid buyer of a package into all of its underlying workshops.
+     * Safe to run repeatedly — existing enrollments are skipped.
+     */
+    public function syncPackage(string $slug, PackageEnrollmentService $service): JsonResponse
+    {
+        validator(
+            ['slug' => $slug],
+            ['slug' => ['required', 'string', Rule::in(Event::ALL_PACKAGE_SLUGS)]]
+        )->validate();
+
+        $result = $service->sync($slug);
+
+        ActivityLog::record(
+            Auth::guard('api')->id(),
+            'package.enrollments_synced',
+            'Event',
+            null,
+            array_merge($result, ['slug' => $slug])
+        );
+
+        return response()->json(['data' => $result]);
     }
 }

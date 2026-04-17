@@ -45,6 +45,23 @@ class ExpertController extends Controller
         return response()->json(['data' => $expert]);
     }
 
+    /**
+     * Distinct specialization values currently in use. Consumed by the admin
+     * portal to populate autocomplete/filter dropdowns.
+     */
+    public function specializations(): JsonResponse
+    {
+        $values = Expert::query()
+            ->whereNotNull('specialization')
+            ->where('specialization', '!=', '')
+            ->distinct()
+            ->orderBy('specialization')
+            ->pluck('specialization')
+            ->values();
+
+        return response()->json(['data' => $values]);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([

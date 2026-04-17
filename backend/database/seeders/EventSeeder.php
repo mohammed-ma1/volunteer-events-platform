@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
-use App\Models\Order;
-use App\Models\User;
+use App\Services\PackageEnrollmentService;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class EventSeeder extends Seeder
 {
@@ -183,88 +181,11 @@ class EventSeeder extends Seeder
             ->whereDoesntHave('enrollments')
             ->delete();
 
-        $this->enrollPaidUsersInAllScheduleWorkshops($pack);
-        $this->enrollPaidUsersInCategoryPackages(array_merge($newBundles, $legacyCategoryPackages));
-    }
-
-    /**
-     * Backfill enrollments for the 100-workshops mega-bundle.
-     */
-    private function enrollPaidUsersInAllScheduleWorkshops(array $pack): void
-    {
-        $workshopSlugs = collect($pack['rows'])->map(fn (array $row) => $row[0])->all();
-        $workshopIds = Event::query()->whereIn('slug', $workshopSlugs)->orderBy('id')->pluck('id');
-
-        if ($workshopIds->isEmpty()) {
-            return;
-        }
-
-        $packageEventId = Event::query()->where('slug', Event::SLUG_100_WORKSHOPS_PACKAGE)->value('id');
-        if ($packageEventId === null) {
-            return;
-        }
-
-        $this->bulkEnrollPackageBuyers($packageEventId, $workshopIds);
-    }
-
-    /**
-     * Backfill enrollments for each category package.
-     */
-    private function enrollPaidUsersInCategoryPackages(array $categoryPackages): void
-    {
-        foreach ($categoryPackages as $cp) {
-            $packageEventId = Event::query()->where('slug', $cp['slug'])->value('id');
-            if ($packageEventId === null) {
-                continue;
-            }
-
-            $workshopIds = Event::query()->whereIn('slug', $cp['workshop_slugs'])->orderBy('id')->pluck('id');
-            if ($workshopIds->isEmpty()) {
-                continue;
-            }
-
-            $this->bulkEnrollPackageBuyers($packageEventId, $workshopIds);
-        }
-    }
-
-    /**
-     * For a given package event ID, find all paid buyers and enroll them
-     * in the given workshop IDs. Idempotent via insertOrIgnore.
-     */
-    private function bulkEnrollPackageBuyers(int $packageEventId, $workshopIds): void
-    {
-        $emails = Order::query()
-            ->where('status', Order::STATUS_PAID)
-            ->whereHas('items', fn ($q) => $q->where('event_id', $packageEventId))
-            ->distinct()
-            ->pluck('email')
-            ->filter(fn ($email) => is_string($email) && $email !== '');
-
-        if ($emails->isEmpty()) {
-            return;
-        }
-
-        $userIds = User::query()->whereIn('email', $emails)->pluck('id');
-        if ($userIds->isEmpty()) {
-            return;
-        }
-
-        $now = now();
-        $rows = [];
-        foreach ($userIds as $userId) {
-            foreach ($workshopIds as $eventId) {
-                $rows[] = [
-                    'user_id' => $userId,
-                    'event_id' => $eventId,
-                    'enrolled_at' => $now,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ];
-            }
-        }
-
-        foreach (array_chunk($rows, 500) as $chunk) {
-            DB::table('enrollments')->insertOrIgnore($chunk);
+        // Sync enrollments for every known package. The service reads the
+        // underlying workshop list from the same source files the seeder uses.
+        $service = app(PackageEnrollmentService::class);
+        foreach (Event::ALL_PACKAGE_SLUGS as $packageSlug) {
+            $service->sync($packageSlug);
         }
     }
 }

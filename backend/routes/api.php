@@ -67,7 +67,11 @@ Route::prefix('v1/admin')->group(function () {
         Route::post('/events/{eventId}/enrollments', [AdminEnrollmentController::class, 'store']);
         Route::delete('/events/{eventId}/enrollments/{enrollmentId}', [AdminEnrollmentController::class, 'destroy']);
 
-        // Experts
+        // Package Enrollment Sync (idempotent bulk enroll of paid package buyers)
+        Route::post('/packages/{slug}/sync-enrollments', [AdminEnrollmentController::class, 'syncPackage']);
+
+        // Experts — `specializations` must be registered before `{id}` to win the match.
+        Route::get('/experts/specializations', [AdminExpertController::class, 'specializations']);
         Route::get('/experts', [AdminExpertController::class, 'index']);
         Route::get('/experts/{id}', [AdminExpertController::class, 'show']);
         Route::post('/experts', [AdminExpertController::class, 'store']);
