@@ -380,10 +380,10 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                     @if (ws.event.zoom_link && ws.event.status !== 'completed') {
                       <a [href]="ws.event.zoom_link" target="_blank" rel="noopener"
                          (click)="$event.stopPropagation()"
-                         class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-bold text-white transition active:scale-[0.97]"
-                         [ngClass]="ws.event.status === 'ongoing' ? 'bg-emerald-600' : 'bg-blue-600'">
-                        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        {{ ws.event.status === 'ongoing' ? tr('انضم', 'Join') : tr('زوم', 'Zoom') }}
+                         class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold text-white shadow-sm transition active:scale-[0.97]"
+                         [ngClass]="ws.event.status === 'ongoing' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'">
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        {{ ws.event.status === 'ongoing' ? tr('انضم الآن', 'Join Now') : tr('انضم عبر زوم', 'Join Zoom') }}
                       </a>
                     } @else if (ws.event.status === 'completed') {
                       <span class="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">

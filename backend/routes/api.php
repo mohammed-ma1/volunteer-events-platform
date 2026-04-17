@@ -48,7 +48,8 @@ Route::prefix('v1/admin')->group(function () {
         Route::patch('/users/{id}/toggle-active', [AdminUserController::class, 'toggleActive']);
         Route::patch('/users/{id}/role', [AdminUserController::class, 'changeRole']);
 
-        // Events
+        // Events — literal paths must be declared before `{id}` so they aren't captured as IDs.
+        Route::post('/events/bulk-zoom-link', [AdminEventController::class, 'bulkSetZoomLink']);
         Route::get('/events', [AdminEventController::class, 'index']);
         Route::get('/events/{id}', [AdminEventController::class, 'show']);
         Route::post('/events', [AdminEventController::class, 'store']);

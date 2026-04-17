@@ -181,4 +181,67 @@ class EventController extends Controller
             ])],
         ]);
     }
+
+    /**
+     * Apply one Zoom link (or clear it) to many workshops at once.
+     *
+     * Body:
+     *   zoom_link:  string|null  — null or "" clears the link on matched rows.
+     *   overwrite:  bool         — when false, only rows without a zoom_link are touched.
+     *   scope:      'all' | 'workshops_only'  — 'workshops_only' (default) excludes
+     *               package bundle rows so the link only lands on live sessions.
+     */
+    public function bulkSetZoomLink(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'zoom_link' => 'nullable|string|max:500',
+            'overwrite' => 'sometimes|boolean',
+            'scope' => ['sometimes', Rule::in(['all', 'workshops_only'])],
+        ]);
+
+        $zoomLink = isset($validated['zoom_link']) && $validated['zoom_link'] !== ''
+            ? $validated['zoom_link']
+            : null;
+        $overwrite = (bool) ($validated['overwrite'] ?? false);
+        $scope = $validated['scope'] ?? 'workshops_only';
+
+        $query = Event::query();
+
+        if ($scope === 'workshops_only') {
+            $query->whereNotIn('slug', Event::ALL_PACKAGE_SLUGS);
+        }
+
+        if (! $overwrite && $zoomLink !== null) {
+            $query->where(function ($q) {
+                $q->whereNull('zoom_link')->orWhere('zoom_link', '');
+            });
+        }
+
+        $matched = (clone $query)->count();
+        $updated = $query->update(['zoom_link' => $zoomLink]);
+
+        ActivityLog::record(
+            Auth::guard('api')->id(),
+            'event.bulk_zoom_link',
+            'Event',
+            null,
+            [
+                'scope' => $scope,
+                'overwrite' => $overwrite,
+                'matched' => $matched,
+                'updated' => $updated,
+                'link_set' => $zoomLink !== null,
+            ]
+        );
+
+        return response()->json([
+            'data' => [
+                'matched' => $matched,
+                'updated' => $updated,
+                'zoom_link' => $zoomLink,
+                'overwrite' => $overwrite,
+                'scope' => $scope,
+            ],
+        ]);
+    }
 }
