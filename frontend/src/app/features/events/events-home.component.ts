@@ -399,26 +399,6 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
 
       <!-- Category Package Cards (hidden for now) -->
 
-      <label
-        class="motion-safe:animate-ve-fade-up mt-8 flex w-full max-w-xs items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3.5 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10"
-      >
-        <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-        <input
-          id="workshop-search-input"
-          class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
-          [placeholder]="i18n.t('workshops.searchPlaceholder')"
-          [(ngModel)]="searchText"
-          (ngModelChange)="onSearchChange($event)"
-        />
-      </label>
-
       @if (workshopDayBuckets().length > 1) {
         <div
           class="mt-8 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -505,6 +485,26 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         }
       </div>
 
+      <label
+        class="motion-safe:animate-ve-fade-up mt-4 flex w-full max-w-xs items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3.5 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10"
+      >
+        <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <input
+          id="workshop-search-input"
+          class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
+          [placeholder]="i18n.t('workshops.searchPlaceholder')"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </label>
+
       @if (demoHint()) {
         <p
           class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
@@ -539,24 +539,32 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         <p class="mt-8 text-center text-sm text-ink-500">{{ i18n.t('workshops.empty') }}</p>
       }
 
-      @if (!loading() && filteredEvents().length > WORKSHOPS_PREVIEW) {
-        <div class="mt-8 flex justify-center">
-          <button
-            type="button"
-            class="ve-btn-secondary px-8"
-            (click)="showAllWorkshops() ? collapseWorkshopsGrid() : expandWorkshopsGrid()"
-          >
-            <span>{{ showAllWorkshops() ? i18n.t('workshops.showLess') : i18n.t('workshops.showMore') }}</span>
-            @if (showAllWorkshops()) {
-              <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
-              </svg>
-            } @else {
+      @if (!loading() && (canLoadMore() || canLoadLess())) {
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          @if (canLoadMore()) {
+            <button
+              type="button"
+              class="ve-btn-secondary inline-flex items-center gap-2 px-8"
+              (click)="loadMoreWorkshops()"
+            >
+              <span>{{ i18n.t('workshops.showMore') }}</span>
               <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
-            }
-          </button>
+            </button>
+          }
+          @if (canLoadLess()) {
+            <button
+              type="button"
+              class="ve-btn-secondary inline-flex items-center gap-2 px-8"
+              (click)="loadLessWorkshops()"
+            >
+              <span>{{ i18n.t('workshops.showLess') }}</span>
+              <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+              </svg>
+            </button>
+          }
         </div>
       }
 
@@ -752,8 +760,11 @@ export class EventsHomeComponent implements OnDestroy {
   private readonly checkoutFlow = inject(CheckoutFlowService);
   readonly cart = inject(CartService);
 
-  /** Initial grid size before "عرض جميع الورش". */
+  /** Initial grid size + step for load-more / load-less. */
   readonly WORKSHOPS_PREVIEW = 4;
+  readonly WORKSHOPS_STEP = 4;
+  /** Number of workshops currently visible (incremental, ramps up by WORKSHOPS_STEP). */
+  readonly visibleCount = signal<number>(this.WORKSHOPS_PREVIEW);
 
   /** Load full workshop list in one request (backend caps per_page; must cover all seeded events). */
   private readonly EVENTS_HOME_PER_PAGE = 200;
@@ -899,11 +910,11 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly displayedWorkshops = computed(() => {
     const all = this.filteredEvents();
-    if (this.showAllWorkshops() || all.length <= this.WORKSHOPS_PREVIEW) {
-      return all;
-    }
-    return all.slice(0, this.WORKSHOPS_PREVIEW);
+    return all.slice(0, Math.min(this.visibleCount(), all.length));
   });
+
+  readonly canLoadMore = computed(() => this.filteredEvents().length > this.visibleCount());
+  readonly canLoadLess = computed(() => this.visibleCount() > this.WORKSHOPS_PREVIEW);
 
   readonly filteredExperts = computed(() => {
     const raw = this.expertSearch().trim();
@@ -990,7 +1001,7 @@ export class EventsHomeComponent implements OnDestroy {
           }
           const mapped = res.data.map(volunteerToHome);
           this.homeEvents.set(mapped);
-          this.showAllWorkshops.set(false);
+          this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
           this.selectedDayKey.set(null);
           this.page.set(res.current_page);
           this.lastPage.set(res.last_page);
@@ -1080,13 +1091,13 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   onSelectCategory(cat: WorkshopFilterCategory): void {
-    this.showAllWorkshops.set(false);
+    this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
     this.selectedDayKey.set(null);
     this.selectedCategory.set(cat);
   }
 
   onSelectDay(dayKey: string | null): void {
-    this.showAllWorkshops.set(false);
+    this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
     if (dayKey === null) {
       this.selectedDayKey.set(null);
       return;
@@ -1098,6 +1109,19 @@ export class EventsHomeComponent implements OnDestroy {
     this.selectedDayKey.set(dayKey);
   }
 
+  loadMoreWorkshops(): void {
+    const total = this.filteredEvents().length;
+    this.visibleCount.set(Math.min(this.visibleCount() + this.WORKSHOPS_STEP, total));
+  }
+
+  loadLessWorkshops(): void {
+    const next = Math.max(this.WORKSHOPS_PREVIEW, this.visibleCount() - this.WORKSHOPS_STEP);
+    this.visibleCount.set(next);
+    requestAnimationFrame(() => {
+      this.doc.getElementById('workshops-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   expandWorkshopsGrid(): void {
     this.showAllWorkshops.set(true);
     requestAnimationFrame(() => {
@@ -1106,7 +1130,7 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   collapseWorkshopsGrid(): void {
-    this.showAllWorkshops.set(false);
+    this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
     requestAnimationFrame(() => {
       this.doc.getElementById('workshops')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -1117,7 +1141,7 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   onSearchChange(value: string): void {
-    this.showAllWorkshops.set(false);
+    this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
     this.selectedDayKey.set(null);
     if (this.usingDummy()) {
       this.applyDummyFilter(value.trim());
@@ -1167,7 +1191,7 @@ export class EventsHomeComponent implements OnDestroy {
       .subscribe({
         next: (res) => {
           const mapped = res.data.map(volunteerToHome);
-          this.showAllWorkshops.set(false);
+          this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
           this.selectedDayKey.set(null);
           if (mapped.length === 0) {
             this.usingDummy.set(true);
