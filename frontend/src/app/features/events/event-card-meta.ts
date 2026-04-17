@@ -41,27 +41,28 @@ export function parsePresenterFromSummaries(
   summary: string | null | undefined,
   preferAr: boolean,
 ): string | null {
+  const stripTrailing = (v: string): string => v.trim().replace(/[.·]+$/, '').trim();
   const tryAr = (s: string | null | undefined) => {
     if (!s) {
       return null;
     }
     // Old format: "مقدم الورشة: NAME · ..."
     let m = s.match(/مقدم الورشة:\s*([^·]+)/);
-    if (m) return m[1].trim();
+    if (m) return stripTrailing(m[1]);
     // New format from EventSeeder: "[personal] ورشة TITLE يقدمها NAME."
-    m = s.match(/يقدمها\s+([^.·]+)\.?/);
-    return m ? m[1].trim() : null;
+    // Capture greedily until the next " · " separator or end of string,
+    // so honorific periods like "د." or "د.بسام" don't truncate the name.
+    m = s.match(/يقدمها\s+(.+?)(?:\s+·|$)/);
+    return m ? stripTrailing(m[1]) : null;
   };
   const tryEn = (s: string | null | undefined) => {
     if (!s) {
       return null;
     }
-    // Old format
     let m = s.match(/Facilitator:\s*([^·]+)/i);
-    if (m) return m[1].trim();
-    // New format: "[personal] TITLE workshop led by NAME."
-    m = s.match(/led by\s+([^.·]+)\.?/i);
-    return m ? m[1].trim() : null;
+    if (m) return stripTrailing(m[1]);
+    m = s.match(/led by\s+(.+?)(?:\s+·|$)/i);
+    return m ? stripTrailing(m[1]) : null;
   };
   if (preferAr) {
     return tryAr(summaryAr) ?? tryAr(summary) ?? tryEn(summaryEn) ?? tryEn(summary);
