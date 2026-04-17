@@ -23,7 +23,20 @@ export class AuthService {
   }
 
   logout(): void {
-    this.http.post('/v1/auth/logout', {}).subscribe({ error: () => {} });
+    const token = this.getToken();
+    if (token) {
+      // Send the request explicitly with the current token so the server can
+      // invalidate it. We don't rely on the interceptor here so we can clear
+      // the session immediately afterwards without risking a refresh loop.
+      this.http
+        .post('/v1/auth/logout', {}, { headers: { Authorization: `Bearer ${token}` } })
+        .subscribe({ error: () => {} });
+    }
+    this.clearSession();
+  }
+
+  /** Clear session without firing the logout request (used by interceptor when refresh fails). */
+  forceLogout(): void {
     this.clearSession();
   }
 

@@ -89,8 +89,13 @@ Route::prefix('v1/admin')->group(function () {
 Route::prefix('v1/auth')->group(function () {
     Route::post('/login', [LearnerAuthController::class, 'login']);
 
-    Route::middleware(['auth:api', 'token.version'])->group(function () {
+    // Logout must remain reachable even when token_version is stale (single-session
+    // invalidation), otherwise the frontend ends up in an infinite refresh/logout loop.
+    Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [LearnerAuthController::class, 'logout']);
+    });
+
+    Route::middleware(['auth:api', 'token.version'])->group(function () {
         Route::post('/refresh', [LearnerAuthController::class, 'refresh']);
         Route::get('/me', [LearnerAuthController::class, 'me']);
         Route::patch('/me', [LearnerAuthController::class, 'updateProfile']);

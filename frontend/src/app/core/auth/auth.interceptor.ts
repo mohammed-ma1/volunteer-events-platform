@@ -25,7 +25,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         error.status === 401 &&
         needsAuthHeader(req.url) &&
         !req.url.includes('/auth/login') &&
-        !req.url.includes('/auth/refresh')
+        !req.url.includes('/auth/refresh') &&
+        !req.url.includes('/auth/logout')
       ) {
         if (!isRefreshing) {
           isRefreshing = true;
@@ -36,7 +37,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             }),
             catchError(refreshErr => {
               isRefreshing = false;
-              auth.logout();
+              auth.forceLogout();
               return throwError(() => refreshErr);
             })
           );

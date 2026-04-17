@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular/core';
-import { DatePipe, NgClass } from '@angular/common';
+import { NgClass, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
@@ -30,7 +30,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, DatePipe, NgClass, FormsModule],
+  imports: [RouterLink, NgClass, FormsModule],
   template: `
     <div class="space-y-6">
 
@@ -164,14 +164,16 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                   <h3 class="text-lg font-bold text-slate-900 line-clamp-2">{{ workshopTitle(ns) }}</h3>
 
                   <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-slate-500">
-                    @if (ns.event.starts_at) {
+                    @if (safeDate(ns.event.starts_at, 'EEE, MMM d'); as d) {
                       <span class="inline-flex items-center gap-1.5">
                         <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {{ ns.event.starts_at | date:'EEE, MMM d' }}
+                        {{ d }}
                       </span>
+                    }
+                    @if (safeDate(ns.event.starts_at, 'h:mm a'); as t) {
                       <span class="inline-flex items-center gap-1.5">
                         <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ ns.event.starts_at | date:'h:mm a' }}
+                        {{ t }}
                       </span>
                     }
                   </div>
@@ -351,14 +353,16 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
 
                   <!-- Date / Time -->
                   <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 text-[11px] text-slate-500">
-                    @if (ws.event.starts_at) {
+                    @if (safeDate(ws.event.starts_at, 'MMM d'); as d) {
                       <span class="inline-flex items-center gap-1">
                         <svg class="h-3.5 w-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {{ ws.event.starts_at | date:'MMM d' }}
+                        {{ d }}
                       </span>
+                    }
+                    @if (safeDate(ws.event.starts_at, 'h:mm a'); as t) {
                       <span class="inline-flex items-center gap-1">
                         <svg class="h-3.5 w-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ ws.event.starts_at | date:'h:mm a' }}
+                        {{ t }}
                       </span>
                     }
                   </div>
@@ -541,6 +545,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return this.tr('مباشر', 'Live');
       case 'completed':
         return this.tr('مكتملة', 'Completed');
+    }
+  }
+
+  /** Format an ISO/date string safely. Returns null for invalid input so the
+   *  template can `@if` on it instead of crashing the DatePipe (NG02100). */
+  safeDate(value: string | null | undefined, format: string): string | null {
+    if (!value) return null;
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return null;
+    try {
+      return formatDate(d, format, 'en-US');
+    } catch {
+      return null;
     }
   }
 
