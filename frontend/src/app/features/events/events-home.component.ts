@@ -9,7 +9,7 @@ import {
 import { ALL_PACKAGE_SLUGS } from '../../core/constants/package-offer';
 import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
 import { HOME_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
-import { HOME_EXPERTS, HomeExpert, normalizePresenterName } from '../../core/data/home-experts';
+import { HOME_EXPERTS, HomeExpert, getExpertInitials, normalizePresenterName } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
 import { FormsModule } from '@angular/forms';
@@ -27,7 +27,10 @@ import { CartService } from '../../core/services/cart.service';
 import { EventsService } from '../../core/services/events.service';
 import { EventCardComponent } from './event-card.component';
 import { formatCardDateLong, formatTimeKuwait, parsePresenterFromSummaries } from './event-card-meta';
-import { calendarDayKeyKuwait, formatDaySubLabelKuwait } from './workshop-day-filters';
+import {
+  calendarDayKeyKuwait,
+  formatDaySubLabelKuwait,
+} from './workshop-day-filters';
 
 const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'all',
@@ -135,20 +138,20 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             />
           </div>
 
-          <!-- Stat Badge: top-start corner, slightly outside image -->
-          <div class="motion-safe:animate-ve-float absolute -top-3 -start-3 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-8px_rgba(0,26,51,0.2)] ring-1 ring-ink-200/40 md:-top-4 md:-start-4 md:px-5 md:py-3.5">
-            <p class="text-sm font-bold text-brand-900 md:text-base">{{ i18n.t('hero.stat') }}</p>
-            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold-100 text-base shadow-inner md:h-8 md:w-8" aria-hidden="true">🏅</span>
-          </div>
-
-          <!-- Partnership Card: bottom-end corner, slightly outside image -->
-          <div class="motion-safe:animate-ve-float absolute -bottom-4 -end-3 flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-3 shadow-[0_15px_40px_-10px_rgba(0,26,51,0.25)] ring-1 ring-ink-200/40 md:-bottom-5 md:-end-4 md:px-6 md:py-3.5">
+          <!-- Partnership / KU card: top physical left (same in LTR + RTL) -->
+          <div class="motion-safe:animate-ve-float absolute -left-3 -top-3 flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-3 shadow-[0_15px_40px_-10px_rgba(0,26,51,0.25)] ring-1 ring-ink-200/40 md:-left-4 md:-top-4 md:px-6 md:py-3.5">
             <span class="text-[11px] font-bold text-brand-900 md:text-xs">{{ i18n.isRtl() ? 'مشروع تَهيّأ بالتعاون مع جامعة الكويت' : 'In partnership with Kuwait University' }}</span>
             <div class="flex items-center gap-3">
               <img src="/images/branding/ku-university-logo.png" alt="Kuwait University" class="h-9 w-auto shrink-0 object-contain md:h-10"/>
               <span class="h-7 w-px bg-ink-200" aria-hidden="true"></span>
               <img src="/images/branding/next-levels-logo.png" alt="Next Levels" class="h-6 w-auto shrink-0 object-contain md:h-7"/>
             </div>
+          </div>
+
+          <!-- Stat badge (e.g. 100 workshops): bottom physical right (same in LTR + RTL) -->
+          <div class="motion-safe:animate-ve-float absolute -bottom-4 -right-3 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-8px_rgba(0,26,51,0.2)] ring-1 ring-ink-200/40 md:-bottom-5 md:-right-4 md:px-5 md:py-3.5">
+            <p class="text-sm font-bold text-brand-900 md:text-base">{{ i18n.t('hero.stat') }}</p>
+            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold-100 text-base shadow-inner md:h-8 md:w-8" aria-hidden="true">🏅</span>
           </div>
         </div>
       </div>
@@ -502,10 +505,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
               "
             >
-              <span class="block text-sm font-bold">
-                {{ i18n.t('workshops.allDaysShort') }}
-                <span class="font-normal opacity-80">({{ categoryFilteredEvents().length }})</span>
-              </span>
+              <span class="block text-sm font-bold tabular-nums">{{ i18n.t('workshops.allDaysShort') }} ({{ categoryFilteredEvents().length }})</span>
               <span
                 class="mt-0.5 block text-[11px] font-medium"
                 [ngClass]="selectedDayKey() === null ? 'text-white/80' : 'text-ink-500'"
@@ -527,9 +527,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                     : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
                 "
               >
-                <span class="block text-sm font-bold">
-                  {{ dayLabel(di) }} <span class="font-normal opacity-80">({{ b.count }})</span>
-                </span>
+                <span class="block text-sm font-bold tabular-nums">{{ dayLabelWithCount(di, b.count) }}</span>
                 <span
                   class="mt-0.5 block text-[11px] font-medium"
                   [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-ink-500'"
@@ -622,11 +620,11 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       }
 
       @if (!loading() && (canLoadMore() || canLoadLess())) {
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <div class="mt-8 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 overflow-x-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           @if (canLoadMore()) {
             <button
               type="button"
-              class="ve-btn-secondary inline-flex items-center gap-2 px-8"
+              class="ve-btn-secondary inline-flex shrink-0 items-center gap-2 px-6 sm:px-8"
               (click)="loadMoreWorkshops()"
             >
               <span>{{ i18n.t('workshops.showMore') }}</span>
@@ -638,7 +636,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           @if (canLoadLess()) {
             <button
               type="button"
-              class="ve-btn-secondary inline-flex items-center gap-2 px-8"
+              class="ve-btn-secondary inline-flex shrink-0 items-center gap-2 px-6 sm:px-8"
               (click)="loadLessWorkshops()"
             >
               <span>{{ i18n.t('workshops.showLess') }}</span>
@@ -699,41 +697,45 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
               />
             </label>
             <div
-              class="flex w-full min-w-0 max-w-full gap-2 pe-1 max-md:flex-row max-md:flex-nowrap max-md:gap-1.5 max-md:overflow-x-auto max-md:overflow-y-visible max-md:overscroll-x-contain max-md:pb-2 max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden md:max-h-[min(28rem,55vh)] md:flex-col md:overflow-y-auto md:overflow-x-visible"
+              class="flex w-full min-w-0 max-w-full flex-row items-stretch gap-2 pe-1 max-md:min-h-[3.25rem] md:flex-col md:gap-2"
             >
-              @for (ex of displayedExpertTabs(); track ex.id) {
+              <div
+                class="flex min-w-0 flex-1 gap-2 pe-0 max-md:flex-row max-md:flex-nowrap max-md:gap-2 max-md:overflow-x-auto max-md:overflow-y-visible max-md:overscroll-x-contain max-md:pb-0 max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden md:max-h-[min(28rem,55vh)] md:flex-col md:overflow-y-auto md:overflow-x-visible md:pe-1 md:pb-2"
+              >
+                @for (ex of displayedExpertTabs(); track ex.id) {
+                  <button
+                    type="button"
+                    (click)="selectExpert(ex.id)"
+                    class="rounded-full text-start font-semibold transition duration-200 max-md:max-w-[11.5rem] max-md:shrink-0 max-md:truncate max-md:px-4 max-md:py-2.5 max-md:text-xs max-md:leading-snug md:w-full md:max-w-none md:whitespace-normal md:px-5 md:py-3.5 md:text-base md:leading-snug"
+                    [ngClass]="
+                      selectedExpertId() === ex.id
+                        ? 'bg-brand-900 text-white shadow-md'
+                        : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
+                    "
+                  >
+                    {{ expertName(ex) }}
+                  </button>
+                }
+              </div>
+              @if (filteredExperts().length > EXPERT_SIDEBAR_PREVIEW) {
                 <button
                   type="button"
-                  (click)="selectExpert(ex.id)"
-                  class="rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200 max-md:max-w-[9rem] max-md:shrink-0 max-md:truncate max-md:px-2.5 max-md:py-1.5 max-md:text-[11px] max-md:leading-tight md:w-full md:max-w-none md:whitespace-normal md:px-4 md:py-3 md:text-sm"
-                  [ngClass]="
-                    selectedExpertId() === ex.id
-                      ? 'bg-brand-900 text-white shadow-md'
-                      : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
-                  "
+                  class="ve-btn-secondary inline-flex w-auto max-w-[7rem] shrink-0 items-center justify-center gap-1.5 self-center px-3.5 py-2 text-xs leading-snug md:max-w-none md:w-full md:gap-2 md:px-6 md:py-3.5 md:text-sm"
+                  (click)="toggleExpertListExpand()"
                 >
-                  {{ expertName(ex) }}
+                  <span class="max-md:truncate">{{ showAllExpertTabs() ? i18n.t('experts.showLess') : i18n.t('experts.showMore') }}</span>
+                  @if (showAllExpertTabs()) {
+                    <svg class="h-3.5 w-3.5 shrink-0 text-brand-900 max-md:h-3 max-md:w-3 md:h-4 md:w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                    </svg>
+                  } @else {
+                    <svg class="h-3.5 w-3.5 shrink-0 text-brand-900 max-md:h-3 max-md:w-3 md:h-4 md:w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  }
                 </button>
               }
             </div>
-            @if (filteredExperts().length > EXPERT_SIDEBAR_PREVIEW) {
-              <button
-                type="button"
-                class="ve-btn-secondary ve-btn-secondary--block"
-                (click)="toggleExpertListExpand()"
-              >
-                <span>{{ showAllExpertTabs() ? i18n.t('experts.showLess') : i18n.t('experts.showMore') }}</span>
-                @if (showAllExpertTabs()) {
-                  <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
-                  </svg>
-                } @else {
-                  <svg class="h-4 w-4 shrink-0 text-brand-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                }
-              </button>
-            }
           </aside>
 
           <div class="min-w-0 w-full max-w-full space-y-8">
@@ -747,12 +749,25 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 <div
                   class="relative shrink-0 overflow-hidden rounded-xl bg-ink-50 ring-1 ring-ink-100 max-md:h-20 max-md:w-20 md:min-h-[19rem] md:rounded-none md:ring-0"
                 >
-                  <img
-                    [src]="selectedExpert().imageUrl"
-                    [alt]="expertName(selectedExpert())"
-                    class="h-full w-full max-md:object-cover max-md:object-top md:absolute md:inset-0 md:min-h-full md:object-contain md:object-center"
-                    loading="lazy"
-                  />
+                  @if (selectedExpert().imageUrl) {
+                    <img
+                      [src]="selectedExpert().imageUrl"
+                      [alt]="expertName(selectedExpert())"
+                      class="h-full w-full max-md:object-cover max-md:object-top md:absolute md:inset-0 md:min-h-full md:object-contain md:object-center"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <div
+                      class="flex h-full min-h-[5rem] w-full items-center justify-center bg-gradient-to-br from-brand-900 via-brand-800 to-violet-800 text-white md:absolute md:inset-0 md:min-h-full"
+                      role="img"
+                      [attr.aria-label]="expertName(selectedExpert())"
+                    >
+                      <span
+                        class="font-extrabold tracking-tight max-md:text-xl md:text-5xl md:leading-none"
+                        dir="ltr"
+                        >{{ expertInitials(selectedExpert()) }}</span>
+                    </div>
+                  }
                 </div>
                 <div class="flex min-w-0 flex-1 flex-col justify-center md:p-8 max-md:p-0 max-md:pt-0.5">
                   <h3 class="break-words text-lg font-extrabold leading-snug text-brand-900 max-md:text-base md:text-2xl">
@@ -1155,6 +1170,11 @@ export class EventsHomeComponent implements OnDestroy {
     return ar ? `اليوم ${ord}` : `Day ${ord}`;
   }
 
+  /** Chip title line, e.g. "اليوم الأول (20)" / "Day First (20)". */
+  dayLabelWithCount(dayIndex: number, count: number): string {
+    return `${this.dayLabel(dayIndex)} (${count})`;
+  }
+
   onWorkshopSortChange(value: string): void {
     if (value === 'closest' || value === 'latest' || value === 'title') {
       this.workshopSortMode.set(value);
@@ -1270,6 +1290,10 @@ export class EventsHomeComponent implements OnDestroy {
 
   toggleExpertListExpand(): void {
     this.showAllExpertTabs.update((v) => !v);
+  }
+
+  expertInitials(ex: HomeExpert): string {
+    return getExpertInitials(ex);
   }
 
   expertName(ex: HomeExpert): string {

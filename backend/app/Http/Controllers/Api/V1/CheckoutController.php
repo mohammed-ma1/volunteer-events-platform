@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Event;
 use App\Models\Order;
@@ -31,7 +32,7 @@ class CheckoutController extends Controller
             'phone' => ['required', 'string', 'max:32'],
         ]);
 
-        /** @var \App\Models\Cart $cart */
+        /** @var Cart $cart */
         $cart = $request->attributes->get('cart');
         $cart->load(['items.event']);
 
@@ -53,6 +54,7 @@ class CheckoutController extends Controller
 
                 $order = Order::createFresh([
                     'idempotency_key' => is_string($idempotencyKey) && $idempotencyKey !== '' ? $idempotencyKey : null,
+                    'cart_id' => $cart->id,
                     'email' => $data['email'],
                     'customer_name' => $data['customer_name'],
                     'phone' => $data['phone'] ?? null,
@@ -87,8 +89,6 @@ class CheckoutController extends Controller
                     'subtotal' => round($subtotal, 3),
                     'total' => round($subtotal, 3),
                 ]);
-
-                $cart->items()->delete();
 
                 return $order->fresh(['items']);
             });

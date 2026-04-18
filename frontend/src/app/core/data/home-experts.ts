@@ -11,6 +11,7 @@ export interface HomeExpert {
   specialtyEn: string;
   bioAr: string;
   bioEn: string;
+  /** Local presenter photo path, or empty when the UI should show initials instead of a stock image. */
   imageUrl: string;
   socials: ExpertSocial[];
   /** Match `slug` on seeded / API workshops for the grid below the profile. */
@@ -86,6 +87,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
 // (د.بسام vs د. بسام, سليمان المراغى vs سليمان المراغي) resolve correctly.
 const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
   'د. بسام الجزاف': '/images/presenters/bassam-al-jazzaf.jpg',
+  'د.بسام الجزاف': '/images/presenters/bassam-al-jazzaf.jpg',
   'بدر الفيلكاوي': '/images/presenters/badr-al-failakawi.jpg',
   'حسن سيد': '/images/presenters/hassan-syed.jpg',
   'أحمد سمير': '/images/presenters/ahmed-sameer.jpg',
@@ -134,6 +136,100 @@ export function normalizePresenterName(name: string | null | undefined): string 
   return normalizeArName(name ?? '');
 }
 
+/** First meaningful letter of a segment (Arabic / Latin letters). */
+function firstLetterOfSegment(segment: string): string {
+  for (const ch of segment.normalize('NFKC')) {
+    if (/[\u0600-\u06FF]/.test(ch) || /[A-Za-z]/.test(ch)) {
+      return ch;
+    }
+  }
+  return '';
+}
+
+function secondLetterOfSegment(segment: string): string {
+  const first = firstLetterOfSegment(segment);
+  if (!first) {
+    return '';
+  }
+  const i = segment.indexOf(first);
+  if (i < 0) {
+    return '';
+  }
+  return firstLetterOfSegment(segment.slice(i + first.length));
+}
+
+/**
+ * Two-letter initials for experts without a photo, always from the English name
+ * (honorifics stripped, then first + last word; A–Z uppercase).
+ */
+export function getExpertInitials(ex: HomeExpert): string {
+  const pick = (name: string): string => {
+    let s = name.normalize('NFKC').trim();
+    s = s
+      .replace(/^د\.?\s*/u, '')
+      .replace(/^Dr\.?\s+/i, '')
+      .replace(/^المحامي\s+/u, '')
+      .replace(/^الحكم\s+/u, '')
+      .replace(/^Lawyer\s+/i, '')
+      .replace(/^Referee\s+/i, '')
+      .trim();
+    s = s.replace(/\s*&\s*/g, ' ').replace(/\s+و\s+/g, ' ');
+    const parts = s.split(/\s+/).filter((p) => p.length > 0 && !/^(&|و|and)$/i.test(p));
+    if (parts.length >= 2) {
+      const a = firstLetterOfSegment(parts[0]);
+      const lastSeg = parts[parts.length - 1];
+      let b = firstLetterOfSegment(lastSeg);
+      if (a.toLowerCase() === b.toLowerCase()) {
+        b = secondLetterOfSegment(lastSeg) || b;
+      }
+      return (a + b).trim();
+    }
+    if (parts.length === 1) {
+      const p = parts[0];
+      const a = firstLetterOfSegment(p);
+      const rest = p.slice(p.indexOf(a) + 1);
+      const b = firstLetterOfSegment(rest);
+      if (b) {
+        return (a + b).trim();
+      }
+      return (a + firstLetterOfSegment(p.slice(1))).trim() || a;
+    }
+    return name.slice(0, 2).trim();
+  };
+
+  const out = pick(ex.nameEn);
+  const letters = out.length > 0 ? out : pick(ex.nameAr);
+  return letters.replace(/[a-z]/g, (ch) => ch.toUpperCase());
+}
+
+/**
+ * English-style initials for a presenter line from API `host_name`
+ * (matches `HOME_EXPERTS` when possible, otherwise initials from the string).
+ */
+export function getPresenterInitialsFromHostName(hostName: string | null | undefined): string {
+  const h = (hostName ?? '').trim();
+  if (!h) {
+    return '?';
+  }
+  const hit = HOME_EXPERTS.find((e) => normalizeArName(e.nameAr) === normalizeArName(h));
+  if (hit) {
+    return getExpertInitials(hit);
+  }
+  const pseudo: HomeExpert = {
+    id: '_host',
+    nameAr: h,
+    nameEn: h,
+    specialtyAr: '',
+    specialtyEn: '',
+    bioAr: '',
+    bioEn: '',
+    imageUrl: '',
+    socials: [],
+    workshopSlugs: [],
+  };
+  return getExpertInitials(pseudo);
+}
+
 const DEFAULT_SOCIALS: ExpertSocial[] = [];
 
 function presenterId(name: string): string {
@@ -165,7 +261,7 @@ function buildHomeExperts(): HomeExpert[] {
       specialtyEn: SOURCE_ROLE_EN,
       bioAr: SOURCE_BIO_AR,
       bioEn: SOURCE_BIO_EN,
-      imageUrl: localOverride ?? t.imageUrl,
+      imageUrl: localOverride ?? '',
       socials: DEFAULT_SOCIALS,
       // Empty — the events-home component derives the trainer's workshops by
       // parsing the instructor name from each event's summary (set by the

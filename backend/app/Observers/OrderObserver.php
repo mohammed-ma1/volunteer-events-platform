@@ -4,9 +4,11 @@ namespace App\Observers;
 
 use App\Jobs\SendGhlWebhookJob;
 use App\Mail\WelcomeCredentialsMail;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Services\OrderReceiptMailer;
 use App\Services\PostPaymentService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
@@ -23,6 +25,8 @@ class OrderObserver
         if ($order->status !== Order::STATUS_PAID || ! $order->wasChanged('status')) {
             return;
         }
+
+        $this->removePaidLinesFromCart($order);
 
         $this->receiptMailer->sendIfPaidAndNotSent($order);
 
@@ -50,5 +54,40 @@ class OrderObserver
         if (config('services.ghl.webhook_url')) {
             SendGhlWebhookJob::dispatch($order);
         }
+    }
+
+    /**
+     * Remove only the quantities that were purchased, so failed checkouts keep the cart
+     * and post-payment cart edits (e.g. items added in another tab) are preserved.
+     */
+    private function removePaidLinesFromCart(Order $order): void
+    {
+        $cartId = $order->cart_id;
+        if ($cartId === null) {
+            return;
+        }
+
+        $order->loadMissing('items');
+
+        DB::transaction(function () use ($order, $cartId): void {
+            foreach ($order->items as $oi) {
+                $line = CartItem::query()
+                    ->where('cart_id', $cartId)
+                    ->where('event_id', $oi->event_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($line === null) {
+                    continue;
+                }
+
+                $newQty = (int) $line->quantity - (int) $oi->quantity;
+                if ($newQty <= 0) {
+                    $line->delete();
+                } else {
+                    $line->update(['quantity' => $newQty]);
+                }
+            }
+        });
     }
 }

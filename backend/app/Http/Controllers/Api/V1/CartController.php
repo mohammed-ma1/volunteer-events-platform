@@ -48,7 +48,7 @@ class CartController extends Controller
             'cart_id' => $cart->id,
             'event_id' => $event->id,
         ]);
-        $item->quantity = ($item->exists ? (int) $item->quantity : 0) + $qty;
+        $item->quantity = $qty;
         $item->save();
 
         $cart->load(['items.event']);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -19,7 +20,7 @@ class Order extends Model
     public const STATUS_CANCELLED = 'cancelled';
 
     protected $fillable = [
-        'uuid', 'idempotency_key', 'email', 'customer_name', 'phone',
+        'uuid', 'idempotency_key', 'cart_id', 'email', 'customer_name', 'phone',
         'status', 'subtotal', 'total', 'currency', 'tap_charge_id',
         'tap_payment_url', 'paid_at', 'receipt_email_sent_at',
     ];
@@ -45,6 +46,11 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class);
     }
 
     /** Human-friendly reference for receipts (e.g. KW-000471). */

@@ -34,6 +34,28 @@ export function formatTimeKuwait(iso: string, locale: 'ar' | 'en'): string {
   }).format(d);
 }
 
+/** Compact “starts in …” from wall-clock delta (e.g. تبدأ خلال 7ي 10س / Starts in 7d 10h). Null if not in the future. */
+export function formatStartsInCompact(
+  iso: string | null | undefined,
+  locale: 'ar' | 'en',
+  nowMs: number = Date.now(),
+): string | null {
+  if (!iso) {
+    return null;
+  }
+  const diffMs = new Date(iso).getTime() - nowMs;
+  if (diffMs <= 0) {
+    return null;
+  }
+  const hoursTotal = Math.floor(diffMs / (1000 * 60 * 60));
+  const days = Math.floor(hoursTotal / 24);
+  const hours = hoursTotal % 24;
+  if (locale === 'ar') {
+    return `تبدأ خلال ${days}ي ${hours}س`;
+  }
+  return `Starts in ${days}d ${hours}h`;
+}
+
 /** Parse presenter name from seeded Arabic/English summary lines. */
 export function parsePresenterFromSummaries(
   summaryAr: string | null | undefined,

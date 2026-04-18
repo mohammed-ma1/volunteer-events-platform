@@ -49,21 +49,40 @@ import { CartDrawerComponent } from './cart-drawer.component';
           [class.md:py-4]="!headerCompact()"
           [class.md:py-2]="headerCompact()"
         >
-          <a routerLink="/" class="group flex shrink-0 items-center">
-            <img
-              src="/images/branding/next-levels-logo.png"
-              alt=""
-              class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
-              [ngClass]="
-                headerCompact()
-                  ? 'h-6 max-w-[7rem] sm:max-w-[7.5rem]'
-                  : 'h-7 max-w-[8rem] sm:h-8 sm:max-w-[9rem] md:max-w-[9.5rem]'
-              "
-              width="180"
-              height="48"
-              fetchpriority="high"
-            />
-          </a>
+          @if (isLearnerView()) {
+            <span class="flex shrink-0 items-center select-none" aria-label="Next Levels">
+              <img
+                src="/images/branding/next-levels-logo.png"
+                alt=""
+                class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
+                [ngClass]="
+                  headerCompact()
+                    ? 'h-6 max-w-[7rem] sm:max-w-[7.5rem]'
+                    : 'h-7 max-w-[8rem] sm:h-8 sm:max-w-[9rem] md:max-w-[9.5rem]'
+                "
+                width="180"
+                height="48"
+                fetchpriority="high"
+                draggable="false"
+              />
+            </span>
+          } @else {
+            <a routerLink="/" class="group flex shrink-0 items-center">
+              <img
+                src="/images/branding/next-levels-logo.png"
+                alt=""
+                class="w-auto shrink-0 object-contain object-start transition-[height,max-width] duration-300"
+                [ngClass]="
+                  headerCompact()
+                    ? 'h-6 max-w-[7rem] sm:max-w-[7.5rem]'
+                    : 'h-7 max-w-[8rem] sm:h-8 sm:max-w-[9rem] md:max-w-[9.5rem]'
+                "
+                width="180"
+                height="48"
+                fetchpriority="high"
+              />
+            </a>
+          }
 
           @if (!isLearnerView()) {
           <nav class="hidden items-center gap-1 text-sm font-medium text-ink-600 md:flex md:gap-4 lg:gap-5">
@@ -161,7 +180,10 @@ import { CartDrawerComponent } from './cart-drawer.component';
             </button>
 
             @if (auth.isAuthenticated()) {
-              <div class="relative hidden md:block">
+              <div
+                class="relative"
+                [ngClass]="isLearnerView() ? 'block' : 'hidden md:block'"
+              >
                 <button
                   type="button"
                   (click)="userMenuOpen.set(!userMenuOpen()); langMenuOpen.set(false)"
