@@ -335,7 +335,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.linkTrainers': 'تعرّف على المدربين',
     'footer.linkFaq': 'الأسئلة الشائعة',
     'footer.copyrightNextLevel': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
-    'footer.mediaSolution': 'بدعم من Media Solution',
+    'footer.mediaSolution': 'بدعم من',
     'legal.privacyTitle': 'سياسة الخصوصية',
     'legal.privacyBody':
       'نلتزم بحماية بياناتك وفق الأنظمة المعمول بها. تفاصيل كاملة ستُحدَّث هنا قريباً بالتنسيق مع الجهة المالكة للمنصة.',
@@ -465,7 +465,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.promoPrevAria': 'الباقة السابقة',
     'workshops.promoNextAria': 'الباقة التالية',
     'workshops.promoSliderAria': 'اختيار عرض الباقات',
-    'workshops.bundleFiftyCerts': '٥٠ شهادة معتمدة',
+    'workshops.bundleFiftyCerts': '50 شهادة معتمدة',
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
@@ -657,7 +657,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.linkTrainers': 'Meet the trainers',
     'footer.linkFaq': 'FAQ',
     'footer.copyrightNextLevel': 'All rights reserved © 2026 Next Level Company',
-    'footer.mediaSolution': 'Supported by Media Solution',
+    'footer.mediaSolution': 'Supported by',
     'legal.privacyTitle': 'Privacy policy',
     'legal.privacyBody':
       'We are committed to protecting your data in line with applicable regulations. Full details will be published here soon in coordination with the platform owner.',
@@ -702,7 +702,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.ctaBrowse': 'Browse workshops',
     'hero.ctaPaths': 'Explore learning paths',
     'hero.ctaFacilitators': 'Meet facilitators',
-    'hero.stat': '100+ certified workshops',
+    'hero.stat': '100 certified workshops',
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
       'Special pricing for KU students · Live week Sun 26 Apr–Thu 30 Apr 2026 (Asia/Kuwait)',

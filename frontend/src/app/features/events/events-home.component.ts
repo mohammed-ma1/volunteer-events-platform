@@ -219,7 +219,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
     <section
       id="workshops"
       veScrollReveal
-      class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-8 shadow-inner ring-1 ring-ink-200/60 md:px-8 md:py-10"
+      class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-10 shadow-inner ring-1 ring-ink-200/60 max-md:py-12 md:px-8 md:py-10"
     >
       <div class="motion-safe:animate-ve-fade-up w-full min-w-0 text-start">
         <div class="flex w-full max-w-3xl flex-col items-start gap-3">
@@ -439,13 +439,13 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
         </div>
       </div>
 
-      <!-- Filters: same structure & density as learner dashboard -->
-      <div class="mt-8 flex flex-col gap-2.5">
+      <!-- Filters: mobile = horizontal scroll (ref. design); md+ = wrap -->
+      <div class="mt-8 flex flex-col gap-2.5 max-md:mb-4">
         <div class="flex">
           <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByCategoryHint') }}</span>
         </div>
         <div
-          class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          class="flex flex-nowrap gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-2 md:pb-1"
           role="tablist"
           [attr.aria-label]="i18n.t('workshops.filterCategoryAria')"
         >
@@ -470,12 +470,12 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       </div>
 
       @if (workshopDayBuckets().length > 0) {
-        <div class="mt-4 flex flex-col gap-2.5">
+        <div class="mt-4 flex flex-col gap-2.5 max-md:mb-4">
           <div class="flex">
             <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByDayHint') }}</span>
           </div>
           <div
-            class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            class="flex flex-nowrap gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-2 md:pb-1"
             role="tablist"
             [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
           >
@@ -484,7 +484,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
               role="tab"
               [attr.aria-selected]="selectedDayKey() === null"
               (click)="onSelectDay(null)"
-              class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+              class="min-w-[10.75rem] shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200 sm:min-w-[11rem] md:min-w-0 md:py-2"
               [ngClass]="
                 selectedDayKey() === null
                   ? 'bg-brand-900 text-white shadow-md'
@@ -509,7 +509,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 role="tab"
                 [attr.aria-selected]="selectedDayKey() === b.key"
                 (click)="onSelectDay(b.key)"
-                class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+                class="min-w-[10.75rem] shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200 sm:min-w-[11rem] md:min-w-0 md:py-2"
                 [ngClass]="
                   selectedDayKey() === b.key
                     ? 'bg-brand-900 text-white shadow-md'
@@ -532,28 +532,10 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       }
 
       <div
-        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-col gap-3 md:mt-5 md:flex-row md:items-center md:justify-between md:gap-4"
       >
-        <label
-          class="flex min-h-[2.75rem] w-full min-w-0 flex-1 items-center gap-2.5 rounded-full border border-ink-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:max-w-md"
-        >
-          <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <input
-            id="workshop-search-input"
-            class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
-            [placeholder]="i18n.t('workshops.searchPlaceholder')"
-            [(ngModel)]="searchText"
-            (ngModelChange)="onSearchChange($event)"
-          />
-        </label>
-        <div class="relative w-full shrink-0 sm:w-auto sm:min-w-[12rem]">
+        <!-- Mobile: sort above search (design ref); md+: search start, sort end -->
+        <div class="relative order-1 w-full shrink-0 md:order-2 md:w-auto md:min-w-[12rem]">
           <select
             class="w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-4 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
             [ngModel]="workshopSortMode()"
@@ -573,6 +555,25 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
+        <label
+          class="order-2 flex min-h-[2.75rem] w-full min-w-0 flex-1 items-center gap-2.5 rounded-full border border-ink-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 md:order-1 md:max-w-md"
+        >
+          <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            id="workshop-search-input"
+            class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
+            [placeholder]="i18n.t('workshops.searchPlaceholder')"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange($event)"
+          />
+        </label>
       </div>
 
       @if (demoHint()) {
@@ -684,12 +685,14 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 (input)="onExpertSearch($any($event.target).value)"
               />
             </label>
-            <div class="flex max-h-[min(28rem,55vh)] flex-col gap-2 overflow-y-auto pe-1">
+            <div
+              class="flex gap-2 pe-1 max-md:flex-row max-md:flex-nowrap max-md:overflow-x-auto max-md:overflow-y-visible max-md:pb-2 max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden md:max-h-[min(28rem,55vh)] md:flex-col md:overflow-y-auto md:overflow-x-visible"
+            >
               @for (ex of displayedExpertTabs(); track ex.id) {
                 <button
                   type="button"
                   (click)="selectExpert(ex.id)"
-                  class="w-full rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200"
+                  class="rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200 max-md:shrink-0 max-md:whitespace-nowrap md:w-full md:whitespace-normal"
                   [ngClass]="
                     selectedExpertId() === ex.id
                       ? 'bg-brand-900 text-white shadow-md'
