@@ -21,9 +21,6 @@ export type TranslationKey =
   | 'nav.faq'
   | 'nav.studentLogin'
   | 'nav.signOut'
-  | 'hero.title2a'
-  | 'hero.title2b'
-  | 'hero.title2c'
   | 'workshops.titleBefore'
   | 'workshops.titleHighlight'
   | 'workshops.titleAfter'
@@ -324,9 +321,6 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.faq': 'الأسئلة الشائعة',
     'nav.studentLogin': 'دخول الطلاب',
     'nav.signOut': 'تسجيل الخروج',
-    'hero.title2a': 'وابنِ ',
-    'hero.title2b': 'مستقبلك ',
-    'hero.title2c': 'المهني',
     'workshops.titleBefore': 'أحدث',
     'workshops.titleHighlight': 'الورش',
     'workshops.titleAfter': 'المتاحة',
@@ -379,7 +373,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.ctaBrowse': 'تصفح الورش المتاحة',
     'hero.ctaPaths': 'تعرف على المسارات',
     'hero.ctaFacilitators': 'تعرّف على المدربين',
-    'hero.stat': '+100 ورشة معتمدة',
+    'hero.stat': '100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
     'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٦–٤–٢٠٢٦ حتى الخميس ٣٠–٤–٢٠٢٦',
     'feat1.title': 'تطوير مستمر',
@@ -646,9 +640,6 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.faq': 'FAQ',
     'nav.studentLogin': 'Student login',
     'nav.signOut': 'Sign out',
-    'hero.title2a': 'build ',
-    'hero.title2b': 'your ',
-    'hero.title2c': 'career',
     'workshops.titleBefore': 'Latest',
     'workshops.titleHighlight': 'workshops',
     'workshops.titleAfter': 'available',

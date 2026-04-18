@@ -75,9 +75,12 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           >
             <span class="block text-brand-900">{{ i18n.t('hero.title1') }}</span>
             <span class="block pt-1 md:pt-1.5">
-              <span class="ve-hero-title2-gradient">{{ i18n.t('hero.title2a') }}</span
-              ><span class="ve-hero-title2-bronze">{{ i18n.t('hero.title2b') }}</span
-              ><span class="ve-hero-title2-bright">{{ i18n.t('hero.title2c') }}</span>
+              <span
+                class="ve-hero-title2-phrase"
+                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+                [ngClass]="i18n.isRtl() ? 've-hero-title2-phrase--rtl' : 've-hero-title2-phrase--ltr'"
+                >{{ i18n.t('hero.title2') }}</span
+              >
             </span>
           </h1>
           <p
@@ -313,7 +316,9 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 </p>
               </div>
               <div class="flex flex-col justify-center gap-5 lg:order-1">
-                <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
+                <div
+                  class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
+                >
                   <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
                     i18n.t('workshops.promoPrice')
                   }}</span>
@@ -323,9 +328,11 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5"
                 >
                   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                    <p class="text-base leading-relaxed text-white">
-                      {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                      <span class="text-2xl font-extrabold text-pink-400">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
+                    <p class="text-base leading-relaxed text-white max-md:text-center md:text-start">
+                      <span>{{ i18n.t('workshops.promoInstallmentPrefix') }}</span>
+                      <span class="mt-1 block text-2xl font-extrabold text-pink-400 md:mt-0 md:inline">{{
+                        i18n.t('workshops.promoInstallmentAmount')
+                      }}</span>
                     </p>
                     <span
                       class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
@@ -382,7 +389,9 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   </p>
                 </div>
                 <div class="flex flex-col justify-center gap-5 lg:order-1">
-                  <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
+                  <div
+                    class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
+                  >
                     <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
                       categoryPromoCopy(pkg).priceNow
                     }}</span>
@@ -390,9 +399,11 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   </div>
                   <div class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5">
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                      <p class="text-base leading-relaxed text-white">
-                        {{ categoryPromoCopy(pkg).installmentPrefix }}
-                        <span class="text-2xl font-extrabold text-pink-400">{{ categoryPromoCopy(pkg).installmentAmount }}</span>
+                      <p class="text-base leading-relaxed text-white max-md:text-center md:text-start">
+                        <span>{{ categoryPromoCopy(pkg).installmentPrefix }}</span>
+                        <span class="mt-1 block text-2xl font-extrabold text-pink-400 md:mt-0 md:inline">{{
+                          categoryPromoCopy(pkg).installmentAmount
+                        }}</span>
                       </p>
                       <span
                         class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
@@ -532,12 +543,12 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       }
 
       <div
-        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-col gap-3 md:mt-5 md:flex-row md:items-center md:justify-between md:gap-4"
+        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-row flex-nowrap items-stretch gap-2 sm:gap-3 md:mt-5 md:items-center md:justify-between md:gap-4"
       >
-        <!-- Mobile: sort above search (design ref); md+: search start, sort end -->
-        <div class="relative order-1 w-full shrink-0 md:order-2 md:w-auto md:min-w-[12rem]">
+        <!-- Sort (inline-start) + search one row; md+ justify-between keeps sort at end in LTR -->
+        <div class="relative w-[8.25rem] shrink-0 sm:w-36 md:order-2 md:w-auto md:min-w-[12rem]">
           <select
-            class="w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-4 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+            class="h-full min-h-[2.75rem] w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-3 pe-8 text-xs font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:ps-4 sm:pe-9 sm:text-sm"
             [ngModel]="workshopSortMode()"
             (ngModelChange)="onWorkshopSortChange($event)"
           >
@@ -546,7 +557,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             <option value="title">{{ i18n.t('workshops.sortAlphabetical') }}</option>
           </select>
           <svg
-            class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            class="pointer-events-none absolute end-2 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400 sm:end-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -556,7 +567,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           </svg>
         </div>
         <label
-          class="order-2 flex min-h-[2.75rem] w-full min-w-0 flex-1 items-center gap-2.5 rounded-full border border-ink-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 md:order-1 md:max-w-md"
+          class="flex min-h-[2.75rem] min-w-0 flex-1 items-center gap-2 rounded-full border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:gap-2.5 sm:px-4 md:order-1 md:max-w-md"
         >
           <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -644,9 +655,9 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
     <section
       id="trainers"
       veScrollReveal
-      class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f7f8fb] px-4 py-10 ring-1 ring-ink-200/50 md:px-8 md:py-14"
+      class="ve-scroll-reveal mt-16 scroll-mt-24 overflow-x-hidden rounded-3xl bg-[#f7f8fb] px-4 py-10 ring-1 ring-ink-200/50 max-md:px-4 md:px-8 md:py-14"
     >
-      <div class="mx-auto max-w-6xl">
+      <div class="mx-auto min-w-0 max-w-6xl">
         <div class="text-center">
           <span
             class="inline-flex items-center gap-2 rounded-full bg-violet-100/90 px-4 py-1.5 text-xs font-bold text-brand-900 ring-1 ring-accent-400/25"
@@ -664,8 +675,10 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           </p>
         </div>
 
-        <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(240px,28%)_minmax(0,1fr)] lg:items-start">
-          <aside class="flex flex-col gap-4">
+        <div
+          class="mt-10 grid min-w-0 gap-8 lg:grid-cols-[minmax(240px,28%)_minmax(0,1fr)] lg:items-start"
+        >
+          <aside class="flex min-w-0 w-full max-w-full flex-col gap-4">
             <label
               class="flex items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:ring-2 focus-within:ring-brand-900/10"
             >
@@ -686,13 +699,13 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
               />
             </label>
             <div
-              class="flex gap-2 pe-1 max-md:flex-row max-md:flex-nowrap max-md:overflow-x-auto max-md:overflow-y-visible max-md:pb-2 max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden md:max-h-[min(28rem,55vh)] md:flex-col md:overflow-y-auto md:overflow-x-visible"
+              class="flex w-full min-w-0 max-w-full gap-2 pe-1 max-md:flex-row max-md:flex-nowrap max-md:gap-1.5 max-md:overflow-x-auto max-md:overflow-y-visible max-md:overscroll-x-contain max-md:pb-2 max-md:[-ms-overflow-style:none] max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden md:max-h-[min(28rem,55vh)] md:flex-col md:overflow-y-auto md:overflow-x-visible"
             >
               @for (ex of displayedExpertTabs(); track ex.id) {
                 <button
                   type="button"
                   (click)="selectExpert(ex.id)"
-                  class="rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200 max-md:shrink-0 max-md:whitespace-nowrap md:w-full md:whitespace-normal"
+                  class="rounded-full px-4 py-3 text-start text-sm font-semibold transition duration-200 max-md:max-w-[9rem] max-md:shrink-0 max-md:truncate max-md:px-2.5 max-md:py-1.5 max-md:text-[11px] max-md:leading-tight md:w-full md:max-w-none md:whitespace-normal md:px-4 md:py-3 md:text-sm"
                   [ngClass]="
                     selectedExpertId() === ex.id
                       ? 'bg-brand-900 text-white shadow-md'
@@ -723,23 +736,32 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             }
           </aside>
 
-          <div class="min-w-0 space-y-8">
+          <div class="min-w-0 w-full max-w-full space-y-8">
             <article
-              class="overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-[0_8px_30px_-12px_rgba(0,26,51,0.12)]"
+              class="w-full max-w-full overflow-hidden rounded-2xl border border-ink-200/90 bg-white shadow-[0_8px_30px_-12px_rgba(0,26,51,0.12)]"
             >
-              <div class="grid md:grid-cols-2">
-                <div class="relative min-h-[15rem] bg-ink-50 md:min-h-[19rem]">
+              <!-- Mobile: compact row (avatar + copy). md+: two-column hero image. -->
+              <div
+                class="max-w-full max-md:flex max-md:flex-row max-md:items-start max-md:gap-3 max-md:p-3 md:grid md:grid-cols-2 md:gap-0 md:p-0"
+              >
+                <div
+                  class="relative shrink-0 overflow-hidden rounded-xl bg-ink-50 ring-1 ring-ink-100 max-md:h-20 max-md:w-20 md:min-h-[19rem] md:rounded-none md:ring-0"
+                >
                   <img
                     [src]="selectedExpert().imageUrl"
                     [alt]="expertName(selectedExpert())"
-                    class="h-full min-h-[15rem] w-full object-contain md:absolute md:inset-0 md:min-h-full"
+                    class="h-full w-full max-md:object-cover max-md:object-top md:absolute md:inset-0 md:min-h-full md:object-contain md:object-center"
                     loading="lazy"
                   />
                 </div>
-                <div class="flex flex-col justify-center p-6 md:p-8">
-                  <h3 class="text-xl font-extrabold text-brand-900 md:text-2xl">{{ expertName(selectedExpert()) }}</h3>
-                  <p class="mt-1 text-sm font-medium text-ink-500">{{ expertSpecialty(selectedExpert()) }}</p>
-                  <p class="mt-4 text-sm leading-relaxed text-ink-600">{{ expertBio(selectedExpert()) }}</p>
+                <div class="flex min-w-0 flex-1 flex-col justify-center md:p-8 max-md:p-0 max-md:pt-0.5">
+                  <h3 class="break-words text-lg font-extrabold leading-snug text-brand-900 max-md:text-base md:text-2xl">
+                    {{ expertName(selectedExpert()) }}
+                  </h3>
+                  <p class="mt-1 text-xs font-medium text-ink-500 md:text-sm">{{ expertSpecialty(selectedExpert()) }}</p>
+                  <p class="mt-3 break-words text-sm leading-relaxed text-ink-600 max-md:mt-2 md:mt-4">
+                    {{ expertBio(selectedExpert()) }}
+                  </p>
                 </div>
               </div>
             </article>
@@ -749,31 +771,35 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 {{ i18n.t('experts.workshopsHeading') }}
                 <span class="text-brand-700">({{ expertWorkshopsForSelected().length }})</span>
               </h3>
-              <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div class="mt-4 grid min-w-0 gap-3 sm:grid-cols-2">
                 @for (ev of expertWorkshopsForSelected(); track ev.slug) {
-                  <div class="flex items-center gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm">
-                    @if (ev.image_url) {
-                      <img
-                        [src]="ev.image_url"
-                        alt=""
-                        class="h-14 w-[4.5rem] shrink-0 rounded-lg object-cover ring-1 ring-ink-100"
-                      />
-                    } @else {
-                      <div
-                        class="h-14 w-[4.5rem] shrink-0 rounded-lg bg-ink-100 ring-1 ring-ink-100"
-                        aria-hidden="true"
-                      ></div>
-                    }
-                    <div class="min-w-0 flex-1 text-start">
-                      <p class="text-sm font-bold leading-snug text-[#0a1628]">
-                        {{ displayWorkshopTitle(ev) }}
-                      </p>
-                      <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
+                  <div
+                    class="flex min-w-0 max-w-full flex-col gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm sm:flex-row sm:items-center"
+                  >
+                    <div class="flex min-w-0 flex-1 items-center gap-3">
+                      @if (ev.image_url) {
+                        <img
+                          [src]="ev.image_url"
+                          alt=""
+                          class="h-14 w-[4.5rem] shrink-0 rounded-lg object-cover ring-1 ring-ink-100"
+                        />
+                      } @else {
+                        <div
+                          class="h-14 w-[4.5rem] shrink-0 rounded-lg bg-ink-100 ring-1 ring-ink-100"
+                          aria-hidden="true"
+                        ></div>
+                      }
+                      <div class="min-w-0 flex-1 text-start">
+                        <p class="break-words text-sm font-bold leading-snug text-[#0a1628]">
+                          {{ displayWorkshopTitle(ev) }}
+                        </p>
+                        <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
+                      </div>
                     </div>
-                    <div class="flex shrink-0">
+                    <div class="flex w-full shrink-0 sm:w-auto sm:justify-end">
                       <button
                         type="button"
-                        class="inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-semibold text-brand-900 shadow-sm transition hover:bg-ink-50 active:scale-[0.97]"
+                        class="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-semibold text-brand-900 shadow-sm transition hover:bg-ink-50 active:scale-[0.97] sm:w-auto"
                         (click)="addExpertWorkshopToCart(ev)"
                       >
                         <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>

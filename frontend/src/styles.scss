@@ -89,15 +89,11 @@
     -webkit-text-decoration-skip: objects;
   }
 
-  /** Hero line 2 — first word: indigo → bronze (matches design ref). */
-  .ve-hero-title2-gradient {
-    background-image: linear-gradient(
-      102deg,
-      theme('colors.brand.800') 0%,
-      theme('colors.brand.700') 28%,
-      theme('colors.gold.700') 72%,
-      theme('colors.gold.600') 100%
-    );
+  /**
+   * Hero line 2 — one gradient across the full phrase (gold → taupe → indigo).
+   * RTL: physical right = reading start = gold; LTR: physical left = gold.
+   */
+  .ve-hero-title2-phrase {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -106,12 +102,12 @@
     -webkit-text-decoration-skip: objects;
   }
 
-  .ve-hero-title2-bronze {
-    color: theme('colors.gold.700');
+  .ve-hero-title2-phrase--rtl {
+    background-image: linear-gradient(to left, #e5b74b 0%, #8f755e 48%, #342e74 100%);
   }
 
-  .ve-hero-title2-bright {
-    color: theme('colors.gold.400');
+  .ve-hero-title2-phrase--ltr {
+    background-image: linear-gradient(to right, #e5b74b 0%, #8f755e 48%, #342e74 100%);
   }
 
   /** Subtle shimmer bar (section accents) */

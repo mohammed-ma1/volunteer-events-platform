@@ -563,15 +563,19 @@ import { CartDrawerComponent } from './cart-drawer.component';
                   </div>
                 </div>
               </div>
-              <div class="rounded-xl border border-pink-200 bg-white px-3 py-3.5 shadow-sm sm:px-4" dir="ltr">
-                <div class="flex items-center justify-between gap-2.5 text-sm leading-snug text-ink-700">
+              <div class="rounded-xl border border-pink-200 bg-white px-3 py-4 shadow-sm sm:px-4 sm:py-4" dir="ltr">
+                <div class="flex items-center justify-between gap-2.5 leading-snug">
                   <span
                     class="inline-flex shrink-0 rounded-full bg-pink-50 px-2.5 py-1 text-[10px] font-bold text-pink-600 ring-1 ring-pink-200/90"
                     >{{ i18n.t('workshops.promoInterestFree') }}</span
                   >
-                  <p class="min-w-0 flex-1 px-1 text-center">
+                  <p
+                    class="min-w-0 flex-1 px-1 text-center text-base font-semibold leading-snug text-ink-800 sm:text-lg"
+                  >
                     {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                    <span class="font-bold text-pink-600">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
+                    <span class="mt-1 block text-lg font-extrabold text-pink-600 sm:mt-0 sm:inline sm:text-xl">{{
+                      i18n.t('workshops.promoInstallmentAmount')
+                    }}</span>
                   </p>
                   <span class="h-2 w-2 shrink-0 rounded-full bg-pink-500" aria-hidden="true"></span>
                 </div>
