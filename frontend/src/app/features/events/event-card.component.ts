@@ -19,7 +19,10 @@ import {
     <article
       class="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink-200/90 bg-white text-start shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-ink-300 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.15)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     >
-      <div class="relative isolate block aspect-[16/10] overflow-hidden bg-ink-100">
+      <div
+        class="relative isolate block overflow-hidden bg-ink-100"
+        [ngClass]="large ? 'aspect-[3/2]' : 'aspect-[16/10]'"
+      >
         @if (event.image_url) {
           <img
             [src]="event.image_url"
@@ -38,7 +41,7 @@ import {
           <span class="line-clamp-2">{{ categoryLabel() }}</span>
         </span>
         <span
-          class="absolute bottom-3 left-3 z-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-bold text-brand-900 shadow-sm ring-1 ring-ink-200/70 rtl:left-auto rtl:right-3"
+          class="absolute bottom-3 start-3 z-10 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-xs font-bold text-brand-900 shadow-sm ring-1 ring-ink-200/70"
         >
           @if (event.price <= 0) {
             {{ i18n.t('card.free') }}
@@ -48,18 +51,23 @@ import {
         </span>
       </div>
 
-      <div class="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-4 pt-3.5 sm:px-4 lg:px-3 xl:px-4">
+      <div
+        class="flex min-h-0 flex-1 flex-col gap-3 px-3 pb-4 pt-3.5 sm:px-4"
+        [ngClass]="large ? 'sm:px-5 sm:pb-5 sm:pt-4' : 'lg:px-3 xl:px-4'"
+      >
         <div class="min-h-0 flex-1 space-y-2">
           <div class="block min-w-0">
             <h3
-              class="line-clamp-2 text-[1.05rem] font-bold leading-snug tracking-tight text-[#0a1628] transition-colors group-hover:text-brand-900 md:text-lg"
+              class="line-clamp-2 font-bold leading-snug tracking-tight text-[#0a1628] transition-colors group-hover:text-brand-900"
+              [ngClass]="large ? 'text-base sm:text-lg md:text-xl' : 'text-[1.05rem] md:text-lg'"
             >
               {{ displayTitle() }}
             </h3>
           </div>
           @if (displayDescription()) {
             <p
-              class="line-clamp-3 text-[13px] leading-relaxed text-ink-600"
+              class="line-clamp-3 leading-relaxed text-ink-600"
+              [ngClass]="large ? 'text-sm sm:text-[0.95rem]' : 'text-[13px]'"
               [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
               [attr.lang]="i18n.locale()"
             >
@@ -68,7 +76,10 @@ import {
           }
         </div>
 
-        <div class="space-y-2.5 border-t border-ink-100 pt-3 text-[13px] leading-snug text-ink-700">
+        <div
+          class="space-y-2.5 border-t border-ink-100 pt-3 leading-snug text-ink-700"
+          [ngClass]="large ? 'text-sm' : 'text-[13px]'"
+        >
           @if (presenterLine()) {
             <div class="flex items-start gap-2.5">
               <svg
@@ -233,6 +244,8 @@ export class EventCardComponent {
   readonly cart = inject(CartService);
 
   @Input({ required: true }) event!: HomeListEvent;
+  /** Taller image + larger type (e.g. home page workshop grid). */
+  @Input() large = false;
   @Output() add = new EventEmitter<HomeListEvent>();
 
   private cardLocale(): 'ar' | 'en' {

@@ -6,9 +6,9 @@ import {
   isKuWorkshopWeekDayKey,
   kuWorkshopWeekNoonIso,
 } from '../../core/constants/ku-workshop-week';
-import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
-import { CATEGORY_PACKAGES, CategoryPackagePromo, findCategoryPackage } from '../../core/constants/category-packages-promo';
-import { HOME_HERO_IMAGE_URL, PROMO_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
+import { ALL_PACKAGE_SLUGS } from '../../core/constants/package-offer';
+import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
+import { HOME_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
 import { HOME_EXPERTS, HomeExpert, normalizePresenterName } from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
@@ -34,6 +34,9 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'personal',
   'professional',
 ];
+
+const ARABIC_DAY_ORDINALS = ['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس', 'السابع'];
+const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh'];
 
 @Component({
   selector: 'app-events-home',
@@ -68,14 +71,13 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
             {{ i18n.t('hero.badge') }}
           </span>
           <h1
-            class="motion-safe:animate-ve-fade-up text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.75rem]"
+            class="motion-safe:animate-ve-fade-up text-start text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.75rem]"
           >
-            <span class="text-brand-900">{{ i18n.t('hero.titleNavy1') }}</span
-            ><span class="ve-hero-accent">{{ i18n.t('hero.titleGold1') }}</span
-            ><span class="text-brand-900">، </span>
-            <span class="block pt-1 sm:inline sm:pt-0">
-              <span class="text-brand-900">{{ i18n.t('hero.titleNavy2') }} </span
-              ><span class="ve-hero-accent">{{ i18n.t('hero.titleGold2') }}</span>
+            <span class="block text-brand-900">{{ i18n.t('hero.title1') }}</span>
+            <span class="block pt-1 md:pt-1.5">
+              <span class="ve-hero-title2-gradient">{{ i18n.t('hero.title2a') }}</span
+              ><span class="ve-hero-title2-bronze">{{ i18n.t('hero.title2b') }}</span
+              ><span class="ve-hero-title2-bright">{{ i18n.t('hero.title2c') }}</span>
             </span>
           </h1>
           <p
@@ -219,291 +221,359 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       veScrollReveal
       class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-8 shadow-inner ring-1 ring-ink-200/60 md:px-8 md:py-10"
     >
-      <div class="motion-safe:animate-ve-fade-up min-w-0">
-        <span
-          class="mb-3 inline-flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1.5 text-xs font-bold text-violet-900 shadow-sm ring-1 ring-violet-200/80"
-        >
-          {{ i18n.t('workshops.programsBadge') }}
-        </span>
-        <h2 class="text-2xl font-extrabold tracking-tight md:text-3xl">
-          <span class="text-brand-900">{{ i18n.t('workshops.titleBefore') }}</span>
-          <span class="ve-hero-accent"> {{ i18n.t('workshops.titleHighlight') }} </span>
-          <span class="text-brand-900">{{ i18n.t('workshops.titleAfter') }}</span>
-        </h2>
-        <p class="mt-2 max-w-2xl text-sm leading-relaxed text-ink-600 md:text-base">
-          {{ i18n.t('workshops.subtitle') }}
-        </p>
+      <div class="motion-safe:animate-ve-fade-up w-full min-w-0 text-start">
+        <div class="flex w-full max-w-3xl flex-col items-start gap-3">
+          <span
+            class="inline-flex items-center gap-2 rounded-full bg-violet-100 px-3 py-1.5 text-xs font-bold text-violet-900 shadow-sm ring-1 ring-violet-200/80"
+          >
+            <svg class="h-3.5 w-3.5 shrink-0 text-violet-700/90" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            {{ i18n.t('workshops.programsBadge') }}
+          </span>
+          <h2 class="text-2xl font-extrabold tracking-tight md:text-3xl">
+            <span class="text-brand-900">{{ i18n.t('workshops.titleBefore') }}</span>
+            <span class="ve-hero-accent"> {{ i18n.t('workshops.titleHighlight') }} </span>
+            <span class="text-brand-900">{{ i18n.t('workshops.titleAfter') }}</span>
+          </h2>
+          <p class="max-w-2xl text-sm leading-relaxed text-ink-600 md:text-base">
+            {{ i18n.t('workshops.subtitle') }}
+          </p>
+        </div>
       </div>
 
-      @if (!activeCategoryPromo()) {
-      <div
-        class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-brand-950 text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)]"
-      >
-        <div class="flex flex-col-reverse md:flex-row md:items-stretch" dir="ltr">
+      <!-- Package offers carousel (100 + two 50-workshop bundles) -->
+      <div class="motion-safe:animate-ve-fade-up relative mt-8">
+        <button
+          type="button"
+          class="absolute start-1 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-sm transition hover:bg-white/25 sm:start-2 sm:h-11 sm:w-11"
+          (click)="prevPromoSlide()"
+          [attr.aria-label]="i18n.t('workshops.promoPrevAria')"
+        >
+          <svg class="h-5 w-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="absolute end-1 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-sm transition hover:bg-white/25 sm:end-2 sm:h-11 sm:w-11"
+          (click)="nextPromoSlide()"
+          [attr.aria-label]="i18n.t('workshops.promoNextAria')"
+        >
+          <svg class="h-5 w-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <div
+          class="overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b1020] via-[#121a33] to-[#0b1020] shadow-[0_20px_50px_-18px_rgba(0,0,0,0.55)] ring-1 ring-white/10 select-none"
+          dir="ltr"
+          role="region"
+          [attr.aria-label]="i18n.t('workshops.promoSliderAria')"
+          (touchstart)="onPromoTouchStart($event)"
+          (touchend)="onPromoTouchEnd($event)"
+        >
           <div
-            class="relative min-h-[14rem] w-full shrink-0 overflow-hidden md:min-h-[20rem] md:w-[min(50%,32rem)]"
+            class="flex w-[300%] transition-transform duration-500 ease-out motion-reduce:transition-none"
+            [style.transform]="promoCarouselTransform()"
           >
-            <img
-              [src]="promoOfferImageUrl"
-              alt=""
-              class="h-full min-h-[14rem] w-full object-cover md:min-h-[20rem]"
-              loading="lazy"
-            />
+            <!-- Slide 0: 100 workshops -->
             <div
-              class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
-              aria-hidden="true"
-            ></div>
-            <div
-              class="absolute inset-x-0 bottom-0 flex items-end gap-3 px-4 pb-4 pt-10 md:gap-4 md:px-5 md:pb-5 md:pt-14"
-              dir="ltr"
+              class="flex w-[33.333333%] shrink-0 flex-col justify-center gap-6 px-5 py-8 sm:px-8 lg:grid lg:min-h-[17rem] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-10 lg:py-10"
+              [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+              [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
             >
-              <div
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/95 text-lg shadow-md ring-1 ring-black/5 md:h-12 md:w-12"
-                aria-hidden="true"
-              >
-                🤝
+              <div class="flex flex-col justify-center gap-4 lg:order-2">
+                <span
+                  class="inline-flex w-fit items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-100"
+                >
+                  {{ i18n.t('workshops.promoSavePct') }}
+                </span>
+                <p class="inline-flex items-center gap-2 text-sm font-semibold text-amber-100/95">
+                  <svg class="h-5 w-5 shrink-0 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                    />
+                  </svg>
+                  {{ i18n.t('workshops.promoCertBanner') }}
+                </p>
+                <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
+                  {{ i18n.t('workshops.promoTitle') }}
+                </h3>
+                <p class="max-w-xl text-sm leading-relaxed text-white/70 md:text-[0.95rem]">
+                  {{ i18n.t('workshops.promoBody') }}
+                </p>
               </div>
+              <div class="flex flex-col justify-center gap-5 lg:order-1">
+                <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
+                  <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
+                    i18n.t('workshops.promoPrice')
+                  }}</span>
+                  <span class="text-base font-medium text-white/35 line-through md:text-lg">{{ i18n.t('workshops.promoPriceWas') }}</span>
+                </div>
+                <div
+                  class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5"
+                >
+                  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                    <p class="text-base leading-relaxed text-white">
+                      {{ i18n.t('workshops.promoInstallmentPrefix') }}
+                      <span class="text-2xl font-extrabold text-pink-400">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
+                    </p>
+                    <span
+                      class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
+                      >{{ i18n.t('workshops.promoInterestFree') }}</span
+                    >
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-[#4c3d9e] px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-[#43388d] active:scale-[0.98]"
+                  (click)="onPromoCheckout100()"
+                >
+                  <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                  <span>{{ i18n.t('workshops.promoCta') }}</span>
+                </button>
+              </div>
+            </div>
+
+            @for (pkg of categoryPackages; track pkg.slug) {
               <div
-                class="flex min-w-0 flex-1 flex-col gap-1.5 text-sm font-semibold text-white drop-shadow-md sm:gap-2"
-                [class.items-end]="!i18n.isRtl()"
-                [class.items-start]="i18n.isRtl()"
+                class="flex w-[33.333333%] shrink-0 flex-col justify-center gap-6 px-5 py-8 sm:px-8 lg:grid lg:min-h-[17rem] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-10 lg:py-10"
                 [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
                 [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
               >
-                <div class="flex max-w-full flex-nowrap items-center justify-start gap-2.5">
-                  <span class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">{{
-                    i18n.t('workshops.promoTrainerLine')
-                  }}</span>
-                  <span class="shrink-0 text-base leading-none" aria-hidden="true">👤</span>
+                <div class="flex flex-col justify-center gap-4 lg:order-2">
+                  <span
+                    class="inline-flex w-fit items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-100"
+                  >
+                    {{ categoryPromoCopy(pkg).savePct }}
+                  </span>
+                  <p class="inline-flex items-center gap-2 text-sm font-semibold text-amber-100/95">
+                    <svg class="h-5 w-5 shrink-0 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                      />
+                    </svg>
+                    {{ i18n.t('workshops.bundleFiftyCerts') }}
+                  </p>
+                  <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
+                    {{ categoryPromoCopy(pkg).title }}
+                  </h3>
+                  <p class="max-w-xl text-sm leading-relaxed text-white/70 md:text-[0.95rem]">
+                    {{ categoryPromoCopy(pkg).tagline }}
+                  </p>
                 </div>
-                <div class="flex max-w-full flex-nowrap items-center justify-start gap-2.5">
-                  <span class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">{{
-                    i18n.t('workshops.promoVenueLine')
-                  }}</span>
-                  <span class="shrink-0 text-base leading-none" aria-hidden="true">📍</span>
+                <div class="flex flex-col justify-center gap-5 lg:order-1">
+                  <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
+                    <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
+                      categoryPromoCopy(pkg).priceNow
+                    }}</span>
+                    <span class="text-base font-medium text-white/35 line-through md:text-lg">{{ categoryPromoCopy(pkg).priceWas }}</span>
+                  </div>
+                  <div class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                      <p class="text-base leading-relaxed text-white">
+                        {{ categoryPromoCopy(pkg).installmentPrefix }}
+                        <span class="text-2xl font-extrabold text-pink-400">{{ categoryPromoCopy(pkg).installmentAmount }}</span>
+                      </p>
+                      <span
+                        class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
+                        >{{ categoryPromoCopy(pkg).interestFree }}</span
+                      >
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-[#4c3d9e] px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-[#43388d] active:scale-[0.98]"
+                    (click)="onCategoryPackageCheckout(pkg.slug)"
+                  >
+                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                      />
+                    </svg>
+                    <span>{{ categoryPromoCopy(pkg).cta }}</span>
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div
-            class="flex flex-1 flex-col justify-center gap-4 p-6 md:gap-5 md:p-9 lg:p-11"
-            [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-            [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
-          >
-            <span
-              class="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/90"
-            >
-              {{ i18n.t('workshops.promoLimitedBadge') }}
-            </span>
-            <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl lg:text-[1.85rem]">
-              {{ i18n.t('workshops.promoTitle') }}
-            </h3>
-            <p class="max-w-xl text-sm leading-relaxed text-white/65 md:text-[0.95rem]">
-              {{ i18n.t('workshops.promoBody') }}
-            </p>
-            <div
-              class="max-w-xl rounded-xl border border-[#eab308]/55 bg-white/[0.05] px-3 py-2.5 text-sm font-semibold text-[#f5d76e] md:px-4 md:py-3"
-            >
-              {{ i18n.t('workshops.promoCertBanner') }}
-            </div>
-            <div class="flex flex-wrap items-end gap-x-4 gap-y-2">
-              <span class="text-4xl font-black tracking-tight text-[#eab308] md:text-[2.65rem]">{{
-                i18n.t('workshops.promoPrice')
-              }}</span>
-              <div class="flex flex-col items-start gap-1.5">
-                <span class="text-base font-medium text-white/40 line-through md:text-lg">{{
-                  i18n.t('workshops.promoPriceWas')
-                }}</span>
-                <span
-                  class="inline-flex rounded-md bg-[#22c55e] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm"
-                  >{{ i18n.t('workshops.promoSavePct') }}</span
-                >
-              </div>
-            </div>
-            <div
-              class="max-w-xl rounded-xl border border-fuchsia-400/50 bg-[#2a1f3d]/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-4"
-            >
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <p class="text-base leading-relaxed text-white">
-                  {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                  <span class="text-2xl font-extrabold text-[#ec4899]">{{ i18n.t('workshops.promoInstallmentAmount') }}</span>
-                </p>
-                <span
-                  class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-3 py-1.5 text-xs font-bold tracking-wide text-white"
-                  >{{ i18n.t('workshops.promoInterestFree') }}</span
-                >
-              </div>
-            </div>
-            <button
-              type="button"
-              class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-brand-900 shadow-lg transition hover:bg-white/90 active:scale-[0.98] md:py-4"
-              [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-              (click)="onPromoCheckout()"
-            >
-              <span>{{ i18n.t('workshops.promoCta') }}</span>
-            </button>
+            }
           </div>
         </div>
-      </div>
-      }
-      @if (activeCategoryPromo(); as cp) {
-        <div
-          class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-brand-950 text-white shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)]"
-        >
-          <div
-            class="flex flex-col gap-5 p-6 md:p-9 lg:p-11"
-            [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-            [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
-          >
-            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-              <span class="text-4xl font-black tracking-tight text-[#eab308] md:text-[2.65rem]">{{ categoryPromoCopy(cp).priceNow }}</span>
-              <span class="text-base font-medium text-white/40 line-through md:text-lg">{{ categoryPromoCopy(cp).priceWas }}</span>
-              <span class="inline-flex items-center gap-1 rounded-full bg-[#eab308]/20 px-3 py-1 text-xs font-bold text-[#f5d76e]">
-                <span aria-hidden="true">⚡</span>
-                {{ categoryPromoCopy(cp).savePct }}
-              </span>
-            </div>
 
-            <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
-              {{ categoryPromoCopy(cp).title }}
-            </h3>
-            <p class="max-w-2xl text-sm leading-relaxed text-white/65 md:text-[0.95rem]">
-              {{ categoryPromoCopy(cp).tagline }}
-            </p>
-
-            <div class="max-w-xl rounded-xl border border-fuchsia-400/50 bg-[#2a1f3d]/75 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-4">
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <p class="text-base leading-relaxed text-white">
-                  {{ categoryPromoCopy(cp).installmentPrefix }}
-                  <span class="text-2xl font-extrabold text-[#ec4899]">{{ categoryPromoCopy(cp).installmentAmount }}</span>
-                </p>
-                <span class="inline-flex w-fit shrink-0 rounded-full bg-[#db2777] px-3 py-1.5 text-xs font-bold tracking-wide text-white">
-                  {{ categoryPromoCopy(cp).interestFree }}
-                </span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-brand-700 px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-brand-800 active:scale-[0.98]"
-              (click)="onPromoCheckout()"
-            >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/>
-              </svg>
-              <span>{{ categoryPromoCopy(cp).cta }}</span>
-            </button>
-          </div>
-        </div>
-      }
-
-      <!-- Category Package Cards (hidden for now) -->
-
-      @if (workshopDayBuckets().length > 1) {
-        <div
-          class="mt-8 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          role="tablist"
-          [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
-        >
-          <!-- All Days tab -->
-          <button
-            type="button"
-            role="tab"
-            [attr.aria-selected]="selectedDayKey() === null"
-            (click)="onSelectDay(null)"
-            class="shrink-0 rounded-full px-5 py-2.5 text-center transition duration-200"
-            [ngClass]="
-              selectedDayKey() === null
-                ? 'bg-brand-900 text-white shadow-md'
-                : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
-            "
-          >
-            <span class="flex items-center gap-1.5 text-sm font-bold">
-              {{ i18n.isRtl() ? 'كل الأيام' : 'All Days' }}
-              <span class="rounded-full bg-white/20 px-1.5 text-xs font-bold"
-                    [ngClass]="selectedDayKey() === null ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
-                ({{ categoryFilteredEvents().length }})
-              </span>
-            </span>
-            <span
-              class="mt-0.5 block text-xs font-medium"
-              [ngClass]="selectedDayKey() === null ? 'text-white/85' : 'text-ink-500'"
-              >{{ i18n.isRtl() ? 'عرض الكل' : 'Show all' }}</span
-            >
-          </button>
-
-          @for (b of workshopDayBuckets(); track b.key; let di = $index) {
+        <div class="mt-3 flex justify-center gap-2" role="tablist" [attr.aria-label]="i18n.t('workshops.promoSliderAria')">
+          @for (s of promoSlideIndices; track s) {
             <button
               type="button"
               role="tab"
-              [attr.aria-selected]="selectedDayKey() === b.key"
-              (click)="onSelectDay(b.key)"
-              class="shrink-0 rounded-full px-5 py-2.5 text-center transition duration-200"
+              class="h-2 rounded-full transition-all"
+              [class.w-6]="promoSlideIndex() === s"
+              [class.bg-brand-900]="promoSlideIndex() === s"
+              [class.w-2]="promoSlideIndex() !== s"
+              [class.bg-ink-300]="promoSlideIndex() !== s"
+              [attr.aria-selected]="promoSlideIndex() === s"
+              [attr.aria-label]="promoDotLabel(s)"
+              (click)="goToPromoSlide(s)"
+            ></button>
+          }
+        </div>
+      </div>
+
+      <!-- Filters: same structure & density as learner dashboard -->
+      <div class="mt-8 flex flex-col gap-2.5">
+        <div class="flex">
+          <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByCategoryHint') }}</span>
+        </div>
+        <div
+          class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="tablist"
+          [attr.aria-label]="i18n.t('workshops.filterCategoryAria')"
+        >
+          @for (cat of CATEGORY_ORDER; track cat) {
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="selectedCategory() === cat"
+              (click)="onSelectCategory(cat)"
+              class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98] motion-reduce:active:scale-100"
               [ngClass]="
-                selectedDayKey() === b.key
+                selectedCategory() === cat
                   ? 'bg-brand-900 text-white shadow-md'
-                  : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
+                  : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
               "
             >
-              <span class="flex items-center gap-1.5 text-sm font-bold">
-                {{ i18n.t('workshops.dayWord') }} {{ di + 1 }}
-                <span class="rounded-full px-1.5 text-xs font-bold"
-                      [ngClass]="selectedDayKey() === b.key ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
-                  ({{ b.count }})
-                </span>
-              </span>
-              <span
-                class="mt-0.5 block text-xs font-medium"
-                [ngClass]="selectedDayKey() === b.key ? 'text-white/85' : 'text-ink-500'"
-                >{{ b.sub }}</span
-              >
+              {{ categoryLabel(cat) }}
+              <span class="font-normal opacity-80">({{ categoryCounts()[cat] }})</span>
             </button>
           }
+        </div>
+      </div>
+
+      @if (workshopDayBuckets().length > 0) {
+        <div class="mt-4 flex flex-col gap-2.5">
+          <div class="flex">
+            <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByDayHint') }}</span>
+          </div>
+          <div
+            class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            role="tablist"
+            [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
+          >
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="selectedDayKey() === null"
+              (click)="onSelectDay(null)"
+              class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+              [ngClass]="
+                selectedDayKey() === null
+                  ? 'bg-brand-900 text-white shadow-md'
+                  : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
+              "
+            >
+              <span class="block text-sm font-bold">
+                {{ i18n.t('workshops.allDaysShort') }}
+                <span class="font-normal opacity-80">({{ categoryFilteredEvents().length }})</span>
+              </span>
+              <span
+                class="mt-0.5 block text-[11px] font-medium"
+                [ngClass]="selectedDayKey() === null ? 'text-white/80' : 'text-ink-500'"
+              >
+                {{ i18n.t('workshops.showAllShort') }}
+              </span>
+            </button>
+
+            @for (b of workshopDayBuckets(); track b.key; let di = $index) {
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="selectedDayKey() === b.key"
+                (click)="onSelectDay(b.key)"
+                class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+                [ngClass]="
+                  selectedDayKey() === b.key
+                    ? 'bg-brand-900 text-white shadow-md'
+                    : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
+                "
+              >
+                <span class="block text-sm font-bold">
+                  {{ dayLabel(di) }} <span class="font-normal opacity-80">({{ b.count }})</span>
+                </span>
+                <span
+                  class="mt-0.5 block text-[11px] font-medium"
+                  [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-ink-500'"
+                >
+                  {{ b.sub }}
+                </span>
+              </button>
+            }
+          </div>
         </div>
       }
 
       <div
-        class="mt-4 flex min-w-0 gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
       >
-        @for (cat of CATEGORY_ORDER; track cat) {
-          <button
-            type="button"
-            (click)="onSelectCategory(cat)"
-            class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 hover:opacity-95 active:scale-[0.98] motion-reduce:active:scale-100"
-            [ngClass]="
-              selectedCategory() === cat
-                ? 'bg-brand-900 text-white shadow-md'
-                : 'border border-ink-200 bg-white text-brand-900 hover:bg-white'
-            "
-          >
-            <span>{{ categoryLabel(cat) }}</span>
-            <span class="rounded-full px-1.5 text-xs font-bold"
-                  [ngClass]="selectedCategory() === cat ? 'bg-white/20 text-white' : 'bg-ink-100 text-brand-900'">
-              ({{ categoryCounts()[cat] }})
-            </span>
-          </button>
-        }
-      </div>
-
-      <label
-        class="motion-safe:animate-ve-fade-up mt-4 flex w-full max-w-xs items-center gap-2.5 rounded-full border border-ink-200 bg-white px-3.5 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10"
-      >
-        <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        <label
+          class="flex min-h-[2.75rem] w-full min-w-0 flex-1 items-center gap-2.5 rounded-full border border-ink-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:max-w-md"
+        >
+          <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            id="workshop-search-input"
+            class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
+            [placeholder]="i18n.t('workshops.searchPlaceholder')"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange($event)"
           />
-        </svg>
-        <input
-          id="workshop-search-input"
-          class="min-w-0 flex-1 bg-transparent text-sm text-brand-900 outline-none placeholder:text-ink-400"
-          [placeholder]="i18n.t('workshops.searchPlaceholder')"
-          [(ngModel)]="searchText"
-          (ngModelChange)="onSearchChange($event)"
-        />
-      </label>
+        </label>
+        <div class="relative w-full shrink-0 sm:w-auto sm:min-w-[12rem]">
+          <select
+            class="w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-4 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+            [ngModel]="workshopSortMode()"
+            (ngModelChange)="onWorkshopSortChange($event)"
+          >
+            <option value="closest">{{ i18n.t('workshops.sortClosest') }}</option>
+            <option value="latest">{{ i18n.t('workshops.sortLatest') }}</option>
+            <option value="title">{{ i18n.t('workshops.sortAlphabetical') }}</option>
+          </select>
+          <svg
+            class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
 
       @if (demoHint()) {
         <p
@@ -520,7 +590,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         </p>
       }
 
-      <div id="workshops-grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+      <div id="workshops-grid" class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @for (event of displayedWorkshops(); track event.id; let ei = $index) {
           <div
             class="motion-safe:animate-ve-fade-up h-full motion-reduce:opacity-100"
@@ -535,7 +605,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
         <p class="mt-8 text-center text-sm text-ink-500">{{ i18n.t('workshops.loading') }}</p>
       }
 
-      @if (!loading() && !filteredEvents().length) {
+      @if (!loading() && !sortedFilteredEvents().length) {
         <p class="mt-8 text-center text-sm text-ink-500">{{ i18n.t('workshops.empty') }}</p>
       }
 
@@ -774,8 +844,17 @@ export class EventsHomeComponent implements OnDestroy {
   readonly EXPERT_SIDEBAR_PREVIEW = 13;
 
   readonly homeHeroImageUrl = HOME_HERO_IMAGE_URL;
-  readonly promoOfferImageUrl = PROMO_HERO_IMAGE_URL;
   readonly categoryPackages = CATEGORY_PACKAGES;
+
+  /** Package carousel: 0 = 100-workshop bundle, 1–2 = 50-workshop category bundles (order matches `categoryPackages`). */
+  readonly promoSlideIndex = signal(0);
+  readonly promoSlideCount = 3;
+  readonly promoSlideIndices: readonly number[] = [0, 1, 2];
+
+  /** Touch swipe: record start X for `touchend` delta. */
+  private promoTouchStartX: number | null = null;
+
+  readonly workshopSortMode = signal<'closest' | 'latest' | 'title'>('closest');
 
   readonly expertSearch = signal('');
   readonly selectedExpertId = signal(HOME_EXPERTS[0].id);
@@ -830,24 +909,6 @@ export class EventsHomeComponent implements OnDestroy {
       }
     }
     return counts;
-  });
-
-  /** Promo card kind: 'main' for the 100-bundle, 'category' for one of the 50-bundles. */
-  readonly activePromo = computed<{ kind: 'main' | 'category' }>(() => {
-    const cat = this.selectedCategory();
-    if ((cat === 'personal' || cat === 'professional') && findCategoryPackage(cat)) {
-      return { kind: 'category' };
-    }
-    return { kind: 'main' };
-  });
-
-  /** When activePromo() is 'category', the actual promo object — null otherwise. */
-  readonly activeCategoryPromo = computed<CategoryPackagePromo | null>(() => {
-    const cat = this.selectedCategory();
-    if (cat === 'personal' || cat === 'professional') {
-      return findCategoryPackage(cat) ?? null;
-    }
-    return null;
   });
 
   categoryPromoCopy(promo: CategoryPackagePromo): CategoryPackagePromo['ar'] {
@@ -910,12 +971,31 @@ export class EventsHomeComponent implements OnDestroy {
     return list;
   });
 
+  readonly sortedFilteredEvents = computed(() => {
+    const list = [...this.filteredEvents()];
+    const loc = this.i18n.locale() === 'ar' ? 'ar' : 'en';
+    const mode = this.workshopSortMode();
+    const time = (ev: HomeListEvent) => new Date(ev.starts_at).getTime();
+    if (mode === 'title') {
+      list.sort((a, b) =>
+        this.workshopTitleSortKey(a, loc).localeCompare(this.workshopTitleSortKey(b, loc), loc === 'ar' ? 'ar' : 'en', {
+          sensitivity: 'base',
+        }),
+      );
+    } else if (mode === 'latest') {
+      list.sort((a, b) => time(b) - time(a));
+    } else {
+      list.sort((a, b) => time(a) - time(b));
+    }
+    return list;
+  });
+
   readonly displayedWorkshops = computed(() => {
-    const all = this.filteredEvents();
+    const all = this.sortedFilteredEvents();
     return all.slice(0, Math.min(this.visibleCount(), all.length));
   });
 
-  readonly canLoadMore = computed(() => this.filteredEvents().length > this.visibleCount());
+  readonly canLoadMore = computed(() => this.sortedFilteredEvents().length > this.visibleCount());
   readonly canLoadLess = computed(() => this.visibleCount() > this.WORKSHOPS_PREVIEW);
 
   readonly filteredExperts = computed(() => {
@@ -1038,14 +1118,107 @@ export class EventsHomeComponent implements OnDestroy {
     return this.i18n.t(`cat.${cat}` as TranslationKey);
   }
 
-  onPromoCheckout(): void {
-    const cp = this.activeCategoryPromo();
-    if (cp) {
-      this.checkoutFlow.startPackageCheckout(cp.slug, () =>
-        this.error.set(this.i18n.t('workshops.packageUnavailable')),
-      );
+  /** Ordinal day label aligned with learner dashboard (e.g. اليوم الأول / Day First). */
+  dayLabel(dayIndex: number): string {
+    const ar = this.i18n.locale() === 'ar';
+    const ordinals = ar ? ARABIC_DAY_ORDINALS : ENGLISH_DAY_ORDINALS;
+    const ord = ordinals[dayIndex] ?? String(dayIndex + 1);
+    return ar ? `اليوم ${ord}` : `Day ${ord}`;
+  }
+
+  onWorkshopSortChange(value: string): void {
+    if (value === 'closest' || value === 'latest' || value === 'title') {
+      this.workshopSortMode.set(value);
+    }
+  }
+
+  promoCarouselTransform(): string {
+    const i = this.promoSlideIndex();
+    const pct = (i / this.promoSlideCount) * 100;
+    return `translate3d(-${pct}%,0,0)`;
+  }
+
+  /** Slide index → workshop category filter (chips below stay in sync). */
+  slideIndexToCategory(index: number): WorkshopFilterCategory {
+    if (index <= 0) {
+      return 'all';
+    }
+    const pkg = this.categoryPackages[index - 1];
+    return pkg?.filterCategory ?? 'all';
+  }
+
+  /** Category chip → carousel slide (0 = 100 bundle, 1+ = `categoryPackages` rows). */
+  categoryToSlideIndex(cat: WorkshopFilterCategory): number {
+    if (cat === 'all') {
+      return 0;
+    }
+    const idx = this.categoryPackages.findIndex((p) => p.filterCategory === cat);
+    return idx >= 0 ? idx + 1 : 0;
+  }
+
+  /** Move carousel and mirror selection onto category chips (الكل / شخصي / مهني). */
+  goToPromoSlide(index: number): void {
+    const n = this.promoSlideCount;
+    const i = ((index % n) + n) % n;
+    const cat = this.slideIndexToCategory(i);
+    if (cat !== this.selectedCategory()) {
+      this.selectedDayKey.set(null);
+      this.showAllWorkshops.set(false);
+      this.visibleCount.set(this.WORKSHOPS_PREVIEW);
+    }
+    this.promoSlideIndex.set(i);
+    this.selectedCategory.set(cat);
+  }
+
+  prevPromoSlide(): void {
+    this.goToPromoSlide(this.promoSlideIndex() - 1);
+  }
+
+  nextPromoSlide(): void {
+    this.goToPromoSlide(this.promoSlideIndex() + 1);
+  }
+
+  onPromoTouchStart(event: TouchEvent): void {
+    if (event.touches.length !== 1) {
+      this.promoTouchStartX = null;
       return;
     }
+    this.promoTouchStartX = event.touches[0].clientX;
+  }
+
+  onPromoTouchEnd(event: TouchEvent): void {
+    if (this.promoTouchStartX === null) {
+      return;
+    }
+    const touch = event.changedTouches[0];
+    if (!touch) {
+      this.promoTouchStartX = null;
+      return;
+    }
+    const dx = touch.clientX - this.promoTouchStartX;
+    this.promoTouchStartX = null;
+    const threshold = 48;
+    if (dx < -threshold) {
+      this.nextPromoSlide();
+    } else if (dx > threshold) {
+      this.prevPromoSlide();
+    }
+  }
+
+  promoDotLabel(index: number): string {
+    const n = index + 1;
+    return this.i18n.isRtl() ? `الباقة ${n}` : `Package ${n}`;
+  }
+
+  workshopTitleSortKey(ev: HomeListEvent, loc: 'ar' | 'en'): string {
+    if (loc === 'ar') {
+      return (ev.titleAr ?? ev.title ?? '').trim().toLowerCase();
+    }
+    const en = ev.title_en?.trim();
+    return (en && en.length > 0 ? en : ev.title).toLowerCase();
+  }
+
+  onPromoCheckout100(): void {
     this.checkoutFlow.startPackage100Checkout(() => this.error.set(this.i18n.t('workshops.packageUnavailable')));
   }
 
@@ -1107,9 +1280,16 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   onSelectCategory(cat: WorkshopFilterCategory): void {
-    this.showAllWorkshops.set(false); this.visibleCount.set(this.WORKSHOPS_PREVIEW);
+    this.showAllWorkshops.set(false);
+    this.visibleCount.set(this.WORKSHOPS_PREVIEW);
     this.selectedDayKey.set(null);
-    this.selectedCategory.set(cat);
+    if (this.selectedCategory() === cat) {
+      this.selectedCategory.set('all');
+      this.promoSlideIndex.set(0);
+    } else {
+      this.selectedCategory.set(cat);
+      this.promoSlideIndex.set(this.categoryToSlideIndex(cat));
+    }
   }
 
   onSelectDay(dayKey: string | null): void {
@@ -1126,7 +1306,7 @@ export class EventsHomeComponent implements OnDestroy {
   }
 
   loadMoreWorkshops(): void {
-    const total = this.filteredEvents().length;
+    const total = this.sortedFilteredEvents().length;
     this.visibleCount.set(Math.min(this.visibleCount() + this.WORKSHOPS_STEP, total));
   }
 

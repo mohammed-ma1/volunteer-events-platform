@@ -378,7 +378,7 @@ return [
         'instructor' => 'سنابل المسلم',
     ],
     'ms-w-042' => [
-        'title' => 'From zero to hero',
+        'title' => 'من الصفر إلى البطولة',
         'title_en' => 'From Zero to Hero',
         'description_ar' => 'رحلة ملهمة عن كيفية البدء من الصفر وتحقيق نجاحات كبيرة في حياتك المهنية.',
         'description_en' => 'An inspiring journey on how to start from zero and achieve great career success.',
@@ -495,7 +495,7 @@ return [
         'instructor' => 'مرزوق السعيد',
     ],
     'ms-w-055' => [
-        'title' => 'welcome income',
+        'title' => 'زيادة مصادر الدخل والاستقرار المالي',
         'title_en' => 'Welcome Income',
         'description_ar' => 'استراتيجيات عملية لزيادة مصادر دخلك وتحقيق الاستقرار المالي.',
         'description_en' => 'Practical strategies to increase your income sources and achieve financial stability.',

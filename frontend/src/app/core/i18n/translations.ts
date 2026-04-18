@@ -21,10 +21,9 @@ export type TranslationKey =
   | 'nav.faq'
   | 'nav.studentLogin'
   | 'nav.signOut'
-  | 'hero.titleNavy1'
-  | 'hero.titleGold1'
-  | 'hero.titleNavy2'
-  | 'hero.titleGold2'
+  | 'hero.title2a'
+  | 'hero.title2b'
+  | 'hero.title2c'
   | 'workshops.titleBefore'
   | 'workshops.titleHighlight'
   | 'workshops.titleAfter'
@@ -142,6 +141,18 @@ export type TranslationKey =
   | 'workshops.promoInstallmentAmount'
   | 'workshops.promoInterestFree'
   | 'workshops.filterDaysAria'
+  | 'workshops.filterCategoryAria'
+  | 'workshops.sortClosest'
+  | 'workshops.sortLatest'
+  | 'workshops.sortAlphabetical'
+  | 'workshops.filterByCategoryHint'
+  | 'workshops.filterByDayHint'
+  | 'workshops.allDaysShort'
+  | 'workshops.showAllShort'
+  | 'workshops.promoPrevAria'
+  | 'workshops.promoNextAria'
+  | 'workshops.promoSliderAria'
+  | 'workshops.bundleFiftyCerts'
   | 'workshops.packageUnavailable'
   | 'cat.all'
   | 'cat.personal'
@@ -313,14 +324,13 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.faq': 'الأسئلة الشائعة',
     'nav.studentLogin': 'دخول الطلاب',
     'nav.signOut': 'تسجيل الخروج',
-    'hero.titleNavy1': 'طوّر',
-    'hero.titleGold1': 'مهاراتك',
-    'hero.titleNavy2': 'وابنِ',
-    'hero.titleGold2': 'مستقبلك المهني',
+    'hero.title2a': 'وابنِ ',
+    'hero.title2b': 'مستقبلك ',
+    'hero.title2c': 'المهني',
     'workshops.titleBefore': 'أحدث',
     'workshops.titleHighlight': 'الورش',
     'workshops.titleAfter': 'المتاحة',
-    'workshops.programsBadge': '📚 البرامج التدريبية',
+    'workshops.programsBadge': 'البرامج التدريبية',
     'workshops.promoCertBanner': '🎗️ سيحصل الطالب على 100 شهادة معتمدة',
     'footer.linkTrainers': 'تعرّف على المدربين',
     'footer.linkFaq': 'الأسئلة الشائعة',
@@ -444,6 +454,18 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.promoInstallmentAmount': PROMO.ar.installmentAmount,
     'workshops.promoInterestFree': PROMO.ar.interestFree,
     'workshops.filterDaysAria': 'تصفية الورش حسب اليوم',
+    'workshops.filterCategoryAria': 'تصفية الورش حسب التصنيف',
+    'workshops.sortClosest': 'الأقرب',
+    'workshops.sortLatest': 'الأحدث',
+    'workshops.sortAlphabetical': 'أبجدي',
+    'workshops.filterByCategoryHint': 'تصفح الورشات حسب التصنيف',
+    'workshops.filterByDayHint': 'تصفح الورشات حسب أيام عرضها',
+    'workshops.allDaysShort': 'كل الأيام',
+    'workshops.showAllShort': 'عرض الكل',
+    'workshops.promoPrevAria': 'الباقة السابقة',
+    'workshops.promoNextAria': 'الباقة التالية',
+    'workshops.promoSliderAria': 'اختيار عرض الباقات',
+    'workshops.bundleFiftyCerts': '٥٠ شهادة معتمدة',
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
@@ -624,14 +646,13 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.faq': 'FAQ',
     'nav.studentLogin': 'Student login',
     'nav.signOut': 'Sign out',
-    'hero.titleNavy1': 'Grow',
-    'hero.titleGold1': 'your skills',
-    'hero.titleNavy2': 'and build',
-    'hero.titleGold2': 'your career',
+    'hero.title2a': 'build ',
+    'hero.title2b': 'your ',
+    'hero.title2c': 'career',
     'workshops.titleBefore': 'Latest',
     'workshops.titleHighlight': 'workshops',
     'workshops.titleAfter': 'available',
-    'workshops.programsBadge': '📚 Training programs',
+    'workshops.programsBadge': 'Training programs',
     'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
     'footer.linkTrainers': 'Meet the trainers',
     'footer.linkFaq': 'FAQ',
@@ -757,6 +778,18 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.promoInstallmentAmount': PROMO.en.installmentAmount,
     'workshops.promoInterestFree': PROMO.en.interestFree,
     'workshops.filterDaysAria': 'Filter workshops by day',
+    'workshops.filterCategoryAria': 'Filter workshops by category',
+    'workshops.sortClosest': 'Closest',
+    'workshops.sortLatest': 'Latest',
+    'workshops.sortAlphabetical': 'Alphabetical',
+    'workshops.filterByCategoryHint': 'Browse workshops by category',
+    'workshops.filterByDayHint': 'Browse workshops by day',
+    'workshops.allDaysShort': 'All days',
+    'workshops.showAllShort': 'Show all',
+    'workshops.promoPrevAria': 'Previous package',
+    'workshops.promoNextAria': 'Next package',
+    'workshops.promoSliderAria': 'Choose a package offer',
+    'workshops.bundleFiftyCerts': '50 certified certificates',
     'workshops.packageUnavailable':
       'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',

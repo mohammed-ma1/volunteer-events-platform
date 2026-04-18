@@ -134,10 +134,10 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 
         <!-- ─── Category filter (with counts) ─── -->
         <div class="flex flex-col gap-2.5">
-          <div class="flex justify-end">
+          <div class="flex">
             <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب التصنيف', 'Browse workshops by category') }}</span>
           </div>
-          <div class="flex flex-wrap gap-2 justify-end overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             @for (cat of CATEGORY_ORDER; track cat) {
               <button type="button" (click)="onSelectCategory(cat)"
                       class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98]"
@@ -153,10 +153,10 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
         <!-- ─── Day filter (with date sublabels) ─── -->
         @if (dayBuckets().length > 0) {
           <div class="flex flex-col gap-2.5">
-            <div class="flex justify-end">
+            <div class="flex">
               <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب أيام عرضها', 'Browse workshops by day') }}</span>
             </div>
-            <div class="flex flex-wrap gap-2 justify-end overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div class="flex flex-wrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <!-- All days -->
               <button type="button"
                       (click)="onSelectDay(null)"
@@ -186,19 +186,25 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 
         <!-- ─── My workshops header + search + sort ─── -->
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div class="flex items-center gap-2 justify-end sm:order-2 sm:flex-1">
+          <div class="flex items-center gap-2 sm:order-1">
+            <h2 class="text-lg font-bold text-slate-900">{{ tr('ورشـي', 'My Workshops') }}</h2>
+            <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
+          </div>
+          <div class="flex items-center gap-2 sm:order-2 sm:flex-1 sm:max-w-md">
             <label class="flex flex-1 items-center gap-2.5 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10">
               <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
               <input
                 class="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
                 [placeholder]="tr('ابحث...', 'Search...')"
-                [(ngModel)]="searchText"
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
               />
             </label>
             <div class="relative">
               <select
-                [(ngModel)]="sortMode"
-                class="appearance-none rounded-full border border-slate-200 bg-white px-4 py-2.5 pe-9 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+                [ngModel]="sortMode()"
+                (ngModelChange)="sortMode.set($event)"
+                class="appearance-none rounded-full border border-slate-200 bg-white ps-4 pe-9 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
               >
                 <option value="closest">{{ tr('الأقرب', 'Closest') }}</option>
                 <option value="latest">{{ tr('الأحدث', 'Latest') }}</option>
@@ -208,10 +214,6 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
               </svg>
             </div>
-          </div>
-          <div class="flex items-center gap-2 sm:order-1">
-            <h2 class="text-lg font-bold text-slate-900">{{ tr('ورشـي', 'My Workshops') }}</h2>
-            <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
           </div>
         </div>
 
@@ -307,8 +309,10 @@ export class DashboardComponent implements OnInit {
 
   workshops = signal<EnrolledWorkshop[]>([]);
   loading = signal(true);
-  searchText = '';
-  sortMode: SortMode = 'closest';
+  /** Search box text. Must be a signal so `filteredWorkshops` re-runs on every keystroke. */
+  readonly searchText = signal('');
+  /** Sort mode for the workshop list. Signal so the computed re-runs when the user picks a new option. */
+  readonly sortMode = signal<SortMode>('closest');
   readonly statusFilter = signal<StatusFilter>('all');
   readonly selectedDayKey = signal<string | null>(null);
   readonly selectedCategory = signal<WorkshopFilterCategory>('all');
@@ -358,7 +362,7 @@ export class DashboardComponent implements OnInit {
       list = list.filter((w) => eventMatchesWorkshopFilter(cat, inferCategory(w.event)));
     }
 
-    const q = this.searchText.trim().toLowerCase();
+    const q = this.searchText().trim().toLowerCase();
     if (q) {
       list = list.filter((w) => {
         const title = (w.event.title + ' ' + (w.event.title_en ?? '')).toLowerCase();
@@ -368,7 +372,7 @@ export class DashboardComponent implements OnInit {
       });
     }
 
-    return this.applySort(list, this.sortMode);
+    return this.applySort(list, this.sortMode());
   });
 
   private applySort(list: EnrolledWorkshop[], mode: SortMode): EnrolledWorkshop[] {
@@ -453,7 +457,7 @@ export class DashboardComponent implements OnInit {
   }
 
   clearFilters(): void {
-    this.searchText = '';
+    this.searchText.set('');
     this.statusFilter.set('all');
     this.selectedDayKey.set(null);
     this.selectedCategory.set('all');

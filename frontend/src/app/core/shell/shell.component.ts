@@ -22,25 +22,20 @@ import { CartDrawerComponent } from './cart-drawer.component';
     <div class="flex min-h-dvh flex-col bg-[var(--ve-surface)]">
       <div class="sticky top-0 z-40 isolate flex shrink-0 flex-col">
       @if (!isLearnerView()) {
-      <div
-        class="relative shrink-0 border-x-0 border-b border-white/10 bg-brand-900 text-white"
-        role="region"
-        [attr.aria-label]="i18n.t('banner.promoAria')"
-      >
-        <div
-          class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-2.5 text-center text-xs font-semibold leading-snug sm:text-sm md:gap-3"
+      <div class="relative shrink-0 border-x-0 border-b border-white/10 bg-brand-900 text-white">
+        <button
+          type="button"
+          class="ve-focus-ring mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-2.5 text-center text-xs font-semibold leading-snug transition hover:bg-white/5 active:bg-white/10 sm:text-sm md:gap-3"
           [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+          (click)="openPromoModal()"
         >
           <span class="shrink-0 text-base leading-none motion-safe:animate-ve-float-slow" aria-hidden="true">🔥</span>
           <span class="min-w-0">{{ i18n.t('banner.promoMain') }}</span>
-          <button
-            type="button"
-            class="shrink-0 rounded-sm border-0 bg-transparent px-0.5 text-inherit underline decoration-dotted decoration-white/90 underline-offset-[3px] transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900"
-            (click)="openPromoModal()"
+          <span
+            class="shrink-0 underline decoration-dotted decoration-white/90 underline-offset-[3px] hover:decoration-white"
+            >{{ i18n.t('banner.promoDetails') }}</span
           >
-            {{ i18n.t('banner.promoDetails') }}
-          </button>
-        </div>
+        </button>
       </div>
       }
       <header
@@ -105,7 +100,9 @@ import { CartDrawerComponent } from './cart-drawer.component';
           <div class="flex items-center gap-0.5 sm:gap-1 md:gap-1.5" dir="ltr">
             @if (!auth.isAuthenticated()) {
               <a
-                routerLink="/login"
+                href="/login"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="ve-focus-ring inline-flex items-center gap-2 rounded-lg border border-slate-200/90 bg-slate-50/90 px-3 py-2 text-xs font-bold text-brand-900 shadow-none transition hover:bg-slate-100 sm:px-3.5"
               >
                 <span class="max-w-[7.5rem] truncate sm:max-w-none">{{ i18n.t('nav.studentLogin') }}</span>

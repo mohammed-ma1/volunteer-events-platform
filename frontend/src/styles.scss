@@ -89,6 +89,31 @@
     -webkit-text-decoration-skip: objects;
   }
 
+  /** Hero line 2 — first word: indigo → bronze (matches design ref). */
+  .ve-hero-title2-gradient {
+    background-image: linear-gradient(
+      102deg,
+      theme('colors.brand.800') 0%,
+      theme('colors.brand.700') 28%,
+      theme('colors.gold.700') 72%,
+      theme('colors.gold.600') 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    -webkit-text-decoration-skip: objects;
+  }
+
+  .ve-hero-title2-bronze {
+    color: theme('colors.gold.700');
+  }
+
+  .ve-hero-title2-bright {
+    color: theme('colors.gold.400');
+  }
+
   /** Subtle shimmer bar (section accents) */
   .ve-shimmer-bar {
     background: linear-gradient(

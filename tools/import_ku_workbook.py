@@ -68,7 +68,7 @@ TITLE_EN_OVERRIDES: dict[str, str] = {
     "ms-w-030": "Workplace conflict resolution",
     "ms-w-040": "Refereeing fundamentals",
     "ms-w-049": "Planning science and tools for work quality",
-    "ms-w-055": "Welcome income",
+    "ms-w-055": "Welcome Income",
     "ms-w-059": "Visual analysis and extracting ideas",
     "ms-w-060": "Video tech and the IRS referee system",
     "ms-w-062": "Releasing negative emotions",

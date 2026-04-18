@@ -29,44 +29,33 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
       @if (isOwned()) {
         <!-- ─────────────── Enrolled-learner view ─────────────── -->
 
-        <!-- Hero -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]">
+        <!-- Hero: back link in its own top row; below it, content (start) + image (end). -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b1220] via-[#0f172a] to-[#1f2937] shadow-xl">
           @if (ev.image_url) {
             <div class="absolute inset-0">
-              <img [src]="ev.image_url" [alt]="title(ev)" class="h-full w-full object-cover opacity-15 blur-sm" loading="lazy"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/85 to-[#0f172a]/40"></div>
+              <img [src]="ev.image_url" [alt]="title(ev)" class="h-full w-full object-cover opacity-15 blur-md scale-105" loading="lazy"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-[#0b1220]/85 to-[#0b1220]/40"></div>
             </div>
           }
 
-          <div class="relative z-10 px-6 pt-5 pb-7 sm:px-8 sm:pt-6 sm:pb-9">
-            <div class="flex items-start justify-between gap-3">
+          <div class="relative z-10 px-5 pt-4 pb-6 sm:px-8 sm:pt-5 sm:pb-8">
+            <!-- Back link, anchored to the END side (left in RTL, right in LTR) -->
+            <div class="flex justify-end">
               <a routerLink="/dashboard" class="inline-flex items-center gap-1.5 text-sm font-medium text-white/65 transition hover:text-white">
-                @if (i18n.isRtl()) {
-                  <svg class="h-4 w-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                } @else {
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                }
+                <svg class="h-4 w-4" [class.rotate-180]="i18n.isRtl()" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 {{ tr('العودة للورش', 'Back to Workshops') }}
               </a>
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 px-3 py-1 text-[11px] font-bold text-white shadow-lg ring-1 ring-emerald-300/40">
-                <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                {{ tr('مسجّل', 'Enrolled') }}
-              </span>
             </div>
 
-            <div class="mt-6 flex flex-col gap-6 sm:flex-row sm:items-center">
-              <div class="shrink-0 w-full sm:w-64 aspect-video sm:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-700/40">
-                @if (ev.image_url) {
-                  <img [src]="ev.image_url" [alt]="title(ev)" class="h-full w-full object-cover" loading="lazy"/>
-                } @else {
-                  <div class="h-full w-full bg-gradient-to-br from-brand-800 to-indigo-900 flex items-center justify-center">
-                    <svg class="h-16 w-16 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                  </div>
-                }
-              </div>
-
+            <!-- Content (start) + thumbnail (end). DOM order is content→image so RTL puts content on the RIGHT and the image on the LEFT, matching the design. -->
+            <div class="mt-2 flex flex-col gap-6 sm:mt-3 sm:flex-row sm:items-center">
               <div class="flex-1 min-w-0">
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">{{ title(ev) }}</h1>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 px-3 py-1 text-[11px] font-bold text-white shadow ring-1 ring-emerald-300/40">
+                  <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  {{ tr('مسجّل', 'Enrolled') }}
+                </span>
+
+                <h1 class="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">{{ title(ev) }}</h1>
 
                 @if (hostName(); as h) {
                   <div class="mt-3 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm font-medium text-white ring-1 ring-white/15 backdrop-blur">
@@ -75,7 +64,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                   </div>
                 }
 
-                <div class="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-sm text-white/70">
+                <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/70">
                   @if (ev.starts_at) {
                     <span class="inline-flex items-center gap-1.5">
                       <svg class="h-4 w-4 text-white/45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -83,7 +72,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                     </span>
                     <span class="inline-flex items-center gap-1.5">
                       <svg class="h-4 w-4 text-white/45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                      {{ ev.starts_at | date:'h:mm a' }}
+                      {{ ev.starts_at | date:'h:mm a' : undefined : dateLocale() }}
                     </span>
                   }
                   @if (location(ev); as loc) {
@@ -93,6 +82,16 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                     </span>
                   }
                 </div>
+              </div>
+
+              <div class="shrink-0 w-full sm:w-72 lg:w-80 aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-slate-700/40">
+                @if (ev.image_url) {
+                  <img [src]="ev.image_url" [alt]="title(ev)" class="h-full w-full object-cover" loading="lazy"/>
+                } @else {
+                  <div class="h-full w-full bg-gradient-to-br from-brand-800 to-indigo-900 flex items-center justify-center">
+                    <svg class="h-16 w-16 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -110,7 +109,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
 
             <!-- Live broadcast link -->
             <section class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-              <h3 class="mb-4 text-base font-bold text-slate-900 text-center">{{ tr('رابط البث المباشر', 'Live broadcast link') }}</h3>
+              <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('رابط البث المباشر', 'Live broadcast link') }}</h3>
               <div class="flex flex-col items-center gap-3 py-2">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
                   @if (zoomAvailable()) {
@@ -145,12 +144,12 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
               </div>
             </section>
 
-            <!-- Recording -->
-            <section class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-              <h3 class="mb-4 text-base font-bold text-slate-900 text-center">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-              <div class="flex flex-col items-center gap-3 py-6">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
-                  <svg class="h-6 w-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <!-- Recording (dashed placeholder until a real recording is attached) -->
+            <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
+              <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+              <div class="flex flex-col items-center gap-3 py-10">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                  <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
               </div>
