@@ -17,6 +17,7 @@ export interface EnrolledWorkshop {
     location?: string;
     location_en?: string;
     zoom_link?: string;
+    host_name?: string;
     price?: number;
     currency?: string;
     status: WorkshopStatus;
@@ -44,6 +45,7 @@ export interface WorkshopDetail {
     location?: string;
     location_en?: string;
     zoom_link?: string;
+    host_name?: string;
     status: WorkshopStatus;
   };
   lessons: Lesson[];

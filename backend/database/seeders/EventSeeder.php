@@ -56,6 +56,7 @@ class EventSeeder extends Seeder
                     'ends_at' => $ends,
                     'location' => 'أونلاين عبر زوم',
                     'location_en' => 'Online via Zoom',
+                    'host_name' => $instructor,
                     'price' => 10,
                     'currency' => 'KWD',
                     'capacity' => 240,

@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular/core';
-import { NgClass, formatDate } from '@angular/common';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
@@ -20,12 +20,16 @@ import { LearnService } from '../../core/services/learn.service';
 import { calendarDayKeyKuwait, formatDaySubLabelKuwait } from '../events/workshop-day-filters';
 
 type StatusFilter = 'all' | 'upcoming' | 'ongoing' | 'completed';
+type SortMode = 'closest' | 'latest' | 'title';
 
 const CATEGORY_ORDER: WorkshopFilterCategory[] = [
   'all',
   'personal',
   'professional',
 ];
+
+const ARABIC_DAY_ORDINALS = ['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس', 'السابع'];
+const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh'];
 
 @Component({
   selector: 'app-dashboard',
@@ -89,7 +93,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
       } @else {
 
         <!-- ─── Stats Row ─── -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button type="button" (click)="onSelectStatus('all')"
                   class="relative bg-white rounded-xl border p-4 text-center group transition-all duration-200 hover:shadow-md"
                   [ngClass]="statusFilter() === 'all' ? 'border-brand-300 ring-2 ring-brand-100 shadow-md' : 'border-slate-100'">
@@ -128,168 +132,104 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
           </button>
         </div>
 
-        <!-- ─── Next Session Spotlight ─── -->
-        @if (nextSession(); as ns) {
-          <div class="relative overflow-hidden rounded-2xl p-5 sm:p-6"
-               [ngClass]="ns.event.status === 'ongoing'
-                 ? 'bg-gradient-to-br from-emerald-50 to-emerald-100/60 border-2 border-emerald-300'
-                 : 'bg-gradient-to-br from-blue-50 to-indigo-50/60 border-2 border-blue-200'">
-
-            @if (ns.event.status === 'ongoing') {
-              <div class="absolute top-0 right-0 w-40 h-40 bg-emerald-400/15 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-            }
-
-            <div class="relative z-10">
-              <div class="flex items-center gap-2 mb-3">
-                @if (ns.event.status === 'ongoing') {
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-lg animate-pulse">
-                    <span class="w-2 h-2 rounded-full bg-white"></span> {{ tr('الجلسة التالية مباشرة الآن', 'Next Session is LIVE') }}
-                  </span>
-                } @else {
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold shadow-lg">
-                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    {{ tr('الجلسة التالية', 'Up Next') }}
-                  </span>
-                }
-              </div>
-
-              <div class="flex flex-col sm:flex-row gap-4">
-                <div class="relative shrink-0 w-full sm:w-40 aspect-video sm:aspect-[4/3] rounded-xl overflow-hidden bg-slate-200 shadow-md">
-                  @if (ns.event.image_url) {
-                    <img [src]="ns.event.image_url" [alt]="workshopTitle(ns)" class="w-full h-full object-cover">
-                  }
-                </div>
-
-                <div class="flex-1 min-w-0">
-                  <h3 class="text-lg font-bold text-slate-900 line-clamp-2">{{ workshopTitle(ns) }}</h3>
-
-                  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-slate-500">
-                    @if (safeDate(ns.event.starts_at, 'EEE, MMM d'); as d) {
-                      <span class="inline-flex items-center gap-1.5">
-                        <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {{ d }}
-                      </span>
-                    }
-                    @if (safeDate(ns.event.starts_at, 'h:mm a'); as t) {
-                      <span class="inline-flex items-center gap-1.5">
-                        <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ t }}
-                      </span>
-                    }
-                  </div>
-
-                  @if (ns.event.status === 'upcoming' && countdown()) {
-                    <div class="flex items-center gap-2.5 mt-3">
-                      <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">{{ tr('تبدأ خلال', 'Starts in') }}</span>
-                      <div class="flex items-center gap-1.5">
-                        @if (countdown()!.days > 0) {
-                          <span class="inline-flex flex-col items-center px-2.5 py-1 bg-white rounded-lg border border-blue-100 min-w-[42px] shadow-sm">
-                            <span class="text-base font-bold text-blue-700">{{ countdown()!.days }}</span>
-                            <span class="text-[9px] text-slate-400 font-medium">{{ tr('أيام', 'DAYS') }}</span>
-                          </span>
-                        }
-                        <span class="inline-flex flex-col items-center px-2.5 py-1 bg-white rounded-lg border border-blue-100 min-w-[42px] shadow-sm">
-                          <span class="text-base font-bold text-blue-700">{{ countdown()!.hours }}</span>
-                          <span class="text-[9px] text-slate-400 font-medium">{{ tr('ساعات', 'HRS') }}</span>
-                        </span>
-                        <span class="inline-flex flex-col items-center px-2.5 py-1 bg-white rounded-lg border border-blue-100 min-w-[42px] shadow-sm">
-                          <span class="text-base font-bold text-blue-700">{{ countdown()!.minutes }}</span>
-                          <span class="text-[9px] text-slate-400 font-medium">{{ tr('دقائق', 'MIN') }}</span>
-                        </span>
-                        <span class="inline-flex flex-col items-center px-2.5 py-1 bg-white rounded-lg border border-blue-100 min-w-[42px] shadow-sm">
-                          <span class="text-base font-bold text-blue-700">{{ countdown()!.seconds }}</span>
-                          <span class="text-[9px] text-slate-400 font-medium">{{ tr('ثواني', 'SEC') }}</span>
-                        </span>
-                      </div>
-                    </div>
-                  }
-
-                  <div class="flex items-center gap-2 mt-4">
-                    @if (ns.event.zoom_link && ns.event.status !== 'completed') {
-                      <a [href]="ns.event.zoom_link" target="_blank" rel="noopener"
-                         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg active:scale-[0.98] transition-all"
-                         [ngClass]="ns.event.status === 'ongoing' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        {{ ns.event.status === 'ongoing' ? tr('انضم للجلسة المباشرة', 'Join Live Session') : tr('انضم عبر زوم', 'Join Zoom') }}
-                      </a>
-                    }
-                    <button type="button"
-                            class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition"
-                            (click)="openWorkshop(ns)">
-                      {{ tr('تفاصيل', 'Details') }}
-                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <!-- ─── Category filter (with counts) ─── -->
+        <div class="flex flex-col gap-2.5">
+          <div class="flex justify-end">
+            <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب التصنيف', 'Browse workshops by category') }}</span>
           </div>
-        }
-
-        <!-- ─── Search + Filters ─── -->
-        <div class="space-y-4">
-          <!-- Search -->
-          <label class="flex w-full items-center gap-2.5 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10">
-            <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input
-              class="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
-              [placeholder]="tr('ابحث في ورشك...', 'Search your workshops...')"
-              [(ngModel)]="searchText"
-            />
-          </label>
-
-          <!-- Day Tabs -->
-          @if (dayBuckets().length > 1) {
-            <div class="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              @for (b of dayBuckets(); track b.key; let di = $index) {
-                <button type="button"
-                        (click)="onSelectDay(b.key)"
-                        class="shrink-0 rounded-full px-5 py-2 text-center transition duration-200"
-                        [ngClass]="selectedDayKey() === b.key
-                          ? 'bg-brand-900 text-white shadow-md'
-                          : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
-                  <span class="block text-sm font-bold">{{ tr('اليوم', 'Day') }} {{ di + 1 }}</span>
-                  <span class="mt-0.5 block text-[11px] font-medium"
-                        [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-slate-400'">{{ b.sub }}</span>
-                </button>
-              }
-            </div>
-          }
-
-          <!-- Category Chips -->
-          <div class="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div class="flex flex-wrap gap-2 justify-end overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             @for (cat of CATEGORY_ORDER; track cat) {
               <button type="button" (click)="onSelectCategory(cat)"
                       class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98]"
                       [ngClass]="selectedCategory() === cat
                         ? 'bg-brand-900 text-white shadow-md'
                         : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
-                {{ categoryLabel(cat) }}
-              </button>
-            }
-          </div>
-
-          <!-- Status Chips (mobile-friendly alt to the stat cards) -->
-          <div class="flex gap-2 overflow-x-auto pb-1 sm:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            @for (s of STATUS_FILTERS; track s) {
-              <button type="button" (click)="onSelectStatus(s)"
-                      class="shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition"
-                      [ngClass]="statusFilter() === s
-                        ? 'bg-brand-900 text-white shadow-sm'
-                        : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'">
-                {{ statusLabel(s) }}
+                {{ categoryLabel(cat) }} <span class="font-normal opacity-75">({{ categoryCount(cat) }})</span>
               </button>
             }
           </div>
         </div>
 
+        <!-- ─── Day filter (with date sublabels) ─── -->
+        @if (dayBuckets().length > 0) {
+          <div class="flex flex-col gap-2.5">
+            <div class="flex justify-end">
+              <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب أيام عرضها', 'Browse workshops by day') }}</span>
+            </div>
+            <div class="flex flex-wrap gap-2 justify-end overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <!-- All days -->
+              <button type="button"
+                      (click)="onSelectDay(null)"
+                      class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+                      [ngClass]="selectedDayKey() === null
+                        ? 'bg-brand-900 text-white shadow-md'
+                        : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
+                <span class="block text-sm font-bold">{{ tr('كل الأيام', 'All days') }}</span>
+                <span class="mt-0.5 block text-[11px] font-medium"
+                      [ngClass]="selectedDayKey() === null ? 'text-white/80' : 'text-slate-400'">{{ tr('عرض الكل', 'Show all') }}</span>
+              </button>
+              @for (b of dayBuckets(); track b.key; let di = $index) {
+                <button type="button"
+                        (click)="onSelectDay(b.key)"
+                        class="shrink-0 rounded-2xl px-4 py-2 text-center transition duration-200"
+                        [ngClass]="selectedDayKey() === b.key
+                          ? 'bg-brand-900 text-white shadow-md'
+                          : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
+                  <span class="block text-sm font-bold">{{ dayLabel(di) }}</span>
+                  <span class="mt-0.5 block text-[11px] font-medium"
+                        [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-slate-400'">{{ b.sub }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- ─── My workshops header + search + sort ─── -->
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-center gap-2 justify-end sm:order-2 sm:flex-1">
+            <label class="flex flex-1 items-center gap-2.5 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10">
+              <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input
+                class="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                [placeholder]="tr('ابحث...', 'Search...')"
+                [(ngModel)]="searchText"
+              />
+            </label>
+            <div class="relative">
+              <select
+                [(ngModel)]="sortMode"
+                class="appearance-none rounded-full border border-slate-200 bg-white px-4 py-2.5 pe-9 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+              >
+                <option value="closest">{{ tr('الأقرب', 'Closest') }}</option>
+                <option value="latest">{{ tr('الأحدث', 'Latest') }}</option>
+                <option value="title">{{ tr('أبجدي', 'Alphabetical') }}</option>
+              </select>
+              <svg class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 sm:order-1">
+            <h2 class="text-lg font-bold text-slate-900">{{ tr('ورشـي', 'My Workshops') }}</h2>
+            <span class="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
+          </div>
+        </div>
+
+        <!-- Status chips (mobile-friendly alt to the stat cards) -->
+        <div class="flex gap-2 overflow-x-auto pb-1 sm:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          @for (s of STATUS_FILTERS; track s) {
+            <button type="button" (click)="onSelectStatus(s)"
+                    class="shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition"
+                    [ngClass]="statusFilter() === s
+                      ? 'bg-brand-900 text-white shadow-sm'
+                      : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'">
+              {{ statusLabel(s) }}
+            </button>
+          }
+        </div>
+
         <!-- ─── Workshop Cards Grid ─── -->
         <div>
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-bold text-slate-900">{{ tr('ورشــي', 'My Workshops') }}</h2>
-            <span class="text-xs text-slate-400 font-medium">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
-          </div>
-
           @if (filteredWorkshops().length === 0) {
             <div class="text-center py-12 bg-white rounded-2xl border border-slate-100">
               <svg class="h-10 w-10 text-slate-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -302,7 +242,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @for (ws of filteredWorkshops(); track ws.id) {
-              <div class="group relative overflow-hidden rounded-2xl border bg-white hover:shadow-lg transition-all duration-300 cursor-pointer"
+              <div class="group relative flex flex-col overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:shadow-lg cursor-pointer"
                    [ngClass]="ws.event.status === 'ongoing' ? 'border-emerald-200 ring-1 ring-emerald-100' : 'border-slate-100'"
                    role="button" tabindex="0"
                    (click)="openWorkshop(ws)"
@@ -310,7 +250,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                    (keydown.space)="openWorkshop(ws); $event.preventDefault()">
 
                 <!-- Image -->
-                <div class="relative aspect-[16/9] overflow-hidden bg-slate-100">
+                <div class="relative aspect-[16/10] overflow-hidden bg-slate-100">
                   @if (ws.event.image_url) {
                     <img [src]="ws.event.image_url" [alt]="workshopTitle(ws)" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                   } @else {
@@ -319,81 +259,34 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
                     </div>
                   }
                   <!-- Status Badge -->
-                  <div class="absolute top-2.5 left-2.5">
+                  <div class="absolute top-3 start-3">
                     @if (ws.event.status === 'ongoing') {
-                      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold shadow bg-emerald-600 text-white">
+                      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow bg-emerald-600 text-white">
                         <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                         {{ tr('مباشر', 'LIVE') }}
                       </span>
                     } @else if (ws.event.status === 'upcoming') {
-                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold shadow bg-blue-600 text-white">{{ tr('قادمة', 'UPCOMING') }}</span>
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow bg-blue-600 text-white">{{ tr('قادمة', 'UPCOMING') }}</span>
                     } @else {
-                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold shadow bg-slate-500 text-white">{{ tr('مكتملة', 'ENDED') }}</span>
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow bg-slate-500 text-white">{{ tr('مكتملة', 'ENDED') }}</span>
                     }
                   </div>
-                  <!-- Zoom Quick-Join Overlay -->
-                  @if (ws.event.zoom_link && ws.event.status !== 'completed') {
-                    <a [href]="ws.event.zoom_link" target="_blank" rel="noopener"
-                       (click)="$event.stopPropagation()"
-                       class="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-lg backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 active:scale-[0.97]"
-                       [ngClass]="ws.event.status === 'ongoing' ? 'bg-emerald-600/90' : 'bg-blue-600/90'">
-                      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                      {{ ws.event.status === 'ongoing' ? tr('انضم الآن', 'Join Now') : tr('زوم', 'Zoom') }}
-                    </a>
-                  }
                 </div>
 
                 <!-- Content -->
-                <div class="p-4">
-                  <h3 class="font-bold text-slate-900 text-sm line-clamp-2 leading-snug">{{ workshopTitle(ws) }}</h3>
+                <div class="flex flex-1 flex-col p-4 gap-1.5">
+                  <h3 class="font-bold text-slate-900 text-base line-clamp-2 leading-snug">{{ workshopTitle(ws) }}</h3>
 
-                  @if (workshopSummary(ws)) {
-                    <p class="text-xs text-slate-400 mt-1 line-clamp-1">{{ workshopSummary(ws) }}</p>
+                  @if (presenterName(ws); as host) {
+                    <p class="inline-flex items-center gap-1.5 text-xs text-brand-700 font-semibold">
+                      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                      {{ host }}
+                    </p>
                   }
 
-                  <!-- Date / Time -->
-                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3 text-[11px] text-slate-500">
-                    @if (safeDate(ws.event.starts_at, 'MMM d'); as d) {
-                      <span class="inline-flex items-center gap-1">
-                        <svg class="h-3.5 w-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        {{ d }}
-                      </span>
-                    }
-                    @if (safeDate(ws.event.starts_at, 'h:mm a'); as t) {
-                      <span class="inline-flex items-center gap-1">
-                        <svg class="h-3.5 w-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ t }}
-                      </span>
-                    }
-                  </div>
-
-                  <!-- Footer -->
-                  <div class="flex items-center justify-between mt-3.5 pt-3 border-t border-slate-100">
-                    @if (ws.event.status === 'upcoming' && ws.event.starts_at) {
-                      <span class="text-[11px] font-semibold text-blue-600">{{ getRelativeTime(ws.event.starts_at) }}</span>
-                    } @else if (ws.event.status === 'ongoing') {
-                      <span class="text-[11px] font-semibold text-emerald-600">{{ tr('جارية الآن', 'In progress') }}</span>
-                    } @else {
-                      <span class="text-[11px] text-slate-400">{{ tr('انتهت', 'Ended') }}</span>
-                    }
-
-                    @if (ws.event.zoom_link && ws.event.status !== 'completed') {
-                      <a [href]="ws.event.zoom_link" target="_blank" rel="noopener"
-                         (click)="$event.stopPropagation()"
-                         class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold text-white shadow-sm transition active:scale-[0.97]"
-                         [ngClass]="ws.event.status === 'ongoing' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'">
-                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        {{ ws.event.status === 'ongoing' ? tr('انضم الآن', 'Join Now') : tr('انضم عبر زوم', 'Join Zoom') }}
-                      </a>
-                    } @else if (ws.event.status === 'completed') {
-                      <span class="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                        <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        {{ tr('منتهية', 'Done') }}
-                      </span>
-                    } @else {
-                      <span class="text-[11px] text-brand-600 font-semibold group-hover:underline">{{ tr('التفاصيل', 'Details') }} &rarr;</span>
-                    }
-                  </div>
+                  @if (workshopSummary(ws); as sum) {
+                    <p class="text-xs text-slate-400 line-clamp-2">{{ sum }}</p>
+                  }
                 </div>
               </div>
             }
@@ -403,7 +296,7 @@ const CATEGORY_ORDER: WorkshopFilterCategory[] = [
     </div>
   `,
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   readonly auth = inject(AuthService);
   readonly i18n = inject(I18nService);
   private learnService = inject(LearnService);
@@ -415,6 +308,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   workshops = signal<EnrolledWorkshop[]>([]);
   loading = signal(true);
   searchText = '';
+  sortMode: SortMode = 'closest';
   readonly statusFilter = signal<StatusFilter>('all');
   readonly selectedDayKey = signal<string | null>(null);
   readonly selectedCategory = signal<WorkshopFilterCategory>('all');
@@ -422,14 +316,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   upcomingCount = signal(0);
   ongoingCount = signal(0);
   completedCount = signal(0);
-
-  countdown = signal<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
-  private countdownInterval: ReturnType<typeof setInterval> | null = null;
-
-  nextSession = computed(() => {
-    const ws = this.workshops();
-    return ws.find(w => w.event.status === 'ongoing') ?? ws.find(w => w.event.status === 'upcoming') ?? null;
-  });
 
   readonly dayBuckets = computed(() => {
     const list = this.workshops();
@@ -477,12 +363,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
       list = list.filter((w) => {
         const title = (w.event.title + ' ' + (w.event.title_en ?? '')).toLowerCase();
         const summary = ((w.event.summary ?? '') + ' ' + (w.event.summary_en ?? '')).toLowerCase();
-        return title.includes(q) || summary.includes(q);
+        const host = (w.event.host_name ?? '').toLowerCase();
+        return title.includes(q) || summary.includes(q) || host.includes(q);
       });
     }
 
-    return list;
+    return this.applySort(list, this.sortMode);
   });
+
+  private applySort(list: EnrolledWorkshop[], mode: SortMode): EnrolledWorkshop[] {
+    const t = (s?: string) => (s ?? '').trim();
+    const time = (s?: string) => (s ? new Date(s).getTime() : Number.POSITIVE_INFINITY);
+    const sorted = [...list];
+    switch (mode) {
+      case 'closest':
+        sorted.sort((a, b) => time(a.event.starts_at) - time(b.event.starts_at));
+        break;
+      case 'latest':
+        sorted.sort((a, b) => time(b.event.starts_at) - time(a.event.starts_at));
+        break;
+      case 'title':
+        sorted.sort((a, b) => t(this.workshopTitle(a)).localeCompare(t(this.workshopTitle(b))));
+        break;
+    }
+    return sorted;
+  }
 
   get userName(): string {
     return this.auth.user()?.name ?? 'Learner';
@@ -500,23 +405,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.ongoingCount.set(data.filter(w => w.event.status === 'ongoing').length);
         this.completedCount.set(data.filter(w => w.event.status === 'completed').length);
         this.loading.set(false);
-        this.startCountdown();
       },
       error: () => this.loading.set(false),
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
-    }
   }
 
   onSelectStatus(s: StatusFilter): void {
     this.statusFilter.set(this.statusFilter() === s ? 'all' : s);
   }
 
-  onSelectDay(dayKey: string): void {
+  onSelectDay(dayKey: string | null): void {
+    if (dayKey === null) {
+      this.selectedDayKey.set(null);
+      return;
+    }
     this.selectedDayKey.set(this.selectedDayKey() === dayKey ? null : dayKey);
   }
 
@@ -526,6 +428,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   categoryLabel(cat: WorkshopFilterCategory): string {
     return this.i18n.t(`cat.${cat}` as TranslationKey);
+  }
+
+  /** Number of enrolled workshops in this category (always shown next to chip). */
+  categoryCount(cat: WorkshopFilterCategory): number {
+    const list = this.workshops();
+    if (cat === 'all') {
+      return list.length;
+    }
+    return list.filter((w) => eventMatchesWorkshopFilter(cat, inferCategory(w.event))).length;
+  }
+
+  /** Localised ordinal day label: "اليوم الأول" / "Day First". */
+  dayLabel(dayIndex: number): string {
+    const ordinals = this.isArabic() ? ARABIC_DAY_ORDINALS : ENGLISH_DAY_ORDINALS;
+    const ord = ordinals[dayIndex] ?? String(dayIndex + 1);
+    return this.isArabic() ? `اليوم ${ord}` : `Day ${ord}`;
+  }
+
+  /** Trim and return the host name when present. */
+  presenterName(ws: EnrolledWorkshop): string | null {
+    const raw = ws.event.host_name?.trim();
+    return raw && raw.length > 0 ? raw : null;
   }
 
   clearFilters(): void {
@@ -546,43 +470,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'completed':
         return this.tr('مكتملة', 'Completed');
     }
-  }
-
-  /** Format an ISO/date string safely. Returns null for invalid input so the
-   *  template can `@if` on it instead of crashing the DatePipe (NG02100). */
-  safeDate(value: string | null | undefined, format: string): string | null {
-    if (!value) return null;
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return null;
-    try {
-      return formatDate(d, format, 'en-US');
-    } catch {
-      return null;
-    }
-  }
-
-  getRelativeTime(dateStr: string): string {
-    const target = new Date(dateStr).getTime();
-    const now = Date.now();
-    const diff = target - now;
-
-    if (diff <= 0) return this.tr('بدأت الآن', 'Starting now');
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    if (days > 0) {
-      return this.isArabic()
-        ? `تبدأ خلال ${days}ي ${hours}س`
-        : `Starts in ${days}d ${hours}h`;
-    }
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    if (hours > 0) {
-      return this.isArabic()
-        ? `تبدأ خلال ${hours}س ${minutes}د`
-        : `Starts in ${hours}h ${minutes}m`;
-    }
-    return this.isArabic() ? `تبدأ خلال ${minutes}د` : `Starts in ${minutes}m`;
   }
 
   openWorkshop(ws: EnrolledWorkshop): void {
@@ -627,28 +514,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private isArabic(): boolean {
     return this.i18n.locale() === 'ar';
-  }
-
-  private startCountdown(): void {
-    this.updateCountdown();
-    this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
-  }
-
-  private updateCountdown(): void {
-    const ns = this.nextSession();
-    if (!ns || ns.event.status !== 'upcoming' || !ns.event.starts_at) {
-      this.countdown.set(null);
-      return;
-    }
-
-    const target = new Date(ns.event.starts_at).getTime();
-    const diff = Math.max(0, target - Date.now());
-
-    this.countdown.set({
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((diff % (1000 * 60)) / 1000),
-    });
   }
 }

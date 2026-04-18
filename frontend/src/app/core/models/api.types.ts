@@ -12,6 +12,8 @@ export interface VolunteerEvent {
   ends_at: string | null;
   location: string | null;
   location_en?: string | null;
+  zoom_link?: string | null;
+  host_name?: string | null;
   price: number;
   currency: string;
   capacity: number;

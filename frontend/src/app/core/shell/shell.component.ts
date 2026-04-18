@@ -1,6 +1,8 @@
 import { NgClass } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
-import { PRIMARY_OUTLET, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, PRIMARY_OUTLET, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
 import { cartIconBump } from '../animations/cart-animations';
 import { routeFade } from '../animations/route-animations';
 import { PROMO_HERO_IMAGE_URL } from '../constants/promo-hero';
@@ -19,6 +21,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
   template: `
     <div class="flex min-h-dvh flex-col bg-[var(--ve-surface)]">
       <div class="sticky top-0 z-40 isolate flex shrink-0 flex-col">
+      @if (!isLearnerView()) {
       <div
         class="relative shrink-0 border-x-0 border-b border-white/10 bg-brand-900 text-white"
         role="region"
@@ -39,6 +42,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
           </button>
         </div>
       </div>
+      }
       <header
         class="shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md transition-[box-shadow] duration-300"
         [class.shadow-sm]="headerCompact()"
@@ -66,6 +70,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
             />
           </a>
 
+          @if (!isLearnerView()) {
           <nav class="hidden items-center gap-1 text-sm font-medium text-ink-600 md:flex md:gap-4 lg:gap-5">
             <a
               routerLink="/"
@@ -93,6 +98,9 @@ import { CartDrawerComponent } from './cart-drawer.component';
               >{{ i18n.t('nav.faq') }}</a
             >
           </nav>
+          } @else {
+            <span class="hidden flex-1 md:block"></span>
+          }
 
           <div class="flex items-center gap-0.5 sm:gap-1 md:gap-1.5" dir="ltr">
             @if (!auth.isAuthenticated()) {
@@ -112,6 +120,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
               </a>
             }
 
+            @if (!isLearnerView()) {
             <span [@cartIconBump]="cart.itemCount()" class="inline-flex">
               <button
                 type="button"
@@ -135,12 +144,14 @@ import { CartDrawerComponent } from './cart-drawer.component';
                 }
               </button>
             </span>
+            }
 
             <button
               type="button"
               class="ve-focus-ring hidden h-9 w-9 items-center justify-center rounded-lg text-brand-900 transition-colors hover:bg-slate-100 md:inline-flex"
               [attr.aria-label]="i18n.t('nav.searchAria')"
               (click)="onSearchClick()"
+              [class.md:hidden]="isLearnerView()"
             >
               <svg class="h-[1.15rem] w-[1.15rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path
@@ -211,22 +222,6 @@ import { CartDrawerComponent } from './cart-drawer.component';
                           />
                         </svg>
                         {{ i18n.t('nav.myWorkshops') }}
-                      </a>
-                      <a
-                        routerLink="/"
-                        fragment="workshops"
-                        (click)="userMenuOpen.set(false)"
-                        class="flex items-center gap-3 px-4 py-2.5 text-sm text-ink-700 transition-colors hover:bg-brand-50 hover:text-brand-900"
-                      >
-                        <svg class="h-[18px] w-[18px] text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.8"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                        {{ i18n.t('nav.browseWorkshops') }}
                       </a>
                       <a
                         routerLink="/change-password"
@@ -349,6 +344,7 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </div>
       </main>
 
+      @if (!isLearnerView()) {
       <footer class="mt-auto shrink-0 border-t border-white/5 bg-[#020617] pt-16 pb-8 text-slate-300">
         <div class="mx-auto max-w-6xl px-4 md:px-8">
           <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
@@ -455,6 +451,21 @@ import { CartDrawerComponent } from './cart-drawer.component';
           </div>
         </div>
       </footer>
+      } @else {
+      <!-- ─── Learner-portal compact footer ─── -->
+      <footer class="mt-auto shrink-0 border-t border-slate-200 bg-white py-4 text-slate-500">
+        <div
+          class="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 text-xs sm:flex-row"
+          [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+        >
+          <p class="text-center sm:text-start">{{ i18n.t('footer.copyrightNextLevel') }}</p>
+          <div class="flex items-center gap-5">
+            <a routerLink="/terms" class="transition-colors hover:text-brand-900">{{ i18n.t('footer.terms') }}</a>
+            <a routerLink="/privacy" class="transition-colors hover:text-brand-900">{{ i18n.t('footer.privacy') }}</a>
+          </div>
+        </div>
+      </footer>
+      }
 
       <!-- Floating WhatsApp Chat Button -->
       <a
@@ -619,7 +630,9 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </svg>
       </button>
 
-      <app-cart-drawer />
+      @if (!isLearnerView()) {
+        <app-cart-drawer />
+      }
     </div>
   `,
 })
@@ -635,6 +648,31 @@ export class ShellComponent {
   readonly langMenuOpen = signal(false);
   readonly showScrollTop = signal(false);
   readonly headerCompact = signal(false);
+
+  /** Current URL, kept reactive via router events. Used to switch between
+   *  the public marketing shell and the simplified learner-portal shell. */
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  /** True for routes that belong to the learner portal: dashboard, change-password,
+   *  and the workshop detail page when viewed by a logged-in learner. Public
+   *  visitors keep the full marketing header/footer. */
+  readonly isLearnerView = computed(() => {
+    const url = (this.currentUrl() ?? '').split('?')[0].split('#')[0];
+    if (url.startsWith('/dashboard') || url.startsWith('/change-password')) {
+      return true;
+    }
+    if (url.startsWith('/events/') && this.auth.isAuthenticated()) {
+      return true;
+    }
+    return false;
+  });
 
   userInitial(): string {
     return (this.auth.user()?.name ?? '?').charAt(0).toUpperCase();
