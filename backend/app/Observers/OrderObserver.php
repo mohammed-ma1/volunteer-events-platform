@@ -52,7 +52,8 @@ class OrderObserver
         }
 
         if (config('services.ghl.webhook_url')) {
-            SendGhlWebhookJob::dispatch($order);
+            // Run synchronously: production uses database queue with no worker, so async dispatch never fires.
+            SendGhlWebhookJob::dispatchSync($order);
         }
     }
 
