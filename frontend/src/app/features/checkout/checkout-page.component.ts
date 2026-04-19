@@ -200,6 +200,9 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
                   formControlName="email"
                   autocomplete="email"
                 />
+                <p class="mt-1.5 max-w-prose text-xs leading-snug text-red-600" role="note">
+                  {{ i18n.t('checkout.emailImportantNote') }}
+                </p>
               </div>
 
               @if (error()) {

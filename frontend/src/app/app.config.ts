@@ -8,6 +8,7 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { acceptLanguageInterceptor } from './core/http/accept-language.interceptor';
 import { apiUrlInterceptor } from './core/http/api-url.interceptor';
 import { cartTokenInterceptor } from './core/http/cart-token.interceptor';
 
@@ -50,6 +51,8 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
-    provideHttpClient(withInterceptors([apiUrlInterceptor, authInterceptor, cartTokenInterceptor])),
+    provideHttpClient(
+      withInterceptors([acceptLanguageInterceptor, apiUrlInterceptor, authInterceptor, cartTokenInterceptor]),
+    ),
   ],
 };

@@ -2,7 +2,13 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { AuthResponse, ChangePasswordRequest, LearnerUser, LoginRequest } from './auth.types';
+import {
+  AuthResponse,
+  ChangePasswordRequest,
+  ForgotPasswordResetRequest,
+  LearnerUser,
+  LoginRequest,
+} from './auth.types';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -54,6 +60,18 @@ export class AuthService {
     return this.http.put<{ message: string }>('/v1/auth/password', data).pipe(
       catchError(err => throwError(() => err))
     );
+  }
+
+  requestPasswordResetOtp(email: string): Observable<{ message: string }> {
+    return this.http
+      .post<{ message: string }>('/v1/auth/forgot-password/request', { email })
+      .pipe(catchError(err => throwError(() => err)));
+  }
+
+  resetPasswordWithOtp(body: ForgotPasswordResetRequest): Observable<{ message: string }> {
+    return this.http
+      .post<{ message: string }>('/v1/auth/forgot-password/reset', body)
+      .pipe(catchError(err => throwError(() => err)));
   }
 
   getToken(): string | null {

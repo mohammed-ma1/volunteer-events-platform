@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Services\OrderReceiptMailer;
 use App\Services\PostPaymentService;
+use App\Services\TeamPaymentNotifyMailer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -17,6 +18,7 @@ class OrderObserver
 {
     public function __construct(
         private readonly OrderReceiptMailer $receiptMailer,
+        private readonly TeamPaymentNotifyMailer $teamPaymentNotifyMailer,
         private readonly PostPaymentService $postPaymentService
     ) {}
 
@@ -29,6 +31,7 @@ class OrderObserver
         $this->removePaidLinesFromCart($order);
 
         $this->receiptMailer->sendIfPaidAndNotSent($order);
+        $this->teamPaymentNotifyMailer->sendIfPaidAndNotSent($order);
 
         try {
             $result = $this->postPaymentService->handlePaidOrder($order);

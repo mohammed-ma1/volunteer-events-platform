@@ -41,6 +41,22 @@ export type TranslationKey =
   | 'login.signIn'
   | 'login.signingIn'
   | 'login.forgot'
+  | 'login.pwdResetSuccess'
+  | 'forgotPassword.title'
+  | 'forgotPassword.subtitle'
+  | 'forgotPassword.emailLabel'
+  | 'forgotPassword.sendCode'
+  | 'forgotPassword.sending'
+  | 'forgotPassword.backLogin'
+  | 'forgotPassword.otpLabel'
+  | 'forgotPassword.newPassword'
+  | 'forgotPassword.confirmPassword'
+  | 'forgotPassword.resetSubmit'
+  | 'forgotPassword.resetting'
+  | 'forgotPassword.step2Hint'
+  | 'forgotPassword.errGeneric'
+  | 'forgotPassword.errOtp'
+  | 'forgotPassword.requestSent'
   | 'changePassword.title'
   | 'changePassword.subtitle'
   | 'changePassword.labelCurrent'
@@ -243,6 +259,7 @@ export type TranslationKey =
   | 'checkout.tapLeavingSite'
   | 'checkout.preparingTap'
   | 'checkout.loadingTapFrame'
+  | 'checkout.emailImportantNote'
   | 'tapReturn.finishing'
   | 'complete.title'
   | 'complete.status'
@@ -343,6 +360,23 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'login.signIn': 'تسجيل الدخول',
     'login.signingIn': 'جاري الدخول…',
     'login.forgot': 'نسيت كلمة المرور؟',
+    'login.pwdResetSuccess': 'تم تغيير كلمة المرور بنجاح. يمكنك تسجيل الدخول الآن.',
+    'forgotPassword.title': 'استعادة كلمة المرور',
+    'forgotPassword.subtitle': 'أدخل بريدك الإلكتروني لإرسال رمز التحقق إلى صندوق الوارد.',
+    'forgotPassword.emailLabel': 'البريد الإلكتروني',
+    'forgotPassword.sendCode': 'إرسال الرمز',
+    'forgotPassword.sending': 'جاري الإرسال…',
+    'forgotPassword.backLogin': 'العودة لتسجيل الدخول',
+    'forgotPassword.otpLabel': 'رمز التحقق (6 أرقام)',
+    'forgotPassword.newPassword': 'كلمة المرور الجديدة',
+    'forgotPassword.confirmPassword': 'تأكيد كلمة المرور',
+    'forgotPassword.resetSubmit': 'تعيين كلمة المرور',
+    'forgotPassword.resetting': 'جاري الحفظ…',
+    'forgotPassword.step2Hint': 'تحقق من بريدك الإلكتروني وأدخل الرمز ثم اختر كلمة مرور جديدة.',
+    'forgotPassword.errGeneric': 'تعذر إتمام الطلب. حاول مرة أخرى.',
+    'forgotPassword.errOtp': 'رمز غير صالح أو منتهي.',
+    'forgotPassword.requestSent':
+      'إذا كان هناك حساب مرتبط بهذا البريد الإلكتروني، فقد أرسلنا رمز التحقق.',
     'changePassword.title': 'تغيير كلمة المرور',
     'changePassword.subtitle': 'أدخل كلمة المرور الحالية ثم اختر كلمة مرور جديدة.',
     'changePassword.labelCurrent': 'كلمة المرور الحالية',
@@ -556,6 +590,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.tapLeavingSite': 'سيتم فتح Tap في هذه النافذة؛ بعد الدفع ستعود تلقائياً إلى التأكيد.',
     'checkout.preparingTap': 'جاري تجهيز صفحة الدفع…',
     'checkout.loadingTapFrame': 'جاري تحميل Tap…',
+    'checkout.emailImportantNote':
+      'ملاحظة: يرجى كتابة اسمك وايميلك بشكل صحيح ، معلومات تسجيل الدخول ستصلك على الايميل بعد الدفع مباشرة',
     'tapReturn.finishing': 'جاري إنهاء الدفع…',
     'complete.title': 'شكراً',
     'complete.status': 'حالة الطلب:',
@@ -662,6 +698,23 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'login.signIn': 'Sign in',
     'login.signingIn': 'Signing in…',
     'login.forgot': 'Forgot password?',
+    'login.pwdResetSuccess': 'Your password was reset. You can sign in now.',
+    'forgotPassword.title': 'Reset password',
+    'forgotPassword.subtitle': 'Enter your email and we will send a 6-digit code to your inbox.',
+    'forgotPassword.emailLabel': 'Email',
+    'forgotPassword.sendCode': 'Send code',
+    'forgotPassword.sending': 'Sending…',
+    'forgotPassword.backLogin': 'Back to sign in',
+    'forgotPassword.otpLabel': 'Verification code (6 digits)',
+    'forgotPassword.newPassword': 'New password',
+    'forgotPassword.confirmPassword': 'Confirm new password',
+    'forgotPassword.resetSubmit': 'Set password',
+    'forgotPassword.resetting': 'Saving…',
+    'forgotPassword.step2Hint': 'Check your email for the code, then choose a new password.',
+    'forgotPassword.errGeneric': 'Something went wrong. Please try again.',
+    'forgotPassword.errOtp': 'Invalid or expired code.',
+    'forgotPassword.requestSent':
+      'If an account exists for this email, we sent a verification code.',
     'changePassword.title': 'Change password',
     'changePassword.subtitle': 'Enter your current password and choose a new one.',
     'changePassword.labelCurrent': 'Current password',
@@ -880,6 +933,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.tapLeavingSite': 'Tap will open in this window; after you pay you will return here for confirmation.',
     'checkout.preparingTap': 'Preparing secure checkout…',
     'checkout.loadingTapFrame': 'Loading Tap checkout…',
+    'checkout.emailImportantNote':
+      'Note: Please enter your name and email correctly. Your login details will be sent to this email right after payment.',
     'tapReturn.finishing': 'Finishing your payment…',
     'complete.title': 'Thanks',
     'complete.status': 'Your order status is',

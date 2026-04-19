@@ -39,6 +39,20 @@ return [
         'webhook_url' => env('GHL_WEBHOOK_URL'),
     ],
 
+    /*
+    | Comma-separated list. Notified once when an order becomes paid (idempotent).
+    | Leave empty to disable internal payment emails.
+    */
+    'internal_payment_notify' => [
+        'recipients' => array_values(array_filter(array_map(
+            static fn (string $e): string => trim($e),
+            explode(',', (string) env(
+                'INTERNAL_PAYMENT_NOTIFY_RECIPIENTS',
+                'muneera@nextlevels.education,info@nextlevels.education,it@nextlevels.education'
+            ))
+        ))),
+    ],
+
     'tap' => [
         'secret' => env('TAP_SECRET_KEY'),
         'public_key' => env('TAP_PUBLIC_KEY'),

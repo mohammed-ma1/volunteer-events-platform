@@ -22,7 +22,7 @@ class Order extends Model
     protected $fillable = [
         'uuid', 'idempotency_key', 'cart_id', 'email', 'customer_name', 'phone',
         'status', 'subtotal', 'total', 'currency', 'tap_charge_id',
-        'tap_payment_url', 'paid_at', 'receipt_email_sent_at',
+        'tap_payment_url', 'paid_at', 'receipt_email_sent_at', 'team_payment_notify_sent_at',
     ];
 
     protected function casts(): array
@@ -32,6 +32,7 @@ class Order extends Model
             'total' => 'decimal:3',
             'paid_at' => 'datetime',
             'receipt_email_sent_at' => 'datetime',
+            'team_payment_notify_sent_at' => 'datetime',
         ];
     }
 

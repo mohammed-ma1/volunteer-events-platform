@@ -9,6 +9,13 @@ export interface ChangePasswordRequest {
   password_confirmation: string;
 }
 
+export interface ForgotPasswordResetRequest {
+  email: string;
+  otp: string;
+  password: string;
+  password_confirmation: string;
+}
+
 export interface AuthResponse {
   access_token: string;
   token_type: string;

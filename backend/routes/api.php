@@ -92,6 +92,11 @@ Route::prefix('v1/admin')->group(function () {
 
 // ── Learner Auth ─────────────────────────────────────────────────
 Route::prefix('v1/auth')->group(function () {
+    Route::middleware('throttle:5,1')->group(function () {
+        Route::post('/forgot-password/request', [LearnerAuthController::class, 'forgotPasswordRequest']);
+        Route::post('/forgot-password/reset', [LearnerAuthController::class, 'forgotPasswordReset']);
+    });
+
     Route::post('/login', [LearnerAuthController::class, 'login']);
 
     // Logout must remain reachable even when token_version is stale (single-session

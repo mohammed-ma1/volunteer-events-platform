@@ -1,5 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../core/auth/auth.service';
@@ -33,6 +33,12 @@ import { I18nService } from '../../core/i18n/i18n.service';
         </div>
 
         <div class="w-full rounded-2xl border border-ink-200/80 bg-white p-7 shadow-sm">
+          @if (pwdResetOk()) {
+            <div class="mb-5 rounded-xl border border-emerald-100 bg-emerald-50 p-3.5 text-sm text-emerald-800">
+              {{ i18n.t('login.pwdResetSuccess') }}
+            </div>
+          }
+
           @if (errorMessage()) {
             <div
               class="mb-5 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 p-3.5 text-sm text-red-600"
@@ -68,9 +74,8 @@ import { I18nService } from '../../core/i18n/i18n.service';
               <div class="mb-1.5 flex items-center justify-between gap-2">
                 <label for="password" class="block text-sm font-medium text-brand-900">{{ i18n.t('login.password') }}</label>
                 <a
-                  routerLink="/login"
+                  routerLink="/forgot-password"
                   class="text-xs font-semibold text-brand-900 underline-offset-2 hover:underline"
-                  (click)="$event.preventDefault()"
                   >{{ i18n.t('login.forgot') }}</a
                 >
               </div>
@@ -145,9 +150,10 @@ import { I18nService } from '../../core/i18n/i18n.service';
     </div>
   `,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   readonly i18n = inject(I18nService);
 
@@ -159,7 +165,14 @@ export class LoginComponent {
   loading = signal(false);
   errorMessage = signal('');
   showPassword = signal(false);
+  pwdResetOk = signal(false);
   currentYear = new Date().getFullYear();
+
+  ngOnInit(): void {
+    if (this.route.snapshot.queryParamMap.get('pwdReset') === 'ok') {
+      this.pwdResetOk.set(true);
+    }
+  }
 
   togglePassword(): void {
     this.showPassword.update((v) => !v);

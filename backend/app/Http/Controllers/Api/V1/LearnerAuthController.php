@@ -3,14 +3,111 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ForgotPasswordOtpMail;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use Throwable;
 
 class LearnerAuthController extends Controller
 {
+    private const OTP_CACHE_PREFIX = 'learner_pwd_otp:';
+
+    private const OTP_TTL_MINUTES = 15;
+
+    /** Same response whether or not a learner account exists (avoid email enumeration). */
+    private function forgotRequestMessage(Request $request): string
+    {
+        $al = strtolower((string) $request->header('Accept-Language', 'en'));
+
+        if (str_contains($al, 'ar')) {
+            return 'إذا كان هناك حساب مرتبط بهذا البريد الإلكتروني، فقد أرسلنا رمز التحقق.';
+        }
+
+        return 'If an account exists for this email, we sent a verification code.';
+    }
+
+    public function forgotPasswordRequest(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $emailNorm = strtolower(trim($validated['email']));
+
+        $user = User::query()
+            ->whereRaw('lower(email) = ?', [$emailNorm])
+            ->where('role', 'user')
+            ->where('is_active', true)
+            ->first();
+
+        if ($user !== null) {
+            $otp = (string) random_int(100000, 999999);
+            $cacheKey = self::OTP_CACHE_PREFIX.$emailNorm;
+
+            Cache::put($cacheKey, Hash::make($otp), now()->addMinutes(self::OTP_TTL_MINUTES));
+
+            try {
+                Mail::to($user->email)->send(new ForgotPasswordOtpMail($otp, $user));
+            } catch (Throwable $e) {
+                Cache::forget($cacheKey);
+                Log::error('Forgot password OTP email failed', [
+                    'email' => $user->email,
+                    'exception' => $e->getMessage(),
+                ]);
+
+                return response()->json([
+                    'message' => 'Unable to send email. Please try again later.',
+                ], 503);
+            }
+        }
+
+        return response()->json(['message' => $this->forgotRequestMessage($request)]);
+    }
+
+    public function forgotPasswordReset(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'otp' => ['required', 'string', 'size:6', 'regex:/^[0-9]{6}$/'],
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ]);
+
+        $emailNorm = strtolower(trim($validated['email']));
+        $cacheKey = self::OTP_CACHE_PREFIX.$emailNorm;
+        $hashedOtp = Cache::get($cacheKey);
+
+        if (! is_string($hashedOtp) || $hashedOtp === '' || ! Hash::check($validated['otp'], $hashedOtp)) {
+            return response()->json(['message' => 'Invalid or expired verification code.'], 422);
+        }
+
+        $user = User::query()
+            ->whereRaw('lower(email) = ?', [$emailNorm])
+            ->where('role', 'user')
+            ->where('is_active', true)
+            ->first();
+
+        if ($user === null) {
+            Cache::forget($cacheKey);
+
+            return response()->json(['message' => 'Invalid or expired verification code.'], 422);
+        }
+
+        $user->update([
+            'password' => $validated['password'],
+        ]);
+        $user->increment('token_version');
+        Cache::forget($cacheKey);
+
+        return response()->json(['message' => 'Password reset successfully. You can sign in now.']);
+    }
+
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
