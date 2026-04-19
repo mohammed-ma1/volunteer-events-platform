@@ -279,6 +279,13 @@ export type TranslationKey =
   | 'complete.downloadInvoice'
   | 'complete.backHome'
   | 'complete.detailsHeading'
+  | 'complete.goToMyWorkshops'
+  | 'complete.logInToWorkshops'
+  | 'complete.workshopAccountReadyTitle'
+  | 'complete.workshopAddedDashboardBody'
+  | 'complete.workshopAddedDashboardTitle'
+  | 'complete.workshopCredentialsAfter'
+  | 'complete.workshopCredentialsBefore'
   | 'failed.title'
   | 'failed.reasonTimeout'
   | 'failed.reasonError'
@@ -611,6 +618,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.downloadInvoice': 'تحميل الفاتورة',
     'complete.backHome': 'العودة للرئيسية',
     'complete.detailsHeading': 'تفاصيل الطلب',
+    'complete.goToMyWorkshops': 'ورشي',
+    'complete.logInToWorkshops': 'تسجيل الدخول للورش',
+    'complete.workshopAccountReadyTitle': 'حسابك جاهز للورش!',
+    'complete.workshopAddedDashboardBody':
+      'الورشة الجديدة جاهزة. انتقل إلى لوحة التحكم لعرض تفاصيل الجلسات وروابط زووم.',
+    'complete.workshopAddedDashboardTitle': 'أُضيفت الورشة إلى لوحة التحكم!',
+    'complete.workshopCredentialsAfter':
+      '. سجّل الدخول للاطلاع على تفاصيل الورش والجدول وروابط زووم.',
+    'complete.workshopCredentialsBefore': 'أرسلنا بيانات تسجيل الدخول إلى ',
     'failed.title': 'لم يكتمل الدفع',
     'failed.reasonTimeout': 'استغرق التأكيد وقتاً طويلاً أو انقطع الاتصال. إن خُصم مبلغ من بطاقتك ولم يُؤكد الطلب، تواصل مع الدعم مع رقم الطلب.',
     'failed.reasonError': 'حدث خطأ أثناء التحقق من حالة الدفع. حاول مرة أخرى.',
@@ -954,6 +970,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.downloadInvoice': 'Download invoice',
     'complete.backHome': 'Back to home',
     'complete.detailsHeading': 'Order details',
+    'complete.goToMyWorkshops': 'Go to My Workshops',
+    'complete.logInToWorkshops': 'Log In to Access Workshops',
+    'complete.workshopAccountReadyTitle': 'Your workshop account is ready!',
+    'complete.workshopAddedDashboardBody':
+      'Your new workshop is ready. Go to your dashboard to view session details and Zoom links.',
+    'complete.workshopAddedDashboardTitle': 'Workshop added to your dashboard!',
+    'complete.workshopCredentialsAfter':
+      '. Log in to access your workshop details, schedule, and Zoom links.',
+    'complete.workshopCredentialsBefore': "We've sent your login credentials to ",
     'failed.title': 'Payment not completed',
     'failed.reasonTimeout': 'Confirmation took too long or the connection dropped. If you were charged but the order did not confirm, contact support with your order reference.',
     'failed.reasonError': 'Something went wrong while checking payment status. Please try again.',

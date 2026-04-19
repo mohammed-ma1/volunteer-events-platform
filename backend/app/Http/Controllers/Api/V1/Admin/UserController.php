@@ -4,14 +4,179 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Enrollment;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    /**
+     * Create a learner account (role user). Omit password to receive a generated one in the response.
+     */
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'phone' => 'sometimes|nullable|string|max:30',
+            'password' => 'sometimes|nullable|string|min:8|max:255',
+            'is_active' => 'sometimes|boolean',
+        ]);
+
+        $provided = $validated['password'] ?? null;
+        $plainPassword = is_string($provided) && strlen($provided) >= 8
+            ? $provided
+            : Str::password(14);
+        $passwordWasGenerated = ! is_string($provided) || strlen($provided) < 8;
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'password' => $plainPassword,
+            'role' => 'user',
+            'is_active' => $validated['is_active'] ?? true,
+        ]);
+
+        ActivityLog::record(
+            Auth::guard('api')->id(),
+            'user.created',
+            'User',
+            $user->id,
+            ['email' => $user->email, 'auto_password' => $passwordWasGenerated]
+        );
+
+        return response()->json([
+            'data' => $this->serializeUser($user),
+            'meta' => [
+                'temporary_password' => $passwordWasGenerated ? $plainPassword : null,
+            ],
+        ], 201);
+    }
+
+    /**
+     * Move all enrollments from this learner to another (e.g. wrong-email checkout). Duplicate events on the target are deduplicated.
+     */
+    public function transferEnrollments(Request $request, int $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'target_user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        $source = User::findOrFail($id);
+        $target = User::findOrFail($validated['target_user_id']);
+
+        if ($source->id === $target->id) {
+            return response()->json(['message' => 'Source and target users must be different.'], 422);
+        }
+
+        if ($source->role !== 'user' || $target->role !== 'user') {
+            return response()->json(['message' => 'Enrollment transfer is only allowed between learner (user) accounts.'], 422);
+        }
+
+        $moved = 0;
+        $mergedDuplicates = 0;
+
+        DB::transaction(function () use ($source, $target, &$moved, &$mergedDuplicates): void {
+            $enrollments = Enrollment::query()
+                ->where('user_id', $source->id)
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->get();
+
+            foreach ($enrollments as $enrollment) {
+                $existingOnTarget = Enrollment::query()
+                    ->where('user_id', $target->id)
+                    ->where('event_id', $enrollment->event_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($existingOnTarget !== null) {
+                    $enrollment->delete();
+                    $mergedDuplicates++;
+
+                    continue;
+                }
+
+                $enrollment->update(['user_id' => $target->id]);
+                $moved++;
+            }
+        });
+
+        ActivityLog::record(
+            Auth::guard('api')->id(),
+            'user.enrollments_transferred',
+            'User',
+            $target->id,
+            [
+                'from_user_id' => $source->id,
+                'to_user_id' => $target->id,
+                'moved' => $moved,
+                'merged_duplicates' => $mergedDuplicates,
+            ]
+        );
+
+        return response()->json([
+            'data' => [
+                'from_user_id' => $source->id,
+                'to_user_id' => $target->id,
+                'moved' => $moved,
+                'merged_duplicates' => $mergedDuplicates,
+            ],
+        ]);
+    }
+
+    /**
+     * Set a new password for a learner (invalidates existing JWTs). Omit password to auto-generate; copy from response once.
+     */
+    public function resetPassword(Request $request, int $id): JsonResponse
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->role !== 'user') {
+            return response()->json(['message' => 'This endpoint only resets passwords for learner accounts.'], 422);
+        }
+
+        $admin = Auth::guard('api')->user();
+        if ($user->id === $admin->id) {
+            return response()->json(['message' => 'Use your account profile to change your own password.'], 422);
+        }
+
+        $validated = $request->validate([
+            'password' => 'sometimes|nullable|string|min:8|max:255',
+        ]);
+
+        $provided = $validated['password'] ?? null;
+        $plainPassword = is_string($provided) && strlen($provided) >= 8
+            ? $provided
+            : Str::password(14);
+        $passwordWasGenerated = ! is_string($provided) || strlen($provided) < 8;
+
+        $user->password = $plainPassword;
+        $user->save();
+        $user->increment('token_version');
+
+        ActivityLog::record(
+            $admin->id,
+            'user.password_reset_by_admin',
+            'User',
+            $user->id,
+            ['auto_password' => $passwordWasGenerated]
+        );
+
+        return response()->json([
+            'data' => $this->serializeUser($user->fresh()),
+            'meta' => [
+                'temporary_password' => $passwordWasGenerated ? $plainPassword : null,
+            ],
+        ]);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $query = User::query();

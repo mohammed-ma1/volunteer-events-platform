@@ -114,20 +114,31 @@ import { CheckoutService } from '../../core/services/checkout.service';
                     </div>
                     <div>
                       @if (auth.isAuthenticated()) {
-                        <span class="text-sm font-semibold text-slate-800 block">Workshop added to your dashboard!</span>
-                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">Your new workshop is ready. Go to your dashboard to view session details and Zoom links.</span>
+                        <span class="text-sm font-semibold text-slate-800 block">{{
+                          i18n.t('complete.workshopAddedDashboardTitle')
+                        }}</span>
+                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">{{
+                          i18n.t('complete.workshopAddedDashboardBody')
+                        }}</span>
                         <a routerLink="/dashboard"
                            class="ve-btn-primary mt-3">
                           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
-                          Go to My Workshops
+                          {{ i18n.t('complete.goToMyWorkshops') }}
                         </a>
                       } @else {
-                        <span class="text-sm font-semibold text-slate-800 block">Your workshop account is ready!</span>
-                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">We've sent your login credentials to <strong class="text-slate-700">{{ o.email }}</strong>. Log in to access your workshop details, schedule, and Zoom links.</span>
+                        <span class="text-sm font-semibold text-slate-800 block">{{
+                          i18n.t('complete.workshopAccountReadyTitle')
+                        }}</span>
+                        <span class="text-xs text-slate-500 mt-1 block leading-relaxed">
+                          {{ i18n.t('complete.workshopCredentialsBefore') }}<strong
+                            class="text-slate-700 [unicode-bidi:isolate]"
+                            dir="ltr"
+                            >{{ o.email }}</strong
+                          >{{ i18n.t('complete.workshopCredentialsAfter') }}</span>
                         <a routerLink="/login"
                            class="ve-btn-primary mt-3">
                           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                          Log In to Access Workshops
+                          {{ i18n.t('complete.logInToWorkshops') }}
                         </a>
                       }
                     </div>

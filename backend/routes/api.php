@@ -41,12 +41,17 @@ Route::prefix('v1/admin')->group(function () {
             Route::get('/events-chart', [AdminDashboardController::class, 'eventsChart']);
         });
 
-        // Users
+        // Users — literal paths before `{id}` where needed; constrain `{id}` to digits.
         Route::get('/users', [AdminUserController::class, 'index']);
-        Route::get('/users/{id}', [AdminUserController::class, 'show']);
-        Route::patch('/users/{id}', [AdminUserController::class, 'update']);
-        Route::patch('/users/{id}/toggle-active', [AdminUserController::class, 'toggleActive']);
-        Route::patch('/users/{id}/role', [AdminUserController::class, 'changeRole']);
+        Route::post('/users', [AdminUserController::class, 'store']);
+        Route::post('/users/{id}/transfer-enrollments', [AdminUserController::class, 'transferEnrollments'])
+            ->whereNumber('id');
+        Route::post('/users/{id}/reset-password', [AdminUserController::class, 'resetPassword'])
+            ->whereNumber('id');
+        Route::get('/users/{id}', [AdminUserController::class, 'show'])->whereNumber('id');
+        Route::patch('/users/{id}', [AdminUserController::class, 'update'])->whereNumber('id');
+        Route::patch('/users/{id}/toggle-active', [AdminUserController::class, 'toggleActive'])->whereNumber('id');
+        Route::patch('/users/{id}/role', [AdminUserController::class, 'changeRole'])->whereNumber('id');
 
         // Events — literal paths must be declared before `{id}` so they aren't captured as IDs.
         Route::post('/events/bulk-zoom-link', [AdminEventController::class, 'bulkSetZoomLink']);
