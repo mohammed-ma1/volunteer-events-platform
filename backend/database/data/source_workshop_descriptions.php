@@ -14,7 +14,7 @@ return [
         'description_ar' => 'بعضا من الأخطاء يقع فيها الغالبية في كتابة اللغة العربية، إما بسبب كون الخطأ متكرر أو كونهم لم يتعلموا الصح، تتضمن الورشة نشاطا لغويا بهدف إيضاح هذه الأخطاء وكيفية تعديلها.',
         'description_en' => 'Common writing mistakes in Arabic, often repeated or due to lack of proper learning. The workshop includes a linguistic activity to clarify and correct them.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/002_%D8%A7%D9%84%D8%A3%D8%AE%D8%B7%D8%A7%D8%A1_%D8%A7%D9%84%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9_%D9%81%D9%8A_%D8%A7%D9%84%D9%84%D8%BA%D8%A9_%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9.jpg',
         'instructor' => 'سنابل المسلم',
     ],
     'ms-w-002' => [
@@ -23,7 +23,7 @@ return [
         'description_ar' => 'نظرة عملية على طيف يغير الذكاء الاصطناعي مسار الوظائف، وما الذي عليك القيام به اليوم لتبقى في المقدمة',
         'description_en' => 'A practical look at how AI changes career paths, and what you need to do today to stay ahead.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/930494c0-639e-4204-9b81-864dfd122a63.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/038_%D9%87%D9%84_%D8%B3%D9%8A%D8%A3%D8%AE%D8%B0_%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A_%D9%88%D8%B8%D9%8A%D9%81%D8%AA%D9%83.jpg',
         'instructor' => 'عبدالعزيز الضبيب',
     ],
     'ms-w-003' => [
@@ -32,7 +32,7 @@ return [
         'description_ar' => 'تطوير أساليب التواصل المهني مع مختلف الأطراف داخل وخارج المؤسسة',
         'description_en' => 'Developing professional communication methods with various parties inside and outside the organization.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e767d052-b53b-423e-8ceb-7c2146b27714.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/005_%D9%85%D9%87%D8%A7%D8%B1%D8%A7%D8%AA_%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B5%D9%84_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'د.بسام الجزاف',
     ],
     'ms-w-004' => [
@@ -41,7 +41,7 @@ return [
         'description_ar' => 'الرسم ليس موهبة حكر على أحد. المتطلبات: قلم وورقة بيضاء أي حجم.',
         'description_en' => 'Drawing is not an exclusive talent. Requirements: pen and blank paper of any size.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/010_%D8%A7%D9%84%D8%B1%D8%B3%D9%85_%D8%A8%D8%AF%D9%88%D9%86_%D8%AA%D9%81%D9%83%D9%8A%D8%B1.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
     'ms-w-005' => [
@@ -50,7 +50,7 @@ return [
         'description_ar' => 'مدخل شامل لعالم التصميم الجرافيكي وأهم مبادئه وقواعده.',
         'description_en' => 'A comprehensive introduction to graphic design and its most important principles and rules.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/041_%D8%B4%D9%84%D9%88%D9%86_%D8%A3%D8%A8%D8%AF%D8%A3%D8%9F.jpg',
         'instructor' => 'حسن سيد',
     ],
     'ms-w-006' => [
@@ -59,7 +59,7 @@ return [
         'description_ar' => 'أمسك بزمام جميع أمور حياتك من خلال تعلم تقنية ذكية جديدة تساعدك في التعامل مع جميع المواقف وإزالة التوتر والخوف بشكل فوري والوصول إلى الاسترخاء',
         'description_en' => 'Take control of your life by learning a smart new technique to handle situations, instantly remove stress and fear, and reach relaxation.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4f262b3d-b79b-40c4-b2c1-eac956ce65d0.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/015_%D8%A7%D9%84%D8%B5%D9%85%D9%88%D8%AF_%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%AE%D8%A7%D8%A1.jpg',
         'instructor' => 'زينب الغضبان',
     ],
     'ms-w-007' => [
@@ -68,7 +68,7 @@ return [
         'description_ar' => 'كيفية إنشاء مشاهد احترافية باستخدام أدوات مجانية ومدفوعة بطريقة سهلة وذكية.',
         'description_en' => 'How to create professional scenes using free and paid tools in an easy and smart way.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/020_%D8%A5%D8%A8%D8%AF%D8%A7%D8%B9_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF_%D8%A8%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A.jpg',
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-008' => [
@@ -77,7 +77,7 @@ return [
         'description_ar' => 'كيف يؤثر الضغط على شهيتك واختياراتك الغذائية.',
         'description_en' => 'How stress affects your appetite and food choices.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/593058e3-ae1c-498a-9aed-8c0d113d213a.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/025_%D8%A7%D9%84%D8%AA%D9%88%D8%AA%D8%B1_%D9%88_%D8%A7%D9%84%D8%A7%D9%83%D9%84.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-009' => [
@@ -86,7 +86,7 @@ return [
         'description_ar' => 'تنظيم وعرض الأفكار بشكل واضح ومقنع / استخدام الصوت ولغة الجسد لتعزيز التأثير والحضور / اكتساب الثقة في طرح الرأي والدفاع عنه باحترافية',
         'description_en' => 'Organizing and presenting ideas clearly and convincingly / Using voice and body language to enhance impact and presence / Gaining confidence in presenting and defending opinions professionally.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/006_%D9%81%D9%86_%D8%A7%D9%84%D8%B9%D8%B1%D8%B6_%D9%88_%D8%A7%D9%84%D8%AA%D9%82%D8%AF%D9%8A%D9%85_%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A_%D9%88%D8%A5%D9%8A%D8%B5%D8%A7%D9%84_%D8%A7%D9%84%D8%B1%D8%A3%D9%8A_%D8%A8%D8%AB%D9%82%D8%A9_%D8%AF%D8%A7%D8%AE%D9%84_%D8%A7%D9%84%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%D8%A7%D8%AA.jpg',
         'instructor' => 'د.بسام الجزاف',
     ],
     'ms-w-010' => [
@@ -95,7 +95,7 @@ return [
         'description_ar' => 'كيفية استلهام وتوليد أفكار إبداعية للحملات الإعلانية والتسويقية.',
         'description_en' => 'How to inspire and generate creative ideas for advertising and marketing campaigns.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9.jpg',
         'instructor' => 'علي عادل',
     ],
     'ms-w-011' => [
@@ -104,7 +104,7 @@ return [
         'description_ar' => 'خطوات عملية لدمج تقنيات الذكاء الاصطناعي في خدماتك ومشاريعك الحالية.',
         'description_en' => 'Practical steps to integrate AI technologies into your current services and projects.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e254e55b-e8d0-4e29-8445-52ebc8871934.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/051_%D9%81%D9%86%D9%88%D9%86_%D8%AA%D8%B4%D8%A8%D9%87%D9%86%D8%A7_1.jpg',
         'instructor' => 'سليمان المراغى',
     ],
     'ms-w-012' => [
@@ -113,7 +113,7 @@ return [
         'description_ar' => 'تعرف على كيفية حماية أعمالك وتجنب المخاطر القانونية في العقود والتعاملات التجارية.',
         'description_en' => 'Learn how to protect your business and avoid legal risks in contracts and commercial dealings.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/26a955e2-c254-4e58-83d3-8572ac964a54.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/057_%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%AE%D8%A7%D8%B7%D8%B1_%D8%A7%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86%D9%8A%D8%A9.jpg',
         'instructor' => 'المحامي إبراهيم السماعيل',
     ],
     'ms-w-013' => [
@@ -122,7 +122,7 @@ return [
         'description_ar' => 'خطوات عملية تجنبك الوصول إلى الاحتراق الوظيفي.',
         'description_en' => 'Practical steps to avoid reaching burnout.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/030_%D8%A7%D9%84%D8%A8%D9%84%D9%88%D9%83_%D8%A7%D9%84%D8%A5%D8%A8%D8%AF%D8%A7%D8%B9%D9%8A.jpg',
         'instructor' => 'عبدالرحمن التركيت',
     ],
     'ms-w-014' => [
@@ -131,7 +131,7 @@ return [
         'description_ar' => 'القدرة على إدارة الأولويات بذكاء.',
         'description_en' => 'The ability to manage priorities smartly.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/033_%D8%A8%D9%88%D8%B5%D9%84%D8%A9_%D8%A7%D9%84%D8%A5%D9%86%D8%AC%D8%A7%D8%B2.jpg',
         'instructor' => 'آلاء النصار',
     ],
     'ms-w-015' => [
@@ -140,7 +140,7 @@ return [
         'description_ar' => 'تطوير مهارات التحدث أمام الجمهور والتأثير الإيجابي في المستمعين.',
         'description_en' => 'Developing public speaking skills and positively influencing listeners.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/059_%D9%81%D9%86_%D8%A7%D9%84%D8%A5%D9%84%D9%82%D8%A7%D8%A1_%D9%88%D8%A7%D9%84%D8%AA%D8%A3%D8%AB%D9%8A%D8%B1.jpg',
         'instructor' => 'مرزوق السعيد',
     ],
     'ms-w-016' => [
@@ -149,7 +149,7 @@ return [
         'description_ar' => 'تعلم كيف تساهم في بناء عالم من الوعي والوحدة / احتضن تميزك وتفرد به وغير العالم',
         'description_en' => 'Learn how to contribute to building a world of awareness and unity / Embrace your uniqueness and change the world.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/016_%D9%83%D9%86_%D8%A3%D9%86%D8%AA_%D8%BA%D9%8A%D8%B1_%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85.jpg',
         'instructor' => 'زينب الغضبان',
     ],
     'ms-w-017' => [
@@ -158,7 +158,7 @@ return [
         'description_ar' => 'أساسيات لغة بايثون وكيفية استخدامها في المشاريع البرمجية المختلفة.',
         'description_en' => 'Basics of Python language and how to use it in various programming projects.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e254e55b-e8d0-4e29-8445-52ebc8871934.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/061_%D8%A8%D8%B1%D9%85%D8%AC%D8%A9_%D8%A8%D8%A7%D9%8A%D8%AB%D9%88%D9%86.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
     'ms-w-018' => [
@@ -167,7 +167,7 @@ return [
         'description_ar' => 'ورشة عمل عملية تساعدك على اتخاذ الخطوة الأولى بثقة نحو تحقيق أهدافك المهنية.',
         'description_en' => 'A practical workshop to help you confidently take the first step towards achieving your career goals.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/039_%D8%A7%D9%84%D8%AE%D8%B7%D9%88%D8%A9_%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%89.jpg',
         'instructor' => 'منيرة النخيلان',
     ],
     'ms-w-019' => [
@@ -176,7 +176,7 @@ return [
         'description_ar' => 'تعرف على قواعد التصوير الأساسية وكيفية التقاط صور احترافية.',
         'description_en' => 'Learn the basic rules of photography and how to take professional photos.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/066_%D8%A3%D8%B3%D8%A7%D8%B3%D9%8A%D8%A7%D8%AA_%D8%A7%D9%84%D8%AA%D8%B5%D9%88%D9%8A%D8%B1.jpg',
         'instructor' => 'فاطمة عباس',
     ],
     'ms-w-020' => [
@@ -185,7 +185,7 @@ return [
         'description_ar' => 'نظرة عامة على قوانين كرة السلة ودور الحكم في إدارة المباراة.',
         'description_en' => 'An overview of basketball rules and the referee\'s role in managing the game.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/069_%D8%AD%D9%83%D8%A7%D9%85_%D9%83%D8%B1%D8%A9_%D8%A7%D9%84%D8%B3%D9%84%D8%A9.jpg',
         'instructor' => 'الحكم خالد الشمري',
     ],
     'ms-w-021' => [
@@ -194,7 +194,7 @@ return [
         'description_ar' => 'التعرف على أنماط الشخصيات في بيئة العمل / تحسين نهارات التكيف والتواصل، ةتقليل التوتر ورفع مستوى الانسجام.',
         'description_en' => 'Recognizing personality types in the workplace / Improving adaptation and communication skills, reducing stress, and raising harmony levels.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/007_%D8%A7%D9%84%D8%AA%D8%B9%D8%A7%D9%85%D9%84_%D9%85%D8%B9_%D8%A3%D9%86%D9%85%D8%A7%D8%B7_%D8%A7%D9%84%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA_%D8%A7%D9%84%D9%85%D8%AE%D8%AA%D9%84%D9%81%D8%A9_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'د.بسام الجزاف',
     ],
     'ms-w-022' => [
@@ -203,7 +203,7 @@ return [
         'description_ar' => 'اختر شعورا ةترجمه بصريا. المتطلبات: ألوان، ورقة بيضاء أي حجم.',
         'description_en' => 'Choose an emotion and translate it visually. Requirements: colors, blank paper of any size.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/011_%D8%A7%D9%84%D8%B1%D8%B3%D9%85_%D9%83%D8%AA%D8%B9%D8%A8%D9%8A%D8%B1_%D8%B9%D9%86_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D8%B9%D8%B1.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
     'ms-w-023' => [
@@ -212,7 +212,7 @@ return [
         'description_ar' => 'جولة عملية في أهم برامج التصميم وكيفية اختيار البرنامج المناسب لمشروعك.',
         'description_en' => 'A practical tour of the most important design software and how to choose the right one for your project.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/76fd7f81-a364-4934-a0e4-6e803b86ec84.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/043_%D8%A7%D9%84%D8%A8%D8%B1%D8%A7%D9%85%D8%AC_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D8%AE%D8%AF%D9%85%D8%A9_%D9%84%D9%84%D8%AC%D8%B1%D8%A7%D9%81%D9%8A%D9%83_%D8%AF%D9%8A%D8%B2%D8%A7%D9%8A%D9%86.jpg',
         'instructor' => 'حسن سيد',
     ],
     'ms-w-024' => [
@@ -221,7 +221,7 @@ return [
         'description_ar' => 'مبادئ كتابة السيناريو وكيفية بناء القصة من الفكرة إلى الورق.',
         'description_en' => 'Principles of screenwriting and how to build a story from idea to paper.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9_1.jpg',
         'instructor' => 'علي عادل',
     ],
     'ms-w-025' => [
@@ -230,7 +230,7 @@ return [
         'description_ar' => 'كيفية بناء عقلية إيجابية ومرنة تساعدك على تجاوز التحديات وتحقيق أهدافك.',
         'description_en' => 'How to build a positive and flexible mindset to overcome challenges and achieve goals.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/074_%D8%B9%D9%82%D9%84%D9%8A%D8%A9_%D8%A7%D9%84%D9%86%D8%AC%D8%A7%D8%AD.jpg',
         'instructor' => 'ريم العلي',
     ],
     'ms-w-026' => [
@@ -239,7 +239,7 @@ return [
         'description_ar' => 'اكتشف قوتك الداخلية وغير حياتك للأفضل من خلال ورشة مستوحاة من كتاب السبع عادات للكاتب ستيفن كوفي',
         'description_en' => 'Discover your inner strength and change your life for the better through a workshop inspired by Stephen Covey\'s 7 Habits.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/016_%D9%83%D9%86_%D8%A3%D9%86%D8%AA_%D8%BA%D9%8A%D8%B1_%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85_1.jpg',
         'instructor' => 'زينب الغضبان',
     ],
     'ms-w-027' => [
@@ -248,7 +248,7 @@ return [
         'description_ar' => 'أسرار المقابلة والطرق للعلامة الكاملة.',
         'description_en' => 'Interview secrets and methods for a perfect score.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e767d052-b53b-423e-8ceb-7c2146b27714.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/075_%D9%81%D9%86_%D8%A7%D8%AC%D8%AA%D9%8A%D8%A7%D8%B2_%D8%A7%D9%84%D9%85%D9%82%D8%A7%D8%A8%D9%84%D8%A9_%D8%A7%D9%84%D8%B4%D8%AE%D8%B5%D9%8A%D8%A9.jpg',
         'instructor' => 'د. محمد إسماعيل',
     ],
     'ms-w-028' => [
@@ -257,7 +257,7 @@ return [
         'description_ar' => 'كيف تأخذ اللقطة الصح وتفهم الزوايا السينمائية باستخدام AI بشكل احترافي.',
         'description_en' => 'How to take the right shot and understand cinematic angles using AI professionally.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/020_%D8%A5%D8%A8%D8%AF%D8%A7%D8%B9_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF_%D8%A8%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A_1.jpg',
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-029' => [
@@ -266,7 +266,7 @@ return [
         'description_ar' => 'ماذا تأكل لتعزز الطاقة والذاكرة والانتاجية.',
         'description_en' => 'What to eat to boost energy, memory, and productivity.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4f262b3d-b79b-40c4-b2c1-eac956ce65d0.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/026_%D8%BA%D8%B0%D8%A7%D8%A1_%D8%A7%D9%84%D8%AA%D8%B1%D9%83%D9%8A%D8%B2.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-030' => [
@@ -275,7 +275,7 @@ return [
         'description_ar' => 'حل المنازعات داخل العمل / فهم أسباب الخلافات المهنية وتطبيق مهارات التفاوض والحوار للوصول إلى حلول سريعة, تحويل النزاع إلى فرصة لتحسين الأداء والعلاقات',
         'description_en' => 'Resolving workplace disputes / Understanding causes of professional conflicts and applying negotiation skills for quick solutions, turning conflict into an opportunity for improvement.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/009_%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D8%AE%D9%84%D8%A7%D9%81%D8%A7%D8%AA_%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A%D8%A9.jpg',
         'instructor' => 'د.بسام الجزاف',
     ],
     'ms-w-031' => [
@@ -284,7 +284,7 @@ return [
         'description_ar' => 'مفتاحك الحقيقي للحصول على الوظيفة',
         'description_en' => 'Your real key to getting the job.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/086_%D9%83%D8%AA%D8%A7%D8%A8%D8%A9_%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9_%D8%A7%D9%84%D8%B0%D8%A7%D8%AA%D9%8A%D8%A9.jpg',
         'instructor' => 'د. محمد إسماعيل',
     ],
     'ms-w-032' => [
@@ -293,7 +293,7 @@ return [
         'description_ar' => 'أسلوب شيق وبسيط لتحليل التحديات بدءا من المشكلات وتداعياتها، وتلخيص الأهداف، اختيار الاجراءات المناسبة، ومن ثم متابعة النتائج.',
         'description_en' => 'An interesting and simple method to analyze challenges, summarize goals, choose appropriate actions, and follow up on results.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/031_%D8%A3%D8%B3%D9%84%D9%88%D8%A8_STAR.jpg',
         'instructor' => 'عبدالرحمن التركيت',
     ],
     'ms-w-033' => [
@@ -302,7 +302,7 @@ return [
         'description_ar' => 'تعلم فن صياغة الأوامر (Prompts) للحصول على أفضل النتائج من نماذج الذكاء الاصطناعي.',
         'description_en' => 'Learn the art of crafting prompts to get the best results from AI models.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/930494c0-639e-4204-9b81-864dfd122a63.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/062_%D8%A7%D9%84%D8%AA%D8%AD%D8%AF%D8%AB_%D9%85%D8%B9_%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
     'ms-w-034' => [
@@ -311,7 +311,7 @@ return [
         'description_ar' => 'ورشة توعوية في مفهوم السئولية المجتمعية، وكيفية ممارستها بفاعلية في المجتمع وتحقيق الأهداف المرجوة لنهضته.',
         'description_en' => 'Awareness workshop on social responsibility and how to practice it effectively.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/083_%D8%A7%D9%84%D9%85%D8%B3%D8%A4%D9%88%D9%84%D9%8A%D8%A9_%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9%D9%8A%D8%A9.jpg',
         'instructor' => 'شيماء الطباخ',
     ],
     'ms-w-035' => [
@@ -320,7 +320,7 @@ return [
         'description_ar' => 'مهارة رسم الحدود الصحية في العلاقات، وحماية الصحة النفسية,',
         'description_en' => 'The skill of drawing healthy boundaries in relationships and protecting mental health.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/034_%D9%81%D9%86_%D9%84%D8%A7_%D8%A7%D9%84%D9%84%D8%A8%D9%82%D8%A9.jpg',
         'instructor' => 'آلاء النصار',
     ],
     'ms-w-036' => [
@@ -329,7 +329,7 @@ return [
         'description_ar' => 'كيف تنجز أكثر بوقت أقل',
         'description_en' => 'How to accomplish more in less time.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/930494c0-639e-4204-9b81-864dfd122a63.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/077_%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%88%D9%82%D8%AA_%D8%A8%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A.jpg',
         'instructor' => 'د. محمد إسماعيل',
     ],
     'ms-w-037' => [
@@ -338,7 +338,7 @@ return [
         'description_ar' => 'كيفية تحويل البيانات المعقدة إلى تقارير بصرية سهلة الفهم وقابلة للتفاعل.',
         'description_en' => 'How to turn complex data into easy-to-understand and interactive visual reports.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/053_%D8%AA%D8%AD%D9%84%D9%8A%D9%84_%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA.jpg',
         'instructor' => 'سليمان المراغى',
     ],
     'ms-w-038' => [
@@ -347,7 +347,7 @@ return [
         'description_ar' => 'نصائح وتدريبات عملية لتخطي المقابلات الشخصية بكل ثقة واحترافية.',
         'description_en' => 'Practical tips and exercises to pass personal interviews with confidence and professionalism.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e767d052-b53b-423e-8ceb-7c2146b27714.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/085_%D8%A7%D8%AC%D8%AA%D9%8A%D8%A7%D8%B2_%D8%A7%D9%84%D9%85%D9%82%D8%A7%D8%A8%D9%84%D8%A9.jpg',
         'instructor' => 'محمد الجيماز',
     ],
     'ms-w-039' => [
@@ -356,7 +356,7 @@ return [
         'description_ar' => 'التجهيزات والإعدادات اللازمة لضمان تصوير فيديو احترافي بهاتفك.',
         'description_en' => 'Necessary preparations and settings to ensure professional video shooting with your phone.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/087_%D8%AA%D8%B5%D9%88%D9%8A%D8%B1_%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88_%D9%82%D8%A8%D9%84.jpg',
         'instructor' => 'دلال الحشاش',
     ],
     'ms-w-040' => [
@@ -374,7 +374,7 @@ return [
         'description_ar' => 'نظرة عامة للتسويق والتعريق به كنشاط ممتع وعملية ملهمة يجب القيام بها بحب وحماس، ورشة تفاعلية تتضمن نشاط يدوي من قبل الحضور وبعض التفاعل الشفهي أيضا لتحفيز العقول على التفكير بشكل خارج عن المألوف.',
         'description_en' => 'An overview of marketing as a fun activity and inspiring process. An interactive workshop with manual activities and oral interaction to stimulate out-of-the-box thinking.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/003_%D8%A7%D9%84%D8%AA%D8%B3%D9%88%D9%8A%D9%82_%D8%A7%D9%84%D9%85%D9%85%D8%AA%D8%B9.jpg',
         'instructor' => 'سنابل المسلم',
     ],
     'ms-w-042' => [
@@ -383,7 +383,7 @@ return [
         'description_ar' => 'رحلة ملهمة عن كيفية البدء من الصفر وتحقيق نجاحات كبيرة في حياتك المهنية.',
         'description_en' => 'An inspiring journey on how to start from zero and achieve great career success.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/040_From_zero_to_hero.jpg',
         'instructor' => 'منيرة النخيلان',
     ],
     'ms-w-043' => [
@@ -392,7 +392,7 @@ return [
         'description_ar' => 'التصرف باحتراف في المواقف الصعبة',
         'description_en' => 'Acting professionally in difficult situations.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4f262b3d-b79b-40c4-b2c1-eac956ce65d0.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/008_%D8%A7%D9%84%D8%B9%D9%85%D9%84_%D8%AA%D8%AD%D8%AA_%D8%A7%D9%84%D8%B6%D8%BA%D8%B7.jpg',
         'instructor' => 'د.بسام الجزاف',
     ],
     'ms-w-044' => [
@@ -401,7 +401,7 @@ return [
         'description_ar' => 'الرسم كتوثيق للحظة زمنية. المتطلبات: قلم وورقة بيضاء أي حجم.',
         'description_en' => 'Drawing as documentation of a moment in time. Requirements: pen and blank paper of any size.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/012_%D8%A7%D9%84%D9%81%D9%86%D8%A7%D9%86_%D9%88%D8%A7%D9%84%D8%B2%D9%85%D9%86.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
     'ms-w-045' => [
@@ -410,7 +410,7 @@ return [
         'description_ar' => 'دليل لاختيار أفضل الأجهزة والمعدات التي تلبي احتياجاتك في مجال التصميم.',
         'description_en' => 'A guide to choosing the best devices and equipment that meet your design needs.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/044_%D8%A7%D9%84%D8%A3%D8%AC%D9%87%D8%B2%D8%A9_%D8%A7%D9%84%D8%AA%D9%8A_%D8%AA%D8%AD%D8%AA%D8%A7%D8%AC%D9%87%D8%A7_%D9%81%D9%8A_%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85.jpg',
         'instructor' => 'حسن سيد',
     ],
     'ms-w-046' => [
@@ -419,7 +419,7 @@ return [
         'description_ar' => 'أهم قواعد التعامل والكلام والزي مع المسئولين والزملاء',
         'description_en' => 'The most important rules of dealing, speaking, and dressing with officials and colleagues.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/26a955e2-c254-4e58-83d3-8572ac964a54.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/081_%D8%A5%D8%AA%D9%8A%D9%83%D9%8A%D8%AA_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'دانا العوضي',
     ],
     'ms-w-047' => [
@@ -428,7 +428,7 @@ return [
         'description_ar' => 'حول خيالك إلى فيديو متكامل مع تحريك احترافي و ردود فعل واقعية.',
         'description_en' => 'Turn your imagination into a complete video with professional animation and realistic reactions.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/022_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88_%D9%88%D8%AA%D8%AD%D8%B1%D9%8A%D9%83_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D9%87%D8%AF.jpg',
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-048' => [
@@ -437,7 +437,7 @@ return [
         'description_ar' => 'كيف تحافظ على الشبع والتركيز وتجنب هبوط الطاقة.',
         'description_en' => 'How to stay full and focused, and avoid energy crashes.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/027_%D8%A7%D9%84%D8%B3%D9%86%D8%A7%D9%83%D8%A7%D8%AA_%D8%A7%D9%84%D8%B0%D9%83%D9%8A%D8%A9.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-049' => [
@@ -446,7 +446,7 @@ return [
         'description_ar' => 'تعلم الأداة الأكثر قيمة لإدارة الشركات والمؤسسات الكبرى الرائدة في عالم الأعمال.',
         'description_en' => 'Learn the most valuable tool for managing leading companies and institutions in the business world.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e767d052-b53b-423e-8ceb-7c2146b27714.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/018_%D9%85%D9%82%D8%AF%D9%85%D8%A9_%D9%81%D9%8A_%D8%B9%D9%84%D9%85_%D8%A7%D9%84%D8%AA%D8%AE%D8%B7%D9%8A%D8%B7.jpg',
         'instructor' => 'زينب الغضبان',
     ],
     'ms-w-050' => [
@@ -455,7 +455,7 @@ return [
         'description_ar' => 'المتطلبات الأساسية والخطوات الأولى للدخول في عالم صناعة الأفلام.',
         'description_en' => 'Basic requirements and first steps to enter the world of filmmaking.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/049_%D8%A8%D8%B7%D8%A7%D9%82%D8%A9_%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%8A%D8%A9_%D9%84%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%A3%D9%81%D9%84%D8%A7%D9%85.jpg',
         'instructor' => 'علي عادل',
     ],
     'ms-w-051' => [
@@ -464,7 +464,7 @@ return [
         'description_ar' => 'ابدأ صح',
         'description_en' => 'Start right.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/078_%D8%A3%D9%88%D9%84_90_%D9%8A%D9%88%D9%85_%D9%85%D9%86_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'د. محمد إسماعيل',
     ],
     'ms-w-052' => [
@@ -473,7 +473,7 @@ return [
         'description_ar' => 'مهارة فلترة الأفكار، وتحويلها من سامة إلى مغذية.',
         'description_en' => 'The skill of filtering ideas, transforming them from toxic to nourishing.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/035_%D9%83%D8%B3%D8%B1_%D9%82%D9%8A%D9%88%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1.jpg',
         'instructor' => 'آلاء النصار',
     ],
     'ms-w-053' => [
@@ -482,7 +482,7 @@ return [
         'description_ar' => 'مبادئ حماية البيانات والأنظمة من الاختراقات والتهديدات السيبرانية.',
         'description_en' => 'Principles of protecting data and systems from breaches and cyber threats.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/930494c0-639e-4204-9b81-864dfd122a63.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/063_%D8%A7%D9%84%D8%A3%D9%85%D9%86_%D8%A7%D9%84%D8%B3%D9%8A%D8%A8%D8%B1%D8%A7%D9%86%D9%8A.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
     'ms-w-054' => [
@@ -491,7 +491,7 @@ return [
         'description_ar' => 'تعلم استراتيجيات فعالة لإبراز مهاراتك وترك انطباع قوي في مقابلات العمل.',
         'description_en' => 'Learn effective strategies to highlight your skills and leave a strong impression in job interviews.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/060_%D8%A7%D9%84%D8%AA%D8%A3%D9%84%D9%82_%D9%81%D9%8A_%D8%A7%D9%84%D9%85%D9%82%D8%A7%D8%A8%D9%84%D8%A7%D8%AA_%D8%A7%D9%84%D9%88%D8%B8%D9%8A%D9%81%D9%8A%D8%A9.jpg',
         'instructor' => 'مرزوق السعيد',
     ],
     'ms-w-055' => [
@@ -509,7 +509,7 @@ return [
         'description_ar' => 'فهم الشخصيات وبناء علاقات ناجحة.',
         'description_en' => 'Understanding personalities and building successful relationships.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/079_%D8%A8%D9%86%D8%A7%D8%A1_%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D9%82%D8%A7%D8%AA_%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A%D8%A9.jpg',
         'instructor' => 'د. محمد إسماعيل',
     ],
     'ms-w-057' => [
@@ -518,7 +518,7 @@ return [
         'description_ar' => 'ورشة عملية سريعة لبناء واجهات تطبيقات الهواتف الذكية باستخدام React Native.',
         'description_en' => 'A quick practical workshop on building smartphone app interfaces using React Native.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e254e55b-e8d0-4e29-8445-52ebc8871934.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/054_%D8%A8%D9%86%D8%A7%D8%A1_%D9%88%D8%A7%D8%AC%D9%87%D8%A9_%D8%AA%D8%B7%D8%A8%D9%8A%D9%82.jpg',
         'instructor' => 'سليمان المراغى',
     ],
     'ms-w-058' => [
@@ -527,7 +527,7 @@ return [
         'description_ar' => 'ورشة تفاعلية تساعدك على فهم المشاعر وإدارة الانفعال (التفاعل والتواصل بوعي / التوازن النفسي في الحياة اليومية )',
         'description_en' => 'Interactive workshop to help you understand emotions and manage reactions.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/091_%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%B9%D8%A7%D8%B7%D9%81%D9%8A.jpg',
         'instructor' => 'سارة المنيس',
     ],
     'ms-w-059' => [
@@ -536,7 +536,7 @@ return [
         'description_ar' => 'كيفية قراءة الصورة وتحليلها لاستخراج أفكار إبداعية جديدة.',
         'description_en' => 'How to read and analyze an image to extract new creative ideas.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/067_%D8%A7%D9%84%D8%AA%D8%AD%D9%84%D9%8A%D9%84_%D8%A7%D9%84%D8%A8%D8%B5%D8%B1%D9%8A.jpg',
         'instructor' => 'فاطمة عباس',
     ],
     'ms-w-060' => [
@@ -545,7 +545,7 @@ return [
         'description_ar' => 'كيف تساهم التكنولوجيا في تحسين دقة التحكيم وتقليل الأخطاء.',
         'description_en' => 'How technology contributes to improving refereeing accuracy and reducing errors.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/071_%D8%AA%D9%82%D9%86%D9%8A%D8%A9_%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88_IRS.jpg',
         'instructor' => 'الحكم خالد الشمري',
     ],
     'ms-w-061' => [
@@ -554,7 +554,7 @@ return [
         'description_ar' => 'ربط المكان والهوية من خلال الرسم من الذاكرة. المتطلبات: قلم وورقة بيضاء أي حجم.',
         'description_en' => 'Connecting place and identity by drawing from memory. Requirements: pen and blank paper of any size.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/013_%D8%B1%D8%B3%D9%85_%D8%A7%D9%84%D9%85%D9%83%D8%A7%D9%86_%E2%80%93_%D9%87%D9%88%D9%8A%D8%AA%D9%8A_%D8%A7%D9%84%D8%A8%D8%B5%D8%B1%D9%8A%D8%A9.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
     'ms-w-062' => [
@@ -563,7 +563,7 @@ return [
         'description_ar' => 'استعراض الأدوات التي تساعد على التخلص من المشاعر السلبية واضافتها إلى مهاراتنا الحياتية',
         'description_en' => 'Reviewing tools to help get rid of negative emotions and add them to life skills.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/593058e3-ae1c-498a-9aed-8c0d113d213a.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/099_%D8%A7%D9%84%D8%AA%D8%AE%D9%84%D8%B5_%D9%85%D9%86_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D8%B9%D8%B1_%D8%A7%D9%84%D8%B3%D9%84%D8%A8%D9%8A%D8%A9.jpg',
         'instructor' => 'فيصل الدويسان',
     ],
     'ms-w-063' => [
@@ -572,7 +572,7 @@ return [
         'description_ar' => 'توضيح الفروق الجوهرية بين الرسم الرقمي والتصميم الجرافيكي ومجالات كل منهما.',
         'description_en' => 'Clarifying the fundamental differences between digital art and graphic design and their respective fields.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/045_%D8%A7%D9%84%D9%81%D8%B1%D9%82_%D8%A8%D9%8A%D9%86_%D8%A7%D9%84%D8%B1%D8%B3%D9%85_%D8%A7%D9%84%D8%AF%D9%8A%D8%AC%D8%AA%D8%A7%D9%84_%D9%88%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85.jpg',
         'instructor' => 'حسن سيد',
     ],
     'ms-w-064' => [
@@ -581,7 +581,7 @@ return [
         'description_ar' => 'الفرق بين التحكيم على المستوى المحلي والدولي وأهم التحديات.',
         'description_en' => 'The difference between local and international refereeing and key challenges.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/072_%D8%A7%D9%84%D8%AA%D8%AD%D9%83%D9%8A%D9%85_%D8%A7%D9%84%D9%85%D8%AD%D9%84%D9%8A_%D9%88_%D8%A7%D9%84%D8%AF%D9%88%D9%84%D9%8A.jpg',
         'instructor' => 'الحكم خالد الشمري',
     ],
     'ms-w-065' => [
@@ -590,7 +590,7 @@ return [
         'description_ar' => 'خطوات تفصيلية لإعداد خطة عمل تجارية متكاملة تضمن نجاح مشروعك.',
         'description_en' => 'Detailed steps to prepare a comprehensive business plan that ensures your project\'s success.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/100_%D9%86%D9%85%D9%88%D8%B0%D8%AC_%D8%AE%D8%B7%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84_%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A.jpg',
         'instructor' => 'هاجر النصار',
     ],
     'ms-w-066' => [
@@ -599,7 +599,7 @@ return [
         'description_ar' => 'لكل شخص يستخدم البريد الالكتروني في معاملاته هذه الورشة لك',
         'description_en' => 'For anyone who uses email in their transactions, this workshop is for you.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/082_%D9%83%D8%AA%D8%A7%D8%A8%D8%A9_%D8%A7%D9%84%D8%A5%D9%8A%D9%85%D9%8A%D9%84.jpg',
         'instructor' => 'دانا العوضي',
     ],
     'ms-w-067' => [
@@ -608,7 +608,7 @@ return [
         'description_ar' => 'تعلم كيف تظهر داخل فيديوهات أو أفلام أو تصاميم سوشيال ميديا وكأنك جزء منها.',
         'description_en' => 'Learn how to appear in videos, movies, or social media designs as if you are part of them.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/023_%D8%B6%D8%B9_%D9%86%D9%81%D8%B3%D9%83_%D8%AF%D8%A7%D8%AE%D9%84_%D8%A3%D9%8A_%D9%85%D8%B4%D9%87%D8%AF.jpg',
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-068' => [
@@ -617,7 +617,7 @@ return [
         'description_ar' => 'طكيف تساهم التمارين القصيرة في تحسين الطاقة والمزاج والأداء الذهني.',
         'description_en' => 'How short exercises contribute to improving energy, mood, and mental performance.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/593058e3-ae1c-498a-9aed-8c0d113d213a.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/028_%D8%A7%D9%84%D8%AD%D8%B1%D9%83%D8%A9_%D9%88_%D8%A7%D9%84%D8%AA%D8%B1%D9%83%D9%8A%D8%B2.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-069' => [
@@ -626,7 +626,7 @@ return [
         'description_ar' => 'ما لا يقال في بيئة العمل، هو ما يصنع الفرق في نجاحك المهني.',
         'description_en' => 'What is not said in the workplace is what makes the difference in your career success.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/26a955e2-c254-4e58-83d3-8572ac964a54.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/092_%D9%82%D9%88%D8%A7%D8%B9%D8%AF_%D8%BA%D9%8A%D8%B1_%D9%85%D9%83%D8%AA%D9%88%D8%A8%D8%A9.jpg',
         'instructor' => 'غدير الكندري',
     ],
     'ms-w-070' => [
@@ -635,7 +635,7 @@ return [
         'description_ar' => 'ورشة لتطوير مهارات العمل الجماعي والانتقال من عقلية الموظف إلى عقلية الشريك.',
         'description_en' => 'A workshop to develop teamwork skills and transition from an employee mindset to a partner mindset.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/018_%D9%85%D9%82%D8%AF%D9%85%D8%A9_%D9%81%D9%8A_%D8%B9%D9%84%D9%85_%D8%A7%D9%84%D8%AA%D8%AE%D8%B7%D9%8A%D8%B7_1.jpg',
         'instructor' => 'زينب الغضبان',
     ],
     'ms-w-071' => [
@@ -644,7 +644,7 @@ return [
         'description_ar' => 'تعرف على أساسيات الإنتاج الفني وكيفية إدارة المشاريع الإبداعية.',
         'description_en' => 'Learn the basics of art production and how to manage creative projects.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/bc485eb7-32c1-4023-97c0-3a762a97f744.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/050_%D9%85%D8%A8%D8%A7%D8%AF%D8%A6_%D8%A7%D9%84%D8%A5%D9%86%D8%AA%D8%A7%D8%AC_%D8%A7%D9%84%D9%81%D9%86%D9%8A.jpg',
         'instructor' => 'علي عادل',
     ],
     'ms-w-072' => [
@@ -653,7 +653,7 @@ return [
         'description_ar' => 'تطبيق عملي لبناء نموذج عمل تجاري ناجح ومستدام لمشروعك.',
         'description_en' => 'Practical application to build a successful and sustainable business model for your project.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e767d052-b53b-423e-8ceb-7c2146b27714.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/090_%D9%86%D9%85%D9%88%D8%B0%D8%AC_%D8%A7%D9%84%D8%B9%D9%85%D9%84_%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A.jpg',
         'instructor' => 'أبرار أشكناني',
     ],
     'ms-w-073' => [
@@ -662,7 +662,7 @@ return [
         'description_ar' => 'العمل لا يتطلب فقط مهارات! بل يتطلب أيضا مشاعر جيدة، فهي مفتاح نجاحك المهني. إبدأ رحلتك بثبات ووعي من أول خطوة في بيئة العمل.',
         'description_en' => 'Work requires not just skills, but also good emotions, which are the key to your professional success. Start your journey with stability and awareness.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/593058e3-ae1c-498a-9aed-8c0d113d213a.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/098_%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D8%B9%D8%B1_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'فاطمة القطان',
     ],
     'ms-w-074' => [
@@ -671,7 +671,7 @@ return [
         'description_ar' => 'تصميم خطة لتجنب الملل واستثمار فترة الانتظار للوقاية من القلق.',
         'description_en' => 'Designing a plan to avoid boredom and invest the waiting period to prevent anxiety.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/036_%D9%85%D8%AD%D8%B7%D8%A9_%D9%85%D8%A7_%D8%A8%D8%B9%D8%AF_%D8%A7%D9%84%D8%B4%D9%87%D8%A7%D8%AF%D8%A9.jpg',
         'instructor' => 'آلاء النصار',
     ],
     'ms-w-075' => [
@@ -680,7 +680,7 @@ return [
         'description_ar' => 'نحو صحة مؤسسية مستدامة',
         'description_en' => 'Towards sustainable corporate health.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/26a955e2-c254-4e58-83d3-8572ac964a54.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/093_%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D8%AC_%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%B9%D9%8A_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'د. جواد أبو الحسن',
     ],
     'ms-w-076' => [
@@ -689,7 +689,7 @@ return [
         'description_ar' => 'تعلم كيف تتخذ قرارات مهنية صائبة تبني مستقبلك على أسس متينة.',
         'description_en' => 'Learn how to make sound professional decisions that build your future on solid foundations.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/094_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%B1_%D8%A7%D9%84%D9%85%D9%87%D9%86%D9%8A.jpg',
         'instructor' => 'ريم الفرحان',
     ],
     'ms-w-077' => [
@@ -698,7 +698,7 @@ return [
         'description_ar' => 'تعلم كيف تحدد أهداف قابلة للتحقيق',
         'description_en' => 'Learn how to set achievable goals.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/080_SMART_%D8%A7%D9%84%D8%A3%D9%87%D8%AF%D8%A7%D9%81.jpg',
         'instructor' => 'دانا العوضي',
     ],
     'ms-w-078' => [
@@ -707,7 +707,7 @@ return [
         'description_ar' => 'تعلم كيف تصيغ سيرة ذاتية تبرز خبراتك وتجذب انتباه أصحاب العمل.',
         'description_en' => 'Learn how to craft a resume that highlights your experiences and attracts employers\' attention.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/26a955e2-c254-4e58-83d3-8572ac964a54.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/086_%D9%83%D8%AA%D8%A7%D8%A8%D8%A9_%D8%A7%D9%84%D8%B3%D9%8A%D8%B1%D8%A9_%D8%A7%D9%84%D8%B0%D8%A7%D8%AA%D9%8A%D8%A9.jpg',
         'instructor' => 'محمد الجيماز',
     ],
     'ms-w-079' => [
@@ -716,7 +716,7 @@ return [
         'description_ar' => 'تقنيات وحيل التصوير المباشر بالهاتف للحصول على أفضل لقطات ممكنة.',
         'description_en' => 'Live shooting techniques and tricks with the phone to get the best possible shots.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/088_%D8%AA%D8%B5%D9%88%D9%8A%D8%B1_%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88_%D8%A3%D8%AB%D9%86%D8%A7%D8%A1.jpg',
         'instructor' => 'دلال الحشاش',
     ],
     'ms-w-080' => [
@@ -725,7 +725,7 @@ return [
         'description_ar' => 'استراتيجيات فعالة لاستخدام منصات التواصل الاجتماعي في زيادة مبيعاتك.',
         'description_en' => 'Effective strategies for using social media platforms to increase sales.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/095_%D8%B2%D9%8A%D8%A7%D8%AF%D8%A9_%D8%A7%D9%84%D8%A3%D8%B1%D8%A8%D8%A7%D8%AD_%D8%B9%D8%A8%D8%B1_%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B5%D9%84.jpg',
         'instructor' => 'شهد العطار و حمزه فيصل',
     ],
     'ms-w-081' => [
@@ -734,7 +734,7 @@ return [
         'description_ar' => 'خطوات ونصائح لتمكين الراغبين بكتابة الروايات والقصص بشكل عام من الوصول لهدفهم بناء على تجربة شخصية بعد نشر روايتيين مع دار من أنجح دور النشر في الكويت. يخللها نقاش وتفاعل مع الجمهور.',
         'description_en' => 'Steps and tips to enable those wishing to write novels and stories to reach their goal, based on personal experience. Includes discussion and interaction.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/004_%D8%B3%D8%A3%D9%83%D8%AA%D8%A8.jpg',
         'instructor' => 'سنابل المسلم',
     ],
     'ms-w-082' => [
@@ -743,7 +743,7 @@ return [
         'description_ar' => 'دليلك الشامل لمعرفة من أين تبدأ مسيرتك المهنية أو مشروعك الخاص بخطوات واضحة.',
         'description_en' => 'Your comprehensive guide to knowing where to start your career or private project with clear steps.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/040_From_zero_to_hero_1.jpg',
         'instructor' => 'منيرة النخيلان',
     ],
     'ms-w-083' => [
@@ -752,7 +752,7 @@ return [
         'description_ar' => 'جمع أكثر من فكرة في عمل واحد. المتطلبات: قلم وورقة بيضاء أي حجم.',
         'description_en' => 'Combining multiple ideas into one work. Requirements: pen and blank paper of any size.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/014_%D9%84%D9%88%D8%AD%D8%A9_%D8%A7%D9%84%D8%AC%D9%8A%D9%84.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
     'ms-w-084' => [
@@ -761,7 +761,7 @@ return [
         'description_ar' => 'كيفية دمج أدوات الذكاء الاصطناعي لرفع جودة وإبداع أعمالك الفنية الرقمية.',
         'description_en' => 'How to integrate AI tools to elevate the quality and creativity of your digital artwork.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/046_%D8%A7%D8%B3%D8%AA%D8%BA%D9%84%D8%A7%D9%84_%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A_%D9%81%D9%8A_%D8%B9%D8%A7%D9%84%D9%85_%D9%81%D9%86_%D8%A7%D9%84%D8%AF%D9%8A%D8%AC%D8%AA%D8%A7%D9%84.jpg',
         'instructor' => 'حسن سيد',
     ],
     'ms-w-085' => [
@@ -770,7 +770,7 @@ return [
         'description_ar' => 'نبذة قانونية حول شرح أساسيات قانون الخدمة المدنية المتعلقة في كل من القطاع الحكومي والخاص',
         'description_en' => 'A legal overview explaining the basics of civil service law related to both the public and private sectors.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/084_%D9%85%D9%86_%D8%AE%D8%B1%D9%8A%D8%AC_%D8%A5%D9%84%D9%89_%D9%85%D9%88%D8%B8%D9%81.jpg',
         'instructor' => 'شيماء الطباخ',
     ],
     'ms-w-086' => [
@@ -779,7 +779,7 @@ return [
         'description_ar' => 'اصنع صوت احترافي بجودة عالية يليق بمحتواك.',
         'description_en' => 'Create a high-quality professional voiceover suitable for your content.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/e254e55b-e8d0-4e29-8445-52ebc8871934.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/024_%D8%A7%D8%B5%D9%86%D8%B9_%D8%B5%D9%88%D8%AA_%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A.png',
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-087' => [
@@ -788,7 +788,7 @@ return [
         'description_ar' => 'لماذا الراحة أهم من زيادة ساعات الدراسة.',
         'description_en' => 'Why rest is more important than increasing study hours.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4f262b3d-b79b-40c4-b2c1-eac956ce65d0.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/029_%D8%A7%D9%84%D9%86%D9%88%D9%85_%D9%88_%D8%A7%D9%84%D8%A3%D8%AF%D8%A7%D8%A1.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-088' => [
@@ -797,7 +797,7 @@ return [
         'description_ar' => 'تقنيات للتغلب على رهبة المسرح والتحدث بثقة أمام الآخرين.',
         'description_en' => 'Techniques to overcome stage fright and speak confidently in front of others.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/096_%D9%81%D9%86_%D8%A7%D9%84%D8%A5%D9%84%D9%82%D8%A7%D8%A1.jpg',
         'instructor' => 'عبدالرحمن حماد',
     ],
     'ms-w-089' => [
@@ -806,7 +806,7 @@ return [
         'description_ar' => 'اكتشفوا أسرار صناعة الشموع النباتية بطريقة سهلة، وانطلقوا في عالم يجمع بين الهدوء، الابتكار، والفن اليدوي المتقن.',
         'description_en' => 'Discover the secrets of making vegan candles easily, combining calmness, innovation, and art.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/097_%D8%B9%D8%A7%D9%84%D9%85_%D8%A7%D9%84%D8%B4%D9%85%D9%88%D8%B9.jpg',
         'instructor' => 'هيا بوراشد',
     ],
     'ms-w-090' => [
@@ -815,7 +815,7 @@ return [
         'description_ar' => 'دوافع ومميزات الدخول في مجال التحكيم الرياضي وتطوير الذات فيه.',
         'description_en' => 'Motivations and advantages of entering sports refereeing and self-development.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/073_%D9%84%D9%85%D8%A7%D8%B0%D8%A7_%D8%A3%D8%B5%D8%A8%D8%AD_%D8%AD%D9%83%D9%85.jpg',
         'instructor' => 'الحكم خالد الشمري',
     ],
     'ms-w-091' => [
@@ -824,7 +824,7 @@ return [
         'description_ar' => 'مقدمة في استخدام الخوارزميات والبرمجة في أسواق المال والتداول الآلي.',
         'description_en' => 'Introduction to using algorithms and programming in financial markets and automated trading.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/055_%D8%A7%D9%84%D8%AA%D8%AF%D8%A7%D9%88%D9%84_%D8%A7%D9%84%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A.jpg',
         'instructor' => 'سليمان المراغى',
     ],
     'ms-w-092' => [
@@ -833,7 +833,7 @@ return [
         'description_ar' => 'تعرف على حقوقك وواجباتك في بيئة العمل لضمان بيئة مهنية صحية.',
         'description_en' => 'Learn your rights and duties in the workplace to ensure a healthy professional environment.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/ccbfa398-0f39-492e-8bc8-976071e63d3b.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/058_%D8%AD%D9%82%D9%88%D9%82_%D8%A7%D9%84%D9%85%D9%88%D8%B8%D9%81_%D8%A8%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'المحامي إبراهيم السماعيل',
     ],
     'ms-w-093' => [
@@ -842,7 +842,7 @@ return [
         'description_ar' => 'دورة حياة العطاء مستقاة من زهرة العرفج.',
         'description_en' => 'The life cycle of giving derived from the Arfaj flower.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/032_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%AD%D8%B8.jpg',
         'instructor' => 'عبدالرحمن التركيت',
     ],
     'ms-w-094' => [
@@ -851,7 +851,7 @@ return [
         'description_ar' => 'كيفية برمجة واستخدام البوتات لأتمتة المهام الروتينية وتوفير الوقت.',
         'description_en' => 'How to program and use bots to automate routine tasks and save time.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/064_%D8%A8%D9%88%D8%AA%D8%A7%D8%AA_%D8%A7%D9%84%D8%A3%D8%AA%D9%85%D8%AA%D8%A9.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
     'ms-w-095' => [
@@ -860,7 +860,7 @@ return [
         'description_ar' => 'اكتشاف البصمة الشخصيةوتوظيفها لصناعة الأثر في المجتمع.',
         'description_en' => 'Discovering personal footprint and using it to make an impact in society.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/4c23850e-875c-49a2-8fe0-450835b107cb.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/037_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%A3%D8%AB%D8%B1.jpg',
         'instructor' => 'آلاء النصار',
     ],
     'ms-w-096' => [
@@ -869,7 +869,7 @@ return [
         'description_ar' => 'كيفية بناء المنتج الأولي القابل للتطبيق لاختبار فكرتك بأقل تكلفة وجهد.',
         'description_en' => 'How to build a Minimum Viable Product to test your idea with minimal cost and effort.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/3a577abe-c0ff-4ccf-a24c-4015a990df93.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/056_%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AA%D9%8A%D8%AC%D9%8A%D8%A9_MVP.jpg',
         'instructor' => 'سليمان المراغى',
     ],
     'ms-w-097' => [
@@ -887,7 +887,7 @@ return [
         'description_ar' => 'استكشاف الفنون التي تعكس هويتنا وثقافتنا وكيفية التعبير عنها.',
         'description_en' => 'Exploring arts that reflect our identity and culture, and how to express them.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/762bd79d-dd84-4a3b-b416-d6e490834e80.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/051_%D9%81%D9%86%D9%88%D9%86_%D8%AA%D8%B4%D8%A8%D9%87%D9%86%D8%A7.jpg',
         'instructor' => 'علي عادل',
     ],
     'ms-w-099' => [
@@ -896,7 +896,7 @@ return [
         'description_ar' => 'مرحلة المونتاج والتعديل على الفيديوهات باستخدام تطبيقات الهاتف الذكي.',
         'description_en' => 'The editing and modifying phase of videos using smartphone apps.',
         'category' => 'professional',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/76fd7f81-a364-4934-a0e4-6e803b86ec84.jpg',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/089_%D8%AA%D8%B5%D9%88%D9%8A%D8%B1_%D8%A7%D9%84%D9%81%D9%8A%D8%AF%D9%8A%D9%88_%D8%A8%D8%B9%D8%AF.jpg',
         'instructor' => 'دلال الحشاش',
     ],
     'ms-w-100' => [
@@ -905,7 +905,7 @@ return [
         'description_ar' => 'فن السرد البصري وكيفية بناء قصة متكاملة من مجرد لقطة.',
         'description_en' => 'The art of visual storytelling and building a complete story from just a shot.',
         'category' => 'personal',
-        'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/6a807b31-075f-46ca-a962-8a17bbbd24ac.png',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/068_%D8%AA%D8%AD%D9%88%D9%8A%D9%84_%D8%A7%D9%84%D9%84%D9%82%D8%B7%D8%A9_%D8%A5%D9%84%D9%89_%D9%82%D8%B5%D8%A9.jpg',
         'instructor' => 'فاطمة عباس',
     ],
 ];

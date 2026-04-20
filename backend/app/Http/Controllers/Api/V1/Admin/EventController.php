@@ -163,7 +163,7 @@ class EventController extends Controller
             'summary_en' => 'sometimes|nullable|string|max:1000',
             'description' => 'sometimes|nullable|string',
             'description_en' => 'sometimes|nullable|string',
-            'image_url' => 'sometimes|nullable|url|max:500',
+            'image_url' => 'sometimes|nullable|url|max:2048',
             'starts_at' => 'sometimes|required|date',
             'ends_at' => 'sometimes|required|date|after:starts_at',
             'location' => 'sometimes|nullable|string|max:255',
