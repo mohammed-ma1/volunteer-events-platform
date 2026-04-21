@@ -118,6 +118,7 @@ export type TranslationKey =
   | 'experts.subtitle'
   | 'experts.searchPh'
   | 'experts.workshopsHeading'
+  | 'experts.workshopDescriptionFallback'
   | 'experts.connect'
   | 'experts.showMore'
   | 'experts.showLess'
@@ -450,6 +451,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'اختر المدرب لعرض نبذة عنه وورشه التدريبية، وتواصل عبر القنوات المتاحة عند الحاجة.',
     'experts.searchPh': 'ابحث بالاسم أو التخصص…',
     'experts.workshopsHeading': 'الورش التدريبية للمدرب',
+    'experts.workshopDescriptionFallback': 'جلسة قصيرة وعملية مع تطبيقات مباشرة عبر زوم.',
     'experts.connect': 'تواصل مع المدرب',
     'experts.showMore': 'عرض المزيد',
     'experts.showLess': 'عرض أقل',
@@ -800,6 +802,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'Meet the experts and academics who will share their knowledge and experiences with you.',
     'experts.searchPh': 'Search by name or specialty…',
     'experts.workshopsHeading': 'Workshops by this trainer',
+    'experts.workshopDescriptionFallback': 'A short, hands-on session with live exercises over Zoom.',
     'experts.connect': 'Connect with the trainer',
     'experts.showMore': 'Show more',
     'experts.showLess': 'Show fewer',
