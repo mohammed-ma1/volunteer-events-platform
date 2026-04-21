@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CheckoutController;
 use App\Http\Controllers\Api\V1\EventController;
+use App\Http\Controllers\Api\V1\ExpertController;
 use App\Http\Controllers\Api\V1\LearnController;
 use App\Http\Controllers\Api\V1\LearnerAuthController;
 use App\Http\Controllers\Api\V1\TapWebhookController;
@@ -129,6 +130,9 @@ Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(func
 Route::prefix('v1')->group(function () {
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/events/{slug}', [EventController::class, 'show']);
+
+    // Experts feed for the public home page (active only, read-only).
+    Route::get('/experts', [ExpertController::class, 'index']);
 
     Route::post('/carts', [CartController::class, 'store']);
 

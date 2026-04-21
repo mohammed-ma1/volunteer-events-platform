@@ -169,6 +169,10 @@ class EventController extends Controller
             'location' => 'sometimes|nullable|string|max:255',
             'location_en' => 'sometimes|nullable|string|max:255',
             'zoom_link' => 'sometimes|nullable|string|max:500',
+            // Free-text presenter/host name shown on the public site. We don't
+            // FK this to the experts table so admins can reassign to anyone
+            // (active or inactive expert, or a one-off guest).
+            'host_name' => 'sometimes|nullable|string|max:255',
             'price' => 'sometimes|required|numeric|min:0',
             'currency' => 'sometimes|string|size:3',
             'capacity' => 'sometimes|nullable|integer|min:1',

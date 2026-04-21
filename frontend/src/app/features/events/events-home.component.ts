@@ -9,8 +9,15 @@ import {
 import { ALL_PACKAGE_SLUGS } from '../../core/constants/package-offer';
 import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
 import { HOME_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
-import { HOME_EXPERTS, HomeExpert, getExpertInitials, normalizePresenterName } from '../../core/data/home-experts';
+import {
+  HOME_EXPERTS,
+  HomeExpert,
+  applyExpertAvatarOverrides,
+  getExpertInitials,
+  normalizePresenterName,
+} from '../../core/data/home-experts';
 import { CheckoutFlowService } from '../../core/services/checkout-flow.service';
+import { ExpertsService } from '../../core/services/experts.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
@@ -872,9 +879,19 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 export class EventsHomeComponent implements OnDestroy {
   readonly i18n = inject(I18nService);
   private readonly eventsApi = inject(EventsService);
+  private readonly expertsApi = inject(ExpertsService);
   private readonly doc = inject(DOCUMENT);
   private readonly checkoutFlow = inject(CheckoutFlowService);
   readonly cart = inject(CartService);
+
+  /**
+   * Static `HOME_EXPERTS` enriched with admin-portal-managed avatars (lazy-
+   * fetched from `/v1/experts`). Falls back to the static defaults when the
+   * fetch is pending or failed, so the home page always renders.
+   */
+  readonly homeExperts = computed<HomeExpert[]>(() =>
+    applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides()),
+  );
 
   /** Initial grid size + step for load-more / load-less. */
   readonly WORKSHOPS_PREVIEW = 4;
@@ -1043,12 +1060,13 @@ export class EventsHomeComponent implements OnDestroy {
   readonly canLoadLess = computed(() => this.visibleCount() > this.WORKSHOPS_PREVIEW);
 
   readonly filteredExperts = computed(() => {
+    const all = this.homeExperts();
     const raw = this.expertSearch().trim();
     if (!raw) {
-      return HOME_EXPERTS;
+      return all;
     }
     const lower = raw.toLowerCase();
-    return HOME_EXPERTS.filter(
+    return all.filter(
       (e) =>
         e.nameAr.includes(raw) ||
         e.nameEn.toLowerCase().includes(lower) ||
@@ -1072,7 +1090,7 @@ export class EventsHomeComponent implements OnDestroy {
     if (hit) {
       return hit;
     }
-    return list[0] ?? HOME_EXPERTS[0];
+    return list[0] ?? this.homeExperts()[0];
   });
 
   /**
@@ -1118,6 +1136,9 @@ export class EventsHomeComponent implements OnDestroy {
 
   constructor() {
     this.fetchPage(1);
+    // Lazy-load admin-portal-managed experts so their avatars/bios merge into
+    // the static `HOME_EXPERTS` list at runtime.
+    this.expertsApi.ensureLoaded();
 
     this.search$
       .pipe(

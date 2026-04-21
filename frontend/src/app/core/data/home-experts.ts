@@ -66,13 +66,13 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'دانا العوضي', nameEn: 'Dana Al-Awadi', imageUrl: SRC_IMG_B },
   { nameAr: 'شيماء الطباخ', nameEn: 'Shaimaa Al-Tabbakh', imageUrl: SRC_IMG_A },
   { nameAr: 'محمد الجيماز', nameEn: 'Mohammed Al-Jaimaz', imageUrl: SRC_IMG_D },
-  { nameAr: 'دلال الحشاش', nameEn: 'Dalal Al-Hashash', imageUrl: SRC_IMG_C },
+  { nameAr: 'م. الجازي العجمي', nameEn: 'Eng. Al-Jazi Al-Ajmi', imageUrl: SRC_IMG_C },
   { nameAr: 'أبرار أشكناني', nameEn: 'Abrar Ashkanani', imageUrl: SRC_IMG_A },
   { nameAr: 'سارة المنيس', nameEn: 'Sarah Al-Munais', imageUrl: SRC_IMG_D },
   { nameAr: 'غدير الكندري', nameEn: 'Ghadeer Al-Kandari', imageUrl: SRC_IMG_A },
   { nameAr: 'د. جواد أبو الحسن', nameEn: 'Dr. Jawad Abu Al-Hasan', imageUrl: SRC_IMG_C },
   { nameAr: 'ريم الفرحان', nameEn: 'Reem Al-Farhan', imageUrl: SRC_IMG_B },
-  { nameAr: 'شهد العطار و حمزه فيصل', nameEn: 'Shahd Al-Attar & Hamza Faisal', imageUrl: SRC_IMG_A },
+  { nameAr: 'شهد العطار', nameEn: 'Shahd Al-Attar', imageUrl: SRC_IMG_A },
   { nameAr: 'عبدالرحمن حماد', nameEn: 'Abdulrahman Hammad', imageUrl: SRC_IMG_D },
   { nameAr: 'هيا بوراشد', nameEn: 'Haya Bourashed', imageUrl: SRC_IMG_C },
   { nameAr: 'فاطمة القطان', nameEn: 'Fatima Al-Qattan', imageUrl: SRC_IMG_D },
@@ -85,27 +85,41 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
 // Local photos for trainers we have. Keys use the source trainer's exact name
 // where possible; we also build a normalized index so naming variants
 // (د.بسام vs د. بسام, سليمان المراغى vs سليمان المراغي) resolve correctly.
+const R2_BASE = 'https://pub-b242a57539404e6c9709cad496bd5b5b.r2.dev';
+
 const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
-  'د. بسام الجزاف': '/images/presenters/bassam-al-jazzaf.jpg',
-  'د.بسام الجزاف': '/images/presenters/bassam-al-jazzaf.jpg',
-  'بدر الفيلكاوي': '/images/presenters/badr-al-failakawi.jpg',
-  'حسن سيد': '/images/presenters/hassan-syed.jpg',
-  'أحمد سمير': '/images/presenters/ahmed-sameer.jpg',
-  'دلال النخيلان': '/images/presenters/dalal-al-nakhelan.jpg',
-  'علي الأنصاري': '/images/presenters/ali-al-ansari.jpg',
-  'سليمان المراغي': '/images/presenters/sulaiman-al-maraghi.jpg',
-  'المحامي إبراهيم السماعيل': '/images/presenters/ibrahim-al-samael.jpg',
-  'عبدالرحمن التركيت': '/images/presenters/abdulrahman-al-turkait.jpg',
-  'آلاء النصار': '/images/presenters/alaa-al-nassar.jpg',
-  'عبدالرحمن خاجه': '/images/presenters/abdulrahman-khajah.jpg',
-  'د. محمد إسماعيل': '/images/presenters/mohammed-ismail.jpg',
-  'دانا العوضي': '/images/presenters/dana-al-awadi.jpg',
-  'شيماء الطباخ': '/images/presenters/shaimaa-al-tabbakh.jpg',
-  'محمد الجيماز': '/images/presenters/mohammed-al-jaimaz.jpg',
-  'أبرار أشكناني': '/images/presenters/abrar-ashkanani.jpg',
-  'سارة المنيس': '/images/presenters/sarah-al-munais.jpg',
-  'فاطمة القطان': '/images/presenters/fatima-al-qattan.jpg',
-  'فيصل الدويسان': '/images/presenters/faisal-al-duwaisan.jpg',
+  'د. بسام الجزاف': `${R2_BASE}/bassam-al-jazzaf.jpg`,
+  'د.بسام الجزاف': `${R2_BASE}/bassam-al-jazzaf.jpg`,
+  'بدر الفيلكاوي': `${R2_BASE}/badr-al-failakawi.jpg`,
+  'حسن سيد': `${R2_BASE}/hassan-syed.jpg`,
+  'أحمد سمير': `${R2_BASE}/ahmed-sameer.jpg`,
+  'دلال النخيلان': `${R2_BASE}/dalal-al-nakhelan.jpg`,
+  'علي الأنصاري': `${R2_BASE}/ali.jpg`,
+  'سليمان المراغي': `${R2_BASE}/sulaiman-al-maraghi.jpg`,
+  'المحامي إبراهيم السماعيل': `${R2_BASE}/ibrahim-al-samael.jpg`,
+  'عبدالرحمن التركيت': `${R2_BASE}/abdulrahman-al-turkait.jpg`,
+  'آلاء النصار': `${R2_BASE}/alaa-al-nassar.jpg`,
+  'عبدالرحمن خاجه': `${R2_BASE}/abdulrahman-khajah.jpg`,
+  'د. محمد إسماعيل': `${R2_BASE}/mohammed-ismail.jpg`,
+  'دانا العوضي': `${R2_BASE}/dana-al-awadi.jpg`,
+  'شيماء الطباخ': `${R2_BASE}/shaimaa-al-tabbakh.jpg`,
+  'محمد الجيماز': `${R2_BASE}/mohammed-al-jaimaz.jpg`,
+  'أبرار أشكناني': `${R2_BASE}/abrar-ashkanani.jpg`,
+  'سارة المنيس': `${R2_BASE}/sarah-al-munais.jpg`,
+  'فاطمة القطان': `${R2_BASE}/fatima-al-qattan.jpg`,
+  'فيصل الدويسان': `${R2_BASE}/faisal-al-duwaisan.jpg`,
+  'م. الجازي العجمي': `${R2_BASE}/aljazzi.jpg`,
+  'منيرة النخيلان': `${R2_BASE}/moneera.jpg`,
+  'زينب الغضبان': `${R2_BASE}/zainab.jpg`,
+  'مرزوق السعيد': `${R2_BASE}/marzooq.jpg`,
+  'فاطمة عباس': `${R2_BASE}/fatema.jpg`,
+  'غدير الكندري': `${R2_BASE}/ghadeer.jpg`,
+  'د. جواد أبو الحسن': `${R2_BASE}/jawaad.jpg`,
+  'شهد العطار': `${R2_BASE}/shahad.jpg`,
+  'عبدالرحمن حماد': `${R2_BASE}/abd-alrhahman.jpg`,
+  'هيا بوراشد': `${R2_BASE}/hia.jpg`,
+  'هاجر النصار': `${R2_BASE}/hajr.jpg`,
+  'عبدالعزيز الضبيب': `${R2_BASE}/abd-alazeez.jpg`,
 };
 
 /** Strip diacritics + unify alif/ya/spaces so name variants match. */
@@ -273,3 +287,36 @@ function buildHomeExperts(): HomeExpert[] {
 
 /** 35 source trainers, sorted Arabic-locale with honorifics stripped. */
 export const HOME_EXPERTS: HomeExpert[] = buildHomeExperts();
+
+/**
+ * Returns a new array where each expert's `imageUrl` is replaced with the
+ * matching entry from `overridesByNormalizedName` when present. Used to merge
+ * admin-portal-managed avatar URLs into the static `HOME_EXPERTS` list at
+ * runtime so admin edits flow through without a frontend rebuild.
+ *
+ * Matching is exact on the canonical name first; if no exact match is found,
+ * we fall back to substring matching either way (handles composite labels
+ * like `زينب الغضبان وفريق الطلبة` ↔ admin-portal entry `زينب الغضبان`).
+ *
+ * `overridesByNormalizedName` keys must be canonicalised via
+ * `normalizePresenterName` (or `normalizeArName`) — same as the public
+ * `ExpertsService.avatarOverrides` computed signal.
+ */
+export function applyExpertAvatarOverrides(
+  experts: readonly HomeExpert[],
+  overridesByNormalizedName: Record<string, string>,
+): HomeExpert[] {
+  const keys = Object.keys(overridesByNormalizedName ?? {});
+  if (keys.length === 0) {
+    return [...experts];
+  }
+  return experts.map((e) => {
+    const target = normalizeArName(e.nameAr);
+    let live = overridesByNormalizedName[target];
+    if (!live) {
+      const partial = keys.find((k) => k && (target.includes(k) || k.includes(target)));
+      if (partial) live = overridesByNormalizedName[partial];
+    }
+    return live ? { ...e, imageUrl: live } : e;
+  });
+}
