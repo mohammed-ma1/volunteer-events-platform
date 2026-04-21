@@ -1,30 +1,30 @@
-# HTTPS for kw.nextlevels.education (Angular SPA + Laravel /api on one host).
+# HTTPS for ku.nextlevels.education (Angular SPA + Laravel /api on one host).
 #
 # === 1) DNS (name.com → Manage DNS Records for nextlevels.education) ===
 # Add ONE of:
-#   Type A,  Host kw,  Value YOUR_DROPLET_PUBLIC_IP, TTL 300
-#   Type AAAA, Host kw,  Value YOUR_VPS_IPV6 (optional)
-# Wait for propagation (often a few minutes; dig kw.nextlevels.education +short).
+#   Type A,  Host ku,  Value YOUR_DROPLET_PUBLIC_IP, TTL 300
+#   Type AAAA, Host ku,  Value YOUR_VPS_IPV6 (optional)
+# Wait for propagation (often a few minutes; dig ku.nextlevels.education +short).
 #
 # === 2) On the VPS (Ubuntu-style) ===
 #   sudo apt update && sudo apt install -y nginx php8.3-fpm  # adjust PHP version
 #   sudo mkdir -p /var/www/volunteer-events
 #   # Deploy code: frontend/dist/frontend/browser + backend with public/
-#   sudo cp deploy/nginx-kw.nextlevels.education.conf.example \
-#          /etc/nginx/sites-available/kw.nextlevels.education
+#   sudo cp deploy/nginx-ku.nextlevels.education.conf.example \
+#          /etc/nginx/sites-available/ku.nextlevels.education
 #   # Edit paths below if your tree differs; then:
-#   sudo ln -sf /etc/nginx/sites-available/kw.nextlevels.education /etc/nginx/sites-enabled/
+#   sudo ln -sf /etc/nginx/sites-available/ku.nextlevels.education /etc/nginx/sites-enabled/
 #   sudo nginx -t && sudo systemctl reload nginx
 #
 # === 3) TLS (Let's Encrypt) ===
 #   sudo apt install -y certbot python3-certbot-nginx
-#   sudo certbot --nginx -d kw.nextlevels.education
+#   sudo certbot --nginx -d ku.nextlevels.education
 # Certbot will add ssl_certificate and listen 443 to this server block.
 #
 # === 4) Laravel .env on the server ===
-#   APP_URL=https://kw.nextlevels.education
-#   FRONTEND_URL=https://kw.nextlevels.education
-#   CORS_ALLOWED_ORIGINS=https://kw.nextlevels.education
+#   APP_URL=https://ku.nextlevels.education
+#   FRONTEND_URL=https://ku.nextlevels.education
+#   CORS_ALLOWED_ORIGINS=https://ku.nextlevels.education
 #   APP_DEBUG=false
 #   php artisan config:cache
 #
@@ -33,7 +33,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name kw.nextlevels.education;
+    server_name ku.nextlevels.education;
 
     root /var/www/volunteer-events/frontend/dist/frontend/browser;
     index index.html;

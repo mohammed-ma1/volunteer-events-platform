@@ -83,30 +83,17 @@ import { CartService } from '../services/cart.service';
                         <p class="text-xs text-ink-500">
                           {{ line.event?.starts_at | date: 'mediumDate' }}
                         </p>
-                        <div class="mt-2 flex items-center gap-2">
+                        <div class="mt-2 flex items-center justify-between gap-2">
                           <button
                             type="button"
-                            class="rounded-lg border border-ink-200 px-2 py-0.5 text-xs text-brand-900 hover:bg-white"
-                            (click)="bump(line.id, line.quantity - 1)"
-                            [disabled]="line.quantity <= 1"
-                          >
-                            −
-                          </button>
-                          <span class="text-sm font-medium text-brand-900">{{ line.quantity }}</span>
-                          <button
-                            type="button"
-                            class="rounded-lg border border-ink-200 px-2 py-0.5 text-xs text-brand-900 hover:bg-white"
-                            (click)="bump(line.id, line.quantity + 1)"
-                          >
-                            +
-                          </button>
-                          <button
-                            type="button"
-                            class="ms-auto text-xs font-medium text-red-600 hover:text-red-700"
+                            class="text-xs font-medium text-red-600 hover:text-red-700"
                             (click)="remove(line.id)"
                           >
                             {{ i18n.t('cart.remove') }}
                           </button>
+                          <span class="text-sm font-bold text-brand-900">
+                            {{ line.event?.price | number: '1.0-3' }} {{ i18n.currencyLabel(cart.snapshot()?.currency) }}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -131,7 +118,7 @@ import { CartService } from '../services/cart.service';
           </div>
           <a
             routerLink="/checkout"
-            class="block w-full rounded-xl bg-brand-900 px-4 py-3 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800 ve-focus-ring"
+            class="ve-btn-primary ve-btn-primary--block text-center"
             (click)="cart.closeDrawer()"
           >
             {{ i18n.t('cart.checkout') }}

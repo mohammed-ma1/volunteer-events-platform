@@ -46,13 +46,13 @@ import { I18nService } from '../../core/i18n/i18n.service';
         <a
           routerLink="/"
           fragment="workshops"
-          class="ve-focus-ring inline-flex rounded-xl bg-brand-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-800"
+          class="ve-btn-primary"
         >
           {{ i18n.t('about.ctaWorkshops') }}
         </a>
         <a
           routerLink="/career"
-          class="ve-focus-ring inline-flex rounded-xl bg-ink-100 px-5 py-3 text-sm font-semibold text-brand-900 transition hover:bg-ink-200"
+          class="ve-btn-secondary !border-ink-200 !bg-ink-100 hover:!bg-ink-200"
         >
           {{ i18n.t('about.ctaCareer') }}
         </a>

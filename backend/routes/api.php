@@ -1,14 +1,138 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Api\V1\Admin\EnrollmentController as AdminEnrollmentController;
+use App\Http\Controllers\Api\V1\Admin\ExpertController as AdminExpertController;
+use App\Http\Controllers\Api\V1\Admin\LessonController as AdminLessonController;
+use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CheckoutController;
 use App\Http\Controllers\Api\V1\EventController;
+use App\Http\Controllers\Api\V1\ExpertController;
+use App\Http\Controllers\Api\V1\LearnController;
+use App\Http\Controllers\Api\V1\LearnerAuthController;
 use App\Http\Controllers\Api\V1\TapWebhookController;
 use Illuminate\Support\Facades\Route;
 
+// ── Admin Portal ─────────────────────────────────────────────────
+Route::prefix('v1/admin')->group(function () {
+
+    // Auth (no admin middleware — login must be accessible pre-auth)
+    Route::prefix('auth')->group(function () {
+        Route::post('/login', [AdminAuthController::class, 'login']);
+
+        Route::middleware('auth:api')->group(function () {
+            Route::post('/logout', [AdminAuthController::class, 'logout']);
+            Route::post('/refresh', [AdminAuthController::class, 'refresh']);
+            Route::get('/me', [AdminAuthController::class, 'me']);
+        });
+    });
+
+    // Protected admin routes
+    Route::middleware(['auth:api', 'admin'])->group(function () {
+
+        // Dashboard
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/stats', [AdminDashboardController::class, 'stats']);
+            Route::get('/recent-activity', [AdminDashboardController::class, 'recentActivity']);
+            Route::get('/revenue-chart', [AdminDashboardController::class, 'revenueChart']);
+            Route::get('/events-chart', [AdminDashboardController::class, 'eventsChart']);
+        });
+
+        // Users — literal paths before `{id}` where needed; constrain `{id}` to digits.
+        Route::get('/users', [AdminUserController::class, 'index']);
+        Route::post('/users', [AdminUserController::class, 'store']);
+        Route::post('/users/{id}/transfer-enrollments', [AdminUserController::class, 'transferEnrollments'])
+            ->whereNumber('id');
+        Route::post('/users/{id}/reset-password', [AdminUserController::class, 'resetPassword'])
+            ->whereNumber('id');
+        Route::get('/users/{id}', [AdminUserController::class, 'show'])->whereNumber('id');
+        Route::patch('/users/{id}', [AdminUserController::class, 'update'])->whereNumber('id');
+        Route::patch('/users/{id}/toggle-active', [AdminUserController::class, 'toggleActive'])->whereNumber('id');
+        Route::patch('/users/{id}/role', [AdminUserController::class, 'changeRole'])->whereNumber('id');
+
+        // Events — literal paths must be declared before `{id}` so they aren't captured as IDs.
+        Route::post('/events/bulk-zoom-link', [AdminEventController::class, 'bulkSetZoomLink']);
+        Route::get('/events', [AdminEventController::class, 'index']);
+        Route::get('/events/{id}', [AdminEventController::class, 'show']);
+        Route::post('/events', [AdminEventController::class, 'store']);
+        Route::put('/events/{id}', [AdminEventController::class, 'update']);
+        Route::delete('/events/{id}', [AdminEventController::class, 'destroy']);
+        Route::patch('/events/{id}/status', [AdminEventController::class, 'changeStatus']);
+
+        // Event Lessons
+        Route::get('/events/{eventId}/lessons', [AdminLessonController::class, 'index']);
+        Route::post('/events/{eventId}/lessons', [AdminLessonController::class, 'store']);
+        Route::put('/events/{eventId}/lessons/{lessonId}', [AdminLessonController::class, 'update']);
+        Route::delete('/events/{eventId}/lessons/{lessonId}', [AdminLessonController::class, 'destroy']);
+
+        // Event Enrollments
+        Route::get('/events/{eventId}/enrollments', [AdminEnrollmentController::class, 'index']);
+        Route::post('/events/{eventId}/enrollments', [AdminEnrollmentController::class, 'store']);
+        Route::delete('/events/{eventId}/enrollments/{enrollmentId}', [AdminEnrollmentController::class, 'destroy']);
+
+        // Package Enrollment Sync (idempotent bulk enroll of paid package buyers)
+        Route::post('/packages/{slug}/sync-enrollments', [AdminEnrollmentController::class, 'syncPackage']);
+
+        // Experts — `specializations` must be registered before `{id}` to win the match.
+        Route::get('/experts/specializations', [AdminExpertController::class, 'specializations']);
+        Route::get('/experts', [AdminExpertController::class, 'index']);
+        Route::get('/experts/{id}', [AdminExpertController::class, 'show']);
+        Route::post('/experts', [AdminExpertController::class, 'store']);
+        Route::patch('/experts/{id}', [AdminExpertController::class, 'update']);
+        Route::patch('/experts/{id}/toggle-active', [AdminExpertController::class, 'toggleActive']);
+        Route::delete('/experts/{id}', [AdminExpertController::class, 'destroy']);
+
+        // Orders
+        Route::get('/orders', [AdminOrderController::class, 'index']);
+        Route::get('/orders/export', [AdminOrderController::class, 'export']);
+        Route::get('/orders/{uuid}', [AdminOrderController::class, 'show']);
+        Route::post('/orders/{uuid}/sync-tap', [AdminOrderController::class, 'syncTap']);
+        Route::get('/orders/{uuid}/tap-details', [AdminOrderController::class, 'tapDetails']);
+        Route::post('/orders/{uuid}/refund', [AdminOrderController::class, 'refund']);
+    });
+});
+
+// ── Learner Auth ─────────────────────────────────────────────────
+Route::prefix('v1/auth')->group(function () {
+    Route::middleware('throttle:5,1')->group(function () {
+        Route::post('/forgot-password/request', [LearnerAuthController::class, 'forgotPasswordRequest']);
+        Route::post('/forgot-password/reset', [LearnerAuthController::class, 'forgotPasswordReset']);
+    });
+
+    Route::post('/login', [LearnerAuthController::class, 'login']);
+
+    // Logout must remain reachable even when token_version is stale (single-session
+    // invalidation), otherwise the frontend ends up in an infinite refresh/logout loop.
+    Route::middleware('auth:api')->group(function () {
+        Route::post('/logout', [LearnerAuthController::class, 'logout']);
+    });
+
+    Route::middleware(['auth:api', 'token.version'])->group(function () {
+        Route::post('/refresh', [LearnerAuthController::class, 'refresh']);
+        Route::get('/me', [LearnerAuthController::class, 'me']);
+        Route::patch('/me', [LearnerAuthController::class, 'updateProfile']);
+        Route::put('/password', [LearnerAuthController::class, 'changePassword']);
+    });
+});
+
+// ── Learner Platform ─────────────────────────────────────────────
+Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(function () {
+    Route::get('/my-workshops', [LearnController::class, 'myWorkshops']);
+    Route::get('/workshops/{id}', [LearnController::class, 'workshopDetail']);
+    Route::post('/progress', [LearnController::class, 'updateProgress']);
+});
+
+// ── Public API ───────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
     Route::get('/events', [EventController::class, 'index']);
     Route::get('/events/{slug}', [EventController::class, 'show']);
+
+    // Experts feed for the public home page (active only, read-only).
+    Route::get('/experts', [ExpertController::class, 'index']);
 
     Route::post('/carts', [CartController::class, 'store']);
 

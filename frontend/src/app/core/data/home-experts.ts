@@ -11,6 +11,7 @@ export interface HomeExpert {
   specialtyEn: string;
   bioAr: string;
   bioEn: string;
+  /** Local presenter photo path, or empty when the UI should show initials instead of a stock image. */
   imageUrl: string;
   socials: ExpertSocial[];
   /** Match `slug` on seeded / API workshops for the grid below the profile. */
@@ -22,69 +23,228 @@ const SCHEDULE = kuWorkshopSchedule as {
   workshops: { n: number; presenter_ar: string }[];
 };
 
-/**
- * English names for schedule presenters. Only keys that exist in the schedule JSON are used (see `presenterNameEnForSchedule`).
- */
-const PRESENTER_NAME_EN_SOURCE: Record<string, string> = {
-  'آلاء النصار': 'Alaa Al-Nassar',
-  'أبرار أشكناني': 'Abrar Ashkanani',
-  'أحمد سعيد': 'Ahmed Saeed',
-  'المحامي إبراهيم السماعيل': 'Lawyer Ibrahim Al-Samaeel',
-  'بدر الفيلكاوي': 'Bader Al-Failakawi',
-  'حسن سيد': 'Hassan Sayed',
-  'خالد الشمري': 'Khalid Al-Shammari',
-  'د. بسام الجزاف': 'Dr. Bassam Al-Jazzaf',
-  'د. جواد أبو الحسن': 'Dr. Jawad Abu Al-Hasan',
-  'د. رفيدة الميعان': 'Dr. Rafida Al-Mian',
-  'د. محمد إسماعيل': 'Dr. Mohammed Ismail',
-  'دانا العوضي': 'Dana Al-Awadi',
-  'دلال الحشاش': 'Dalal Al-Hashash',
-  'دلال النخيلان': 'Dalal Al-Nakhelan',
-  'ريم العلي': 'Reem Al-Ali',
-  'ريم الفرحان': 'Reem Al-Farhan',
-  'زينب الغضبان': 'Zainab Al-Ghadhban',
-  'سارة المنيس': 'Sarah Al-Munais',
-  'سليمان المراغي': 'Sulaiman Al-Muraghi',
-  'سنابل المسلم': 'Sanabel Al-Muslim',
-  'شهد العطار و حمزه فيصل': 'Shahd Al-Attar & Hamza Faisal',
-  'شيماء الطباخ': 'Shaima Al-Tabbakh',
-  'عبدالرحمن التركيت': 'Abdulrahman Al-Turkait',
-  'عبدالرحمن حماد': 'Abdulrahman Hammad',
-  'عبدالرحمن خاجه': 'Abdulrahman Khaja',
-  'علي الأنصاري': 'Ali Al-Ansari',
-  'غدير الكندري': 'Ghadeer Al-Kandari',
-  'فاطمة تقي': 'Fatima Taqi',
-  'فاطمة عباس': 'Fatima Abbas',
-  'محمد الجيماز': 'Mohammed Al-Jaimaz',
-  'مرزوق السعيد': 'Marzouq Al-Saeed',
-  'منيرة النخيلان': 'Munira Al-Nakhelan',
-  'هيا النصار': 'Haya Al-Nassar',
-  'هيا بوراشد': 'Haya Bourashed',
-};
+// ── Source trainers (35) ──────────────────────────────────────────────
+// Mirror of next-levels source project's rawTrainers list. All share the same
+// role + bio. Image URLs are stock fallbacks; we override with local photos
+// where we have them.
+const SOURCE_ROLE_AR = 'مدرب معتمد';
+const SOURCE_ROLE_EN = 'Certified Trainer';
+const SOURCE_BIO_AR = 'مدرب خبير في مجاله يقدم ورش عمل متخصصة.';
+const SOURCE_BIO_EN = 'An expert trainer providing specialized workshops.';
 
-/** Only `presenter_ar` values that appear in the schedule file. */
-function presenterNameEnForSchedule(schedule: { workshops: { presenter_ar: string }[] }): Record<string, string> {
-  const present = new Set(schedule.workshops.map((w) => w.presenter_ar));
-  const out: Record<string, string> = {};
-  for (const p of present) {
-    const en = PRESENTER_NAME_EN_SOURCE[p];
-    if (en) {
-      out[p] = en;
-    }
-  }
-  return out;
+const SRC_IMG_A = 'https://vibe.filesafe.space/1775667546795098704/assets/2b5d5897-4792-47e5-a27d-ef7ceb12e3c9.png';
+const SRC_IMG_B = 'https://vibe.filesafe.space/1775667546795098704/assets/16cb75dc-c027-44b0-b98f-943ef62525ac.png';
+const SRC_IMG_C = 'https://vibe.filesafe.space/1775667546795098704/assets/21745c71-fbb6-4b4a-9b72-0bf530f63351.png';
+const SRC_IMG_D = 'https://vibe.filesafe.space/1775667546795098704/assets/391318d0-0148-4fd1-8d24-b082191e5682.png';
+
+interface SourceTrainer {
+  nameAr: string;
+  nameEn: string;
+  imageUrl: string;
 }
 
-const PRESENTER_NAME_EN = presenterNameEnForSchedule(SCHEDULE);
-
-/** Served from `frontend/public/` → `/images/experts/...` at runtime. */
-const EXPERT_PORTRAIT_URL = '/images/experts/trump_coach_style.svg';
-
-const DEFAULT_SOCIALS: ExpertSocial[] = [
-      { href: 'mailto:hello@example.com', aria: 'experts.socialEmail', kind: 'mail' },
-      { href: 'https://www.linkedin.com', aria: 'experts.socialLinkedin', kind: 'linkedin' },
-      { href: 'https://x.com', aria: 'experts.socialX', kind: 'x' },
+const SOURCE_TRAINERS: SourceTrainer[] = [
+  { nameAr: 'سنابل المسلم', nameEn: 'Sanabel Al-Muslim', imageUrl: SRC_IMG_A },
+  { nameAr: 'منيرة النخيلان', nameEn: 'Munira Al-Nakhelan', imageUrl: SRC_IMG_B },
+  { nameAr: 'د.بسام الجزاف', nameEn: 'Dr. Bassam Al-Jazzaf', imageUrl: SRC_IMG_C },
+  { nameAr: 'بدر الفيلكاوي', nameEn: 'Bader Al-Failakawi', imageUrl: SRC_IMG_B },
+  { nameAr: 'حسن سيد', nameEn: 'Hassan Sayed', imageUrl: SRC_IMG_A },
+  { nameAr: 'زينب الغضبان', nameEn: 'Zainab Al-Ghadhban', imageUrl: SRC_IMG_D },
+  { nameAr: 'أحمد سمير', nameEn: 'Ahmed Sameer', imageUrl: SRC_IMG_C },
+  { nameAr: 'دلال النخيلان', nameEn: 'Dalal Al-Nakhelan', imageUrl: SRC_IMG_B },
+  { nameAr: 'علي عادل', nameEn: 'Ali Adel', imageUrl: SRC_IMG_A },
+  { nameAr: 'سليمان المراغى', nameEn: 'Sulaiman Al-Muraghi', imageUrl: SRC_IMG_D },
+  { nameAr: 'المحامي إبراهيم السماعيل', nameEn: 'Lawyer Ibrahim Al-Samaeel', imageUrl: SRC_IMG_C },
+  { nameAr: 'عبدالرحمن التركيت', nameEn: 'Abdulrahman Al-Turkait', imageUrl: SRC_IMG_B },
+  { nameAr: 'آلاء النصار', nameEn: 'Alaa Al-Nassar', imageUrl: SRC_IMG_A },
+  { nameAr: 'مرزوق السعيد', nameEn: 'Marzouq Al-Saeed', imageUrl: SRC_IMG_D },
+  { nameAr: 'عبدالرحمن خاجه', nameEn: 'Abdulrahman Khaja', imageUrl: SRC_IMG_C },
+  { nameAr: 'فاطمة عباس', nameEn: 'Fatima Abbas', imageUrl: SRC_IMG_A },
+  { nameAr: 'الحكم خالد الشمري', nameEn: 'Referee Khaled Al-Shammari', imageUrl: SRC_IMG_D },
+  { nameAr: 'ريم العلي', nameEn: 'Reem Al-Ali', imageUrl: SRC_IMG_C },
+  { nameAr: 'د. محمد إسماعيل', nameEn: 'Dr. Mohammed Ismail', imageUrl: SRC_IMG_B },
+  { nameAr: 'دانا العوضي', nameEn: 'Dana Al-Awadi', imageUrl: SRC_IMG_B },
+  { nameAr: 'شيماء الطباخ', nameEn: 'Shaimaa Al-Tabbakh', imageUrl: SRC_IMG_A },
+  { nameAr: 'محمد الجيماز', nameEn: 'Mohammed Al-Jaimaz', imageUrl: SRC_IMG_D },
+  { nameAr: 'م. الجازي العجمي', nameEn: 'Eng. Al-Jazi Al-Ajmi', imageUrl: SRC_IMG_C },
+  { nameAr: 'أبرار أشكناني', nameEn: 'Abrar Ashkanani', imageUrl: SRC_IMG_A },
+  { nameAr: 'سارة المنيس', nameEn: 'Sarah Al-Munais', imageUrl: SRC_IMG_D },
+  { nameAr: 'غدير الكندري', nameEn: 'Ghadeer Al-Kandari', imageUrl: SRC_IMG_A },
+  { nameAr: 'د. جواد أبو الحسن', nameEn: 'Dr. Jawad Abu Al-Hasan', imageUrl: SRC_IMG_C },
+  { nameAr: 'ريم الفرحان', nameEn: 'Reem Al-Farhan', imageUrl: SRC_IMG_B },
+  { nameAr: 'شهد العطار', nameEn: 'Shahd Al-Attar', imageUrl: SRC_IMG_A },
+  { nameAr: 'عبدالرحمن حماد', nameEn: 'Abdulrahman Hammad', imageUrl: SRC_IMG_D },
+  { nameAr: 'هيا بوراشد', nameEn: 'Haya Bourashed', imageUrl: SRC_IMG_C },
+  { nameAr: 'فاطمة القطان', nameEn: 'Fatima Al-Qattan', imageUrl: SRC_IMG_D },
+  { nameAr: 'فيصل الدويسان', nameEn: 'Faisal Al-Duwaisan', imageUrl: SRC_IMG_C },
+  { nameAr: 'هاجر النصار', nameEn: 'Hajar Al-Nassar', imageUrl: SRC_IMG_B },
+  { nameAr: 'عبدالعزيز الضبيب', nameEn: 'Abdulaziz Al-Dhabib', imageUrl: SRC_IMG_D },
 ];
+
+// ── Local presenter photo overrides ───────────────────────────────────
+// Local photos for trainers we have. Keys use the source trainer's exact name
+// where possible; we also build a normalized index so naming variants
+// (د.بسام vs د. بسام, سليمان المراغى vs سليمان المراغي) resolve correctly.
+const R2_BASE = 'https://pub-b242a57539404e6c9709cad496bd5b5b.r2.dev';
+
+const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
+  'د. بسام الجزاف': `${R2_BASE}/bassam-al-jazzaf.jpg`,
+  'د.بسام الجزاف': `${R2_BASE}/bassam-al-jazzaf.jpg`,
+  'بدر الفيلكاوي': `${R2_BASE}/badr-al-failakawi.jpg`,
+  'حسن سيد': `${R2_BASE}/hassan-syed.jpg`,
+  'أحمد سمير': `${R2_BASE}/ahmed-sameer.jpg`,
+  'دلال النخيلان': `${R2_BASE}/dalal-al-nakhelan.jpg`,
+  'علي الأنصاري': `${R2_BASE}/ali.jpg`,
+  'سليمان المراغي': `${R2_BASE}/sulaiman-al-maraghi.jpg`,
+  'المحامي إبراهيم السماعيل': `${R2_BASE}/ibrahim-al-samael.jpg`,
+  'عبدالرحمن التركيت': `${R2_BASE}/abdulrahman-al-turkait.jpg`,
+  'آلاء النصار': `${R2_BASE}/alaa-al-nassar.jpg`,
+  'عبدالرحمن خاجه': `${R2_BASE}/abdulrahman-khajah.jpg`,
+  'د. محمد إسماعيل': `${R2_BASE}/mohammed-ismail.jpg`,
+  'دانا العوضي': `${R2_BASE}/dana-al-awadi.jpg`,
+  'شيماء الطباخ': `${R2_BASE}/shaimaa-al-tabbakh.jpg`,
+  'محمد الجيماز': `${R2_BASE}/mohammed-al-jaimaz.jpg`,
+  'أبرار أشكناني': `${R2_BASE}/abrar-ashkanani.jpg`,
+  'سارة المنيس': `${R2_BASE}/sarah-al-munais.jpg`,
+  'فاطمة القطان': `${R2_BASE}/fatima-al-qattan.jpg`,
+  'فيصل الدويسان': `${R2_BASE}/faisal-al-duwaisan.jpg`,
+  'م. الجازي العجمي': `${R2_BASE}/aljazzi.jpg`,
+  'منيرة النخيلان': `${R2_BASE}/moneera.jpg`,
+  'زينب الغضبان': `${R2_BASE}/zainab.jpg`,
+  'مرزوق السعيد': `${R2_BASE}/marzooq.jpg`,
+  'فاطمة عباس': `${R2_BASE}/fatema.jpg`,
+  'غدير الكندري': `${R2_BASE}/ghadeer.jpg`,
+  'د. جواد أبو الحسن': `${R2_BASE}/jawaad.jpg`,
+  'شهد العطار': `${R2_BASE}/shahad.jpg`,
+  'عبدالرحمن حماد': `${R2_BASE}/abd-alrhahman.jpg`,
+  'هيا بوراشد': `${R2_BASE}/hia.jpg`,
+  'هاجر النصار': `${R2_BASE}/hajr.jpg`,
+  'عبدالعزيز الضبيب': `${R2_BASE}/abd-alazeez.jpg`,
+};
+
+/** Strip diacritics + unify alif/ya/spaces so name variants match. */
+function normalizeArName(name: string): string {
+  if (!name) return '';
+  let s = name.normalize('NFKC');
+  // strip diacritics
+  s = s.replace(/[\u0610-\u0615\u064B-\u0652\u0670]/g, '');
+  // unify alif variants
+  s = s.replace(/[\u0623\u0625\u0622]/g, '\u0627');
+  // unify ya variants (final ى -> ي)
+  s = s.replace(/\u0649/g, '\u064A');
+  // collapse whitespace
+  s = s.replace(/\s+/g, ' ').trim();
+  return s;
+}
+
+const NORMALIZED_AVATAR_OVERRIDES: Record<string, string> = (() => {
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(PRESENTER_AVATAR_OVERRIDES)) {
+    out[normalizeArName(k)] = v;
+  }
+  return out;
+})();
+
+/** Exposed for the events-home component to match a parsed presenter name to a trainer. */
+export function normalizePresenterName(name: string | null | undefined): string {
+  return normalizeArName(name ?? '');
+}
+
+/** First meaningful letter of a segment (Arabic / Latin letters). */
+function firstLetterOfSegment(segment: string): string {
+  for (const ch of segment.normalize('NFKC')) {
+    if (/[\u0600-\u06FF]/.test(ch) || /[A-Za-z]/.test(ch)) {
+      return ch;
+    }
+  }
+  return '';
+}
+
+function secondLetterOfSegment(segment: string): string {
+  const first = firstLetterOfSegment(segment);
+  if (!first) {
+    return '';
+  }
+  const i = segment.indexOf(first);
+  if (i < 0) {
+    return '';
+  }
+  return firstLetterOfSegment(segment.slice(i + first.length));
+}
+
+/**
+ * Two-letter initials for experts without a photo, always from the English name
+ * (honorifics stripped, then first + last word; A–Z uppercase).
+ */
+export function getExpertInitials(ex: HomeExpert): string {
+  const pick = (name: string): string => {
+    let s = name.normalize('NFKC').trim();
+    s = s
+      .replace(/^د\.?\s*/u, '')
+      .replace(/^Dr\.?\s+/i, '')
+      .replace(/^المحامي\s+/u, '')
+      .replace(/^الحكم\s+/u, '')
+      .replace(/^Lawyer\s+/i, '')
+      .replace(/^Referee\s+/i, '')
+      .trim();
+    s = s.replace(/\s*&\s*/g, ' ').replace(/\s+و\s+/g, ' ');
+    const parts = s.split(/\s+/).filter((p) => p.length > 0 && !/^(&|و|and)$/i.test(p));
+    if (parts.length >= 2) {
+      const a = firstLetterOfSegment(parts[0]);
+      const lastSeg = parts[parts.length - 1];
+      let b = firstLetterOfSegment(lastSeg);
+      if (a.toLowerCase() === b.toLowerCase()) {
+        b = secondLetterOfSegment(lastSeg) || b;
+      }
+      return (a + b).trim();
+    }
+    if (parts.length === 1) {
+      const p = parts[0];
+      const a = firstLetterOfSegment(p);
+      const rest = p.slice(p.indexOf(a) + 1);
+      const b = firstLetterOfSegment(rest);
+      if (b) {
+        return (a + b).trim();
+      }
+      return (a + firstLetterOfSegment(p.slice(1))).trim() || a;
+    }
+    return name.slice(0, 2).trim();
+  };
+
+  const out = pick(ex.nameEn);
+  const letters = out.length > 0 ? out : pick(ex.nameAr);
+  return letters.replace(/[a-z]/g, (ch) => ch.toUpperCase());
+}
+
+/**
+ * English-style initials for a presenter line from API `host_name`
+ * (matches `HOME_EXPERTS` when possible, otherwise initials from the string).
+ */
+export function getPresenterInitialsFromHostName(hostName: string | null | undefined): string {
+  const h = (hostName ?? '').trim();
+  if (!h) {
+    return '?';
+  }
+  const hit = HOME_EXPERTS.find((e) => normalizeArName(e.nameAr) === normalizeArName(h));
+  if (hit) {
+    return getExpertInitials(hit);
+  }
+  const pseudo: HomeExpert = {
+    id: '_host',
+    nameAr: h,
+    nameEn: h,
+    specialtyAr: '',
+    specialtyEn: '',
+    bioAr: '',
+    bioEn: '',
+    imageUrl: '',
+    socials: [],
+    workshopSlugs: [],
+  };
+  return getExpertInitials(pseudo);
+}
+
+const DEFAULT_SOCIALS: ExpertSocial[] = [];
 
 function presenterId(name: string): string {
   let h = 0;
@@ -94,54 +254,69 @@ function presenterId(name: string): string {
   return `p${String(Math.abs(h) % 100000).padStart(5, '0')}`;
 }
 
-function specialtyFor(name: string): { ar: string; en: string } {
-  if (name.startsWith('المحامي')) {
-    return { ar: 'مستشار قانوني', en: 'Lawyer' };
-  }
-  if (name.startsWith('د. ')) {
-    return { ar: 'أكاديمي ومقدّم ورش', en: 'Academic & workshop facilitator' };
-  }
-  return { ar: 'مقدّم ورش تدريبية', en: 'Workshop facilitator' };
+/** Strip honorifics for sort comparison (matches source's localeCompare ordering). */
+function nameSortKey(name: string): string {
+  return name.replace(/^(د\.\s*|د\.|المحامي\s|الحكم\s)/, '').trim();
 }
 
 function buildHomeExperts(): HomeExpert[] {
-  const byPresenter = new Map<string, string[]>();
-  for (const w of SCHEDULE.workshops) {
-    const slug = `ms-w-${String(w.n).padStart(3, '0')}`;
-    const list = byPresenter.get(w.presenter_ar) ?? [];
-    list.push(slug);
-    byPresenter.set(w.presenter_ar, list);
-  }
+  const sorted = [...SOURCE_TRAINERS].sort((a, b) =>
+    nameSortKey(a.nameAr).localeCompare(nameSortKey(b.nameAr), 'ar'),
+  );
 
-  const names = [...byPresenter.keys()].sort((a, b) => a.localeCompare(b, 'ar'));
-
-  return names.map((nameAr) => {
-    const slugs = [...(byPresenter.get(nameAr) ?? [])].sort();
-    const nw = slugs.length;
-    const { ar: specialtyAr, en: specialtyEn } = specialtyFor(nameAr);
-    const bioAr =
-      nw === 1
-        ? 'يقدّم ورشة ضمن أسبوع التدريب لطلاب جامعة الكويت (26–30 أبريل 2026).'
-        : `يقدّم ${nw} ورشاً ضمن أسبوع التدريب لطلاب جامعة الكويت (26–30 أبريل 2026).`;
-    const bioEn =
-      nw === 1
-        ? 'Delivers a workshop in the Kuwait University student training week (26–30 April 2026).'
-        : `Delivers ${nw} workshops in the Kuwait University student training week (26–30 April 2026).`;
-
+  return sorted.map((t) => {
+    const id = presenterId(t.nameAr);
+    const localOverride = NORMALIZED_AVATAR_OVERRIDES[normalizeArName(t.nameAr)];
     return {
-      id: presenterId(nameAr),
-      nameAr,
-      nameEn: PRESENTER_NAME_EN[nameAr] ?? nameAr,
-      specialtyAr,
-      specialtyEn,
-      bioAr,
-      bioEn,
-      imageUrl: EXPERT_PORTRAIT_URL,
+      id,
+      nameAr: t.nameAr,
+      nameEn: t.nameEn,
+      specialtyAr: SOURCE_ROLE_AR,
+      specialtyEn: SOURCE_ROLE_EN,
+      bioAr: SOURCE_BIO_AR,
+      bioEn: SOURCE_BIO_EN,
+      imageUrl: localOverride ?? '',
       socials: DEFAULT_SOCIALS,
-      workshopSlugs: slugs,
+      // Empty — the events-home component derives the trainer's workshops by
+      // parsing the instructor name from each event's summary (set by the
+      // backend EventSeeder using source-aligned instructor names).
+      workshopSlugs: [],
     };
   });
 }
 
-/** Facilitators grouped by `presenter_ar` from `ku_student_week_workshops_schedule_full.json`. */
+/** 35 source trainers, sorted Arabic-locale with honorifics stripped. */
 export const HOME_EXPERTS: HomeExpert[] = buildHomeExperts();
+
+/**
+ * Returns a new array where each expert's `imageUrl` is replaced with the
+ * matching entry from `overridesByNormalizedName` when present. Used to merge
+ * admin-portal-managed avatar URLs into the static `HOME_EXPERTS` list at
+ * runtime so admin edits flow through without a frontend rebuild.
+ *
+ * Matching is exact on the canonical name first; if no exact match is found,
+ * we fall back to substring matching either way (handles composite labels
+ * like `زينب الغضبان وفريق الطلبة` ↔ admin-portal entry `زينب الغضبان`).
+ *
+ * `overridesByNormalizedName` keys must be canonicalised via
+ * `normalizePresenterName` (or `normalizeArName`) — same as the public
+ * `ExpertsService.avatarOverrides` computed signal.
+ */
+export function applyExpertAvatarOverrides(
+  experts: readonly HomeExpert[],
+  overridesByNormalizedName: Record<string, string>,
+): HomeExpert[] {
+  const keys = Object.keys(overridesByNormalizedName ?? {});
+  if (keys.length === 0) {
+    return [...experts];
+  }
+  return experts.map((e) => {
+    const target = normalizeArName(e.nameAr);
+    let live = overridesByNormalizedName[target];
+    if (!live) {
+      const partial = keys.find((k) => k && (target.includes(k) || k.includes(target)));
+      if (partial) live = overridesByNormalizedName[partial];
+    }
+    return live ? { ...e, imageUrl: live } : e;
+  });
+}

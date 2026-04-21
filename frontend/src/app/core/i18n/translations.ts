@@ -9,15 +9,76 @@ export type TranslationKey =
   | 'nav.about'
   | 'nav.facilitatorWorkshops'
   | 'nav.searchAria'
+  | 'nav.langAria'
+  | 'nav.langOptionArabic'
+  | 'nav.langOptionEnglish'
   | 'nav.langShortAr'
   | 'nav.langShortEn'
+  | 'nav.changePassword'
+  | 'nav.myWorkshops'
+  | 'nav.browseWorkshops'
+  | 'nav.trainers'
+  | 'nav.faq'
+  | 'nav.studentLogin'
+  | 'nav.signOut'
+  | 'workshops.titleBefore'
+  | 'workshops.titleHighlight'
+  | 'workshops.titleAfter'
+  | 'workshops.programsBadge'
+  | 'workshops.promoCertBanner'
+  | 'footer.linkTrainers'
+  | 'footer.linkFaq'
+  | 'footer.copyrightNextLevel'
+  | 'footer.mediaSolution'
+  | 'legal.privacyTitle'
+  | 'legal.privacyBody'
+  | 'legal.termsTitle'
+  | 'legal.termsBody'
+  | 'login.title'
+  | 'login.subtitle'
+  | 'login.email'
+  | 'login.password'
+  | 'login.signIn'
+  | 'login.signingIn'
+  | 'login.forgot'
+  | 'login.pwdResetSuccess'
+  | 'forgotPassword.title'
+  | 'forgotPassword.subtitle'
+  | 'forgotPassword.emailLabel'
+  | 'forgotPassword.sendCode'
+  | 'forgotPassword.sending'
+  | 'forgotPassword.backLogin'
+  | 'forgotPassword.otpLabel'
+  | 'forgotPassword.newPassword'
+  | 'forgotPassword.confirmPassword'
+  | 'forgotPassword.resetSubmit'
+  | 'forgotPassword.resetting'
+  | 'forgotPassword.step2Hint'
+  | 'forgotPassword.errGeneric'
+  | 'forgotPassword.errOtp'
+  | 'forgotPassword.requestSent'
+  | 'changePassword.title'
+  | 'changePassword.subtitle'
+  | 'changePassword.labelCurrent'
+  | 'changePassword.labelNew'
+  | 'changePassword.labelConfirm'
+  | 'changePassword.submit'
+  | 'changePassword.submitting'
+  | 'changePassword.backDashboard'
+  | 'changePassword.errCurrentRequired'
+  | 'changePassword.errNewRequired'
+  | 'changePassword.errMinLength'
+  | 'changePassword.errMismatch'
+  | 'changePassword.errGeneric'
   | 'banner.promoAria'
   | 'banner.promoMain'
   | 'banner.promoDetails'
   | 'banner.modalCloseAria'
-  | 'banner.modalHeroTitle'
+  | 'banner.modalImageEyebrow'
+  | 'banner.modalHeroBanner'
   | 'banner.modalImageBarText'
   | 'banner.modalBody'
+  | 'banner.modalCheckoutCta'
   | 'hero.badge'
   | 'hero.title1'
   | 'hero.title2'
@@ -93,12 +154,22 @@ export type TranslationKey =
   | 'workshops.promoInstallmentAmount'
   | 'workshops.promoInterestFree'
   | 'workshops.filterDaysAria'
+  | 'workshops.filterCategoryAria'
+  | 'workshops.sortClosest'
+  | 'workshops.sortLatest'
+  | 'workshops.sortAlphabetical'
+  | 'workshops.filterByCategoryHint'
+  | 'workshops.filterByDayHint'
+  | 'workshops.allDaysShort'
+  | 'workshops.showAllShort'
+  | 'workshops.promoPrevAria'
+  | 'workshops.promoNextAria'
+  | 'workshops.promoSliderAria'
+  | 'workshops.bundleFiftyCerts'
   | 'workshops.packageUnavailable'
   | 'cat.all'
-  | 'cat.soft_skills'
-  | 'cat.digital'
-  | 'cat.ai'
-  | 'cat.career_prep'
+  | 'cat.personal'
+  | 'cat.professional'
   | 'card.addCart'
   | 'card.added'
   | 'card.buyNow'
@@ -188,6 +259,7 @@ export type TranslationKey =
   | 'checkout.tapLeavingSite'
   | 'checkout.preparingTap'
   | 'checkout.loadingTapFrame'
+  | 'checkout.emailImportantNote'
   | 'tapReturn.finishing'
   | 'complete.title'
   | 'complete.status'
@@ -207,6 +279,13 @@ export type TranslationKey =
   | 'complete.downloadInvoice'
   | 'complete.backHome'
   | 'complete.detailsHeading'
+  | 'complete.goToMyWorkshops'
+  | 'complete.logInToWorkshops'
+  | 'complete.workshopAccountReadyTitle'
+  | 'complete.workshopAddedDashboardBody'
+  | 'complete.workshopAddedDashboardTitle'
+  | 'complete.workshopCredentialsAfter'
+  | 'complete.workshopCredentialsBefore'
   | 'failed.title'
   | 'failed.reasonTimeout'
   | 'failed.reasonError'
@@ -254,24 +333,88 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.about': 'عن المنصة',
     'nav.facilitatorWorkshops': 'ورش المدرب',
     'nav.searchAria': 'بحث',
+    'nav.langAria': 'تغيير اللغة',
+    'nav.langOptionArabic': 'العربية',
+    'nav.langOptionEnglish': 'الإنجليزية',
     'nav.langShortAr': 'ع',
     'nav.langShortEn': 'EN',
+    'nav.changePassword': 'تغيير كلمة المرور',
+    'nav.myWorkshops': 'ورشي',
+    'nav.browseWorkshops': 'تصفح الورش',
+    'nav.trainers': 'المدربون والمحاضرون',
+    'nav.faq': 'الأسئلة الشائعة',
+    'nav.studentLogin': 'دخول الطلاب',
+    'nav.signOut': 'تسجيل الخروج',
+    'workshops.titleBefore': 'أحدث',
+    'workshops.titleHighlight': 'الورش',
+    'workshops.titleAfter': 'المتاحة',
+    'workshops.programsBadge': 'البرامج التدريبية',
+    'workshops.promoCertBanner': '🎗️ سيحصل الطالب على 100 شهادة معتمدة',
+    'footer.linkTrainers': 'تعرّف على المدربين',
+    'footer.linkFaq': 'الأسئلة الشائعة',
+    'footer.copyrightNextLevel': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
+    'footer.mediaSolution': 'بدعم من',
+    'legal.privacyTitle': 'سياسة الخصوصية',
+    'legal.privacyBody':
+      'نلتزم بحماية بياناتك وفق الأنظمة المعمول بها. تفاصيل كاملة ستُحدَّث هنا قريباً بالتنسيق مع الجهة المالكة للمنصة.',
+    'legal.termsTitle': 'الشروط والأحكام',
+    'legal.termsBody':
+      'باستخدامك للمنصة فإنك توافق على الشروط المعروضة هنا. النص الكامل قيد المراجعة وسيُنشر لاحقاً.',
+    'login.title': 'تسجيل الدخول',
+    'login.subtitle': 'سجّل دخولك للوصول إلى ورشك وحسابك التعليمي.',
+    'login.email': 'البريد الإلكتروني',
+    'login.password': 'كلمة المرور',
+    'login.signIn': 'تسجيل الدخول',
+    'login.signingIn': 'جاري الدخول…',
+    'login.forgot': 'نسيت كلمة المرور؟',
+    'login.pwdResetSuccess': 'تم تغيير كلمة المرور بنجاح. يمكنك تسجيل الدخول الآن.',
+    'forgotPassword.title': 'استعادة كلمة المرور',
+    'forgotPassword.subtitle': 'أدخل بريدك الإلكتروني لإرسال رمز التحقق إلى صندوق الوارد.',
+    'forgotPassword.emailLabel': 'البريد الإلكتروني',
+    'forgotPassword.sendCode': 'إرسال الرمز',
+    'forgotPassword.sending': 'جاري الإرسال…',
+    'forgotPassword.backLogin': 'العودة لتسجيل الدخول',
+    'forgotPassword.otpLabel': 'رمز التحقق (6 أرقام)',
+    'forgotPassword.newPassword': 'كلمة المرور الجديدة',
+    'forgotPassword.confirmPassword': 'تأكيد كلمة المرور',
+    'forgotPassword.resetSubmit': 'تعيين كلمة المرور',
+    'forgotPassword.resetting': 'جاري الحفظ…',
+    'forgotPassword.step2Hint': 'تحقق من بريدك الإلكتروني وأدخل الرمز ثم اختر كلمة مرور جديدة.',
+    'forgotPassword.errGeneric': 'تعذر إتمام الطلب. حاول مرة أخرى.',
+    'forgotPassword.errOtp': 'رمز غير صالح أو منتهي.',
+    'forgotPassword.requestSent':
+      'إذا كان هناك حساب مرتبط بهذا البريد الإلكتروني، فقد أرسلنا رمز التحقق.',
+    'changePassword.title': 'تغيير كلمة المرور',
+    'changePassword.subtitle': 'أدخل كلمة المرور الحالية ثم اختر كلمة مرور جديدة.',
+    'changePassword.labelCurrent': 'كلمة المرور الحالية',
+    'changePassword.labelNew': 'كلمة المرور الجديدة',
+    'changePassword.labelConfirm': 'تأكيد كلمة المرور الجديدة',
+    'changePassword.submit': 'تحديث كلمة المرور',
+    'changePassword.submitting': 'جاري التحديث…',
+    'changePassword.backDashboard': 'العودة إلى ورشي',
+    'changePassword.errCurrentRequired': 'كلمة المرور الحالية مطلوبة',
+    'changePassword.errNewRequired': 'كلمة المرور الجديدة مطلوبة',
+    'changePassword.errMinLength': 'يجب أن تكون كلمة المرور 8 أحرف على الأقل',
+    'changePassword.errMismatch': 'كلمتا المرور غير متطابقتين',
+    'changePassword.errGeneric': 'تعذر تحديث كلمة المرور.',
     'banner.promoAria': 'عرض ترويجي لخصم الورش لطلاب جامعة الكويت',
     'banner.promoMain': 'عرض الـ 100 ورشة لطلاب جامعة الكويت! خصم خاص',
     'banner.promoDetails': 'اضغط للتفاصيل',
     'banner.modalCloseAria': 'إغلاق النافذة',
-    'banner.modalHeroTitle': PROMO.ar.title,
+    'banner.modalImageEyebrow': 'جامعة الكويت · 100 ورشة تدريبية',
+    'banner.modalHeroBanner': 'عرض الـ 100 ورشة 🔥',
     'banner.modalImageBarText': PROMO.ar.modalBar,
     'banner.modalBody': PROMO.ar.tagline,
-    'hero.badge': 'منصة التطوير الطلابي لجامعة الكويت',
+    'banner.modalCheckoutCta': 'احصل على العرض الآن',
+    'hero.badge': 'منصة نكست لفل للتدريب — جامعة الكويت',
     'hero.title1': 'طوّر مهاراتك،',
     'hero.title2': 'وابنِ مستقبلك المهني',
     'hero.body':
-      'استكشف مجموعة واسعة من الورش والفعاليات المصممة لتعزيز قدراتك وإعدادك لسوق العمل—ورش مخصصة لطلاب جامعة الكويت بالتعاون مع شركة نكست لفل. تسجيل آمن عبر المنصة.',
+      'تقدّم المنصة ورشاً عملية لتعزيز قدراتك وإعدادك لسوق العمل، مع مسارات تعليمية وشهادات معتمدة بالتعاون مع جامعة الكويت.',
     'hero.ctaBrowse': 'تصفح الورش المتاحة',
     'hero.ctaPaths': 'تعرف على المسارات',
     'hero.ctaFacilitators': 'تعرّف على المدربين',
-    'hero.stat': '+100 ورشة معتمدة',
+    'hero.stat': '100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
     'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٦–٤–٢٠٢٦ حتى الخميس ٣٠–٤–٢٠٢٦',
     'feat1.title': 'تطوير مستمر',
@@ -318,7 +461,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'facilitatorsPage.back': 'العودة للرئيسية',
     'workshops.title': 'أحدث الورش المتاحة',
     'workshops.subtitle':
-      'اختر من بين مجموعة متنوعة من البرامج لتطوير مهاراتك. جميع الورش مباشرة في التوقيت المحدد ومسجّلة للمشاهدة لاحقاً عبر المنصة التعليمية.',
+      'اختر من بين مجموعة متنوعة من الورش التدريبية التي تناسب اهتماماتك وتخصصك.',
     'workshops.viewAll': 'عرض جميع الورش',
     'workshops.showLess': 'عرض أقل',
     'workshops.searchPlaceholder': 'ابحث عن ورشة…',
@@ -346,16 +489,26 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.promoInstallmentAmount': PROMO.ar.installmentAmount,
     'workshops.promoInterestFree': PROMO.ar.interestFree,
     'workshops.filterDaysAria': 'تصفية الورش حسب اليوم',
+    'workshops.filterCategoryAria': 'تصفية الورش حسب التصنيف',
+    'workshops.sortClosest': 'الأقرب',
+    'workshops.sortLatest': 'الأحدث',
+    'workshops.sortAlphabetical': 'أبجدي',
+    'workshops.filterByCategoryHint': 'تصفح الورشات حسب التصنيف',
+    'workshops.filterByDayHint': 'تصفح الورشات حسب أيام عرضها',
+    'workshops.allDaysShort': 'كل الأيام',
+    'workshops.showAllShort': 'عرض الكل',
+    'workshops.promoPrevAria': 'الباقة السابقة',
+    'workshops.promoNextAria': 'الباقة التالية',
+    'workshops.promoSliderAria': 'اختيار عرض الباقات',
+    'workshops.bundleFiftyCerts': '50 شهادة معتمدة',
     'workshops.packageUnavailable':
       'تعذر تحميل باقة الورش. شغّل الخادم وشغّل التهيئة (php artisan db:seed) لتفعيل حدث الباقة.',
     'cat.all': 'الكل',
-    'cat.soft_skills': 'المهارات الناعمة',
-    'cat.digital': 'المهارات الرقمية',
-    'cat.ai': 'الذكاء الاصطناعي',
-    'cat.career_prep': 'الاستعداد المهني',
+    'cat.personal': 'مهارات الكفاءة الشخصية',
+    'cat.professional': 'الاستعداد المهني والتقني',
     'card.addCart': 'أضف للسلة',
-    'card.added': 'تمت الإضافة',
     'card.buyNow': 'شراء الآن',
+    'card.added': 'تمت الإضافة',
     'card.free': 'مجاناً',
     'card.currencyKwd': 'د.ك',
     'card.presenterLabel': 'مقدم الورشة:',
@@ -373,7 +526,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.q4': 'هل الورشات مسجلة؟',
     'faq.a4': 'نعم، سيتم تسجيل جميع الورش لتكون متاحة أونلاين وللمشاهدة في أي وقت عبر المنصة التعليمية.',
     'footer.brand':
-      'المنصة الرسمية لجامعة الكويت لتقديم الورش التدريبية وتطوير مهارات الطلاب لإعدادهم لسوق العمل.',
+      'مركز نكست لفل للتدريب يقدّم برامج وورشاً عملية لطلاب جامعة الكويت لبناء المهارات والاستعداد لسوق العمل.',
     'footer.quick': 'روابط سريعة',
     'footer.linkHome': 'الرئيسية',
     'footer.linkWorkshops': 'الورش التدريبية',
@@ -385,15 +538,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.privacy': 'سياسة الخصوصية',
     'footer.refund': 'سياسة الاسترجاع',
     'footer.contact': 'تواصل معنا',
-    'footer.contactAddress': 'مدينة صباح السالم الجامعية، الشدادية، الكويت',
-    'footer.contactPhone': '+965 1234 5678',
-    'footer.contactWhatsapp': '+965 9876 5432',
-    'footer.contactEmail': 'info@ku.edu.kw',
+    'footer.contactAddress': 'مدينة الكويت - شارع جاسم بودي - برج H - الدور الثاني',
+    'footer.contactPhone': '+965 9997 4367',
+    'footer.contactWhatsapp': '+965 9997 4367',
+    'footer.contactEmail': 'info@nextlevels.education',
     'footer.newsletter': 'النشرة البريدية',
     'footer.newsletterHint': 'اشترك في نشرتنا البريدية لتصلك آخر المستجدات حول الورش والبرامج التدريبية.',
     'footer.emailPlaceholder': 'البريد الإلكتروني',
     'footer.subscribe': 'اشتراك',
-    'footer.copyright': 'جميع الحقوق محفوظة © 2026 جامعة الكويت',
+    'footer.copyright': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
     'footer.poweredBy': 'Media Solution',
     'cart.title': 'سلة التسجيل',
     'cart.subtitle': 'عناصر محجوزة',
@@ -425,7 +578,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.securePayment': 'الدفع آمن ومحمي',
     'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
     'checkout.labelEmail': 'البريد الإلكتروني',
-    'checkout.labelPhone': 'الهاتف (اختياري)',
+    'checkout.labelPhone': 'رقم الهاتف',
     'checkout.payTap': 'الدفع عبر Tap',
     'checkout.paying': 'جاري بدء الدفع…',
     'checkout.noPaymentUrl': 'لم يُرجع رابط الدفع.',
@@ -444,6 +597,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.tapLeavingSite': 'سيتم فتح Tap في هذه النافذة؛ بعد الدفع ستعود تلقائياً إلى التأكيد.',
     'checkout.preparingTap': 'جاري تجهيز صفحة الدفع…',
     'checkout.loadingTapFrame': 'جاري تحميل Tap…',
+    'checkout.emailImportantNote':
+      'ملاحظة: يرجى كتابة اسمك وايميلك بشكل صحيح ، معلومات تسجيل الدخول ستصلك على الايميل بعد الدفع مباشرة',
     'tapReturn.finishing': 'جاري إنهاء الدفع…',
     'complete.title': 'شكراً',
     'complete.status': 'حالة الطلب:',
@@ -463,6 +618,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.downloadInvoice': 'تحميل الفاتورة',
     'complete.backHome': 'العودة للرئيسية',
     'complete.detailsHeading': 'تفاصيل الطلب',
+    'complete.goToMyWorkshops': 'ورشي',
+    'complete.logInToWorkshops': 'تسجيل الدخول للورش',
+    'complete.workshopAccountReadyTitle': 'حسابك جاهز للورش!',
+    'complete.workshopAddedDashboardBody':
+      'الورشة الجديدة جاهزة. انتقل إلى لوحة التحكم لعرض تفاصيل الجلسات وروابط زووم.',
+    'complete.workshopAddedDashboardTitle': 'أُضيفت الورشة إلى لوحة التحكم!',
+    'complete.workshopCredentialsAfter':
+      '. سجّل الدخول للاطلاع على تفاصيل الورش والجدول وروابط زووم.',
+    'complete.workshopCredentialsBefore': 'أرسلنا بيانات تسجيل الدخول إلى ',
     'failed.title': 'لم يكتمل الدفع',
     'failed.reasonTimeout': 'استغرق التأكيد وقتاً طويلاً أو انقطع الاتصال. إن خُصم مبلغ من بطاقتك ولم يُؤكد الطلب، تواصل مع الدعم مع رقم الطلب.',
     'failed.reasonError': 'حدث خطأ أثناء التحقق من حالة الدفع. حاول مرة أخرى.',
@@ -516,25 +680,89 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.about': 'About',
     'nav.facilitatorWorkshops': 'Facilitator workshops',
     'nav.searchAria': 'Search',
+    'nav.langAria': 'Change language',
+    'nav.langOptionArabic': 'Arabic',
+    'nav.langOptionEnglish': 'English',
     'nav.langShortAr': 'AR',
     'nav.langShortEn': 'EN',
+    'nav.changePassword': 'Change password',
+    'nav.myWorkshops': 'My workshops',
+    'nav.browseWorkshops': 'Browse workshops',
+    'nav.trainers': 'Trainers',
+    'nav.faq': 'FAQ',
+    'nav.studentLogin': 'Student login',
+    'nav.signOut': 'Sign out',
+    'workshops.titleBefore': 'Latest',
+    'workshops.titleHighlight': 'workshops',
+    'workshops.titleAfter': 'available',
+    'workshops.programsBadge': 'Training programs',
+    'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'footer.linkTrainers': 'Meet the trainers',
+    'footer.linkFaq': 'FAQ',
+    'footer.copyrightNextLevel': 'All rights reserved © 2026 Next Level Company',
+    'footer.mediaSolution': 'Supported by',
+    'legal.privacyTitle': 'Privacy policy',
+    'legal.privacyBody':
+      'We are committed to protecting your data in line with applicable regulations. Full details will be published here soon in coordination with the platform owner.',
+    'legal.termsTitle': 'Terms and conditions',
+    'legal.termsBody':
+      'By using the platform you agree to the terms shown here. The full legal text is under review and will be published later.',
+    'login.title': 'Sign in',
+    'login.subtitle': 'Sign in to access your workshops and account.',
+    'login.email': 'Email',
+    'login.password': 'Password',
+    'login.signIn': 'Sign in',
+    'login.signingIn': 'Signing in…',
+    'login.forgot': 'Forgot password?',
+    'login.pwdResetSuccess': 'Your password was reset. You can sign in now.',
+    'forgotPassword.title': 'Reset password',
+    'forgotPassword.subtitle': 'Enter your email and we will send a 6-digit code to your inbox.',
+    'forgotPassword.emailLabel': 'Email',
+    'forgotPassword.sendCode': 'Send code',
+    'forgotPassword.sending': 'Sending…',
+    'forgotPassword.backLogin': 'Back to sign in',
+    'forgotPassword.otpLabel': 'Verification code (6 digits)',
+    'forgotPassword.newPassword': 'New password',
+    'forgotPassword.confirmPassword': 'Confirm new password',
+    'forgotPassword.resetSubmit': 'Set password',
+    'forgotPassword.resetting': 'Saving…',
+    'forgotPassword.step2Hint': 'Check your email for the code, then choose a new password.',
+    'forgotPassword.errGeneric': 'Something went wrong. Please try again.',
+    'forgotPassword.errOtp': 'Invalid or expired code.',
+    'forgotPassword.requestSent':
+      'If an account exists for this email, we sent a verification code.',
+    'changePassword.title': 'Change password',
+    'changePassword.subtitle': 'Enter your current password and choose a new one.',
+    'changePassword.labelCurrent': 'Current password',
+    'changePassword.labelNew': 'New password',
+    'changePassword.labelConfirm': 'Confirm new password',
+    'changePassword.submit': 'Update password',
+    'changePassword.submitting': 'Updating…',
+    'changePassword.backDashboard': 'Back to my workshops',
+    'changePassword.errCurrentRequired': 'Current password is required',
+    'changePassword.errNewRequired': 'New password is required',
+    'changePassword.errMinLength': 'Password must be at least 8 characters',
+    'changePassword.errMismatch': 'Passwords do not match',
+    'changePassword.errGeneric': 'Could not update password.',
     'banner.promoAria':
       '100-workshop offer for Kuwait University students — special discount. Click for details.',
     'banner.promoMain': '100-workshop offer for Kuwait University students! Special discount',
     'banner.promoDetails': 'Click for details',
     'banner.modalCloseAria': 'Close dialog',
-    'banner.modalHeroTitle': PROMO.en.title,
+    'banner.modalImageEyebrow': 'Kuwait University · 100 training workshops',
+    'banner.modalHeroBanner': 'The 100-workshop offer 🔥',
     'banner.modalImageBarText': PROMO.en.modalBar,
     'banner.modalBody': PROMO.en.tagline,
-    'hero.badge': 'Kuwait University student development platform',
+    'banner.modalCheckoutCta': 'Get the offer now',
+    'hero.badge': 'Next Level training platform — Kuwait University',
     'hero.title1': 'Grow your skills,',
     'hero.title2': 'build your career',
     'hero.body':
-      'Explore certified workshops and events built for KU students—in partnership with Next Level. Practical tracks for employability, with a simple and secure registration flow.',
+      'The platform offers practical workshops to strengthen your skills and prepare you for the job market, with learning paths and recognized certificates in cooperation with Kuwait University.',
     'hero.ctaBrowse': 'Browse workshops',
     'hero.ctaPaths': 'Explore learning paths',
     'hero.ctaFacilitators': 'Meet facilitators',
-    'hero.stat': '100+ certified workshops',
+    'hero.stat': '100 certified workshops',
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
       'Special pricing for KU students · Live week Sun 26 Apr–Thu 30 Apr 2026 (Asia/Kuwait)',
@@ -582,7 +810,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'facilitatorsPage.back': 'Back to home',
     'workshops.title': 'Latest available workshops',
     'workshops.subtitle':
-      'Pick the sessions that fit your schedule—live on Zoom at the listed times, with recordings available later on the learning platform.',
+      'Choose from a wide range of training workshops that match your interests and major.',
     'workshops.viewAll': 'View all workshops',
     'workshops.showLess': 'Show fewer',
     'workshops.searchPlaceholder': 'Search workshops…',
@@ -610,16 +838,26 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.promoInstallmentAmount': PROMO.en.installmentAmount,
     'workshops.promoInterestFree': PROMO.en.interestFree,
     'workshops.filterDaysAria': 'Filter workshops by day',
+    'workshops.filterCategoryAria': 'Filter workshops by category',
+    'workshops.sortClosest': 'Closest',
+    'workshops.sortLatest': 'Latest',
+    'workshops.sortAlphabetical': 'Alphabetical',
+    'workshops.filterByCategoryHint': 'Browse workshops by category',
+    'workshops.filterByDayHint': 'Browse workshops by day',
+    'workshops.allDaysShort': 'All days',
+    'workshops.showAllShort': 'Show all',
+    'workshops.promoPrevAria': 'Previous package',
+    'workshops.promoNextAria': 'Next package',
+    'workshops.promoSliderAria': 'Choose a package offer',
+    'workshops.bundleFiftyCerts': '50 certified certificates',
     'workshops.packageUnavailable':
       'The workshop bundle could not be loaded. Run the API and database seeder so the package event exists.',
     'cat.all': 'All',
-    'cat.soft_skills': 'Soft Skills',
-    'cat.digital': 'Digital Skills',
-    'cat.ai': 'Artificial Intelligence',
-    'cat.career_prep': 'Career Prep',
+    'cat.personal': 'Personal Competence Skills',
+    'cat.professional': 'Professional & Technical Readiness',
     'card.addCart': 'Add to cart',
-    'card.added': 'Added',
     'card.buyNow': 'Buy now',
+    'card.added': 'Added',
     'card.free': 'Free',
     'card.currencyKwd': 'K.D.',
     'card.presenterLabel': 'Presenter:',
@@ -640,7 +878,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.a4':
       'Yes—sessions are recorded so you can watch online later on the learning platform when recordings are published.',
     'footer.brand':
-      'The official platform of Kuwait University for offering training workshops and developing student skills to prepare them for the job market.',
+      'Next Level Training Center delivers programs and practical workshops for Kuwait University students to build skills and prepare for the job market.',
     'footer.quick': 'Quick Links',
     'footer.linkHome': 'Home',
     'footer.linkWorkshops': 'Workshops',
@@ -652,15 +890,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'footer.privacy': 'Privacy policy',
     'footer.refund': 'Refund policy',
     'footer.contact': 'Contact Us',
-    'footer.contactAddress': 'Sabah Al-Salem University City, Al-Shadadiya, Kuwait',
-    'footer.contactPhone': '+965 1234 5678',
-    'footer.contactWhatsapp': '+965 9876 5432',
-    'footer.contactEmail': 'info@ku.edu.kw',
+    'footer.contactAddress': 'Kuwait City - Jassim Boudi St. - Tower H - 2nd Floor',
+    'footer.contactPhone': '+965 9997 4367',
+    'footer.contactWhatsapp': '+965 9997 4367',
+    'footer.contactEmail': 'info@nextlevels.education',
     'footer.newsletter': 'Newsletter',
     'footer.newsletterHint': 'Subscribe to our newsletter to receive the latest updates on workshops and training programs.',
     'footer.emailPlaceholder': 'Email Address',
     'footer.subscribe': 'Subscribe',
-    'footer.copyright': 'All Rights Reserved © 2026 Kuwait University',
+    'footer.copyright': 'All rights reserved © 2026 Next Level Company',
     'footer.poweredBy': 'Media Solution',
     'cart.title': 'Your cart',
     'cart.subtitle': 'items reserved',
@@ -692,7 +930,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.securePayment': 'Secure, protected checkout',
     'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
     'checkout.labelEmail': 'Email',
-    'checkout.labelPhone': 'Phone (optional)',
+    'checkout.labelPhone': 'Phone number',
     'checkout.payTap': 'Pay with Tap',
     'checkout.paying': 'Starting payment…',
     'checkout.noPaymentUrl': 'No payment URL returned.',
@@ -711,6 +949,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.tapLeavingSite': 'Tap will open in this window; after you pay you will return here for confirmation.',
     'checkout.preparingTap': 'Preparing secure checkout…',
     'checkout.loadingTapFrame': 'Loading Tap checkout…',
+    'checkout.emailImportantNote':
+      'Note: Please enter your name and email correctly. Your login details will be sent to this email right after payment.',
     'tapReturn.finishing': 'Finishing your payment…',
     'complete.title': 'Thanks',
     'complete.status': 'Your order status is',
@@ -730,6 +970,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'complete.downloadInvoice': 'Download invoice',
     'complete.backHome': 'Back to home',
     'complete.detailsHeading': 'Order details',
+    'complete.goToMyWorkshops': 'Go to My Workshops',
+    'complete.logInToWorkshops': 'Log In to Access Workshops',
+    'complete.workshopAccountReadyTitle': 'Your workshop account is ready!',
+    'complete.workshopAddedDashboardBody':
+      'Your new workshop is ready. Go to your dashboard to view session details and Zoom links.',
+    'complete.workshopAddedDashboardTitle': 'Workshop added to your dashboard!',
+    'complete.workshopCredentialsAfter':
+      '. Log in to access your workshop details, schedule, and Zoom links.',
+    'complete.workshopCredentialsBefore': "We've sent your login credentials to ",
     'failed.title': 'Payment not completed',
     'failed.reasonTimeout': 'Confirmation took too long or the connection dropped. If you were charged but the order did not confirm, contact support with your order reference.',
     'failed.reasonError': 'Something went wrong while checking payment status. Please try again.',

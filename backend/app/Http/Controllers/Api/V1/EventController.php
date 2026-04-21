@@ -22,7 +22,9 @@ class EventController extends Controller
                 $sub->where('title', 'like', '%'.$search.'%')
                     ->orWhere('title_en', 'like', '%'.$search.'%')
                     ->orWhere('summary', 'like', '%'.$search.'%')
-                    ->orWhere('summary_en', 'like', '%'.$search.'%');
+                    ->orWhere('summary_en', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%')
+                    ->orWhere('description_en', 'like', '%'.$search.'%');
             });
         }
 

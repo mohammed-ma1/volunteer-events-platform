@@ -1,3 +1,5 @@
-/** Shared hero image for promo banner, modal, and workshops bundle card (no baked-in pricing text). */
-export const PROMO_HERO_IMAGE_URL =
-  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80';
+/** Top-of-page home hero (collaboration visual). */
+export const HOME_HERO_IMAGE_URL = '/images/hero/next-levels-hero-collaboration.png';
+
+/** Workshops bundle offer strip + promo modal hero. */
+export const PROMO_HERO_IMAGE_URL = '/images/hero/bundle-100-workshops-hero.png';

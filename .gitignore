@@ -1,6 +1,12 @@
 .DS_Store
 *.log
 
+# Local Python venv for tools/import_ku_workbook.py
+tools/.venv/
+
+# Local workshop image URL overrides (copy workshop_r2_urls.example.json)
+tools/workshop_r2_urls.json
+
 # Never commit local env or keys (subprojects also define their own rules)
 **/.env
 **/.env.backup

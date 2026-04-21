@@ -4,13 +4,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        /** NEXT LEVELS: brand purple (screenshot ~#2E2A7B) — primary text, CTAs, banner. */
         brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          500: '#2563eb',
-          600: '#1d4ed8',
-          700: '#1e40af',
-          900: '#0b1221',
+          50: '#f5f4fc',
+          100: '#ebe9f7',
+          200: '#d8d4ef',
+          300: '#b8b2e0',
+          400: '#9288cc',
+          500: '#7268b8',
+          600: '#5d55a5',
+          700: '#4d4594',
+          800: '#3f3a86',
+          900: '#2E2A7B',
+          950: '#232059',
+        },
+        /** Metallic / mustard gold — logo + hero highlights + nav underline */
+        gold: {
+          400: '#f0d78c',
+          500: '#d4af37',
+          600: '#b8922a',
+          700: '#9a7828',
+        },
+        /** Violet / indigo — newsletter, secondary accents */
+        accent: {
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
         },
         ink: {
           50: '#f4f6fb',
@@ -78,8 +98,8 @@ module.exports = {
           '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
         },
         veCtaRing: {
-          '0%, 100%': { boxShadow: '0 0 0 0 rgba(29, 78, 216, 0.42)' },
-          '55%': { boxShadow: '0 0 0 14px rgba(29, 78, 216, 0)' },
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(46, 42, 123, 0.42)' },
+          '55%': { boxShadow: '0 0 0 14px rgba(46, 42, 123, 0)' },
         },
         veFloatSlow: {
           '0%, 100%': { transform: 'translateY(0)' },
@@ -109,7 +129,7 @@ module.exports = {
       },
       backgroundImage: {
         'hero-mesh':
-          'radial-gradient(1200px circle at 10% -10%, rgba(255,107,91,0.35), transparent 55%), radial-gradient(900px circle at 90% 10%, rgba(46,211,166,0.28), transparent 50%), radial-gradient(800px circle at 50% 100%, rgba(154,168,204,0.2), transparent 45%)',
+          'radial-gradient(1200px circle at 10% -10%, rgba(212,175,55,0.18), transparent 55%), radial-gradient(900px circle at 90% 10%, rgba(99,102,241,0.12), transparent 50%), radial-gradient(800px circle at 50% 100%, rgba(26,31,54,0.08), transparent 45%)',
       },
     },
   },

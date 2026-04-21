@@ -25,7 +25,7 @@ return [
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => ['X-Cart-Token'],
+    'exposed_headers' => ['X-Cart-Token', 'Authorization'],
 
     'max_age' => 0,
 
