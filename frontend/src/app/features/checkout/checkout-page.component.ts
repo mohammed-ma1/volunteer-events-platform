@@ -183,13 +183,25 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
               </div>
               <div>
                 <label class="text-sm font-bold text-[#0a1628]" for="ph">{{ i18n.t('checkout.labelPhone') }}</label>
-                <input
-                  id="ph"
-                  class="mt-1.5 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none transition focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
-                  type="tel"
-                  formControlName="phone"
-                  autocomplete="tel"
-                />
+                <div class="mt-1.5 flex items-stretch overflow-hidden rounded-lg border border-ink-200 bg-white focus-within:border-brand-900/40 focus-within:ring-2 focus-within:ring-brand-900/10">
+                  <span
+                    class="flex shrink-0 select-none items-center justify-center border-e border-ink-200 bg-ink-50 px-3 text-sm font-semibold text-ink-700"
+                    dir="ltr"
+                    aria-hidden="true"
+                  >+965</span>
+                  <input
+                    id="ph"
+                    class="min-w-0 flex-1 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none"
+                    type="tel"
+                    formControlName="phone"
+                    autocomplete="tel"
+                    inputmode="numeric"
+                    maxlength="8"
+                    placeholder="9999 9999"
+                    dir="ltr"
+                  />
+                </div>
+                <p class="mt-1 text-xs text-ink-500">{{ i18n.t('checkout.phoneHint') }}</p>
               </div>
               <div>
                 <label class="text-sm font-bold text-[#0a1628]" for="em">{{ i18n.t('checkout.labelEmail') }}</label>
@@ -364,7 +376,7 @@ export class CheckoutPageComponent {
     firstName: ['', [Validators.required, Validators.maxLength(120)]],
     lastName: ['', [Validators.required, Validators.maxLength(120)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.maxLength(32)]],
+    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
   });
 
   constructor() {
@@ -385,10 +397,11 @@ export class CheckoutPageComponent {
 
     const v = this.form.getRawValue();
     const customer_name = `${v.firstName.trim()} ${v.lastName.trim()}`.trim();
+    const localDigits = (v.phone ?? '').replace(/\D+/g, '');
     const body = {
       customer_name,
       email: v.email,
-      phone: v.phone?.trim() ? v.phone.trim() : undefined,
+      phone: localDigits ? `+965${localDigits}` : undefined,
     };
 
     const locale = this.i18n.locale();

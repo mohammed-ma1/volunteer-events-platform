@@ -242,6 +242,7 @@ export type TranslationKey =
   | 'checkout.installmentPill'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
+  | 'checkout.phoneHint'
   | 'checkout.payTap'
   | 'checkout.paying'
   | 'checkout.noPaymentUrl'
@@ -579,6 +580,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
+    'checkout.phoneHint': '٨ أرقام بدون رمز الدولة (مثال: 99991234)',
     'checkout.payTap': 'الدفع عبر Tap',
     'checkout.paying': 'جاري بدء الدفع…',
     'checkout.noPaymentUrl': 'لم يُرجع رابط الدفع.',
@@ -931,6 +933,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
+    'checkout.phoneHint': '8 digits without country code (e.g. 99991234)',
     'checkout.payTap': 'Pay with Tap',
     'checkout.paying': 'Starting payment…',
     'checkout.noPaymentUrl': 'No payment URL returned.',
