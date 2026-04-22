@@ -233,8 +233,11 @@ class LearnController extends Controller
 
     /**
      * GET /v1/learn/events/{event}/certificate
-     * Streams a PDF certificate; gated on the user being enrolled AND having
-     * marked the recording as watched.
+     * Streams a PDF certificate to any enrolled user. The "watched the
+     * recording" gate is intentionally disabled for now — we'll re-enable it
+     * once we wire real video-completion tracking. The completion row is
+     * still surfaced if it exists so the certificate carries the real
+     * completion date; otherwise we use today's date.
      */
     public function downloadCertificate(int $event): JsonResponse|Response
     {
@@ -252,10 +255,6 @@ class LearnController extends Controller
         $completion = EventCompletion::where('user_id', $userId)
             ->where('event_id', $event)
             ->first();
-
-        if (! $completion) {
-            return response()->json(['message' => 'Workshop recording not yet marked as watched.'], 403);
-        }
 
         $eventModel = Event::findOrFail($event);
         $certNo = sprintf('KU-%d-%d', $eventModel->id, $userId);
