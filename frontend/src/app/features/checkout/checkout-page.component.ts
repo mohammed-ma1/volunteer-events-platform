@@ -7,9 +7,10 @@ import { Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap, take, timer } from 'rxjs';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { isLocalBrowserOrigin, isTapCheckoutCompleteMessage } from '../../core/payment/tap-messages';
-import { CartLine } from '../../core/models/api.types';
+import { CartLine, CartSnapshot } from '../../core/models/api.types';
 import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
+import { MetaPixelService } from '../../core/analytics/meta-pixel.service';
 import { environment } from '../../../environments/environment';
 
 /** `randomUUID` is missing on non-HTTPS origins (e.g. http://droplet-ip); use RFC4122 v4 via getRandomValues when needed. */
@@ -344,6 +345,10 @@ export class CheckoutPageComponent {
 
   readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
+  private readonly metaPixel = inject(MetaPixelService);
+
+  /** Guard so the InitiateCheckout pixel fires only once per page visit. */
+  private initiateCheckoutFired = false;
 
   readonly busy = signal(false);
   readonly error = signal<string | null>(null);
@@ -380,11 +385,36 @@ export class CheckoutPageComponent {
   });
 
   constructor() {
-    this.cart.refresh().subscribe();
+    // Refresh first so we have an up-to-date snapshot, then fire the
+    // Meta InitiateCheckout pixel once. Without this the funnel looks
+    // broken in Pixel Helper: AddToCart fires on the home/event page,
+    // PageView fires on the cart page, and nothing in between — making
+    // it look like the AddToCart "disappeared" after navigation.
+    this.cart.refresh().subscribe({
+      next: (s) => this.fireInitiateCheckoutOnce(s),
+      error: () => this.fireInitiateCheckoutOnce(this.cart.snapshot()),
+    });
     window.addEventListener('message', this.onWindowMessage);
     this.destroyRef.onDestroy(() => {
       window.removeEventListener('message', this.onWindowMessage);
       this.stopPolling();
+    });
+  }
+
+  private fireInitiateCheckoutOnce(snap: CartSnapshot | null): void {
+    if (this.initiateCheckoutFired || !snap || snap.items.length === 0) {
+      return;
+    }
+    this.initiateCheckoutFired = true;
+    this.metaPixel.track('InitiateCheckout', {
+      content_ids: snap.items
+        .map((l) => l.event?.id)
+        .filter((id): id is number => typeof id === 'number')
+        .map(String),
+      content_type: 'product',
+      num_items: snap.item_count,
+      value: snap.subtotal,
+      currency: snap.currency || 'KWD',
     });
   }
 
