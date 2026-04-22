@@ -3,6 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { MetaPixelService } from '../../core/analytics/meta-pixel.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { OrderSummary } from '../../core/models/api.types';
@@ -186,6 +187,7 @@ export class CheckoutCompleteComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly checkoutApi = inject(CheckoutService);
   private readonly cart = inject(CartService);
+  private readonly metaPixel = inject(MetaPixelService);
   readonly auth = inject(AuthService);
   readonly i18n = inject(I18nService);
 
@@ -213,6 +215,7 @@ export class CheckoutCompleteComponent implements OnInit {
             } else {
               this.cart.clearLocalCart();
             }
+            this.firePurchasePixelOnce(o);
           }
           if (o.status === 'failed' || o.status === 'cancelled') {
             void this.router.navigate(['/checkout/failed'], { queryParams: { order: uuid } });
@@ -229,5 +232,29 @@ export class CheckoutCompleteComponent implements OnInit {
   downloadInvoice(uuid: string): void {
     const base = environment.apiUrl.replace(/\/$/, '');
     window.location.href = `${window.location.origin}${base}/v1/orders/${uuid}/invoice`;
+  }
+
+  /** Fire Meta `Purchase` exactly once per order — survives refresh / back nav within a tab. */
+  private firePurchasePixelOnce(o: OrderSummary): void {
+    try {
+      const key = `fbq_purchase_${o.uuid}`;
+      if (sessionStorage.getItem(key)) {
+        return;
+      }
+      sessionStorage.setItem(key, '1');
+      this.metaPixel.track('Purchase', {
+        value: o.total,
+        currency: o.currency,
+        num_items: o.items.reduce((sum, i) => sum + i.quantity, 0),
+        content_type: 'product',
+        content_name: o.items.map((i) => i.event_title).join(' | '),
+      });
+    } catch {
+      // sessionStorage may throw in private mode; track once without dedupe rather than skip.
+      this.metaPixel.track('Purchase', {
+        value: o.total,
+        currency: o.currency,
+      });
+    }
   }
 }

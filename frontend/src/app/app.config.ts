@@ -7,6 +7,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
+import { MetaPixelService } from './core/analytics/meta-pixel.service';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { acceptLanguageInterceptor } from './core/http/accept-language.interceptor';
 import { apiUrlInterceptor } from './core/http/api-url.interceptor';
@@ -41,6 +42,12 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       multi: true,
       useFactory: () => () => patchFaviconLinksToAbsoluteOrigin(),
+    },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [MetaPixelService],
+      useFactory: (pixel: MetaPixelService) => () => pixel.init(),
     },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideAnimations(),
