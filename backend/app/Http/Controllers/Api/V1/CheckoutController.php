@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\TapPaymentService;
+use App\Support\PhoneNumber;
 use App\Support\TapChargePayload;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
@@ -57,7 +58,7 @@ class CheckoutController extends Controller
                     'cart_id' => $cart->id,
                     'email' => $data['email'],
                     'customer_name' => $data['customer_name'],
-                    'phone' => $data['phone'] ?? null,
+                    'phone' => PhoneNumber::normalize($data['phone'] ?? null),
                     'currency' => $currency,
                     'status' => Order::STATUS_PENDING_PAYMENT,
                 ]);

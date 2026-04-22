@@ -96,7 +96,7 @@ return [
         'description_en' => 'How to inspire and generate creative ideas for advertising and marketing campaigns.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9.jpg',
-        'instructor' => 'علي عادل',
+        'instructor' => 'علي الأنصاري',
     ],
     'ms-w-011' => [
         'title' => 'ربط أي خدمة بالذكاء الاصطناعي',
@@ -222,7 +222,7 @@ return [
         'description_en' => 'Principles of screenwriting and how to build a story from idea to paper.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9_1.jpg',
-        'instructor' => 'علي عادل',
+        'instructor' => 'علي الأنصاري',
     ],
     'ms-w-025' => [
         'title' => 'عقلية النجاح',
@@ -456,7 +456,7 @@ return [
         'description_en' => 'Basic requirements and first steps to enter the world of filmmaking.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/049_%D8%A8%D8%B7%D8%A7%D9%82%D8%A9_%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%8A%D8%A9_%D9%84%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%A3%D9%81%D9%84%D8%A7%D9%85.jpg',
-        'instructor' => 'علي عادل',
+        'instructor' => 'علي الأنصاري',
     ],
     'ms-w-051' => [
         'title' => 'أول 90 يوم من عملك الجديد',
@@ -645,7 +645,7 @@ return [
         'description_en' => 'Learn the basics of art production and how to manage creative projects.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/050_%D9%85%D8%A8%D8%A7%D8%AF%D8%A6_%D8%A7%D9%84%D8%A5%D9%86%D8%AA%D8%A7%D8%AC_%D8%A7%D9%84%D9%81%D9%86%D9%8A.jpg',
-        'instructor' => 'علي عادل',
+        'instructor' => 'علي الأنصاري',
     ],
     'ms-w-072' => [
         'title' => 'الورشة الثانية ورشة نموذج العمل التجاري',
@@ -888,7 +888,7 @@ return [
         'description_en' => 'Exploring arts that reflect our identity and culture, and how to express them.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/051_%D9%81%D9%86%D9%88%D9%86_%D8%AA%D8%B4%D8%A8%D9%87%D9%86%D8%A7.jpg',
-        'instructor' => 'علي عادل',
+        'instructor' => 'علي الأنصاري',
     ],
     'ms-w-099' => [
         'title' => 'كيف تزيد أرباحك من خلال برامج التواصل الاجتماعي',

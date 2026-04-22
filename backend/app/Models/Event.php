@@ -60,7 +60,7 @@ class Event extends Model
 
     protected $fillable = [
         'title', 'title_en', 'slug', 'summary', 'summary_en', 'description', 'description_en', 'image_url',
-        'starts_at', 'ends_at', 'location', 'location_en', 'zoom_link', 'host_name', 'price', 'currency',
+        'starts_at', 'ends_at', 'location', 'location_en', 'zoom_link', 'recording_url', 'host_name', 'price', 'currency',
         'capacity', 'is_featured', 'is_published',
         'status', 'created_by', 'approved_by', 'approved_at',
     ];
@@ -105,6 +105,11 @@ class Event extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
+    }
+
+    public function completions(): HasMany
+    {
+        return $this->hasMany(EventCompletion::class);
     }
 
     public function scopePublished($query)

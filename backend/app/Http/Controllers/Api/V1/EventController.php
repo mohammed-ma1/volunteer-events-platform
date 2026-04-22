@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Enrollment;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -40,6 +42,25 @@ class EventController extends Controller
     {
         $event = Event::query()->published()->where('slug', $slug)->firstOrFail();
 
-        return response()->json($event);
+        // Only enrolled, authenticated viewers see the recording URL — keeps
+        // unauthenticated visitors from scraping the Cloudflare links.
+        $payload = $event->toArray();
+        if (! $this->viewerCanAccessRecording($event)) {
+            $payload['recording_url'] = null;
+        }
+
+        return response()->json($payload);
+    }
+
+    private function viewerCanAccessRecording(Event $event): bool
+    {
+        $userId = Auth::guard('api')->id();
+        if (! $userId) {
+            return false;
+        }
+
+        return Enrollment::where('user_id', $userId)
+            ->where('event_id', $event->id)
+            ->exists();
     }
 }

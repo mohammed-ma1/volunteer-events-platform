@@ -1,4 +1,4 @@
-import { DOCUMENT, NgClass } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import {
@@ -51,7 +51,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 @Component({
   selector: 'app-events-home',
   standalone: true,
-  imports: [FormsModule, NgClass, RouterLink, EventCardComponent, ScrollRevealDirective],
+  imports: [FormsModule, NgClass, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
   template: `
     <section
       veScrollReveal
@@ -793,42 +793,67 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 {{ i18n.t('experts.workshopsHeading') }}
                 <span class="text-brand-700">({{ expertWorkshopsForSelected().length }})</span>
               </h3>
-              <div class="mt-4 grid min-w-0 gap-3 sm:grid-cols-2">
+              <div class="mt-4 grid min-w-0 gap-4 sm:grid-cols-2">
                 @for (ev of expertWorkshopsForSelected(); track ev.slug) {
-                  <div
-                    class="flex min-w-0 max-w-full flex-col gap-3 rounded-xl border border-ink-200 bg-white p-3 shadow-sm sm:flex-row sm:items-center"
+                  <article
+                    class="group relative flex min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-ink-200/80 bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-lg"
                   >
-                    <div class="flex min-w-0 flex-1 items-center gap-3">
+                    <div class="flex items-start gap-3">
                       @if (ev.image_url) {
                         <img
                           [src]="ev.image_url"
                           alt=""
-                          class="h-14 w-[4.5rem] shrink-0 rounded-lg object-cover ring-1 ring-ink-100"
+                          loading="lazy"
+                          class="h-16 w-16 shrink-0 rounded-xl object-cover ring-1 ring-ink-100"
                         />
                       } @else {
                         <div
-                          class="h-14 w-[4.5rem] shrink-0 rounded-lg bg-ink-100 ring-1 ring-ink-100"
+                          class="h-16 w-16 shrink-0 rounded-xl bg-ink-100 ring-1 ring-ink-100"
                           aria-hidden="true"
                         ></div>
                       }
                       <div class="min-w-0 flex-1 text-start">
-                        <p class="break-words text-sm font-bold leading-snug text-[#0a1628]">
+                        <h4 class="line-clamp-2 break-words text-sm font-bold leading-snug text-[#0a1628] md:text-[15px]">
                           {{ displayWorkshopTitle(ev) }}
+                        </h4>
+                        <p class="mt-1.5 inline-flex items-center gap-1.5 text-xs text-ink-500">
+                          <svg class="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                          <span class="truncate">{{ workshopLineMeta(ev) }}</span>
                         </p>
-                        <p class="mt-1 text-xs text-ink-500">{{ workshopLineMeta(ev) }}</p>
                       </div>
                     </div>
-                    <div class="flex w-full shrink-0 sm:w-auto sm:justify-end">
+
+                    @if (workshopDescription(ev); as desc) {
+                      <p class="mt-3 line-clamp-2 break-words text-xs leading-relaxed text-ink-600 md:text-[13px]">
+                        {{ desc }}
+                      </p>
+                    } @else {
+                      <p class="mt-3 line-clamp-2 break-words text-xs italic leading-relaxed text-ink-400">
+                        {{ i18n.t('experts.workshopDescriptionFallback') }}
+                      </p>
+                    }
+
+                    <div class="mt-auto flex items-center justify-between gap-3 border-t border-ink-100 pt-3">
+                      <div class="flex items-baseline gap-1.5 leading-none">
+                        @if (ev.price <= 0) {
+                          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-emerald-200">
+                            {{ i18n.t('card.free') }}
+                          </span>
+                        } @else {
+                          <span class="text-lg font-extrabold text-brand-900">{{ ev.price | number: '1.0-0' }}</span>
+                          <span class="text-xs font-semibold text-ink-500">{{ i18n.t('card.currencyKwd') }}</span>
+                        }
+                      </div>
                       <button
                         type="button"
-                        class="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-ink-200 bg-white px-4 py-2 text-xs font-semibold text-brand-900 shadow-sm transition hover:bg-ink-50 active:scale-[0.97] sm:w-auto"
+                        class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-900 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-brand-800 active:scale-[0.97]"
                         (click)="addExpertWorkshopToCart(ev)"
                       >
-                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
                         {{ i18n.t('card.addCart') }}
                       </button>
                     </div>
-                  </div>
+                  </article>
                 }
               </div>
             </div>
@@ -1340,6 +1365,18 @@ export class EventsHomeComponent implements OnDestroy {
   workshopLineMeta(ev: HomeListEvent): string {
     const loc = this.i18n.locale() === 'ar' ? 'ar' : 'en';
     return `${formatCardDateLong(ev.starts_at, loc)} · ${formatTimeKuwait(ev.starts_at, loc)}`;
+  }
+
+  /** Locale-preferred workshop description, falls back to the other locale or summary. */
+  workshopDescription(ev: HomeListEvent): string | null {
+    const ar = ev.description?.trim() || (ev as { summaryAr?: string }).summaryAr?.trim();
+    const en = ev.description_en?.trim() || ev.summary_en?.trim();
+    const summaryFallback = ev.summary?.trim();
+    const preferred = this.i18n.locale() === 'ar' ? ar || en : en || ar;
+    const value = preferred || summaryFallback;
+    if (!value) return null;
+    // Strip the leading "[category] " tag the seeder injects into summary fallbacks.
+    return value.replace(/^\[[^\]]+\]\s*/, '');
   }
 
   addExpertWorkshopToCart(ev: HomeListEvent): void {

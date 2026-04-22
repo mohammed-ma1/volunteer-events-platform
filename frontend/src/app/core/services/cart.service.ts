@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, of, switchMap, tap } from 'rxjs';
+import { MetaPixelService } from '../analytics/meta-pixel.service';
 import { CartSnapshot } from '../models/api.types';
 
 const STORAGE_KEY = 've_cart_token';
@@ -12,6 +13,7 @@ const SNAPSHOT_STORAGE_KEY = 've_cart_snapshot';
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly http = inject(HttpClient);
+  private readonly metaPixel = inject(MetaPixelService);
 
   readonly token = signal<string | null>(this.readToken());
   readonly snapshot = signal<CartSnapshot | null>(null);
@@ -150,6 +152,16 @@ export class CartService {
           this.lastAddedEventId.set(null);
           this.clearAddedTimer = null;
         }, 1100);
+        const line = s.items.find((i) => i.event?.id === eventId);
+        if (line?.event) {
+          this.metaPixel.track('AddToCart', {
+            content_ids: [String(eventId)],
+            content_type: 'product',
+            content_name: line.event.title,
+            value: line.event.price,
+            currency: line.event.currency || s.currency || 'KWD',
+          });
+        }
       }),
     );
   }

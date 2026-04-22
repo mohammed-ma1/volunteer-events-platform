@@ -118,6 +118,7 @@ export type TranslationKey =
   | 'experts.subtitle'
   | 'experts.searchPh'
   | 'experts.workshopsHeading'
+  | 'experts.workshopDescriptionFallback'
   | 'experts.connect'
   | 'experts.showMore'
   | 'experts.showLess'
@@ -242,6 +243,7 @@ export type TranslationKey =
   | 'checkout.installmentPill'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
+  | 'checkout.phoneHint'
   | 'checkout.payTap'
   | 'checkout.paying'
   | 'checkout.noPaymentUrl'
@@ -298,6 +300,15 @@ export type TranslationKey =
   | 'detail.registration'
   | 'detail.addCart'
   | 'detail.notFound'
+  | 'learn.recordingTitle'
+  | 'learn.recordingPlaceholder'
+  | 'learn.markCompleted'
+  | 'learn.alreadyCompleted'
+  | 'learn.certificateTitle'
+  | 'learn.certificateSubtitle'
+  | 'learn.certificateDownload'
+  | 'learn.certificateBlockedTitle'
+  | 'learn.certificateBlocked'
   | 'about.title'
   | 'about.intro'
   | 'about.missionTitle'
@@ -449,6 +460,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'اختر المدرب لعرض نبذة عنه وورشه التدريبية، وتواصل عبر القنوات المتاحة عند الحاجة.',
     'experts.searchPh': 'ابحث بالاسم أو التخصص…',
     'experts.workshopsHeading': 'الورش التدريبية للمدرب',
+    'experts.workshopDescriptionFallback': 'جلسة قصيرة وعملية مع تطبيقات مباشرة عبر زوم.',
     'experts.connect': 'تواصل مع المدرب',
     'experts.showMore': 'عرض المزيد',
     'experts.showLess': 'عرض أقل',
@@ -579,6 +591,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
+    'checkout.phoneHint': '٨ أرقام بدون رمز الدولة (مثال: 99991234)',
     'checkout.payTap': 'الدفع عبر Tap',
     'checkout.paying': 'جاري بدء الدفع…',
     'checkout.noPaymentUrl': 'لم يُرجع رابط الدفع.',
@@ -672,6 +685,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'detail.registration': 'الرسوم',
     'detail.addCart': 'أضف للسلة',
     'detail.notFound': 'تعذر العثور على هذه الورشة.',
+    'learn.recordingTitle': 'تسجيل الورشة',
+    'learn.recordingPlaceholder': 'سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها',
+    'learn.markCompleted': 'أكملت المشاهدة',
+    'learn.alreadyCompleted': 'تم إكمال المشاهدة',
+    'learn.certificateTitle': 'الشهادة',
+    'learn.certificateSubtitle': 'احصل على شهادة الإتمام بصيغة PDF',
+    'learn.certificateDownload': 'اضغط هنا لتحميل الشهادة',
+    'learn.certificateBlockedTitle': 'تنبيه',
+    'learn.certificateBlocked': 'يجب عليك إكمال مشاهدة تسجيل الورشة أولاً لتتمكن من تحميل الشهادة',
   },
   en: {
     'nav.home': 'Home',
@@ -798,6 +820,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
       'Meet the experts and academics who will share their knowledge and experiences with you.',
     'experts.searchPh': 'Search by name or specialty…',
     'experts.workshopsHeading': 'Workshops by this trainer',
+    'experts.workshopDescriptionFallback': 'A short, hands-on session with live exercises over Zoom.',
     'experts.connect': 'Connect with the trainer',
     'experts.showMore': 'Show more',
     'experts.showLess': 'Show fewer',
@@ -931,6 +954,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
+    'checkout.phoneHint': '8 digits without country code (e.g. 99991234)',
     'checkout.payTap': 'Pay with Tap',
     'checkout.paying': 'Starting payment…',
     'checkout.noPaymentUrl': 'No payment URL returned.',
@@ -1025,5 +1049,14 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'detail.registration': 'Fee',
     'detail.addCart': 'Add to cart',
     'detail.notFound': 'This workshop could not be found.',
+    'learn.recordingTitle': 'Workshop recording',
+    'learn.recordingPlaceholder': 'The workshop recording will be added here so you can watch it later after the session ends',
+    'learn.markCompleted': 'I completed watching',
+    'learn.alreadyCompleted': 'Watching completed',
+    'learn.certificateTitle': 'Certificate',
+    'learn.certificateSubtitle': 'Get your PDF certificate of completion',
+    'learn.certificateDownload': 'Click here to download your certificate',
+    'learn.certificateBlockedTitle': 'Heads up',
+    'learn.certificateBlocked': 'You must finish watching the workshop recording before downloading the certificate',
   },
 };

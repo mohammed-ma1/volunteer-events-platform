@@ -12,4 +12,6 @@ export const environment = {
    * if redirects are still blocked, use an HTTPS tunnel and set FRONTEND_URL + CORS on the API.
    */
   tapPreferFullPageRedirectOnLocalhost: true,
+  /** Meta (Facebook) Pixel ID. Kept empty in dev so local clicks don't pollute Ads Manager. */
+  metaPixelId: '',
 };

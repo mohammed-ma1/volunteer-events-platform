@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Support\PhoneNumber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,12 +38,14 @@ class SendGhlWebhookJob implements ShouldQueue
         $firstName = $nameParts[0] ?? '';
         $lastName = $nameParts[1] ?? '';
 
+        $phone = PhoneNumber::normalize($order->phone);
+
         $payload = [
             'first_name' => $firstName,
             'last_name' => $lastName,
             'full_name' => $order->customer_name,
             'email' => $order->email,
-            'phone' => $order->phone,
+            'phone' => $phone,
             'order_reference' => $order->invoiceReference(),
             'order_uuid' => $order->uuid,
             'order_total' => (float) $order->total,
