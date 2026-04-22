@@ -1,5 +1,6 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { getDummyBySlug, HomeListEvent, volunteerToHome } from '../../core/data/dummy-events';
 import { AuthService } from '../../core/auth/auth.service';
@@ -8,7 +9,7 @@ import { VolunteerEvent } from '../../core/models/api.types';
 import { EnrolledWorkshop } from '../../core/models/learn.types';
 import { CartService } from '../../core/services/cart.service';
 import { EventsService } from '../../core/services/events.service';
-import { LearnService } from '../../core/services/learn.service';
+import { EventCompletionState, LearnService } from '../../core/services/learn.service';
 import { catchError, of } from 'rxjs';
 
 /** Zoom join button is unlocked this many minutes before workshop start. */
@@ -144,16 +145,63 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
               </div>
             </section>
 
-            <!-- Recording (dashed placeholder until a real recording is attached) -->
-            <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
-              <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-              <div class="flex flex-col items-center gap-3 py-10">
-                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-                  <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <!-- Recording: real player when an URL is set, dashed placeholder otherwise. -->
+            @if (recordingUrl(); as recUrl) {
+              <section class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
+                <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                <div class="overflow-hidden rounded-xl bg-black ring-1 ring-slate-200">
+                  @if (isStreamUrl(recUrl)) {
+                    <iframe
+                      class="block aspect-video w-full"
+                      [src]="safeStreamUrl(recUrl)"
+                      allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                      allowfullscreen
+                      loading="lazy"
+                      referrerpolicy="no-referrer"
+                    ></iframe>
+                  } @else {
+                    <video
+                      class="block aspect-video w-full"
+                      [src]="recUrl"
+                      controls
+                      controlsList="nodownload"
+                      preload="metadata"
+                      playsinline
+                    ></video>
+                  }
                 </div>
-                <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
-              </div>
-            </section>
+
+                @if (completion()?.completed) {
+                  <button type="button" disabled
+                          class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-bold text-emerald-700">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    {{ tr('تم إكمال المشاهدة', 'Watching completed') }}
+                  </button>
+                } @else {
+                  <button type="button"
+                          [disabled]="marking()"
+                          (click)="markCompleted()"
+                          class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                    @if (marking()) {
+                      <svg class="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                    } @else {
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    }
+                    {{ tr('أكملت المشاهدة', 'I completed watching') }}
+                  </button>
+                }
+              </section>
+            } @else {
+              <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
+                <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                <div class="flex flex-col items-center gap-3 py-10">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                    <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
+                </div>
+              </section>
+            }
           </div>
 
           <!-- Sidebar -->
@@ -171,6 +219,43 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
               {{ tr('العودة إلى ورشي', 'Back to My Workshops') }}
             </button>
+
+            <!-- Certificate card. Yellow CTA matches the design; clicking before
+                 marking as watched shows a red toast instead of calling the API. -->
+            <div class="rounded-2xl border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-5 shadow-sm">
+              <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
+                  <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M5 7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2l-3 3-3-3H7a2 2 0 01-2-2V7z"/></svg>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-slate-900">{{ tr('الشهادة', 'Certificate') }}</p>
+                  <p class="text-xs text-slate-500">{{ tr('احصل على شهادة الإتمام بصيغة PDF', 'Get your PDF certificate of completion') }}</p>
+                </div>
+              </div>
+
+              <button type="button"
+                      [disabled]="downloadingCertificate()"
+                      (click)="onDownloadCertificate()"
+                      class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-amber-950 shadow-sm transition hover:bg-amber-300 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                @if (downloadingCertificate()) {
+                  <svg class="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                } @else {
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                }
+                {{ tr('اضغط هنا لتحميل الشهادة', 'Click here to download your certificate') }}
+              </button>
+
+              @if (certAlertVisible()) {
+                <div role="alert"
+                     class="mt-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-medium text-red-700">
+                  <svg class="mt-0.5 h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 7a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/></svg>
+                  <span>
+                    <strong class="block font-bold">{{ tr('تنبيه', 'Heads up') }}</strong>
+                    {{ tr('يجب عليك إكمال مشاهدة تسجيل الورشة أولاً لتتمكن من تحميل الشهادة', 'You must finish watching the workshop recording before downloading the certificate') }}
+                  </span>
+                </div>
+              }
+            </div>
 
             <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
               <h3 class="mb-4 text-sm font-bold text-slate-900">{{ tr('تفاصيل', 'Details') }}</h3>
@@ -402,12 +487,24 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly eventsApi = inject(EventsService);
   private readonly learnApi = inject(LearnService);
+  private readonly sanitizer = inject(DomSanitizer);
   readonly auth = inject(AuthService);
   readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
 
   readonly event = signal<HomeListEvent | null>(null);
   readonly myWorkshops = signal<EnrolledWorkshop[]>([]);
+  /** Watched-state + recording URL for the current enrolled event. Null until loaded. */
+  readonly completion = signal<EventCompletionState | null>(null);
+  readonly marking = signal(false);
+  readonly downloadingCertificate = signal(false);
+  /** Shows the red "you must watch first" toast under the certificate button. */
+  readonly certAlertVisible = signal(false);
+  /** Tracks the event id we last fetched completion for, so we don't refetch on every change. */
+  private lastCompletionFetchedFor: number | null = null;
+  private alertTimeout: ReturnType<typeof setTimeout> | null = null;
+  /** Memoised Cloudflare Stream iframe URLs so the SafeResourceUrl is stable across change detection. */
+  private readonly safeStreamCache = new Map<string, SafeResourceUrl>();
   readonly enrolledWorkshop = computed<EnrolledWorkshop | null>(() => {
     const ev = this.event();
     if (!ev) {
@@ -423,6 +520,15 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       return null;
     }
     return ws.event.zoom_link ?? null;
+  });
+
+  /** Resolved recording URL (only present once /v1/learn/events/{id}/completion responds for an enrolled viewer). */
+  readonly recordingUrl = computed(() => {
+    if (!this.isOwned()) {
+      return null;
+    }
+    const url = this.completion()?.recording_url;
+    return url && url.trim().length > 0 ? url : null;
   });
 
   /** Reactive "now" tick (every minute) so zoom availability flips at the
@@ -453,7 +559,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       this.learnApi
         .getMyWorkshops()
         .pipe(catchError(() => of({ data: [] as EnrolledWorkshop[] })))
-        .subscribe((res) => this.myWorkshops.set(res.data));
+        .subscribe((res) => {
+          this.myWorkshops.set(res.data);
+          this.tryLoadCompletion();
+        });
     }
 
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -462,7 +571,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.eventsApi.bySlug(slug).subscribe({
-      next: (e) => this.event.set(volunteerToHome(e)),
+      next: (e) => {
+        this.event.set(volunteerToHome(e));
+        this.tryLoadCompletion();
+      },
       error: () => {
         const d = getDummyBySlug(slug);
         if (d) {
@@ -481,6 +593,108 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (this.nowInterval) {
       clearInterval(this.nowInterval);
     }
+    if (this.alertTimeout) {
+      clearTimeout(this.alertTimeout);
+    }
+  }
+
+  /** Cloudflare Stream iframe URLs use a distinct host; everything else is a direct mp4. */
+  isStreamUrl(url: string): boolean {
+    return /\bcloudflarestream\.com\b/i.test(url);
+  }
+
+  safeStreamUrl(url: string): SafeResourceUrl {
+    const cached = this.safeStreamCache.get(url);
+    if (cached) {
+      return cached;
+    }
+    const safe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.safeStreamCache.set(url, safe);
+    return safe;
+  }
+
+  markCompleted(): void {
+    const ev = this.event();
+    if (!ev || !this.isOwned() || this.marking() || this.completion()?.completed) {
+      return;
+    }
+    this.marking.set(true);
+    this.learnApi.markEventCompleted(ev.id).subscribe({
+      next: (res) => {
+        this.completion.set(res.data);
+        this.marking.set(false);
+      },
+      error: () => {
+        this.marking.set(false);
+      },
+    });
+  }
+
+  onDownloadCertificate(): void {
+    const ev = this.event();
+    if (!ev || !this.isOwned()) {
+      return;
+    }
+    if (!this.completion()?.completed) {
+      this.flashCertAlert();
+      return;
+    }
+    if (this.downloadingCertificate()) {
+      return;
+    }
+    this.downloadingCertificate.set(true);
+    this.learnApi.downloadCertificate(ev.id).subscribe({
+      next: (res) => {
+        const blob = res.body;
+        if (!blob) {
+          this.downloadingCertificate.set(false);
+          return;
+        }
+        const objectUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = `certificate-${ev.slug ?? 'workshop'}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // Defer revoke a tick so Safari doesn't cancel the download.
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        this.downloadingCertificate.set(false);
+      },
+      error: () => {
+        this.downloadingCertificate.set(false);
+        this.flashCertAlert();
+      },
+    });
+  }
+
+  /** Pulls the per-event completion state once we know both the event and that
+   *  the viewer is enrolled. Idempotent — guarded by `lastCompletionFetchedFor`. */
+  private tryLoadCompletion(): void {
+    const ev = this.event();
+    if (!ev || !this.isOwned()) {
+      return;
+    }
+    if (this.lastCompletionFetchedFor === ev.id) {
+      return;
+    }
+    this.lastCompletionFetchedFor = ev.id;
+    this.learnApi
+      .getEventCompletion(ev.id)
+      .pipe(
+        catchError(() =>
+          of({ data: { completed: false, completed_at: null, recording_url: null } as EventCompletionState }),
+        ),
+      )
+      .subscribe((res) => this.completion.set(res.data));
+  }
+
+  private flashCertAlert(): void {
+    this.certAlertVisible.set(true);
+    if (this.alertTimeout) {
+      clearTimeout(this.alertTimeout);
+    }
+    this.alertTimeout = setTimeout(() => this.certAlertVisible.set(false), 4000);
   }
 
   dateLocale(): string {

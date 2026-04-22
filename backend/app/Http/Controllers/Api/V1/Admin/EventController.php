@@ -169,6 +169,10 @@ class EventController extends Controller
             'location' => 'sometimes|nullable|string|max:255',
             'location_en' => 'sometimes|nullable|string|max:255',
             'zoom_link' => 'sometimes|nullable|string|max:500',
+            // Cloudflare Stream iframe URL or any direct .mp4 URL (R2/S3/etc.).
+            // Used by the enrolled-learner view to play the workshop recording
+            // and unlock the certificate after the user marks it watched.
+            'recording_url' => 'sometimes|nullable|url|max:1024',
             // Free-text presenter/host name shown on the public site. We don't
             // FK this to the experts table so admins can reassign to anyone
             // (active or inactive expert, or a one-off guest).

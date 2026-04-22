@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Event;
+use App\Models\EventCompletion;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Mpdf\Mpdf;
 
 class LearnController extends Controller
 {
@@ -163,6 +166,140 @@ class LearnController extends Controller
         );
 
         return response()->json(['data' => $progress]);
+    }
+
+    /**
+     * GET /v1/learn/events/{event}/completion
+     * Returns whether the current user has marked this workshop's recording as
+     * watched, plus the recording URL (only exposed to enrolled viewers; the
+     * public /v1/events/{slug} payload never includes it).
+     */
+    public function getEventCompletion(int $event): JsonResponse
+    {
+        $userId = Auth::guard('api')->id();
+
+        $enrollment = Enrollment::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        if (! $enrollment) {
+            return response()->json(['message' => 'Not enrolled in this workshop.'], 404);
+        }
+
+        $eventModel = Event::findOrFail($event);
+
+        $completion = EventCompletion::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        return response()->json([
+            'data' => [
+                'completed' => (bool) $completion,
+                'completed_at' => $completion?->completed_at?->toIso8601String(),
+                'recording_url' => $eventModel->recording_url,
+            ],
+        ]);
+    }
+
+    /**
+     * POST /v1/learn/events/{event}/complete
+     * Honor-system "I finished watching" toggle. Idempotent — re-clicking returns
+     * the same row.
+     */
+    public function markEventCompleted(int $event): JsonResponse
+    {
+        $userId = Auth::guard('api')->id();
+
+        $enrollment = Enrollment::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        if (! $enrollment) {
+            return response()->json(['message' => 'Not enrolled in this workshop.'], 404);
+        }
+
+        $completion = EventCompletion::firstOrCreate(
+            ['user_id' => $userId, 'event_id' => $event],
+            ['completed_at' => now()],
+        );
+
+        return response()->json([
+            'data' => [
+                'completed' => true,
+                'completed_at' => $completion->completed_at->toIso8601String(),
+            ],
+        ]);
+    }
+
+    /**
+     * GET /v1/learn/events/{event}/certificate
+     * Streams a PDF certificate; gated on the user being enrolled AND having
+     * marked the recording as watched.
+     */
+    public function downloadCertificate(int $event): JsonResponse|Response
+    {
+        $userId = Auth::guard('api')->id();
+        $user = Auth::guard('api')->user();
+
+        $enrollment = Enrollment::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        if (! $enrollment) {
+            return response()->json(['message' => 'Not enrolled in this workshop.'], 404);
+        }
+
+        $completion = EventCompletion::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        if (! $completion) {
+            return response()->json(['message' => 'Workshop recording not yet marked as watched.'], 403);
+        }
+
+        $eventModel = Event::findOrFail($event);
+        $certNo = sprintf('KU-%d-%d', $eventModel->id, $userId);
+
+        $html = view('certificates.workshop', [
+            'user' => $user,
+            'event' => $eventModel,
+            'completion' => $completion,
+            'certNo' => $certNo,
+        ])->render();
+
+        // mpdf is used (not DomPDF) because it shapes Arabic glyphs correctly
+        // and supports proper bidi text — DomPDF renders RTL strings as
+        // disconnected, reversed letters which is unacceptable for an
+        // official certificate.
+        $tmpDir = storage_path('app/mpdf');
+        if (! is_dir($tmpDir)) {
+            mkdir($tmpDir, 0775, true);
+        }
+
+        // Margins / borders are controlled by the @page rules in the Blade
+        // template — the constructor only sets format, fonts, and the temp
+        // directory mpdf needs for its font cache.
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4-L',
+            'default_font' => 'dejavusans',
+            'autoScriptToLang' => true,
+            'autoLangToFont' => true,
+            'tempDir' => $tmpDir,
+        ]);
+
+        $mpdf->SetTitle("Certificate {$certNo}");
+        $mpdf->SetAuthor('Kuwait University · Next Levels Education');
+        $mpdf->WriteHTML($html);
+
+        $slug = $eventModel->slug ?: 'workshop';
+        $filename = "certificate-{$slug}.pdf";
+
+        return response($mpdf->Output($filename, 'S'), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Cache-Control' => 'private, no-store',
+        ]);
     }
 
     private function computeWorkshopStatus(Event $event): string

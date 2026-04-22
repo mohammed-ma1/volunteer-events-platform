@@ -300,6 +300,15 @@ export type TranslationKey =
   | 'detail.registration'
   | 'detail.addCart'
   | 'detail.notFound'
+  | 'learn.recordingTitle'
+  | 'learn.recordingPlaceholder'
+  | 'learn.markCompleted'
+  | 'learn.alreadyCompleted'
+  | 'learn.certificateTitle'
+  | 'learn.certificateSubtitle'
+  | 'learn.certificateDownload'
+  | 'learn.certificateBlockedTitle'
+  | 'learn.certificateBlocked'
   | 'about.title'
   | 'about.intro'
   | 'about.missionTitle'
@@ -676,6 +685,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'detail.registration': 'الرسوم',
     'detail.addCart': 'أضف للسلة',
     'detail.notFound': 'تعذر العثور على هذه الورشة.',
+    'learn.recordingTitle': 'تسجيل الورشة',
+    'learn.recordingPlaceholder': 'سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها',
+    'learn.markCompleted': 'أكملت المشاهدة',
+    'learn.alreadyCompleted': 'تم إكمال المشاهدة',
+    'learn.certificateTitle': 'الشهادة',
+    'learn.certificateSubtitle': 'احصل على شهادة الإتمام بصيغة PDF',
+    'learn.certificateDownload': 'اضغط هنا لتحميل الشهادة',
+    'learn.certificateBlockedTitle': 'تنبيه',
+    'learn.certificateBlocked': 'يجب عليك إكمال مشاهدة تسجيل الورشة أولاً لتتمكن من تحميل الشهادة',
   },
   en: {
     'nav.home': 'Home',
@@ -1031,5 +1049,14 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'detail.registration': 'Fee',
     'detail.addCart': 'Add to cart',
     'detail.notFound': 'This workshop could not be found.',
+    'learn.recordingTitle': 'Workshop recording',
+    'learn.recordingPlaceholder': 'The workshop recording will be added here so you can watch it later after the session ends',
+    'learn.markCompleted': 'I completed watching',
+    'learn.alreadyCompleted': 'Watching completed',
+    'learn.certificateTitle': 'Certificate',
+    'learn.certificateSubtitle': 'Get your PDF certificate of completion',
+    'learn.certificateDownload': 'Click here to download your certificate',
+    'learn.certificateBlockedTitle': 'Heads up',
+    'learn.certificateBlocked': 'You must finish watching the workshop recording before downloading the certificate',
   },
 };

@@ -124,6 +124,12 @@ Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(func
     Route::get('/my-workshops', [LearnController::class, 'myWorkshops']);
     Route::get('/workshops/{id}', [LearnController::class, 'workshopDetail']);
     Route::post('/progress', [LearnController::class, 'updateProgress']);
+
+    // Single-recording workshop completion + certificate download. Honor-system
+    // mark-as-watched is the prerequisite for the certificate endpoint.
+    Route::get('/events/{event}/completion', [LearnController::class, 'getEventCompletion']);
+    Route::post('/events/{event}/complete', [LearnController::class, 'markEventCompleted']);
+    Route::get('/events/{event}/certificate', [LearnController::class, 'downloadCertificate']);
 });
 
 // ── Public API ───────────────────────────────────────────────────

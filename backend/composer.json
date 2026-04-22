@@ -10,6 +10,7 @@
         "barryvdh/laravel-dompdf": "^3.1",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "mpdf/mpdf": "^8.3",
         "php-open-source-saver/jwt-auth": "^2.8",
         "symfony/http-client": "^8.0",
         "symfony/sendgrid-mailer": "^8.0"
