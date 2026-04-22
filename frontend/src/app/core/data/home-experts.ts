@@ -320,3 +320,31 @@ export function applyExpertAvatarOverrides(
     return live ? { ...e, imageUrl: live } : e;
   });
 }
+
+/**
+ * Filters the static `HOME_EXPERTS` list down to the names that exist as
+ * active rows in the admin-portal-managed `experts` table (passed in as a
+ * Set of normalized names from `ExpertsService.activeNamesSet`).
+ *
+ * When the active set is empty (API hasn't loaded or failed) we return the
+ * full list unchanged so the home page never goes blank during a network
+ * blip — admin deletions only take effect after the API responds.
+ *
+ * Matching is forgiving: exact-normalized first, then substring either way
+ * to handle composite labels like `زينب الغضبان وفريق الطلبة` matching the
+ * admin-portal entry `زينب الغضبان`.
+ */
+export function filterExpertsByActive(
+  experts: readonly HomeExpert[],
+  activeNamesSet: ReadonlySet<string>,
+): HomeExpert[] {
+  if (!activeNamesSet || activeNamesSet.size === 0) {
+    return [...experts];
+  }
+  const activeKeys = Array.from(activeNamesSet);
+  return experts.filter((e) => {
+    const target = normalizeArName(e.nameAr);
+    if (activeNamesSet.has(target)) return true;
+    return activeKeys.some((k) => k && (target.includes(k) || k.includes(target)));
+  });
+}

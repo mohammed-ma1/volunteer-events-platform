@@ -13,6 +13,7 @@ import {
   HOME_EXPERTS,
   HomeExpert,
   applyExpertAvatarOverrides,
+  filterExpertsByActive,
   getExpertInitials,
   normalizePresenterName,
 } from '../../core/data/home-experts';
@@ -910,13 +911,16 @@ export class EventsHomeComponent implements OnDestroy {
   readonly cart = inject(CartService);
 
   /**
-   * Static `HOME_EXPERTS` enriched with admin-portal-managed avatars (lazy-
-   * fetched from `/v1/experts`). Falls back to the static defaults when the
-   * fetch is pending or failed, so the home page always renders.
+   * Static `HOME_EXPERTS` enriched with admin-portal-managed avatars AND
+   * filtered to only the names that exist as active rows in the API
+   * (lazy-fetched from `/v1/experts`). When the API hasn't responded yet we
+   * keep the full static list so the page never goes blank — admin
+   * deletions only take effect once the live data lands.
    */
-  readonly homeExperts = computed<HomeExpert[]>(() =>
-    applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides()),
-  );
+  readonly homeExperts = computed<HomeExpert[]>(() => {
+    const enriched = applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides());
+    return filterExpertsByActive(enriched, this.expertsApi.activeNamesSet());
+  });
 
   /** Initial grid size + step for load-more / load-less. */
   readonly WORKSHOPS_PREVIEW = 4;
