@@ -291,7 +291,7 @@
         <td>
           <hr class="sig-line">
           <div class="meta-value">
-            {{ $completion->completed_at?->timezone(config('app.timezone'))->format('d M Y') ?? now()->format('d M Y') }}
+            {{ $completion?->completed_at?->timezone(config('app.timezone'))->format('d M Y') ?? now()->format('d M Y') }}
           </div>
           <div class="meta-label">Date Issued</div>
         </td>
