@@ -278,13 +278,33 @@ class LearnController extends Controller
         // Margins / borders are controlled by the @page rules in the Blade
         // template — the constructor only sets format, fonts, and the temp
         // directory mpdf needs for its font cache.
+        //
+        // We register Tajawal (Google Fonts, OFL-licensed) so the certificate
+        // uses the same Arabic typeface as the rest of the platform. mpdf's
+        // default font search dirs are merged with the extra one we point at
+        // resources/fonts/, and `fontdata` maps the family name `tajawal` to
+        // the TTF files so CSS like `font-family: tajawal;` resolves.
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
             'format' => 'A4-L',
-            'default_font' => 'dejavusans',
+            'default_font' => 'tajawal',
             'autoScriptToLang' => true,
             'autoLangToFont' => true,
             'tempDir' => $tmpDir,
+            'fontDir' => array_merge($defaultConfig['fontDir'], [
+                resource_path('fonts'),
+            ]),
+            'fontdata' => $defaultFontConfig['fontdata'] + [
+                'tajawal' => [
+                    'R' => 'Tajawal-Regular.ttf',
+                    'B' => 'Tajawal-Bold.ttf',
+                    'M' => 'Tajawal-Medium.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ],
+            ],
         ]);
 
         $mpdf->SetTitle("Certificate {$certNo}");
