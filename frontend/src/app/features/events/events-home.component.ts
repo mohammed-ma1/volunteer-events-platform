@@ -1277,13 +1277,14 @@ export class EventsHomeComponent implements OnDestroy {
     if (!target) return [];
     return this.homeEvents()
       .filter((e) => {
-        if (!e.slug.startsWith('ms-w-')) return false;
-        const presenter = parsePresenterFromSummaries(
+        if (ALL_PACKAGE_SLUGS.includes(e.slug)) return false;
+        const parsed = parsePresenterFromSummaries(
           e.summaryAr,
           e.summary_en,
           e.summary,
           true,
         );
+        const presenter = parsed || e.host_name || '';
         return normalizePresenterName(presenter) === target;
       })
       .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime());
