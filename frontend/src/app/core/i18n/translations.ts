@@ -26,6 +26,16 @@ export type TranslationKey =
   | 'workshops.titleAfter'
   | 'workshops.programsBadge'
   | 'workshops.promoCertBanner'
+  | 'workshops.promoOfferEnds'
+  | 'workshops.promoOfferEndsIn'
+  | 'workshops.promoOfferEndsInShort'
+  | 'workshops.promoOfferEnded'
+  | 'workshops.promoCalMonth'
+  | 'workshops.promoCalDay'
+  | 'workshops.promoCdDays'
+  | 'workshops.promoCdHours'
+  | 'workshops.promoCdMins'
+  | 'workshops.promoCdSecs'
   | 'footer.linkTrainers'
   | 'footer.linkFaq'
   | 'footer.copyrightNextLevel'
@@ -361,6 +371,16 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleAfter': 'المتاحة',
     'workshops.programsBadge': 'البرامج التدريبية',
     'workshops.promoCertBanner': '🎗️ سيحصل الطالب على 100 شهادة معتمدة',
+    'workshops.promoOfferEnds': 'ينتهي العرض في ٣٠ أبريل',
+    'workshops.promoOfferEndsIn': 'الوقت المتبقي',
+    'workshops.promoOfferEndsInShort': 'الوقت المتبقي',
+    'workshops.promoOfferEnded': 'انتهى العرض',
+    'workshops.promoCalMonth': 'أبريل',
+    'workshops.promoCalDay': '٣٠',
+    'workshops.promoCdDays': 'يوم',
+    'workshops.promoCdHours': 'ساعة',
+    'workshops.promoCdMins': 'دقيقة',
+    'workshops.promoCdSecs': 'ثانية',
     'footer.linkTrainers': 'تعرّف على المدربين',
     'footer.linkFaq': 'الأسئلة الشائعة',
     'footer.copyrightNextLevel': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
@@ -719,6 +739,16 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleAfter': 'available',
     'workshops.programsBadge': 'Training programs',
     'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'workshops.promoOfferEnds': 'Offer ends on April 30',
+    'workshops.promoOfferEndsIn': 'Time remaining',
+    'workshops.promoOfferEndsInShort': 'Time remaining',
+    'workshops.promoOfferEnded': 'Offer ended',
+    'workshops.promoCalMonth': 'APR',
+    'workshops.promoCalDay': '30',
+    'workshops.promoCdDays': 'Days',
+    'workshops.promoCdHours': 'Hours',
+    'workshops.promoCdMins': 'Mins',
+    'workshops.promoCdSecs': 'Secs',
     'footer.linkTrainers': 'Meet the trainers',
     'footer.linkFaq': 'FAQ',
     'footer.copyrightNextLevel': 'All rights reserved © 2026 Next Level Company',

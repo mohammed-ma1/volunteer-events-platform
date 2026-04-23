@@ -1,4 +1,4 @@
-import { DecimalPipe, DOCUMENT, NgClass } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import {
@@ -52,7 +52,71 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 @Component({
   selector: 'app-events-home',
   standalone: true,
-  imports: [FormsModule, NgClass, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
+  imports: [FormsModule, NgClass, NgTemplateOutlet, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
+  styles: [
+    `
+    /* "Offer ends in …" countdown widget — used in the promo carousel.
+       Bright urgency styling: pulsing alarm dot, shimmering gradient
+       backdrop, and individual numeric tiles for D/H/M/S. The tiles are
+       intentionally LTR-direction so digits read 12:34:56 in both AR/EN. */
+    /* Subtle pulse on the live-ticking seconds digit so the eye picks up
+       motion without the flashing-tile noise of the previous design. */
+    .ku-countdown__live {
+      animation: ku-countdown-live 1s ease-in-out infinite;
+    }
+    @keyframes ku-countdown-live {
+      0%, 100% { opacity: 1;    }
+      50%      { opacity: 0.55; }
+    }
+
+    /* Calendar tear-off icon — two tiny "binder rings" at the top of the
+       red header strip, plus a soft heartbeat pulse on the day number to
+       echo the live ticking of the seconds tile. */
+    .ku-countdown__cal::before,
+    .ku-countdown__cal::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      width: 2px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 9999px;
+      z-index: 1;
+    }
+    .ku-countdown__cal::before { left: 8px; }
+    .ku-countdown__cal::after  { right: 8px; }
+    .ku-countdown__cal-day {
+      animation: ku-countdown-day-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes ku-countdown-day-pulse {
+      0%, 100% { transform: scale(1);    opacity: 1;    }
+      50%      { transform: scale(1.08); opacity: 0.85; }
+    }
+
+    /* Soft diagonal shimmer that sweeps across the gradient backdrop
+       every few seconds to keep the eye drawn to the badge. */
+    .ku-countdown__shimmer {
+      background: linear-gradient(
+        110deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.18) 50%,
+        transparent 65%
+      );
+      background-size: 200% 100%;
+      animation: ku-countdown-shimmer 4.5s linear infinite;
+    }
+    @keyframes ku-countdown-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ku-countdown__cal-day,
+      .ku-countdown__live,
+      .ku-countdown__shimmer { animation: none; }
+    }
+    `,
+  ],
   template: `
     <section
       veScrollReveal
@@ -327,6 +391,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 </p>
               </div>
               <div class="flex flex-col justify-center gap-5 lg:order-1">
+                <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
                 <div
                   class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
                 >
@@ -400,6 +465,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   </p>
                 </div>
                 <div class="flex flex-col justify-center gap-5 lg:order-1">
+                  <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
                   <div
                     class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
                   >
@@ -460,6 +526,57 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           }
         </div>
       </div>
+
+      <!-- Shared "offer ends in …" countdown widget — reused on all 3 promo
+           slides via *ngTemplateOutlet. The numeric tiles bind to
+           offerCountdown() which ticks every second from a single timer. -->
+      <ng-template #offerCountdownTpl>
+        @let cd = offerCountdown();
+        <div
+          dir="ltr"
+          class="ku-countdown relative isolate w-fit max-w-full overflow-hidden rounded-2xl border border-rose-400/35 bg-gradient-to-r from-rose-600/30 via-rose-500/15 to-amber-500/15 px-3 py-2.5 shadow-[0_8px_24px_-12px_rgba(244,63,94,0.55)] backdrop-blur-sm max-md:self-center md:px-4"
+        >
+          <div class="ku-countdown__shimmer pointer-events-none absolute inset-0 -z-10"></div>
+          <!-- Compact one-line ribbon: [📅 30] [ينتهي العرض في ٣٠ أبريل] [DD:HH:MM:SS]
+               Tiles are minimal (numbers only, single-letter dividers) so
+               the whole composition fits the narrow promo column. -->
+          <div class="flex flex-nowrap items-center gap-x-2 whitespace-nowrap" [class.flex-row-reverse]="i18n.isRtl()">
+            <span class="ku-countdown__cal relative flex h-8 w-7 shrink-0 flex-col overflow-hidden rounded-md bg-white shadow-md ring-1 ring-rose-300/40">
+              <span class="bg-rose-600 py-[1px] text-center text-[6px] font-extrabold uppercase tracking-[0.1em] text-white">
+                {{ i18n.t('workshops.promoCalMonth') }}
+              </span>
+              <span class="ku-countdown__cal-day flex flex-1 items-center justify-center text-[13px] font-black leading-none text-rose-600">
+                {{ i18n.t('workshops.promoCalDay') }}
+              </span>
+            </span>
+
+            <span class="shrink-0 whitespace-nowrap text-[11.5px] font-extrabold tracking-wide text-amber-200">
+              {{ i18n.t('workshops.promoOfferEnds') }}
+            </span>
+
+            @if (!cd.ended) {
+              <span class="shrink-0 text-rose-200/40" aria-hidden="true">·</span>
+              <div
+                class="flex shrink-0 items-center gap-0.5 rounded-md bg-rose-950/40 px-1.5 py-0.5 font-mono text-[12px] font-extrabold leading-none text-rose-50 ring-1 ring-rose-400/30"
+                dir="ltr"
+                [attr.aria-label]="i18n.t('workshops.promoOfferEndsIn') + ' ' + cd.pad(cd.days) + ':' + cd.pad(cd.hours) + ':' + cd.pad(cd.mins) + ':' + cd.pad(cd.secs)"
+              >
+                <span>{{ cd.pad(cd.days) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span>{{ cd.pad(cd.hours) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span>{{ cd.pad(cd.mins) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span class="ku-countdown__live text-amber-200">{{ cd.pad(cd.secs) }}</span>
+              </div>
+            } @else {
+              <span class="shrink-0 whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.14em] text-rose-100">
+                · {{ i18n.t('workshops.promoOfferEnded') }}
+              </span>
+            }
+          </div>
+        </div>
+      </ng-template>
 
       <!-- Filters: mobile = horizontal scroll (ref. design); md+ = wrap -->
       <div class="mt-8 flex flex-col gap-2.5 max-md:mb-4">
@@ -922,6 +1039,34 @@ export class EventsHomeComponent implements OnDestroy {
     return filterExpertsByActive(enriched, this.expertsApi.activeNamesSet());
   });
 
+  /**
+   * Live countdown to the bundle-offer deadline. The deadline is the end of
+   * 30 April in Asia/Kuwait (UTC+3) — encoded directly as a UTC instant so
+   * the value is identical regardless of the visitor's local timezone.
+   *
+   * Drives the "Offer ends in …" badge on all 3 promo slides; ticks every
+   * second via a `setInterval` that's torn down in `ngOnDestroy`.
+   */
+  private readonly OFFER_DEADLINE_MS = Date.UTC(2026, 3, 30, 20, 59, 59); // 30 Apr 2026 23:59:59 +03:00
+  private readonly nowMs = signal<number>(Date.now());
+  private offerCountdownTimer?: ReturnType<typeof setInterval>;
+  readonly offerCountdown = computed(() => {
+    const remaining = Math.max(0, this.OFFER_DEADLINE_MS - this.nowMs());
+    const totalSecs = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSecs / 86400);
+    const hours = Math.floor((totalSecs % 86400) / 3600);
+    const mins = Math.floor((totalSecs % 3600) / 60);
+    const secs = totalSecs % 60;
+    return {
+      ended: remaining === 0,
+      days,
+      hours,
+      mins,
+      secs,
+      pad: (n: number) => (n < 10 ? `0${n}` : String(n)),
+    };
+  });
+
   /** Initial grid size + step for load-more / load-less. */
   readonly WORKSHOPS_PREVIEW = 4;
   readonly WORKSHOPS_STEP = 4;
@@ -1169,6 +1314,13 @@ export class EventsHomeComponent implements OnDestroy {
     // the static `HOME_EXPERTS` list at runtime.
     this.expertsApi.ensureLoaded();
 
+    // Drive the offer countdown — single timer feeds the signal that all 3
+    // promo slides bind to. Skipped on SSR (no window) so it doesn't keep
+    // the Node process alive during prerender.
+    if (typeof window !== 'undefined') {
+      this.offerCountdownTimer = setInterval(() => this.nowMs.set(Date.now()), 1000);
+    }
+
     this.search$
       .pipe(
         debounceTime(280),
@@ -1206,6 +1358,10 @@ export class EventsHomeComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.offerCountdownTimer) {
+      clearInterval(this.offerCountdownTimer);
+      this.offerCountdownTimer = undefined;
+    }
   }
 
   categoryLabel(cat: WorkshopFilterCategory): string {
