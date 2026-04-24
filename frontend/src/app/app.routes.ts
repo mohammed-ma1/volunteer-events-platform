@@ -1,7 +1,25 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from './core/auth/auth.guard';
+import { SITE_DISABLED } from './core/constants/site-mode';
 
-export const routes: Routes = [
+/**
+ * When SITE_DISABLED is true (set in core/constants/site-mode.ts), every
+ * URL — including deep links, dashboards, checkout return, etc. — resolves
+ * to the standalone Coming Soon page. No shell, no API calls, no guards.
+ * This is intentional: the public site is fully offline until we flip the
+ * constant back to false and redeploy.
+ */
+const disabledSiteRoutes: Routes = [
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./features/coming-soon/coming-soon.component').then(
+        (m) => m.ComingSoonComponent,
+      ),
+  },
+];
+
+const liveSiteRoutes: Routes = [
   // Auth routes (full-page, outside shell)
   {
     path: 'login',
@@ -105,3 +123,5 @@ export const routes: Routes = [
     ],
   },
 ];
+
+export const routes: Routes = SITE_DISABLED ? disabledSiteRoutes : liveSiteRoutes;
