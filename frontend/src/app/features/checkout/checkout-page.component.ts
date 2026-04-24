@@ -566,7 +566,10 @@ export class CheckoutPageComponent {
       if (err.status === 502) {
         return this.i18n.t('checkout.errorPaymentProvider');
       }
-      const body = err.error as { message?: string } | null;
+      const body = err.error as { message?: string; code?: string } | null;
+      if (err.status === 503 && body?.code === 'payments_disabled') {
+        return this.i18n.t('checkout.paymentsDisabled');
+      }
       if (body && typeof body.message === 'string' && body.message.length > 0) {
         return body.message;
       }

@@ -267,6 +267,7 @@ export type TranslationKey =
   | 'checkout.errorPaymentProvider'
   | 'checkout.errorMissingCart'
   | 'checkout.networkError'
+  | 'checkout.paymentsDisabled'
   | 'checkout.localTapDevWarning'
   | 'checkout.tapLeavingSite'
   | 'checkout.preparingTap'
@@ -623,6 +624,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.paymentFailedOrCancelled': 'لم يكتمل الدفع أو تم إلغاؤه. يمكنك المحاولة مرة أخرى من السلة.',
     'checkout.paymentPollTimeout': 'استغرق التأكيد وقتاً أطول من المتوقع. تحقق من بريدك أو من حالة الطلب لاحقاً.',
     'checkout.errorPaymentProvider': 'تعذر الاتصال بمزود الدفع. تحقق من إعدادات Tap والخادم.',
+    'checkout.paymentsDisabled': 'الدفع متوقف مؤقتاً، نعتذر عن الإزعاج.',
     'checkout.errorMissingCart': 'انتهت جلسة السلة. أضف الورشة مرة أخرى ثم أعد المحاولة.',
     'checkout.networkError': 'تعذر الاتصال بالخادم. تأكد أن واجهة الـ API تعمل (مثلاً المنفذ 8000) وأن الوكيل مفعّل مع ng serve.',
     'checkout.localTapDevWarning':
@@ -996,6 +998,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.paymentFailedOrCancelled': 'Payment was not completed or was cancelled. You can try again from your cart.',
     'checkout.paymentPollTimeout': 'Confirmation is taking longer than expected. Check your email or try again later.',
     'checkout.errorPaymentProvider': 'Payment provider could not start the charge. Check Tap credentials and server logs.',
+    'checkout.paymentsDisabled': 'Payments are temporarily paused. Please check back soon.',
     'checkout.errorMissingCart': 'Your cart session is missing. Add the workshop again and retry checkout.',
     'checkout.networkError': 'Cannot reach the API. Ensure Laravel is running (e.g. port 8000) and `ng serve` uses the proxy.',
     'checkout.localTapDevWarning':
