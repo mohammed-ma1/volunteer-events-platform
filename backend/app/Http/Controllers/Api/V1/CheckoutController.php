@@ -21,12 +21,28 @@ use Throwable;
 
 class CheckoutController extends Controller
 {
+    /**
+     * Hard kill-switch for the checkout flow. When false, the Pay step is
+     * blocked with a friendly 503 (no Order row is created and no Tap charge
+     * is attempted) but browsing, cart edits and the checkout form itself
+     * keep working. Flip back to true and redeploy to re-enable payments.
+     */
+    private const PAYMENTS_ENABLED = false;
+
     public function __construct(
         private readonly TapPaymentService $tapPaymentService
     ) {}
 
     public function store(Request $request): JsonResponse
     {
+        if (! self::PAYMENTS_ENABLED) {
+            return response()->json([
+                'code' => 'payments_disabled',
+                'message' => 'Payments are temporarily paused. Please check back soon.',
+                'message_ar' => 'الدفع متوقف مؤقتاً، نعتذر عن الإزعاج.',
+            ], 503);
+        }
+
         $data = $request->validate([
             'email' => ['required', 'email', 'max:255'],
             'customer_name' => ['required', 'string', 'max:255'],

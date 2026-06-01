@@ -68,10 +68,15 @@ class PackageEnrollmentService
 
     /**
      * The list of workshop slugs underlying a package. Mirrors the mapping
-     * the seeders use: the 100-bundle = every scheduled KU workshop, the
-     * personal/professional 50-bundles = workshops tagged with that category
-     * in the source data, and legacy packages use the explicit list from
-     * `database/data/category_packages.php`.
+     * the seeders use, then unions with any admin-added events that match
+     * the same criteria so workshops created via the admin portal are
+     * automatically included in the bundle.
+     *
+     *   - 100-bundle: seeded KU week workshops + every non-package event in DB.
+     *   - personal/professional 50-bundles: source-data entries tagged with the
+     *     matching category + DB events whose Arabic summary begins with
+     *     `[personal]` / `[professional]` (the same tag the admin form writes).
+     *   - Legacy packages: explicit static list only (frozen).
      *
      * @return string[]
      */
@@ -79,7 +84,12 @@ class PackageEnrollmentService
     {
         if ($packageSlug === Event::SLUG_100_WORKSHOPS_PACKAGE) {
             $pack = require database_path('data/ku_student_week_workshops.php');
-            return collect($pack['rows'])->map(fn (array $row) => $row[0])->all();
+            $seeded = collect($pack['rows'])->map(fn (array $row) => $row[0])->all();
+            $dbAdded = Event::query()
+                ->whereNotIn('slug', Event::ALL_PACKAGE_SLUGS)
+                ->pluck('slug')
+                ->all();
+            return array_values(array_unique(array_merge($seeded, $dbAdded)));
         }
 
         if ($packageSlug === Event::SLUG_PACKAGE_PERSONAL_50 || $packageSlug === Event::SLUG_PACKAGE_PROFESSIONAL_50) {
@@ -92,7 +102,13 @@ class PackageEnrollmentService
                     $slugs[] = $slug;
                 }
             }
-            return $slugs;
+            $tag = $wanted === 'personal' ? '[personal]' : '[professional]';
+            $dbAdded = Event::query()
+                ->whereNotIn('slug', Event::ALL_PACKAGE_SLUGS)
+                ->where('summary', 'like', $tag.'%')
+                ->pluck('slug')
+                ->all();
+            return array_values(array_unique(array_merge($slugs, $dbAdded)));
         }
 
         // Legacy packages are fully described in a static data file.

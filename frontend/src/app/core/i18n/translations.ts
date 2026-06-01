@@ -26,6 +26,16 @@ export type TranslationKey =
   | 'workshops.titleAfter'
   | 'workshops.programsBadge'
   | 'workshops.promoCertBanner'
+  | 'workshops.promoOfferEnds'
+  | 'workshops.promoOfferEndsIn'
+  | 'workshops.promoOfferEndsInShort'
+  | 'workshops.promoOfferEnded'
+  | 'workshops.promoCalMonth'
+  | 'workshops.promoCalDay'
+  | 'workshops.promoCdDays'
+  | 'workshops.promoCdHours'
+  | 'workshops.promoCdMins'
+  | 'workshops.promoCdSecs'
   | 'footer.linkTrainers'
   | 'footer.linkFaq'
   | 'footer.copyrightNextLevel'
@@ -82,6 +92,8 @@ export type TranslationKey =
   | 'hero.badge'
   | 'hero.title1'
   | 'hero.title2'
+  | 'hero.expertisePrefix'
+  | 'hero.expertiseHighlight'
   | 'hero.body'
   | 'hero.ctaBrowse'
   | 'hero.ctaPaths'
@@ -257,6 +269,7 @@ export type TranslationKey =
   | 'checkout.errorPaymentProvider'
   | 'checkout.errorMissingCart'
   | 'checkout.networkError'
+  | 'checkout.paymentsDisabled'
   | 'checkout.localTapDevWarning'
   | 'checkout.tapLeavingSite'
   | 'checkout.preparingTap'
@@ -361,6 +374,16 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleAfter': 'المتاحة',
     'workshops.programsBadge': 'البرامج التدريبية',
     'workshops.promoCertBanner': '🎗️ سيحصل الطالب على 100 شهادة معتمدة',
+    'workshops.promoOfferEnds': 'ينتهي العرض في ٢ يوليو',
+    'workshops.promoOfferEndsIn': 'الوقت المتبقي',
+    'workshops.promoOfferEndsInShort': 'الوقت المتبقي',
+    'workshops.promoOfferEnded': 'انتهى العرض',
+    'workshops.promoCalMonth': 'يوليو',
+    'workshops.promoCalDay': '٢',
+    'workshops.promoCdDays': 'يوم',
+    'workshops.promoCdHours': 'ساعة',
+    'workshops.promoCdMins': 'دقيقة',
+    'workshops.promoCdSecs': 'ثانية',
     'footer.linkTrainers': 'تعرّف على المدربين',
     'footer.linkFaq': 'الأسئلة الشائعة',
     'footer.copyrightNextLevel': 'جميع الحقوق محفوظة © 2026 شركة نكست ليفل',
@@ -417,17 +440,19 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'banner.modalImageBarText': PROMO.ar.modalBar,
     'banner.modalBody': PROMO.ar.tagline,
     'banner.modalCheckoutCta': 'احصل على العرض الآن',
-    'hero.badge': 'منصة نكست لفل للتدريب — جامعة الكويت',
-    'hero.title1': 'طوّر مهاراتك،',
-    'hero.title2': 'وابنِ مستقبلك المهني',
+    'hero.badge': 'ملتقى نكست ليفلز · أكثر من 100 ورشة',
+    'hero.title1': 'حان وقت الانتقال إلى',
+    'hero.title2': 'المستوى الأعلى',
+    'hero.expertisePrefix': 'في',
+    'hero.expertiseHighlight': 'خبراتك',
     'hero.body':
-      'تقدّم المنصة ورشاً عملية لتعزيز قدراتك وإعدادك لسوق العمل، مع مسارات تعليمية وشهادات معتمدة بالتعاون مع جامعة الكويت.',
-    'hero.ctaBrowse': 'تصفح الورش المتاحة',
+      'انضم إلى أكبر ملتقى تدريبي يجمع نخبة من الخبراء والمتخصصين عبر عشرات الورش المتنوعة لتطوير مهاراتك ومستقبلك المهني.',
+    'hero.ctaBrowse': 'تصفح الورشات المتاحة',
     'hero.ctaPaths': 'تعرف على المسارات',
-    'hero.ctaFacilitators': 'تعرّف على المدربين',
+    'hero.ctaFacilitators': 'تصفح المدربين والمحاضرين',
     'hero.stat': '100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
-    'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٦–٤–٢٠٢٦ حتى الخميس ٣٠–٤–٢٠٢٦',
+    'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٨–٦–٢٠٢٦ حتى الخميس ٢–٧–٢٠٢٦',
     'feat1.title': 'تطوير مستمر',
     'feat1.desc': 'مسارات تعليمية متكاملة تواكب متطلبات العصر.',
     'feat2.title': 'محتوى تطبيقي',
@@ -603,6 +628,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.paymentFailedOrCancelled': 'لم يكتمل الدفع أو تم إلغاؤه. يمكنك المحاولة مرة أخرى من السلة.',
     'checkout.paymentPollTimeout': 'استغرق التأكيد وقتاً أطول من المتوقع. تحقق من بريدك أو من حالة الطلب لاحقاً.',
     'checkout.errorPaymentProvider': 'تعذر الاتصال بمزود الدفع. تحقق من إعدادات Tap والخادم.',
+    'checkout.paymentsDisabled': 'الدفع متوقف مؤقتاً، نعتذر عن الإزعاج.',
     'checkout.errorMissingCart': 'انتهت جلسة السلة. أضف الورشة مرة أخرى ثم أعد المحاولة.',
     'checkout.networkError': 'تعذر الاتصال بالخادم. تأكد أن واجهة الـ API تعمل (مثلاً المنفذ 8000) وأن الوكيل مفعّل مع ng serve.',
     'checkout.localTapDevWarning':
@@ -719,6 +745,16 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleAfter': 'available',
     'workshops.programsBadge': 'Training programs',
     'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'workshops.promoOfferEnds': 'Offer ends on July 2',
+    'workshops.promoOfferEndsIn': 'Time remaining',
+    'workshops.promoOfferEndsInShort': 'Time remaining',
+    'workshops.promoOfferEnded': 'Offer ended',
+    'workshops.promoCalMonth': 'JUL',
+    'workshops.promoCalDay': '2',
+    'workshops.promoCdDays': 'Days',
+    'workshops.promoCdHours': 'Hours',
+    'workshops.promoCdMins': 'Mins',
+    'workshops.promoCdSecs': 'Secs',
     'footer.linkTrainers': 'Meet the trainers',
     'footer.linkFaq': 'FAQ',
     'footer.copyrightNextLevel': 'All rights reserved © 2026 Next Level Company',
@@ -776,18 +812,20 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'banner.modalImageBarText': PROMO.en.modalBar,
     'banner.modalBody': PROMO.en.tagline,
     'banner.modalCheckoutCta': 'Get the offer now',
-    'hero.badge': 'Next Level training platform — Kuwait University',
-    'hero.title1': 'Grow your skills,',
-    'hero.title2': 'build your career',
+    'hero.badge': 'Next Levels Forum · 100+ workshops',
+    'hero.title1': 'It’s time to move up to',
+    'hero.title2': 'the next level',
+    'hero.expertisePrefix': 'in',
+    'hero.expertiseHighlight': 'your expertise',
     'hero.body':
-      'The platform offers practical workshops to strengthen your skills and prepare you for the job market, with learning paths and recognized certificates in cooperation with Kuwait University.',
-    'hero.ctaBrowse': 'Browse workshops',
+      'Join the largest training forum bringing together a select group of experts and specialists across dozens of diverse workshops to grow your skills and shape your career.',
+    'hero.ctaBrowse': 'Browse available workshops',
     'hero.ctaPaths': 'Explore learning paths',
-    'hero.ctaFacilitators': 'Meet facilitators',
+    'hero.ctaFacilitators': 'Browse trainers & facilitators',
     'hero.stat': '100 certified workshops',
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
-      'Special pricing for KU students · Live week Sun 26 Apr–Thu 30 Apr 2026 (Asia/Kuwait)',
+      'Special pricing for KU students · Live week Sun 28 Jun–Thu 2 Jul 2026 (Asia/Kuwait)',
     'feat1.title': 'Continuous development',
     'feat1.desc': 'Learning paths that keep pace with today’s workplace expectations.',
     'feat2.title': 'Applied content',
@@ -966,6 +1004,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.paymentFailedOrCancelled': 'Payment was not completed or was cancelled. You can try again from your cart.',
     'checkout.paymentPollTimeout': 'Confirmation is taking longer than expected. Check your email or try again later.',
     'checkout.errorPaymentProvider': 'Payment provider could not start the charge. Check Tap credentials and server logs.',
+    'checkout.paymentsDisabled': 'Payments are temporarily paused. Please check back soon.',
     'checkout.errorMissingCart': 'Your cart session is missing. Add the workshop again and retry checkout.',
     'checkout.networkError': 'Cannot reach the API. Ensure Laravel is running (e.g. port 8000) and `ng serve` uses the proxy.',
     'checkout.localTapDevWarning':

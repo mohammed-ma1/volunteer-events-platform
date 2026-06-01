@@ -251,7 +251,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                   <svg class="mt-0.5 h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a1 1 0 011 1v3a1 1 0 11-2 0V7a1 1 0 011-1zm0 7a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/></svg>
                   <span>
                     <strong class="block font-bold">{{ tr('تنبيه', 'Heads up') }}</strong>
-                    {{ tr('يجب عليك إكمال مشاهدة تسجيل الورشة أولاً لتتمكن من تحميل الشهادة', 'You must finish watching the workshop recording before downloading the certificate') }}
+                    {{ tr('تعذّر تحميل الشهادة الآن، يرجى المحاولة مرة أخرى', 'We could not download the certificate just now, please try again') }}
                   </span>
                 </div>
               }
@@ -635,10 +635,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (!ev || !this.isOwned()) {
       return;
     }
-    if (!this.completion()?.completed) {
-      this.flashCertAlert();
-      return;
-    }
+    // Completion gate is temporarily off — any enrolled user can download.
+    // Re-enable the `if (!this.completion()?.completed) flashCertAlert()`
+    // check when real video-watch tracking lands.
     if (this.downloadingCertificate()) {
       return;
     }

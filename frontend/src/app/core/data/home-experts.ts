@@ -79,6 +79,11 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'فيصل الدويسان', nameEn: 'Faisal Al-Duwaisan', imageUrl: SRC_IMG_C },
   { nameAr: 'هاجر النصار', nameEn: 'Hajar Al-Nassar', imageUrl: SRC_IMG_B },
   { nameAr: 'عبدالعزيز الضبيب', nameEn: 'Abdulaziz Al-Dhabib', imageUrl: SRC_IMG_D },
+  // ── June 2026 KU week additions (جدول الورش.xlsx) ──
+  { nameAr: 'سالم الهاجري', nameEn: 'Salem Al-Hajri', imageUrl: SRC_IMG_A },
+  { nameAr: 'هلال الهلال', nameEn: 'Hilal Al-Hilal', imageUrl: SRC_IMG_B },
+  { nameAr: 'منال المسلم', nameEn: 'Manal Al-Muslim', imageUrl: SRC_IMG_C },
+  { nameAr: 'محمد الهاجري', nameEn: 'Mohammed Al-Hajri', imageUrl: SRC_IMG_D },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────
@@ -318,5 +323,33 @@ export function applyExpertAvatarOverrides(
       if (partial) live = overridesByNormalizedName[partial];
     }
     return live ? { ...e, imageUrl: live } : e;
+  });
+}
+
+/**
+ * Filters the static `HOME_EXPERTS` list down to the names that exist as
+ * active rows in the admin-portal-managed `experts` table (passed in as a
+ * Set of normalized names from `ExpertsService.activeNamesSet`).
+ *
+ * When the active set is empty (API hasn't loaded or failed) we return the
+ * full list unchanged so the home page never goes blank during a network
+ * blip — admin deletions only take effect after the API responds.
+ *
+ * Matching is forgiving: exact-normalized first, then substring either way
+ * to handle composite labels like `زينب الغضبان وفريق الطلبة` matching the
+ * admin-portal entry `زينب الغضبان`.
+ */
+export function filterExpertsByActive(
+  experts: readonly HomeExpert[],
+  activeNamesSet: ReadonlySet<string>,
+): HomeExpert[] {
+  if (!activeNamesSet || activeNamesSet.size === 0) {
+    return [...experts];
+  }
+  const activeKeys = Array.from(activeNamesSet);
+  return experts.filter((e) => {
+    const target = normalizeArName(e.nameAr);
+    if (activeNamesSet.has(target)) return true;
+    return activeKeys.some((k) => k && (target.includes(k) || k.includes(target)));
   });
 }

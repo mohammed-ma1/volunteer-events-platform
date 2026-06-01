@@ -25,7 +25,7 @@
        ───────────────────────────────────────────────────────── */
 
     body {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       color: #0c2340;
       margin: 0;
       padding: 0;
@@ -72,7 +72,7 @@
     }
     table.header td {
       vertical-align: middle;
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 8.5pt;
       letter-spacing: 1.5pt;
       color: #6b7280;
@@ -92,7 +92,7 @@
 
     /* ── Eyebrow + main headlines ─────────────────────────────── */
     .eyebrow {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 8.5pt;
       letter-spacing: 4pt;
       color: #b58c2a;
@@ -116,6 +116,7 @@
       margin: 4mm auto 3mm;
     }
     .headline-ar {
+      font-family: 'tajawal', sans-serif;
       font-size: 15pt;
       color: #0c2340;
       margin: 0;
@@ -124,7 +125,7 @@
 
     /* ── Recipient ────────────────────────────────────────────── */
     .awarded {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 9pt;
       color: #6b7280;
       letter-spacing: 2pt;
@@ -132,9 +133,8 @@
       margin: 8mm 0 4mm;
     }
     .recipient {
-      font-family: 'dejavuserif', serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 28pt;
-      font-style: italic;
       color: #0c2340;
       margin: 0 auto;
       line-height: 1.1;
@@ -148,7 +148,7 @@
 
     /* ── Workshop title ───────────────────────────────────────── */
     .for-completing {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 9pt;
       color: #6b7280;
       letter-spacing: 1pt;
@@ -163,7 +163,7 @@
       line-height: 1.25;
     }
     .workshop-ar {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 13pt;
       font-weight: bold;
       color: #0c2340;
@@ -197,13 +197,13 @@
       margin: 0 auto 2.5mm;
     }
     .meta-value {
-      font-family: 'dejavuserif', serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 11pt;
       color: #0c2340;
       font-weight: bold;
     }
     .meta-label {
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 7.5pt;
       letter-spacing: 1.4pt;
       color: #6b7280;
@@ -231,7 +231,7 @@
     /* ── Verification strip ───────────────────────────────────── */
     .verify {
       text-align: center;
-      font-family: 'dejavusans', sans-serif;
+      font-family: 'tajawal', sans-serif;
       font-size: 7.5pt;
       letter-spacing: 1.4pt;
       color: #6b7280;
@@ -291,7 +291,7 @@
         <td>
           <hr class="sig-line">
           <div class="meta-value">
-            {{ $completion->completed_at?->timezone(config('app.timezone'))->format('d M Y') ?? now()->format('d M Y') }}
+            {{ $completion?->completed_at?->timezone(config('app.timezone'))->format('d M Y') ?? now()->format('d M Y') }}
           </div>
           <div class="meta-label">Date Issued</div>
         </td>

@@ -115,6 +115,276 @@
     background-image: linear-gradient(to right, #e5b74b 0%, #8f755e 48%, #342e74 100%);
   }
 
+  /**
+   * Hero — gold highlight word ("المستوى الأعلى"). Soft warm shadow gives
+   * the gold subtle depth. The underline is a hand-drawn 2-pass SVG (a thin
+   * shadow swoosh + a brighter highlight stroke on top), drawn in once with
+   * a stroke-dashoffset animation when the hero scroll-reveals.
+   */
+  .ve-hero-highlight {
+    position: relative;
+    display: inline-block;
+    line-height: 1.3;
+    padding-top: 0.1em;
+    padding-bottom: 0.24em;
+    /* Gold→black gradient: bright gold at the reading start, deepening
+       to near-black at the reading end. */
+    background-image: linear-gradient(to left, #e8bd52 0%, #d9a93a 40%, #6b5526 70%, #141414 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [dir='ltr'] .ve-hero-highlight {
+    background-image: linear-gradient(to right, #e8bd52 0%, #d9a93a 40%, #6b5526 70%, #141414 100%);
+  }
+  /* Solid straight gold bar with rounded ends, sitting just under the text. */
+  .ve-hero-highlight::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.02em;
+    height: 0.12em;
+    min-height: 5px;
+    border-radius: 9999px;
+    background-color: #d9a93a;
+    pointer-events: none;
+  }
+
+  /**
+   * Hero — refined headline: tighter optical kerning + soft text-shadow on
+   * the navy line for legibility against the dotted backdrop.
+   */
+  .ve-hero-headline > span:first-child {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  /**
+   * Hero — badge: gold-trimmed pill with a hand-painted gradient border
+   * that reinforces the "hero accent" without competing with the headline.
+   */
+  .ve-hero-badge {
+    background: linear-gradient(white, white) padding-box,
+      linear-gradient(120deg, #f5d97b 0%, #ffffff 35%, #c9a06a 70%, #f5d97b 100%) border-box;
+    border: 1px solid transparent;
+  }
+
+  /**
+   * Hero — primary CTA: layered shadow with a soft gold halo that intensifies
+   * on hover. Layered on top of the shared `.ve-btn-primary` styles.
+   */
+  .ve-hero-cta-primary {
+    box-shadow:
+      0 14px 32px -14px rgba(46, 42, 123, 0.55),
+      0 4px 14px -8px rgba(229, 183, 75, 0.45);
+    transition:
+      box-shadow 0.35s var(--ve-motion-ease),
+      transform 0.3s var(--ve-motion-ease);
+  }
+  .ve-hero-cta-primary:hover {
+    box-shadow:
+      0 18px 38px -14px rgba(46, 42, 123, 0.6),
+      0 8px 22px -8px rgba(229, 183, 75, 0.7);
+  }
+
+  /**
+   * Hero — discover-more cue: a thin vertical "rail" with a gradient that
+   * fades into nothing, plus a bouncing chevron. Mimics a scroll affordance.
+   */
+  .ve-hero-discover-rail {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(
+      to bottom,
+      rgba(46, 42, 123, 0) 0%,
+      rgba(46, 42, 123, 0.35) 100%
+    );
+    border-radius: 9999px;
+  }
+  .ve-hero-discover:hover .ve-hero-discover-rail {
+    background: linear-gradient(
+      to bottom,
+      rgba(46, 42, 123, 0) 0%,
+      rgba(46, 42, 123, 0.7) 100%
+    );
+  }
+
+  /** Subtle bouncing chevron for the discover cue. */
+  @keyframes ve-bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(4px); }
+  }
+  .motion-safe\:animate-ve-bounce-subtle {
+    animation: ve-bounce-subtle 1.8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-safe\:animate-ve-bounce-subtle {
+      animation: none;
+    }
+  }
+
+  /** Slow spin used by the badge's star icon. 14s = barely perceptible. */
+  @keyframes ve-spin-slow {
+    from { transform: rotate(0deg);   }
+    to   { transform: rotate(360deg); }
+  }
+  .motion-safe\:animate-ve-spin-slow {
+    animation: ve-spin-slow 14s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-safe\:animate-ve-spin-slow {
+      animation: none;
+    }
+  }
+
+  /**
+   * Hero rotating word ("خبراتك" / "your expertise"). Uses Tajawal at its
+   * heaviest weight so it sits visually with the rest of the H1. The
+   * fill is a near-uniform muted khaki/tan that matches the reference —
+   * a quiet warm gold rather than a saturated metallic ramp.
+   */
+  .ve-hero-script {
+    display: inline-block;
+    font-family: theme('fontFamily.display');
+    font-weight: 800;
+    /* Roomy line-height + vertical padding so the gradient paint box fully
+       contains Arabic dots/marks (background-clip:text only fills inside the
+       element box — a tight box clips the dots above/below the glyphs). */
+    line-height: 1.45;
+    padding-block: 0.12em;
+    letter-spacing: 0;
+    /* Same gold→black gradient as the highlight, clipped per-word. */
+    background-image: linear-gradient(to left, #e8bd52 0%, #d9a93a 40%, #6b5526 70%, #141414 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [dir='ltr'] .ve-hero-script {
+    background-image: linear-gradient(to right, #e8bd52 0%, #d9a93a 40%, #6b5526 70%, #141414 100%);
+  }
+
+  /**
+   * Hero rotating-word effect — Angular re-creates the inner span on every
+   * `heroRotateIndex` change, which re-fires this entry animation. The
+   * outer `.ve-hero-rotate-wrap` clips overflow so the slide-in/out below
+   * the baseline never adds vertical scroll on narrow viewports.
+   */
+  /**
+   * Rotating word — stacked inline-grid wrap.
+   *
+   * All N phrases live in the SAME grid cell ("stack"), so the wrap's
+   * intrinsic width is the widest word's width and never reflows when the
+   * active word changes. That's what keeps the static "في" pinned in
+   * place rather than sliding when the cycle ticks.
+   *
+   * Inactive slots use visibility:hidden (not display:none) so they still
+   * contribute to track sizing while remaining invisible to sighted users.
+   */
+  .ve-hero-rotate-wrap {
+    display: inline-grid;
+    grid-template-columns: max-content;
+    grid-template-rows: auto;
+    align-items: baseline;
+    justify-items: center;
+    padding-block: 0.3em;
+    line-height: 1.45;
+    overflow: visible;
+  }
+
+  .ve-hero-rotate-slot {
+    grid-area: 1 / 1; /* stack every slot in cell (1,1) */
+    opacity: 0;
+    transform: translate3d(0, -0.18em, 0) scale(0.96);
+    filter: blur(2px);
+    pointer-events: none;
+    transition:
+      opacity 220ms cubic-bezier(0.4, 0, 1, 1),
+      transform 220ms cubic-bezier(0.4, 0, 1, 1),
+      filter 220ms cubic-bezier(0.4, 0, 1, 1);
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+  }
+
+  /**
+   * Active slot — flip-counter entry: 360ms, front-loaded easing so the
+   * word arrives quickly then settles. Old slot's transition (above)
+   * fades it up & out at the same time, producing a clean crossfade.
+   */
+  .ve-hero-rotate-slot.ve-hero-rotate-active {
+    pointer-events: auto;
+    animation: ve-hero-rotate-in 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes ve-hero-rotate-in {
+    0% {
+      opacity: 0.2;
+      transform: translate3d(0, 0.32em, 0) scale(0.96);
+      filter: blur(2.5px);
+    }
+    50% {
+      opacity: 1;
+      filter: blur(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ve-hero-rotate-slot.ve-hero-rotate-active {
+      animation: none;
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  /**
+   * Full-bleed: break out of a max-width parent so the section spans the
+   * entire viewport width. Uses `calc(50% - 50vw)` margins (rather than the
+   * older `100vw + left:50%` trick) so it composes cleanly with flex/grid
+   * parents and doesn't introduce horizontal scroll. The viewport-relative
+   * scrollbar gutter is still respected.
+   */
+  .ve-full-bleed {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline-start: calc(50% - 50vw);
+    margin-inline-end: calc(50% - 50vw);
+  }
+
+  /**
+   * Hero backdrop — solid white canvas; the dotted lattice + decorative
+   * shapes are rendered by an inline SVG (`.ve-hero-svg-bg`) so the dots
+   * stay crisp at any DPI and SMIL drives the drift natively.
+   */
+  .ve-hero-grid-bg {
+    position: relative;
+    isolation: isolate;
+    background-color: #ffffff;
+    /* Force the whole hero (headline, body, badge, buttons) onto Tajawal. */
+    font-family: theme('fontFamily.display');
+  }
+  .ve-hero-grid-bg * {
+    font-family: theme('fontFamily.display');
+  }
+
+  .ve-hero-svg-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ve-hero-svg-bg [data-ve-anim] {
+      animation: none !important;
+    }
+  }
+
   /** Subtle shimmer bar (section accents) */
   .ve-shimmer-bar {
     background: linear-gradient(

@@ -1,4 +1,4 @@
-import { DecimalPipe, DOCUMENT, NgClass } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import {
@@ -8,11 +8,11 @@ import {
 } from '../../core/constants/ku-workshop-week';
 import { ALL_PACKAGE_SLUGS } from '../../core/constants/package-offer';
 import { CATEGORY_PACKAGES, CategoryPackagePromo } from '../../core/constants/category-packages-promo';
-import { HOME_HERO_IMAGE_URL } from '../../core/constants/promo-hero';
 import {
   HOME_EXPERTS,
   HomeExpert,
   applyExpertAvatarOverrides,
+  filterExpertsByActive,
   getExpertInitials,
   normalizePresenterName,
 } from '../../core/data/home-experts';
@@ -51,120 +51,432 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 @Component({
   selector: 'app-events-home',
   standalone: true,
-  imports: [FormsModule, NgClass, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
+  imports: [FormsModule, NgClass, NgTemplateOutlet, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
+  styles: [
+    `
+    /* "Offer ends in …" countdown widget — used in the promo carousel.
+       Bright urgency styling: pulsing alarm dot, shimmering gradient
+       backdrop, and individual numeric tiles for D/H/M/S. The tiles are
+       intentionally LTR-direction so digits read 12:34:56 in both AR/EN. */
+    /* Subtle pulse on the live-ticking seconds digit so the eye picks up
+       motion without the flashing-tile noise of the previous design. */
+    .ku-countdown__live {
+      animation: ku-countdown-live 1s ease-in-out infinite;
+    }
+    @keyframes ku-countdown-live {
+      0%, 100% { opacity: 1;    }
+      50%      { opacity: 0.55; }
+    }
+
+    /* Calendar tear-off icon — two tiny "binder rings" at the top of the
+       red header strip, plus a soft heartbeat pulse on the day number to
+       echo the live ticking of the seconds tile. */
+    .ku-countdown__cal::before,
+    .ku-countdown__cal::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      width: 2px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 9999px;
+      z-index: 1;
+    }
+    .ku-countdown__cal::before { left: 8px; }
+    .ku-countdown__cal::after  { right: 8px; }
+    .ku-countdown__cal-day {
+      animation: ku-countdown-day-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes ku-countdown-day-pulse {
+      0%, 100% { transform: scale(1);    opacity: 1;    }
+      50%      { transform: scale(1.08); opacity: 0.85; }
+    }
+
+    /* Soft diagonal shimmer that sweeps across the gradient backdrop
+       every few seconds to keep the eye drawn to the badge. */
+    .ku-countdown__shimmer {
+      background: linear-gradient(
+        110deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.18) 50%,
+        transparent 65%
+      );
+      background-size: 200% 100%;
+      animation: ku-countdown-shimmer 4.5s linear infinite;
+    }
+    @keyframes ku-countdown-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ku-countdown__cal-day,
+      .ku-countdown__live,
+      .ku-countdown__shimmer { animation: none; }
+    }
+    `,
+  ],
   template: `
     <section
       veScrollReveal
-      class="ve-scroll-reveal relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-white via-brand-50/25 to-white px-5 py-10 shadow-sm ring-1 ring-ink-200/60 md:px-10 md:py-12"
+      class="ve-scroll-reveal ve-hero-grid-bg ve-full-bleed relative isolate -mt-6 overflow-hidden px-5 pb-24 pt-14 md:-mt-8 md:px-10 md:pb-28 md:pt-20"
     >
-      <div
-        class="pointer-events-none absolute -start-32 -top-28 h-72 w-72 rounded-full bg-gradient-to-br from-gold-400/20 via-accent-500/10 to-brand-900/5 blur-3xl motion-safe:animate-ve-blob"
+      <!-- Animated SVG backdrop. Dot lattice drifts via patternTransform;
+           decorative ring outlines echo the comp's hand-placed shapes.
+           Purely decorative (aria-hidden + pointer-events-none). -->
+      <svg
+        class="ve-hero-svg-bg"
+        preserveAspectRatio="xMidYMid slice"
         aria-hidden="true"
-      ></div>
-      <div
-        class="pointer-events-none absolute -end-24 bottom-0 h-56 w-56 rounded-full bg-gradient-to-tl from-accent-500/12 to-transparent blur-3xl motion-safe:animate-ve-blob motion-safe:[animation-delay:-9s]"
-        aria-hidden="true"
-      ></div>
-
-      <div class="relative grid gap-10 md:grid-cols-2 md:items-center md:gap-12">
-        <!-- Text Side (right in RTL, left in LTR) -->
-        <div class="space-y-5">
-          <span
-            class="motion-safe:animate-ve-fade-up inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-brand-900 shadow-sm ring-1 ring-ink-200/80 backdrop-blur-sm"
-          >
-            <span class="relative flex h-2 w-2" aria-hidden="true">
-              <span
-                class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-400 opacity-45 motion-reduce:animate-none"
-              ></span>
-              <span class="relative inline-flex h-2 w-2 rounded-full bg-gold-500"></span>
-            </span>
-            {{ i18n.t('hero.badge') }}
-          </span>
-          <h1
-            class="motion-safe:animate-ve-fade-up text-start text-3xl font-extrabold leading-[1.2] tracking-tight motion-safe:[animation-delay:60ms] md:text-4xl lg:text-[2.75rem]"
-          >
-            <span class="block text-brand-900">{{ i18n.t('hero.title1') }}</span>
-            <span class="block pt-1 md:pt-1.5">
-              <span
-                class="ve-hero-title2-phrase"
-                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-                [ngClass]="i18n.isRtl() ? 've-hero-title2-phrase--rtl' : 've-hero-title2-phrase--ltr'"
-                >{{ i18n.t('hero.title2') }}</span
-              >
-            </span>
-          </h1>
-          <p
-            class="motion-safe:animate-ve-fade-up max-w-xl text-base leading-relaxed text-ink-600 motion-safe:[animation-delay:120ms]"
-          >
-            {{ i18n.t('hero.body') }}
-          </p>
-          <div
-            class="motion-safe:animate-ve-fade-up mt-3 flex flex-wrap gap-3 motion-safe:[animation-delay:150ms]"
-          >
-            <a
-              routerLink="/"
-              fragment="workshops"
-              class="ve-btn-primary motion-safe:animate-ve-cta-ring group relative overflow-hidden transition duration-300 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <span
-                class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition duration-500 group-hover:translate-x-full motion-reduce:group-hover:translate-x-0"
-                aria-hidden="true"
-              ></span>
-              <span class="relative inline-flex items-center gap-2">
-                <span>{{ i18n.t('hero.ctaBrowse') }}</span>
-                <svg class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
-            </a>
-            <a
-              routerLink="/"
-              fragment="trainers"
-              class="ve-btn-secondary group transition duration-300 hover:scale-[1.01] active:scale-[0.98]"
-            >
-              <span class="inline-flex items-center gap-2">
-                <span>{{ i18n.t('hero.ctaFacilitators') }}</span>
-                <svg class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Image Side (left in RTL, right in LTR) -->
-        <div class="motion-safe:animate-ve-fade-up relative motion-safe:[animation-delay:100ms]">
-          <div class="group relative overflow-hidden rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,26,51,0.25)]">
-            <img
-              [src]="homeHeroImageUrl"
-              [alt]="i18n.t('hero.imageAlt')"
-              class="aspect-[4/3] w-full object-cover transition duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
-              width="800"
-              height="600"
-              fetchpriority="high"
+        focusable="false"
+      >
+        <defs>
+          <!-- Primary lattice — soft, almost invisible. Drifts +x +y over 14s -->
+          <pattern id="veHeroDotsPrimary" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="11" cy="11" r="0.95" fill="rgba(196,162,93,0.22)" />
+            <animateTransform
+              attributeName="patternTransform"
+              type="translate"
+              from="0 0"
+              to="22 22"
+              dur="14s"
+              repeatCount="indefinite"
+              data-ve-anim
             />
-          </div>
+          </pattern>
+          <!-- Secondary half-step lattice — even softer; opposing drift -->
+          <pattern id="veHeroDotsSecondary" width="14" height="14" patternUnits="userSpaceOnUse" x="7" y="7">
+            <circle cx="7" cy="7" r="0.65" fill="rgba(196,162,93,0.12)" />
+            <animateTransform
+              attributeName="patternTransform"
+              type="translate"
+              from="0 0"
+              to="-14 -14"
+              dur="22s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+          </pattern>
+          <!-- Cream glow biased to the start side -->
+          <radialGradient id="veHeroGlow" cx="8%" cy="55%" r="55%">
+            <stop offset="0%" stop-color="rgba(245,210,140,0.18)" />
+            <stop offset="100%" stop-color="rgba(245,210,140,0)" />
+          </radialGradient>
+          <!-- Mirrored cool glow on the end side for balance -->
+          <radialGradient id="veHeroGlowEnd" cx="92%" cy="35%" r="45%">
+            <stop offset="0%" stop-color="rgba(106,90,205,0.10)" />
+            <stop offset="100%" stop-color="rgba(106,90,205,0)" />
+          </radialGradient>
+          <!-- Reusable 4-point sparkle (★ shape) -->
+          <symbol id="veHeroSparkle" viewBox="-10 -10 20 20" overflow="visible">
+            <path
+              d="M 0,-10 Q 1.4,-1.4 10,0 Q 1.4,1.4 0,10 Q -1.4,1.4 -10,0 Q -1.4,-1.4 0,-10 Z"
+              fill="currentColor"
+            />
+          </symbol>
+        </defs>
 
-          <!-- Partnership / KU card: top physical left (same in LTR + RTL) -->
-          <div class="motion-safe:animate-ve-float absolute -left-3 -top-3 flex flex-col items-center gap-2 rounded-2xl bg-white px-5 py-3 shadow-[0_15px_40px_-10px_rgba(0,26,51,0.25)] ring-1 ring-ink-200/40 md:-left-4 md:-top-4 md:px-6 md:py-3.5">
-            <span class="text-[11px] font-bold text-brand-900 md:text-xs">{{ i18n.isRtl() ? 'مشروع تَهيّأ بالتعاون مع جامعة الكويت' : 'In partnership with Kuwait University' }}</span>
-            <div class="flex items-center gap-3">
-              <img src="/images/branding/ku-university-logo.png" alt="Kuwait University" class="h-9 w-auto shrink-0 object-contain md:h-10"/>
-              <span class="h-7 w-px bg-ink-200" aria-hidden="true"></span>
-              <img src="/images/branding/next-levels-logo.png" alt="Next Levels" class="h-6 w-auto shrink-0 object-contain md:h-7"/>
-            </div>
-          </div>
+        <rect width="100%" height="100%" fill="url(#veHeroDotsPrimary)" />
+        <rect width="100%" height="100%" fill="url(#veHeroDotsSecondary)" />
+        <rect width="100%" height="100%" fill="url(#veHeroGlow)" />
+        <rect width="100%" height="100%" fill="url(#veHeroGlowEnd)" />
 
-          <!-- Stat badge (e.g. 100 workshops): bottom physical right (same in LTR + RTL) -->
-          <div class="motion-safe:animate-ve-float absolute -bottom-4 -right-3 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 shadow-[0_10px_30px_-8px_rgba(0,26,51,0.2)] ring-1 ring-ink-200/40 md:-bottom-5 md:-right-4 md:px-5 md:py-3.5">
-            <p class="text-sm font-bold text-brand-900 md:text-base">{{ i18n.t('hero.stat') }}</p>
-            <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold-100 text-base shadow-inner md:h-8 md:w-8" aria-hidden="true">🏅</span>
-          </div>
+        <!-- Decorative shapes (positioned by % so they hug the viewport edges).
+             Mix of ring outlines, sparkles and a hand-drawn wave for variety. -->
+
+        <!-- Top-start: gentle hand-drawn wave that pans across over 18s -->
+        <path
+          d="M -50,90 Q 80,60 200,95 T 450,95 T 700,95"
+          fill="none"
+          stroke="rgba(212,154,42,0.22)"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-dasharray="6 8"
+        >
+          <animate
+            attributeName="stroke-dashoffset"
+            values="0;-56"
+            dur="18s"
+            repeatCount="indefinite"
+            data-ve-anim
+          />
+        </path>
+
+        <!-- Top-end: small pulsing ring outline -->
+        <g>
+          <circle
+            cx="96%"
+            cy="16%"
+            r="6"
+            fill="none"
+            stroke="rgba(212,154,42,0.55)"
+            stroke-width="1.4"
+          >
+            <animate
+              attributeName="r"
+              values="5;8;5"
+              dur="4.2s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+            <animate
+              attributeName="opacity"
+              values="0.55;1;0.55"
+              dur="4.2s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+          </circle>
+        </g>
+
+        <!-- Top-end: gold 4-point sparkle that twinkles + slowly rotates -->
+        <g style="color: rgba(212,154,42,0.7); transform-origin: 90% 28%; transform-box: fill-box;">
+          <use href="#veHeroSparkle" x="89%" y="27%" width="14" height="14">
+            <animate
+              attributeName="opacity"
+              values="0.3;1;0.3"
+              dur="2.8s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 0 0"
+              to="360 0 0"
+              dur="22s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+          </use>
+        </g>
+
+        <!-- Mid-end: floating white card with subtle border -->
+        <g>
+          <rect
+            x="93.5%"
+            y="48%"
+            width="20"
+            height="20"
+            rx="4"
+            fill="#ffffff"
+            stroke="rgba(15,23,42,0.10)"
+            stroke-width="1"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="translate"
+              values="0 0; 0 -6; 0 0"
+              dur="5.2s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+          </rect>
+        </g>
+
+        <!-- Mid-start: small indigo "+" mark (decorative) -->
+        <g stroke="rgba(46,42,123,0.4)" stroke-width="1.6" stroke-linecap="round">
+          <line x1="3.4%" y1="44%" x2="4.6%" y2="44%">
+            <animate attributeName="opacity" values="0.3;0.85;0.3" dur="3.6s" repeatCount="indefinite" data-ve-anim />
+          </line>
+          <line x1="4%" y1="43.1%" x2="4%" y2="44.9%">
+            <animate attributeName="opacity" values="0.3;0.85;0.3" dur="3.6s" repeatCount="indefinite" data-ve-anim />
+          </line>
+        </g>
+
+        <!-- Start-side bottom: larger ring outline -->
+        <circle
+          cx="6%"
+          cy="78%"
+          r="14"
+          fill="none"
+          stroke="rgba(46,42,123,0.30)"
+          stroke-width="1.4"
+        >
+          <animate
+            attributeName="opacity"
+            values="0.45;0.9;0.45"
+            dur="3.4s"
+            repeatCount="indefinite"
+            data-ve-anim
+          />
+        </circle>
+
+        <!-- Start-side: tiny gold dot just below the ring -->
+        <circle cx="9%" cy="92%" r="2.4" fill="rgba(212,154,42,0.65)">
+          <animate
+            attributeName="opacity"
+            values="0.4;0.95;0.4"
+            dur="2.6s"
+            begin="0.6s"
+            repeatCount="indefinite"
+            data-ve-anim
+          />
+        </circle>
+
+        <!-- End-side bottom: gold sparkle -->
+        <g style="color: rgba(212,154,42,0.6);">
+          <use href="#veHeroSparkle" x="91%" y="80%" width="11" height="11">
+            <animate
+              attributeName="opacity"
+              values="0.25;0.9;0.25"
+              dur="3.2s"
+              begin="1.1s"
+              repeatCount="indefinite"
+              data-ve-anim
+            />
+          </use>
+        </g>
+
+        <!-- End-side bottom: tiny indigo dot -->
+        <circle cx="95%" cy="86%" r="2" fill="rgba(46,42,123,0.45)">
+          <animate
+            attributeName="opacity"
+            values="0.3;0.85;0.3"
+            dur="2.9s"
+            begin="0.4s"
+            repeatCount="indefinite"
+            data-ve-anim
+          />
+        </circle>
+      </svg>
+
+      <div class="relative mx-auto flex max-w-3xl flex-col items-center text-center">
+        <!-- Top badge — gold-trimmed pill with an animated star + live dot -->
+        <span
+          class="ve-hero-badge motion-safe:animate-ve-fade-up inline-flex items-center gap-2.5 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-brand-900 shadow-[0_8px_24px_-12px_rgba(212,154,42,0.55)] backdrop-blur-sm md:text-sm"
+        >
+          <svg
+            class="h-3.5 w-3.5 shrink-0 text-gold-500 motion-safe:animate-ve-spin-slow"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118L2.05 10.101c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
+          </svg>
+          <span>{{ i18n.t('hero.badge') }}</span>
+          <span class="relative flex h-2 w-2" aria-hidden="true">
+            <span
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold-400 opacity-50 motion-reduce:animate-none"
+            ></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-gold-500"></span>
+          </span>
+        </span>
+
+        <!-- Main headline -->
+        <h1
+          class="ve-hero-headline motion-safe:animate-ve-fade-up mt-8 text-balance text-4xl font-extrabold leading-[1.16] tracking-[-0.01em] motion-safe:[animation-delay:60ms] sm:text-5xl md:mt-9 md:text-[3.4rem] lg:text-[3.75rem]"
+        >
+          <span class="block text-[#1e293b]">{{ i18n.t('hero.title1') }}</span>
+          <span class="mt-3 block md:mt-4">
+            <span class="ve-hero-highlight">{{ i18n.t('hero.title2') }}</span>
+          </span>
+        </h1>
+
+        <!-- "في …" decorative subline. All rotating phrases are stacked in
+             a single grid cell so the wrap's intrinsic width = widest word.
+             That keeps "في" pinned while only the rotating word reflows.
+             The active sibling fades in via .ve-hero-rotate-active;
+             inactive siblings still occupy the cell, reserving space. -->
+        <div
+          class="motion-safe:animate-ve-fade-up mt-8 flex items-baseline justify-center gap-5 motion-safe:[animation-delay:100ms] md:mt-10 md:gap-8"
+        >
+          <span class="text-3xl font-extrabold text-[#1e293b] md:text-5xl">{{
+            i18n.t('hero.expertisePrefix')
+          }}</span>
+          <span
+            class="ve-hero-rotate-wrap text-[3.4rem] leading-none md:text-[5rem] lg:text-[5.75rem]"
+            aria-live="polite"
+            [attr.aria-label]="heroRotateWord()"
+          >
+            @for (w of heroRotatingWords(); track w; let i = $index) {
+              <span
+                class="ve-hero-script ve-hero-rotate-slot"
+                [class.ve-hero-rotate-active]="i === heroRotateActive()"
+                [attr.aria-hidden]="i === heroRotateActive() ? null : 'true'"
+                >{{ w }}</span
+              >
+            }
+          </span>
         </div>
+
+        <!-- Body copy -->
+        <p
+          class="motion-safe:animate-ve-fade-up mt-9 max-w-2xl text-base leading-relaxed text-ink-600 motion-safe:[animation-delay:140ms] md:mt-10 md:text-lg"
+        >
+          {{ i18n.t('hero.body') }}
+        </p>
+
+        <!-- CTA buttons -->
+        <div
+          class="motion-safe:animate-ve-fade-up mt-8 flex flex-col items-center justify-center gap-3 motion-safe:[animation-delay:180ms] sm:flex-row sm:gap-4 md:mt-9"
+        >
+          <a
+            routerLink="/"
+            fragment="workshops"
+            class="ve-btn-primary ve-btn-primary--lg ve-hero-cta-primary motion-safe:animate-ve-cta-ring group relative overflow-hidden transition duration-300 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span
+              class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition duration-500 group-hover:translate-x-full motion-reduce:group-hover:translate-x-0"
+              aria-hidden="true"
+            ></span>
+            <span class="relative inline-flex items-center gap-2">
+              <span>{{ i18n.t('hero.ctaBrowse') }}</span>
+              <svg
+                class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </a>
+          <a
+            routerLink="/"
+            fragment="trainers"
+            class="ve-btn-secondary group px-6 py-3.5 text-base font-bold transition duration-300 hover:scale-[1.01] active:scale-[0.98]"
+          >
+            <span class="inline-flex items-center gap-2">
+              <span>{{ i18n.t('hero.ctaFacilitators') }}</span>
+              <svg
+                class="h-4 w-4 shrink-0 transition-transform motion-reduce:transition-none group-hover:translate-y-0.5 motion-reduce:group-hover:translate-y-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </a>
+        </div>
+
+        <!-- Discover-more cue: bouncing chevron + thin pulse line. Anchors
+             the eye toward the workshops section below the fold. -->
+        <a
+          routerLink="/"
+          fragment="workshops"
+          class="ve-hero-discover motion-safe:animate-ve-fade-up mt-10 inline-flex flex-col items-center gap-2 text-xs font-medium tracking-wide text-ink-500 transition hover:text-brand-900 motion-safe:[animation-delay:240ms] md:mt-12"
+        >
+          <span class="ve-hero-discover-rail" aria-hidden="true"></span>
+          <svg
+            class="h-5 w-5 motion-safe:animate-ve-bounce-subtle"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
       </div>
     </section>
 
-    <section veScrollReveal class="ve-scroll-reveal mt-14 bg-white py-2">
+    <section veScrollReveal class="ve-scroll-reveal mt-8 bg-white py-2 md:mt-10">
       <div class="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4 lg:gap-6">
         @for (f of featuresDisplayOrder(); track f.titleKey) {
           <div class="group flex flex-col items-center px-2 text-center">
@@ -232,7 +544,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
     <section
       id="workshops"
       veScrollReveal
-      class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-10 shadow-inner ring-1 ring-ink-200/60 max-md:py-12 md:px-8 md:py-10"
+      class="ve-scroll-reveal mt-16 scroll-mt-24 rounded-3xl bg-[#f4f6f9] px-4 py-10 shadow-inner ring-1 ring-ink-200/60 max-md:py-12 md:mt-20 md:px-8 md:py-10"
     >
       <div class="motion-safe:animate-ve-fade-up w-full min-w-0 text-start">
         <div class="flex w-full max-w-3xl flex-col items-start gap-3">
@@ -326,6 +638,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                 </p>
               </div>
               <div class="flex flex-col justify-center gap-5 lg:order-1">
+                <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
                 <div
                   class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
                 >
@@ -399,6 +712,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   </p>
                 </div>
                 <div class="flex flex-col justify-center gap-5 lg:order-1">
+                  <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
                   <div
                     class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
                   >
@@ -459,6 +773,57 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           }
         </div>
       </div>
+
+      <!-- Shared "offer ends in …" countdown widget — reused on all 3 promo
+           slides via *ngTemplateOutlet. The numeric tiles bind to
+           offerCountdown() which ticks every second from a single timer. -->
+      <ng-template #offerCountdownTpl>
+        @let cd = offerCountdown();
+        <div
+          dir="ltr"
+          class="ku-countdown relative isolate w-fit max-w-full overflow-hidden rounded-2xl border border-rose-400/35 bg-gradient-to-r from-rose-600/30 via-rose-500/15 to-amber-500/15 px-3 py-2.5 shadow-[0_8px_24px_-12px_rgba(244,63,94,0.55)] backdrop-blur-sm max-md:self-center md:px-4"
+        >
+          <div class="ku-countdown__shimmer pointer-events-none absolute inset-0 -z-10"></div>
+          <!-- Compact one-line ribbon: [📅 30] [ينتهي العرض في ٣٠ أبريل] [DD:HH:MM:SS]
+               Tiles are minimal (numbers only, single-letter dividers) so
+               the whole composition fits the narrow promo column. -->
+          <div class="flex flex-nowrap items-center gap-x-2 whitespace-nowrap" [class.flex-row-reverse]="i18n.isRtl()">
+            <span class="ku-countdown__cal relative flex h-8 w-7 shrink-0 flex-col overflow-hidden rounded-md bg-white shadow-md ring-1 ring-rose-300/40">
+              <span class="bg-rose-600 py-[1px] text-center text-[6px] font-extrabold uppercase tracking-[0.1em] text-white">
+                {{ i18n.t('workshops.promoCalMonth') }}
+              </span>
+              <span class="ku-countdown__cal-day flex flex-1 items-center justify-center text-[13px] font-black leading-none text-rose-600">
+                {{ i18n.t('workshops.promoCalDay') }}
+              </span>
+            </span>
+
+            <span class="shrink-0 whitespace-nowrap text-[11.5px] font-extrabold tracking-wide text-amber-200">
+              {{ i18n.t('workshops.promoOfferEnds') }}
+            </span>
+
+            @if (!cd.ended) {
+              <span class="shrink-0 text-rose-200/40" aria-hidden="true">·</span>
+              <div
+                class="flex shrink-0 items-center gap-0.5 rounded-md bg-rose-950/40 px-1.5 py-0.5 font-mono text-[12px] font-extrabold leading-none text-rose-50 ring-1 ring-rose-400/30"
+                dir="ltr"
+                [attr.aria-label]="i18n.t('workshops.promoOfferEndsIn') + ' ' + cd.pad(cd.days) + ':' + cd.pad(cd.hours) + ':' + cd.pad(cd.mins) + ':' + cd.pad(cd.secs)"
+              >
+                <span>{{ cd.pad(cd.days) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span>{{ cd.pad(cd.hours) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span>{{ cd.pad(cd.mins) }}</span>
+                <span class="text-rose-300/60">:</span>
+                <span class="ku-countdown__live text-amber-200">{{ cd.pad(cd.secs) }}</span>
+              </div>
+            } @else {
+              <span class="shrink-0 whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.14em] text-rose-100">
+                · {{ i18n.t('workshops.promoOfferEnded') }}
+              </span>
+            }
+          </div>
+        </div>
+      </ng-template>
 
       <!-- Filters: mobile = horizontal scroll (ref. design); md+ = wrap -->
       <div class="mt-8 flex flex-col gap-2.5 max-md:mb-4">
@@ -660,7 +1025,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
     <section
       id="trainers"
       veScrollReveal
-      class="ve-scroll-reveal mt-16 scroll-mt-24 overflow-x-hidden rounded-3xl bg-[#f7f8fb] px-4 py-10 ring-1 ring-ink-200/50 max-md:px-4 md:px-8 md:py-14"
+      class="ve-scroll-reveal mt-16 scroll-mt-24 overflow-x-hidden rounded-3xl bg-[#f7f8fb] px-4 py-10 ring-1 ring-ink-200/50 max-md:px-4 md:mt-20 md:px-8 md:py-14"
     >
       <div class="mx-auto min-w-0 max-w-6xl">
         <div class="text-center">
@@ -862,7 +1227,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       </div>
     </section>
 
-    <section veScrollReveal class="ve-scroll-reveal mt-20">
+    <section veScrollReveal class="ve-scroll-reveal mt-16 md:mt-20">
       <div class="text-center motion-safe:animate-ve-fade-up">
         <h2 class="text-2xl font-extrabold tracking-tight text-brand-900 md:text-3xl">{{ i18n.t('faq.title') }}</h2>
         <p class="mx-auto mt-2 max-w-2xl text-sm text-ink-600 md:text-base">{{ i18n.t('faq.subtitle') }}</p>
@@ -910,13 +1275,44 @@ export class EventsHomeComponent implements OnDestroy {
   readonly cart = inject(CartService);
 
   /**
-   * Static `HOME_EXPERTS` enriched with admin-portal-managed avatars (lazy-
-   * fetched from `/v1/experts`). Falls back to the static defaults when the
-   * fetch is pending or failed, so the home page always renders.
+   * Static `HOME_EXPERTS` enriched with admin-portal-managed avatars AND
+   * filtered to only the names that exist as active rows in the API
+   * (lazy-fetched from `/v1/experts`). When the API hasn't responded yet we
+   * keep the full static list so the page never goes blank — admin
+   * deletions only take effect once the live data lands.
    */
-  readonly homeExperts = computed<HomeExpert[]>(() =>
-    applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides()),
-  );
+  readonly homeExperts = computed<HomeExpert[]>(() => {
+    const enriched = applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides());
+    return filterExpertsByActive(enriched, this.expertsApi.activeNamesSet());
+  });
+
+  /**
+   * Live countdown to the bundle-offer deadline. The deadline is the end of
+   * 2 July in Asia/Kuwait (UTC+3) — encoded directly as a UTC instant so
+   * the value is identical regardless of the visitor's local timezone.
+   *
+   * Drives the "Offer ends in …" badge on all 3 promo slides; ticks every
+   * second via a `setInterval` that's torn down in `ngOnDestroy`.
+   */
+  private readonly OFFER_DEADLINE_MS = Date.UTC(2026, 6, 2, 20, 59, 59); // 2 Jul 2026 23:59:59 +03:00
+  private readonly nowMs = signal<number>(Date.now());
+  private offerCountdownTimer?: ReturnType<typeof setInterval>;
+  readonly offerCountdown = computed(() => {
+    const remaining = Math.max(0, this.OFFER_DEADLINE_MS - this.nowMs());
+    const totalSecs = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSecs / 86400);
+    const hours = Math.floor((totalSecs % 86400) / 3600);
+    const mins = Math.floor((totalSecs % 3600) / 60);
+    const secs = totalSecs % 60;
+    return {
+      ended: remaining === 0,
+      days,
+      hours,
+      mins,
+      secs,
+      pad: (n: number) => (n < 10 ? `0${n}` : String(n)),
+    };
+  });
 
   /** Initial grid size + step for load-more / load-less. */
   readonly WORKSHOPS_PREVIEW = 4;
@@ -929,8 +1325,33 @@ export class EventsHomeComponent implements OnDestroy {
 
   readonly EXPERT_SIDEBAR_PREVIEW = 13;
 
-  readonly homeHeroImageUrl = HOME_HERO_IMAGE_URL;
   readonly categoryPackages = CATEGORY_PACKAGES;
+
+  /**
+   * Hero — rotating calligraphic word that cycles every ~2.2s through the
+   * five "في …" labels (your skills / future / expertise / opportunities /
+   * abilities). Index advances on a `setInterval`; the word itself is
+   * derived from `i18n.locale()` + this index. SSR-safe (no timer).
+   */
+  private static readonly HERO_ROTATING_WORDS: Record<'ar' | 'en', readonly string[]> = {
+    ar: ['مهاراتك', 'مستقبلك', 'خبراتك', 'فرصك', 'قدراتك'],
+    en: ['your skills', 'your future', 'your expertise', 'your opportunities', 'your abilities'],
+  };
+
+  readonly heroRotateIndex = signal(0);
+  readonly heroRotatingWords = computed<readonly string[]>(
+    () => EventsHomeComponent.HERO_ROTATING_WORDS[this.i18n.locale()],
+  );
+  readonly heroRotateWord = computed(() => {
+    const list = this.heroRotatingWords();
+    return list[this.heroRotateIndex() % list.length];
+  });
+  /** Active index normalised against the current word list length. */
+  readonly heroRotateActive = computed(
+    () => this.heroRotateIndex() % this.heroRotatingWords().length,
+  );
+
+  private heroRotateTimer: ReturnType<typeof setInterval> | undefined;
 
   /** Package carousel: 0 = 100-workshop bundle, 1–2 = 50-workshop category bundles (order matches `categoryPackages`). */
   readonly promoSlideIndex = signal(0);
@@ -1128,13 +1549,14 @@ export class EventsHomeComponent implements OnDestroy {
     if (!target) return [];
     return this.homeEvents()
       .filter((e) => {
-        if (!e.slug.startsWith('ms-w-')) return false;
-        const presenter = parsePresenterFromSummaries(
+        if (ALL_PACKAGE_SLUGS.includes(e.slug)) return false;
+        const parsed = parsePresenterFromSummaries(
           e.summaryAr,
           e.summary_en,
           e.summary,
           true,
         );
+        const presenter = parsed || e.host_name || '';
         return normalizePresenterName(presenter) === target;
       })
       .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime());
@@ -1164,6 +1586,19 @@ export class EventsHomeComponent implements OnDestroy {
     // Lazy-load admin-portal-managed experts so their avatars/bios merge into
     // the static `HOME_EXPERTS` list at runtime.
     this.expertsApi.ensureLoaded();
+
+    // Drive the offer countdown — single timer feeds the signal that all 3
+    // promo slides bind to. Skipped on SSR (no window) so it doesn't keep
+    // the Node process alive during prerender.
+    if (typeof window !== 'undefined') {
+      this.offerCountdownTimer = setInterval(() => this.nowMs.set(Date.now()), 1000);
+      // Cycle the hero calligraphic word every 1.8s — fast enough to feel
+      // alive but still readable. Animation duration (~0.42s) leaves ~1.4s
+      // of "rest" on each word.
+      this.heroRotateTimer = setInterval(() => {
+        this.heroRotateIndex.update((i) => i + 1);
+      }, 1800);
+    }
 
     this.search$
       .pipe(
@@ -1202,6 +1637,14 @@ export class EventsHomeComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.offerCountdownTimer) {
+      clearInterval(this.offerCountdownTimer);
+      this.offerCountdownTimer = undefined;
+    }
+    if (this.heroRotateTimer) {
+      clearInterval(this.heroRotateTimer);
+      this.heroRotateTimer = undefined;
+    }
   }
 
   categoryLabel(cat: WorkshopFilterCategory): string {

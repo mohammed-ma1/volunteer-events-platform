@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Event;
+use App\Services\PackageEnrollmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -72,6 +74,8 @@ class EventController extends Controller
             ['title' => $event->title_en ?? $event->title]
         );
 
+        $this->syncPackagesForEvent($event);
+
         return response()->json(['data' => $event->load('creator:id,name')], 201);
     }
 
@@ -95,6 +99,8 @@ class EventController extends Controller
             $event->id,
             ['changes' => array_keys($validated)]
         );
+
+        $this->syncPackagesForEvent($event->fresh());
 
         return response()->json(['data' => $event->fresh()->load('creator:id,name')]);
     }
@@ -251,5 +257,44 @@ class EventController extends Controller
                 'scope' => $scope,
             ],
         ]);
+    }
+
+    /**
+     * Auto-enroll existing paid buyers of every active package this workshop
+     * belongs to. Runs after admin create/update so a brand-new workshop is
+     * immediately available in the dashboards of users who already own the
+     * matching bundle (100-bundle for any workshop, plus the personal /
+     * professional 50-bundle when the Arabic summary carries the matching
+     * `[personal]` / `[professional]` tag written by the admin form).
+     *
+     * Failures are swallowed so an enrollment-sync hiccup never breaks the
+     * primary admin save flow.
+     */
+    private function syncPackagesForEvent(?Event $event): void
+    {
+        if (! $event || in_array($event->slug, Event::ALL_PACKAGE_SLUGS, true)) {
+            return;
+        }
+
+        $packages = [Event::SLUG_100_WORKSHOPS_PACKAGE];
+        $summary = trim((string) $event->summary);
+        if (str_starts_with($summary, '[personal]')) {
+            $packages[] = Event::SLUG_PACKAGE_PERSONAL_50;
+        } elseif (str_starts_with($summary, '[professional]')) {
+            $packages[] = Event::SLUG_PACKAGE_PROFESSIONAL_50;
+        }
+
+        try {
+            $service = app(PackageEnrollmentService::class);
+            foreach ($packages as $packageSlug) {
+                $service->sync($packageSlug);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Package enrollment sync failed after event save', [
+                'event_id' => $event->id,
+                'event_slug' => $event->slug,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }

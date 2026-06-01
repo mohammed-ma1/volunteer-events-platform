@@ -40,6 +40,20 @@ export class ExpertsService {
     return out;
   });
 
+  /**
+   * Set of normalized Arabic names that are present + active in the API.
+   * Empty when the fetch is pending or failed — callers should treat the
+   * empty set as "no information yet" and fall back to their static list.
+   */
+  readonly activeNamesSet = computed<Set<string>>(() => {
+    const set = new Set<string>();
+    for (const e of this._experts()) {
+      const key = normalizePresenterName(e.name);
+      if (key) set.add(key);
+    }
+    return set;
+  });
+
   /** Lazy fetch — safe to call from multiple consumers. */
   ensureLoaded(): void {
     if (this.fetched) return;

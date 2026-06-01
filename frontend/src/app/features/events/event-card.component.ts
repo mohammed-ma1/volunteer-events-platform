@@ -261,12 +261,21 @@ export class EventCardComponent {
   }
 
   presenterLine(): string | null {
-    return parsePresenterFromSummaries(
+    const fromSummary = parsePresenterFromSummaries(
       this.event.summaryAr,
       this.event.summary_en,
       this.event.summary,
       this.i18n.locale() === 'ar',
     );
+    if (fromSummary) {
+      return fromSummary;
+    }
+    // Fallback: workshops created via the admin portal don't include the
+    // legacy "يقدمها …" / "led by …" sentence in their summary — they only
+    // set the structured `host_name` column. Use it directly so admin-added
+    // events still surface their presenter on the card.
+    const host = this.event.host_name?.trim();
+    return host && host.length > 0 ? host : null;
   }
 
   displayTitle(): string {
