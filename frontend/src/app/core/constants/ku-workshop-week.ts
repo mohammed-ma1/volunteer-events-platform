@@ -1,13 +1,13 @@
 /**
- * Kuwait-calendar dates for the April 2026 student workshop week (matches
- * `package-100-workshops` in `EventSeeder` and product copy).
+ * Kuwait-calendar dates for the June–July 2026 student workshop week (matches
+ * `مواعيد الورش` in `جدول الورش.xlsx` / `ku_student_week_workshops.php`).
  */
 export const KU_WORKSHOP_WEEK_DAY_KEYS: readonly string[] = [
-  '2026-04-26',
-  '2026-04-27',
-  '2026-04-28',
-  '2026-04-29',
-  '2026-04-30',
+  '2026-06-28',
+  '2026-06-29',
+  '2026-06-30',
+  '2026-07-01',
+  '2026-07-02',
 ];
 
 const weekKeySet = new Set(KU_WORKSHOP_WEEK_DAY_KEYS);

@@ -1,27 +1,12 @@
 [
   {
-    "name_ar": "سنابل المسلم",
-    "phone": "+96599874676",
+    "name_ar": "آلاء النصار",
+    "phone": "+96550933069",
     "on_platform": true
   },
   {
-    "name_ar": "د. بسام الجزاف",
-    "phone": "+96566972355",
-    "on_platform": null
-  },
-  {
-    "name_ar": "منيرة النخيلان",
-    "phone": "+96599335337",
-    "on_platform": null
-  },
-  {
-    "name_ar": "بدر الفيلكاوي",
-    "phone": "+96599651207",
-    "on_platform": true
-  },
-  {
-    "name_ar": "زينب الغضبان",
-    "phone": "+96550488455",
+    "name_ar": "أبرار أشكناني",
+    "phone": "+96565040807",
     "on_platform": null
   },
   {
@@ -30,54 +15,14 @@
     "on_platform": null
   },
   {
-    "name_ar": "دلال النخيلان",
-    "phone": "+96599661231",
-    "on_platform": null
-  },
-  {
-    "name_ar": "علي الأنصاري",
-    "phone": "+96597367066",
-    "on_platform": true
-  },
-  {
-    "name_ar": "سليمان المراغي",
-    "phone": "+96555885252",
-    "on_platform": true
-  },
-  {
-    "name_ar": "عبدالرحمن التركيت",
-    "phone": "+96599627096",
-    "on_platform": true
-  },
-  {
     "name_ar": "المحامي إبراهيم السماعيل",
     "phone": "+96566099098",
     "on_platform": null
   },
   {
-    "name_ar": "آلاء النصار",
-    "phone": "+96550933069",
+    "name_ar": "بدر الفيلكاوي",
+    "phone": "+96599651207",
     "on_platform": true
-  },
-  {
-    "name_ar": "مرزوق السعيد",
-    "phone": "+96566720820",
-    "on_platform": null
-  },
-  {
-    "name_ar": "عبدالرحمن خاجه",
-    "phone": "+96599992303",
-    "on_platform": true
-  },
-  {
-    "name_ar": "فاطمة عباس",
-    "phone": "+96550509914",
-    "on_platform": null
-  },
-  {
-    "name_ar": "خالد الشمري",
-    "phone": "+96560989889",
-    "on_platform": null
   },
   {
     "name_ar": "حسن سيد",
@@ -85,8 +30,18 @@
     "on_platform": true
   },
   {
-    "name_ar": "ريم العلي",
-    "phone": "+96599646645",
+    "name_ar": "خالد الشمري",
+    "phone": "+96560989889",
+    "on_platform": null
+  },
+  {
+    "name_ar": "د. بسام الجزاف",
+    "phone": "+96566972355",
+    "on_platform": null
+  },
+  {
+    "name_ar": "د. جواد أبو الحسن",
+    "phone": "+96566667770",
     "on_platform": null
   },
   {
@@ -100,23 +55,13 @@
     "on_platform": null
   },
   {
-    "name_ar": "شيماء الطباخ",
-    "phone": "+96567033396",
+    "name_ar": "دلال النخيلان",
+    "phone": "+96599661231",
     "on_platform": null
   },
   {
-    "name_ar": "أ. محمد الجيماز",
-    "phone": "+96566334562",
-    "on_platform": null
-  },
-  {
-    "name_ar": "م. الجازي العجمي",
-    "phone": "+96597925989",
-    "on_platform": null
-  },
-  {
-    "name_ar": "أبرار أشكناني",
-    "phone": "+96565040807",
+    "name_ar": "زينب الغضبان",
+    "phone": "+96550488455",
     "on_platform": null
   },
   {
@@ -125,43 +70,23 @@
     "on_platform": true
   },
   {
-    "name_ar": "د. رفيدة الميعان",
-    "phone": "+96555379966",
+    "name_ar": "سالم الهاجري",
+    "phone": "+96560000786",
     "on_platform": null
   },
   {
-    "name_ar": "غدير الكندري",
-    "phone": "+96599067096",
+    "name_ar": "سليمان المراغي",
+    "phone": "+96555885252",
     "on_platform": true
   },
   {
-    "name_ar": "فاطمة القطان",
-    "phone": "+96560065828",
-    "on_platform": null
-  },
-  {
-    "name_ar": "د. جواد أبو الحسن",
-    "phone": "+96566667770",
-    "on_platform": null
-  },
-  {
-    "name_ar": "ريم الفرحان",
-    "phone": "+96599422921",
-    "on_platform": null
-  },
-  {
-    "name_ar": "شهد العطار",
-    "phone": "+96566616632",
-    "on_platform": null
-  },
-  {
-    "name_ar": "هاجر النصار",
-    "phone": "+96599602226",
+    "name_ar": "سنابل المسلم",
+    "phone": "+96599874676",
     "on_platform": true
   },
   {
-    "name_ar": "هيا بوراشد",
-    "phone": "+96566144394",
+    "name_ar": "عبدالرحمن التركيت",
+    "phone": "+96599627096",
     "on_platform": true
   },
   {
@@ -170,18 +95,63 @@
     "on_platform": null
   },
   {
+    "name_ar": "عبدالرحمن خاجه",
+    "phone": "+96599992303",
+    "on_platform": true
+  },
+  {
+    "name_ar": "علي الأنصاري",
+    "phone": "+96597367066",
+    "on_platform": true
+  },
+  {
+    "name_ar": "فاطمة القطان",
+    "phone": "+96560065828",
+    "on_platform": null
+  },
+  {
+    "name_ar": "فاطمة عباس",
+    "phone": "+96550509914",
+    "on_platform": null
+  },
+  {
     "name_ar": "فيصل الدويسان",
     "phone": "+96599650362",
     "on_platform": true
   },
   {
-    "name_ar": "عبدالعزيز الضبيب",
-    "phone": null,
+    "name_ar": "م. الجازي العجمي",
+    "phone": "+96597925989",
     "on_platform": null
   },
   {
-    "name_ar": "لولوة عبدالله مساعدة عبدالعزيز الضبيب",
-    "phone": "+96567720391",
+    "name_ar": "محمد الهاجري",
+    "phone": "+96569666843",
     "on_platform": null
+  },
+  {
+    "name_ar": "مرزوق السعيد",
+    "phone": "+96566720820",
+    "on_platform": null
+  },
+  {
+    "name_ar": "منال المسلم",
+    "phone": "+965990082356",
+    "on_platform": null
+  },
+  {
+    "name_ar": "منيرة النخيلان",
+    "phone": "+96599335337",
+    "on_platform": null
+  },
+  {
+    "name_ar": "هلال الهلال",
+    "phone": "+96599679561",
+    "on_platform": null
+  },
+  {
+    "name_ar": "هيا بوراشد",
+    "phone": "+96566144394",
+    "on_platform": true
   }
 ]

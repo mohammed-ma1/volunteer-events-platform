@@ -79,6 +79,11 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'فيصل الدويسان', nameEn: 'Faisal Al-Duwaisan', imageUrl: SRC_IMG_C },
   { nameAr: 'هاجر النصار', nameEn: 'Hajar Al-Nassar', imageUrl: SRC_IMG_B },
   { nameAr: 'عبدالعزيز الضبيب', nameEn: 'Abdulaziz Al-Dhabib', imageUrl: SRC_IMG_D },
+  // ── June 2026 KU week additions (جدول الورش.xlsx) ──
+  { nameAr: 'سالم الهاجري', nameEn: 'Salem Al-Hajri', imageUrl: SRC_IMG_A },
+  { nameAr: 'هلال الهلال', nameEn: 'Hilal Al-Hilal', imageUrl: SRC_IMG_B },
+  { nameAr: 'منال المسلم', nameEn: 'Manal Al-Muslim', imageUrl: SRC_IMG_C },
+  { nameAr: 'محمد الهاجري', nameEn: 'Mohammed Al-Hajri', imageUrl: SRC_IMG_D },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────

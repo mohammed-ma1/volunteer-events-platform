@@ -5,12 +5,10 @@ import { NavigationEnd, PRIMARY_OUTLET, Router, RouterLink, RouterLinkActive, Ro
 import { filter, map, startWith } from 'rxjs';
 import { cartIconBump } from '../animations/cart-animations';
 import { routeFade } from '../animations/route-animations';
-import { PROMO_HERO_IMAGE_URL } from '../constants/promo-hero';
 import { I18nService } from '../i18n/i18n.service';
 import type { Locale } from '../i18n/translations';
 import { AuthService } from '../auth/auth.service';
 import { CartService } from '../services/cart.service';
-import { CheckoutFlowService } from '../services/checkout-flow.service';
 import { CartDrawerComponent } from './cart-drawer.component';
 
 @Component({
@@ -21,23 +19,6 @@ import { CartDrawerComponent } from './cart-drawer.component';
   template: `
     <div class="flex min-h-dvh flex-col bg-[var(--ve-surface)]">
       <div class="sticky top-0 z-40 isolate flex shrink-0 flex-col">
-      @if (!isLearnerView()) {
-      <div class="relative shrink-0 border-x-0 border-b border-white/10 bg-brand-900 text-white">
-        <button
-          type="button"
-          class="ve-focus-ring mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-2.5 text-center text-xs font-semibold leading-snug transition hover:bg-white/5 active:bg-white/10 sm:text-sm md:gap-3"
-          [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-          (click)="openPromoModal()"
-        >
-          <span class="shrink-0 text-base leading-none motion-safe:animate-ve-float-slow" aria-hidden="true">🔥</span>
-          <span class="min-w-0">{{ i18n.t('banner.promoMain') }}</span>
-          <span
-            class="shrink-0 underline decoration-dotted decoration-white/90 underline-offset-[3px] hover:decoration-white"
-            >{{ i18n.t('banner.promoDetails') }}</span
-          >
-        </button>
-      </div>
-      }
       <header
         class="shrink-0 border-b border-ink-200/80 bg-white/90 backdrop-blur-md transition-[box-shadow] duration-300"
         [class.shadow-sm]="headerCompact()"
@@ -499,142 +480,6 @@ import { CartDrawerComponent } from './cart-drawer.component';
         </svg>
       </a>
 
-      @if (promoModalOpen()) {
-        <div
-          class="fixed inset-0 z-[60] bg-black/55 backdrop-blur-[2px]"
-          role="presentation"
-          (click)="closePromoModal()"
-        ></div>
-        <div
-          class="fixed inset-0 z-[61] flex items-center justify-center overflow-y-auto p-4 sm:p-6 pointer-events-none"
-          role="presentation"
-        >
-          <div
-            class="pointer-events-auto my-auto w-full max-w-[min(100%,42rem)] overflow-hidden rounded-[20px] bg-white shadow-[0_28px_64px_-16px_rgba(0,0,0,0.42)]"
-            role="dialog"
-            aria-modal="true"
-            [attr.aria-label]="i18n.t('banner.promoAria')"
-            (click)="$event.stopPropagation()"
-          >
-            <div class="relative aspect-[2/1] min-h-[13rem] w-full sm:aspect-[21/9] sm:min-h-[15rem] md:min-h-[16.5rem]">
-              <img
-                [src]="promoHeroUrl"
-                alt=""
-                class="h-full w-full object-cover"
-                loading="lazy"
-              />
-              <div
-                class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/88 via-black/30 to-black/25"
-                aria-hidden="true"
-              ></div>
-              <button
-                type="button"
-                class="ve-focus-ring absolute end-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand-600 shadow-md ring-1 ring-ink-200/70 transition hover:bg-ink-50 hover:text-brand-800"
-                (click)="closePromoModal()"
-                [attr.aria-label]="i18n.t('banner.modalCloseAria')"
-              >
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              <p
-                class="absolute start-3 top-3 max-w-[min(100%-5rem,14rem)] text-[11px] font-bold uppercase leading-snug tracking-wide text-white/95 drop-shadow-md sm:max-w-[16rem] sm:text-xs"
-                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-              >
-                {{ i18n.t('banner.modalImageEyebrow') }}
-              </p>
-              <div
-                class="absolute start-3 top-[3.25rem] flex flex-col gap-1.5 sm:top-14 sm:gap-2"
-                aria-hidden="true"
-              >
-                @for (ic of promoModalIcons; track ic) {
-                  <span
-                    class="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-[0.95rem] shadow-md ring-1 ring-black/10 sm:h-9 sm:w-9"
-                    >{{ ic }}</span
-                  >
-                }
-              </div>
-              <div
-                class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/55 to-transparent px-4 pb-5 pt-16 sm:pb-6 sm:pt-20"
-                aria-hidden="true"
-              ></div>
-              <p
-                class="absolute inset-x-0 bottom-0 px-4 pb-5 pt-10 text-center text-xl font-black leading-tight tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:pb-6 sm:text-2xl"
-                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-              >
-                {{ i18n.t('banner.modalHeroBanner') }}
-              </p>
-            </div>
-            <div class="space-y-4 px-5 pb-6 pt-5 sm:px-7 sm:pb-7 sm:pt-6" [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'">
-              <p class="text-center text-sm leading-relaxed text-ink-600">
-                {{ i18n.t('banner.modalBody') }}
-              </p>
-              <div class="rounded-xl bg-slate-100 px-4 py-4 shadow-inner shadow-black/[0.03]" dir="ltr">
-                <div class="flex items-end justify-between gap-3">
-                  <span
-                    class="inline-flex shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-800 shadow-sm ring-1 ring-emerald-200/80"
-                    >{{ i18n.t('workshops.promoSavePct') }}</span
-                  >
-                  <div class="min-w-0 text-end">
-                    <div class="text-sm font-medium text-ink-400 line-through">{{
-                      i18n.t('workshops.promoPriceWas')
-                    }}</div>
-                    <div class="text-[1.75rem] font-black leading-none tracking-tight text-brand-900 sm:text-[2rem]">
-                      {{ i18n.t('workshops.promoPrice') }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="rounded-xl border border-pink-200 bg-white px-3 py-4 shadow-sm sm:px-4 sm:py-4" dir="ltr">
-                <div class="flex items-center justify-between gap-2.5 leading-snug">
-                  <span
-                    class="inline-flex shrink-0 rounded-full bg-pink-50 px-2.5 py-1 text-[10px] font-bold text-pink-600 ring-1 ring-pink-200/90"
-                    >{{ i18n.t('workshops.promoInterestFree') }}</span
-                  >
-                  <p
-                    class="min-w-0 flex-1 px-1 text-center text-base font-semibold leading-snug text-ink-800 sm:text-lg"
-                  >
-                    {{ i18n.t('workshops.promoInstallmentPrefix') }}
-                    <span class="mt-1 block text-lg font-extrabold text-pink-600 sm:mt-0 sm:inline sm:text-xl">{{
-                      i18n.t('workshops.promoInstallmentAmount')
-                    }}</span>
-                  </p>
-                  <span class="h-2 w-2 shrink-0 rounded-full bg-pink-500" aria-hidden="true"></span>
-                </div>
-              </div>
-              <button
-                type="button"
-                class="ve-focus-ring flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#302b85] px-5 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-[#282266] active:scale-[0.99] motion-reduce:active:scale-100"
-                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-                (click)="onPromoModalCheckout()"
-              >
-                @if (i18n.isRtl()) {
-                  <svg class="h-5 w-5 shrink-0 opacity-95" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                    />
-                  </svg>
-                  <span>{{ i18n.t('banner.modalCheckoutCta') }}</span>
-                } @else {
-                  <span>{{ i18n.t('banner.modalCheckoutCta') }}</span>
-                  <svg class="h-5 w-5 shrink-0 opacity-95" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                    />
-                  </svg>
-                }
-              </button>
-            </div>
-          </div>
-        </div>
-      }
-
       <button
         type="button"
         class="fixed bottom-6 end-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-brand-900 text-white shadow-lg shadow-brand-900/30 transition-all duration-300 ease-out hover:bg-brand-800 hover:shadow-xl active:scale-90 motion-reduce:transition-none"
@@ -664,9 +509,6 @@ export class ShellComponent {
   readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
   private readonly router = inject(Router);
-  private readonly checkoutFlow = inject(CheckoutFlowService);
-
-  readonly promoModalOpen = signal(false);
   readonly userMenuOpen = signal(false);
   readonly langMenuOpen = signal(false);
   readonly showScrollTop = signal(false);
@@ -700,10 +542,6 @@ export class ShellComponent {
   userInitial(): string {
     return (this.auth.user()?.name ?? '?').charAt(0).toUpperCase();
   }
-  readonly promoHeroUrl = PROMO_HERO_IMAGE_URL;
-
-  /** Decorative icons on modal hero (design reference). */
-  readonly promoModalIcons = ['📚', '💡', '👤', '🎤'] as const;
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
@@ -718,8 +556,6 @@ export class ShellComponent {
       this.langMenuOpen.set(false);
     } else if (this.userMenuOpen()) {
       this.userMenuOpen.set(false);
-    } else if (this.promoModalOpen()) {
-      this.closePromoModal();
     }
   }
 
@@ -750,22 +586,6 @@ export class ShellComponent {
         }
       }, 100);
     });
-  }
-
-  openPromoModal(): void {
-    this.langMenuOpen.set(false);
-    this.promoModalOpen.set(true);
-    document.body.style.overflow = 'hidden';
-  }
-
-  closePromoModal(): void {
-    this.promoModalOpen.set(false);
-    document.body.style.overflow = '';
-  }
-
-  onPromoModalCheckout(): void {
-    this.closePromoModal();
-    this.checkoutFlow.startPackage100Checkout();
   }
 
   /** Path only — omit `#fragment` so hash-only navigations do not re-run routeFade (invisible absolute layer would steal clicks). */
