@@ -253,6 +253,14 @@ export type TranslationKey =
   | 'checkout.removeLine'
   | 'checkout.securePayment'
   | 'checkout.installmentPill'
+  | 'checkout.upsellBadge'
+  | 'checkout.upsellTitle'
+  | 'checkout.upsellBody'
+  | 'checkout.upsellPriceNow'
+  | 'checkout.upsellPriceWas'
+  | 'checkout.upsellInstallmentAmount'
+  | 'checkout.upsellInstallmentNote'
+  | 'checkout.upsellAppliedNote'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
   | 'checkout.phoneHint'
@@ -614,6 +622,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.removeLine': 'إزالة من السلة',
     'checkout.securePayment': 'الدفع آمن ومحمي',
     'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
+    'checkout.upsellBadge': 'عرض لمرة واحدة!',
+    'checkout.upsellTitle': 'نعم، أريد الترقية إلى باقة الـ 100 ورشة!',
+    'checkout.upsellBody':
+      'احصل على وصول كامل لجميع الورش الـ 100 مع شهادات معتمدة بدلاً من ورشة واحدة فقط. وفّر أكثر من 90٪ من أسعار الورش الفردية!',
+    'checkout.upsellPriceNow': '100 د.ك',
+    'checkout.upsellPriceWas': '1000 د.ك',
+    'checkout.upsellInstallmentAmount': '25 د.ك',
+    'checkout.upsellInstallmentNote': 'قسّمها على 4 دفعات بدون فوائد مع ديمة',
+    'checkout.upsellAppliedNote': 'تمت الترقية إلى باقة الـ 100 ورشة',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
     'checkout.phoneHint': '٨ أرقام بدون رمز الدولة (مثال: 99991234)',
@@ -744,7 +761,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleHighlight': 'workshops',
     'workshops.titleAfter': 'available',
     'workshops.programsBadge': 'Training programs',
-    'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'workshops.promoCertBanner': '🎗️ The student will receive 100 accredited certificates',
     'workshops.promoOfferEnds': 'Offer ends on July 2',
     'workshops.promoOfferEndsIn': 'Time remaining',
     'workshops.promoOfferEndsInShort': 'Time remaining',
@@ -990,6 +1007,15 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.removeLine': 'Remove from cart',
     'checkout.securePayment': 'Secure, protected checkout',
     'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
+    'checkout.upsellBadge': 'One-Time Special Offer!',
+    'checkout.upsellTitle': 'Yes, I want to upgrade to the 100 Workshops Bundle!',
+    'checkout.upsellBody':
+      'Get full access to all 100 workshops with accredited certificates instead of just one. Save over 90% off individual workshop prices!',
+    'checkout.upsellPriceNow': '100 KD',
+    'checkout.upsellPriceWas': '1000 KD',
+    'checkout.upsellInstallmentAmount': '25 KD',
+    'checkout.upsellInstallmentNote': 'Pay in 4 interest-free payments with Dima',
+    'checkout.upsellAppliedNote': 'Upgraded to the 100 Workshops Bundle',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
     'checkout.phoneHint': '8 digits without country code (e.g. 99991234)',
