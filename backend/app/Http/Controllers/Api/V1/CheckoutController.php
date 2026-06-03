@@ -27,7 +27,7 @@ class CheckoutController extends Controller
      * is attempted) but browsing, cart edits and the checkout form itself
      * keep working. Flip back to true and redeploy to re-enable payments.
      */
-    private const PAYMENTS_ENABLED = false;
+    private const PAYMENTS_ENABLED = true;
 
     public function __construct(
         private readonly TapPaymentService $tapPaymentService
