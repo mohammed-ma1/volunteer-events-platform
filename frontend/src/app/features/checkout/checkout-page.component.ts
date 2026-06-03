@@ -1,16 +1,18 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, NgZone, inject, signal } from '@angular/core';
+import { Component, DestroyRef, NgZone, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription, switchMap, take, timer } from 'rxjs';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { isLocalBrowserOrigin, isTapCheckoutCompleteMessage } from '../../core/payment/tap-messages';
-import { CartLine, CartSnapshot } from '../../core/models/api.types';
+import { CartLine, CartSnapshot, VolunteerEvent } from '../../core/models/api.types';
 import { CartService } from '../../core/services/cart.service';
 import { CheckoutService } from '../../core/services/checkout.service';
+import { EventsService } from '../../core/services/events.service';
 import { MetaPixelService } from '../../core/analytics/meta-pixel.service';
+import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
 import { environment } from '../../../environments/environment';
 
 /** `randomUUID` is missing on non-HTTPS origins (e.g. http://droplet-ip); use RFC4122 v4 via getRandomValues when needed. */
@@ -54,7 +56,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
 @Component({
   selector: 'app-checkout-page',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, DecimalPipe],
+  imports: [ReactiveFormsModule, RouterLink, DecimalPipe, NgClass],
   template: `
     <div class="relative mx-auto max-w-6xl px-4 py-8 md:py-10">
       @if (busy() && !paymentActive()) {
@@ -155,6 +157,7 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
         </div>
       } @else {
         <div class="mt-8 grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-10">
+          <div class="space-y-6">
           <div class="rounded-2xl border border-ink-200/90 bg-white p-5 shadow-sm md:p-7">
             <h2 class="text-lg font-bold text-[#0a1628]">{{ i18n.t('checkout.personalTitle') }}</h2>
             <p class="mt-1 text-sm text-ink-600">{{ i18n.t('checkout.personalSubtitle') }}</p>
@@ -226,6 +229,63 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
             </form>
           </div>
 
+          @if (showUpsell()) {
+            <label
+              id="checkout-upsell"
+              class="motion-safe:animate-ve-fade-up relative block cursor-pointer rounded-2xl border-2 border-dashed bg-gradient-to-br from-brand-50/60 via-white to-white p-5 shadow-sm transition md:p-6"
+              [ngClass]="
+                upgradeBundle()
+                  ? 'border-brand-900 ring-2 ring-brand-900/15'
+                  : 'border-brand-900/30 hover:border-brand-900/50'
+              "
+            >
+              <span
+                class="absolute -top-3 end-5 inline-flex items-center gap-1.5 rounded-full bg-brand-900 px-3 py-1 text-[11px] font-bold text-white shadow-md"
+              >
+                <span class="h-1.5 w-1.5 rounded-full bg-gold-400" aria-hidden="true"></span>
+                {{ i18n.t('checkout.upsellBadge') }}
+              </span>
+
+              <div class="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  class="mt-1 h-5 w-5 shrink-0 cursor-pointer rounded border-ink-300 text-brand-900 accent-brand-900 focus:ring-2 focus:ring-brand-900/20"
+                  [checked]="upgradeBundle()"
+                  (change)="toggleUpgrade($event)"
+                />
+                <div class="min-w-0">
+                  <p class="text-base font-extrabold leading-snug text-[#0a1628]">
+                    {{ i18n.t('checkout.upsellTitle') }}
+                  </p>
+                  <p class="mt-1.5 text-sm leading-relaxed text-ink-600">
+                    {{ i18n.t('checkout.upsellBody') }}
+                  </p>
+
+                  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3" dir="ltr">
+                    <div class="inline-flex items-baseline gap-2 rounded-xl bg-brand-50 px-3 py-2">
+                      <span class="text-xl font-black tracking-tight text-brand-900">{{
+                        i18n.t('checkout.upsellPriceNow')
+                      }}</span>
+                      <span class="text-sm font-medium text-ink-400 line-through">{{
+                        i18n.t('checkout.upsellPriceWas')
+                      }}</span>
+                    </div>
+                    <span class="hidden h-8 w-px bg-ink-200 sm:block" aria-hidden="true"></span>
+                    <div class="inline-flex items-center gap-2">
+                      <span class="text-lg font-extrabold text-pink-600">{{
+                        i18n.t('checkout.upsellInstallmentAmount')
+                      }}</span>
+                      <span class="max-w-[14rem] text-xs leading-snug text-ink-600">{{
+                        i18n.t('checkout.upsellInstallmentNote')
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </label>
+          }
+          </div>
+
           <aside class="rounded-2xl border border-ink-200/90 bg-white p-5 shadow-sm md:p-7">
             <h2 class="text-lg font-bold text-[#0a1628]">{{ i18n.t('checkout.orderSummary') }}</h2>
 
@@ -284,9 +344,17 @@ const TAP_PAYMENT_METHODS_BANNER_URL =
               <div class="flex items-baseline justify-between pt-2">
                 <span class="text-base font-bold text-[#0a1628]">{{ i18n.t('checkout.total') }}</span>
                 <span class="text-xl font-black text-brand-900"
-                  >{{ snap.subtotal | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
+                  >{{ effectiveTotal() | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
                 >
               </div>
+              @if (showUpsell() && upgradeBundle()) {
+                <p class="flex items-center justify-end gap-1.5 pt-1 text-xs font-semibold text-brand-900">
+                  <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  {{ i18n.t('checkout.upsellAppliedNote') }}
+                </p>
+              }
             </div>
 
             <button
@@ -345,6 +413,7 @@ export class CheckoutPageComponent {
 
   readonly cart = inject(CartService);
   readonly i18n = inject(I18nService);
+  private readonly events = inject(EventsService);
   private readonly metaPixel = inject(MetaPixelService);
 
   /** Guard so the InitiateCheckout pixel fires only once per page visit. */
@@ -357,6 +426,35 @@ export class CheckoutPageComponent {
   readonly paymentUrlRaw = signal<string | null>(null);
   readonly tapFrameLoading = signal(false);
   private readonly activeOrderUuid = signal<string | null>(null);
+
+  // ── One-time bundle upsell ─────────────────────────────────────────────
+  /** Visible after the first "Pay now" click (the interstitial offer card). */
+  readonly showUpsell = signal(false);
+  /** Whether the learner ticked "upgrade to the 100-workshop bundle". */
+  readonly upgradeBundle = signal(false);
+  /** Resolved 100-workshop bundle event (for id + price), loaded on init. */
+  private readonly bundleEvent = signal<VolunteerEvent | null>(null);
+
+  /**
+   * Eligible only when the cart holds individual workshops (no package slug);
+   * if the learner is already buying a bundle there is nothing to upsell.
+   */
+  readonly upsellEligible = computed(() => {
+    const snap = this.cart.snapshot();
+    if (!snap || snap.items.length === 0) {
+      return false;
+    }
+    return !snap.items.some((l) => l.event && ALL_PACKAGE_SLUGS.includes(l.event.slug));
+  });
+
+  /** Total shown in the summary — the bundle price once the upgrade is ticked. */
+  readonly effectiveTotal = computed(() => {
+    const snap = this.cart.snapshot();
+    if (this.showUpsell() && this.upgradeBundle()) {
+      return this.bundleEvent()?.price ?? 100;
+    }
+    return snap?.subtotal ?? 0;
+  });
 
   private idempotencyKey = createClientUuid();
   private pollSub?: Subscription;
@@ -394,6 +492,13 @@ export class CheckoutPageComponent {
       next: (s) => this.fireInitiateCheckoutOnce(s),
       error: () => this.fireInitiateCheckoutOnce(this.cart.snapshot()),
     });
+    // Resolve the 100-workshop bundle so the upsell can show its price + add it.
+    this.events.bySlug(PACKAGE_100_EVENT_SLUG).subscribe({
+      next: (ev) => this.bundleEvent.set(ev),
+      error: () => {
+        /* upsell falls back to copy-only pricing */
+      },
+    });
     window.addEventListener('message', this.onWindowMessage);
     this.destroyRef.onDestroy(() => {
       window.removeEventListener('message', this.onWindowMessage);
@@ -422,6 +527,45 @@ export class CheckoutPageComponent {
     if (this.form.invalid || this.busy()) {
       return;
     }
+
+    // First "Pay now" click on an individual-workshop cart → reveal the
+    // one-time bundle upsell instead of paying. Subsequent clicks proceed.
+    if (this.upsellEligible() && !this.showUpsell()) {
+      this.showUpsell.set(true);
+      queueMicrotask(() => {
+        document
+          .getElementById('checkout-upsell')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      return;
+    }
+
+    // Upsell accepted → swap the cart to the bundle, then pay.
+    if (this.showUpsell() && this.upgradeBundle()) {
+      const ev = this.bundleEvent();
+      if (ev) {
+        this.busy.set(true);
+        this.error.set(null);
+        this.cart
+          .clear()
+          .pipe(switchMap(() => this.cart.addItem(ev.id, 1)))
+          .subscribe({
+            next: () => this.startPayment(),
+            error: (err) => {
+              this.error.set(this.checkoutErrorMessage(err));
+              this.busy.set(false);
+            },
+          });
+        return;
+      }
+      // Bundle didn't resolve — fall through and pay for the current cart.
+    }
+
+    this.startPayment();
+  }
+
+  /** Builds the order from the current cart and opens Tap. */
+  private startPayment(): void {
     this.busy.set(true);
     this.error.set(null);
 
@@ -575,6 +719,10 @@ export class CheckoutPageComponent {
       }
     }
     return this.i18n.t('checkout.failed');
+  }
+
+  toggleUpgrade(ev: Event): void {
+    this.upgradeBundle.set((ev.target as HTMLInputElement).checked);
   }
 
   currencySuffix(currency: string): string {
