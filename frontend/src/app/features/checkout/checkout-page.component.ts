@@ -336,30 +336,12 @@ interface SummaryRow {
                   </div>
                 </div>
 
-                <!-- BITA shield placeholder badge. Replace with the official
-                     BITA logo by dropping a PNG at frontend/public/images/
-                     and swapping the <svg> for <img src="..."> when ready. -->
+                <!-- Official BITA badge -->
                 <div
-                  class="hidden h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white shadow-sm sm:flex"
+                  class="hidden h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-white p-1.5 shadow-sm sm:flex"
                   aria-hidden="true"
                 >
-                  <svg viewBox="0 0 100 100" class="h-16 w-16" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="bita-shield" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#b45309"/>
-                        <stop offset="100%" stop-color="#7c2d12"/>
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M50 6 L88 18 L88 50 C88 72 70 88 50 94 C30 88 12 72 12 50 L12 18 Z"
-                      fill="url(#bita-shield)"
-                      stroke="#fbbf24"
-                      stroke-width="2"
-                    />
-                    <circle cx="50" cy="48" r="22" fill="#fde68a"/>
-                    <text x="50" y="55" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="14" font-weight="900" fill="#7c2d12">BITA</text>
-                    <text x="50" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#fde68a" letter-spacing="1.5">CERTIFIED</text>
-                  </svg>
+                  <img src="/images/branding/bita-logo.png" alt="BITA" class="h-full w-full object-contain" />
                 </div>
               </div>
             </label>
