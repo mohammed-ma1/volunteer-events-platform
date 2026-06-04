@@ -16,7 +16,7 @@ import {
 import { I18nService } from '../../core/i18n/i18n.service';
 import { TranslationKey } from '../../core/i18n/translations';
 import { EnrolledWorkshop } from '../../core/models/learn.types';
-import { LearnService } from '../../core/services/learn.service';
+import { BitaStatus, LearnService } from '../../core/services/learn.service';
 import {
   calendarDayKeyKuwait,
   formatDaySubLabelKuwait,
@@ -101,7 +101,9 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       } @else {
 
         <!-- ─── Stats Row ─── -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div [ngClass]="bitaStatus()?.eligible_purchase
+                ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4'
+                : 'grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4'">
           <button type="button" (click)="onSelectStatus('all')"
                   class="relative bg-white rounded-xl border p-4 text-center group transition-all duration-200 hover:shadow-md"
                   [ngClass]="statusFilter() === 'all' ? 'border-brand-300 ring-2 ring-brand-100 shadow-md' : 'border-slate-100'">
@@ -138,91 +140,139 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             <div class="text-2xl font-extrabold text-slate-500">{{ completedCount() }}</div>
             <div class="text-[11px] text-slate-400 font-medium mt-0.5">{{ tr('مكتملة', 'Completed') }}</div>
           </button>
-        </div>
 
-        <!-- ─── Category filter (with counts) ─── -->
-        <div class="flex flex-col gap-2.5">
-          <div class="flex">
-            <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب التصنيف', 'Browse workshops by category') }}</span>
-          </div>
-          <div class="flex flex-nowrap gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            @for (cat of CATEGORY_ORDER; track cat) {
-              <button type="button" (click)="onSelectCategory(cat)"
-                      class="shrink-0 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98] max-sm:px-3 max-sm:text-xs"
-                      [ngClass]="selectedCategory() === cat
-                        ? 'bg-brand-900 text-white shadow-md'
-                        : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
-                {{ categoryLabel(cat) }} <span class="font-normal opacity-75">({{ categoryCount(cat) }})</span>
+          @if (bitaStatus(); as bs) {
+            @if (bs.eligible_purchase) {
+              <button
+                type="button"
+                (click)="onBitaTileClick()"
+                [disabled]="bitaRequesting()"
+                class="relative overflow-hidden rounded-xl border p-4 text-center group transition-all duration-200 hover:shadow-md disabled:cursor-progress motion-safe:animate-ve-fade-up"
+                [ngClass]="bs.requested_at
+                  ? 'border-emerald-200 bg-emerald-50/70'
+                  : 'border-amber-200 bg-gradient-to-br from-amber-50 via-white to-amber-50/60 hover:border-amber-300'"
+              >
+                <!-- Subtle sparkles in the background for the "premium" feel -->
+                <span aria-hidden="true" class="pointer-events-none absolute inset-0 motion-safe:animate-pulse opacity-40">
+                  <span class="absolute top-2 right-3 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                  <span class="absolute bottom-3 left-3 h-1 w-1 rounded-full bg-amber-300"></span>
+                  <span class="absolute top-4 left-6 h-1 w-1 rounded-full bg-emerald-300"></span>
+                </span>
+
+                <!-- Official BITA badge -->
+                <div class="relative mx-auto mb-2 flex h-10 w-10 items-center justify-center">
+                  <img src="/images/branding/bita-logo.png" alt="BITA" class="h-10 w-10 object-contain drop-shadow-sm" />
+                  @if (bs.requested_at) {
+                    <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white shadow-md ring-2 ring-white">
+                      <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </span>
+                  }
+                </div>
+
+                <div class="relative">
+                  <div
+                    class="text-sm font-extrabold leading-tight"
+                    [ngClass]="bs.requested_at ? 'text-emerald-700' : 'text-amber-700'"
+                  >
+                    {{ i18n.t('bitaCert.tileTitle') }}
+                  </div>
+                  <div
+                    class="mt-0.5 text-[11px] font-medium"
+                    [ngClass]="bs.requested_at ? 'text-emerald-600' : 'text-amber-600'"
+                  >
+                    {{ bs.requested_at ? i18n.t('bitaCert.tileSubtitleRequested') : i18n.t('bitaCert.tileSubtitleRequest') }}
+                  </div>
+                  @if (!bs.requested_at) {
+                    <div class="mt-1 inline-flex items-center gap-1 text-[10px] font-bold tabular-nums text-amber-700/80">
+                      <span>{{ bs.completed_count }}</span>
+                      <span class="opacity-50">/</span>
+                      <span>{{ bs.required_count }}</span>
+                    </div>
+                  }
+                </div>
               </button>
             }
-          </div>
+          }
         </div>
 
-        <!-- ─── Day filter (with date sublabels) ─── -->
-        @if (dayBuckets().length > 0) {
-          <div class="flex flex-col gap-2.5">
-            <div class="flex">
-              <span class="text-xs font-semibold text-slate-500">{{ tr('تصفح الورشات حسب أيام عرضها', 'Browse workshops by day') }}</span>
-            </div>
-            <div
-              class="flex w-full min-w-0 flex-row flex-nowrap gap-2 overflow-x-auto overflow-y-hidden pb-1 touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:overflow-x-visible md:pb-1"
-            >
-              <!-- All days -->
-              <button type="button"
-                      (click)="onSelectDay(null)"
-                      class="w-max shrink-0 rounded-2xl px-3.5 py-2 text-center transition duration-200 max-sm:px-3 max-sm:py-1.5"
-                      [ngClass]="selectedDayKey() === null
-                        ? 'bg-brand-900 text-white shadow-md'
-                        : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
-                <span class="block whitespace-nowrap text-sm font-bold tabular-nums max-sm:text-xs">{{ tr('كل الأيام', 'All days') }} ({{ workshopsBeforeDayFilter().length }})</span>
-                <span class="mt-0.5 block whitespace-nowrap text-[11px] font-medium max-sm:text-[10px]"
-                      [ngClass]="selectedDayKey() === null ? 'text-white/80' : 'text-slate-400'">{{ tr('عرض الكل', 'Show all') }}</span>
-              </button>
-              @for (b of dayBuckets(); track b.key; let di = $index) {
-                <button type="button"
-                        (click)="onSelectDay(b.key)"
-                        class="w-max shrink-0 rounded-2xl px-3.5 py-2 text-center transition duration-200 max-sm:px-3 max-sm:py-1.5"
-                        [ngClass]="selectedDayKey() === b.key
-                          ? 'bg-brand-900 text-white shadow-md'
-                          : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'">
-                  <span class="block whitespace-nowrap text-sm font-bold tabular-nums max-sm:text-xs">{{ dayLabelWithCount(di, b.count) }}</span>
-                  <span class="mt-0.5 block whitespace-nowrap text-[11px] font-medium max-sm:text-[10px]"
-                        [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-slate-400'">{{ b.sub }}</span>
-                </button>
-              }
-            </div>
+        @if (bitaErrorToast(); as toast) {
+          <div role="status" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 motion-safe:animate-ve-fade-up">
+            {{ toast }}
           </div>
         }
 
-        <!-- ─── My workshops header + search + sort (one row incl. mobile) ─── -->
-        <div id="dashboard-workshop-search" class="scroll-mt-28 flex min-w-0 flex-row items-center gap-2 sm:justify-between sm:gap-3">
-          <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <h2 class="truncate text-base font-bold text-slate-900 sm:text-lg">{{ tr('ورشـي', 'My Workshops') }}</h2>
-            <span class="whitespace-nowrap rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 sm:px-2.5 sm:py-1 sm:text-xs">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
-          </div>
-          <div class="flex min-w-0 flex-1 items-center gap-1.5 sm:max-w-md sm:flex-1 sm:gap-2">
-            <label class="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-slate-200 bg-white px-2.5 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:gap-2.5 sm:px-4 sm:py-2.5">
-              <svg class="h-4 w-4 shrink-0 text-slate-400 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input
-                class="min-w-0 flex-1 bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400 sm:text-sm"
-                [placeholder]="tr('ابحث...', 'Search...')"
-                [ngModel]="searchText()"
-                (ngModelChange)="onSearchTextChange($event)"
-              />
-            </label>
+        <!-- ─── My workshops header ─── -->
+        <div id="dashboard-workshop-search" class="scroll-mt-28 flex min-w-0 items-center gap-2">
+          <h2 class="truncate text-base font-bold text-slate-900 sm:text-lg">{{ tr('ورشـي', 'My Workshops') }}</h2>
+          <span class="whitespace-nowrap rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700 sm:px-2.5 sm:py-1 sm:text-xs">{{ filteredWorkshops().length }} {{ tr('ورشة', 'workshops') }}</span>
+        </div>
+
+        <!-- ─── Search + filter dropdowns (category / day / sort) ─── -->
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5">
+          <!-- Search -->
+          <label class="flex min-w-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:flex-1 sm:gap-2.5 sm:px-4 sm:py-2.5">
+            <svg class="h-4 w-4 shrink-0 text-slate-400 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input
+              class="min-w-0 flex-1 bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400 sm:text-sm"
+              [placeholder]="tr('ابحث عن ورشة، مدرب، أو موضوع...', 'Search workshops, trainers...')"
+              [ngModel]="searchText()"
+              (ngModelChange)="onSearchTextChange($event)"
+            />
+          </label>
+
+          <!-- Filter dropdowns -->
+          <div class="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:overflow-visible sm:pb-0">
+            <!-- Category -->
             <div class="relative shrink-0">
+              <svg class="pointer-events-none absolute start-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 12.414V19a1 1 0 01-.553.894l-4 2A1 1 0 019 21v-8.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+              <select
+                [ngModel]="selectedCategory()"
+                (ngModelChange)="onCategoryDropdownChange($event)"
+                [attr.aria-label]="tr('تصفية حسب التصنيف', 'Filter by category')"
+                class="cursor-pointer appearance-none rounded-full border border-slate-200 bg-white py-2 ps-9 pe-8 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:py-2.5 sm:text-sm"
+              >
+                @for (cat of CATEGORY_ORDER; track cat) {
+                  <option [value]="cat">{{ categoryLabel(cat) }} ({{ categoryCount(cat) }})</option>
+                }
+              </select>
+              <svg class="pointer-events-none absolute end-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+
+            <!-- Day -->
+            @if (dayBuckets().length > 0) {
+              <div class="relative shrink-0">
+                <svg class="pointer-events-none absolute start-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <select
+                  [ngModel]="selectedDayKey() ?? ''"
+                  (ngModelChange)="onDayDropdownChange($event)"
+                  [attr.aria-label]="tr('تصفية حسب اليوم', 'Filter by day')"
+                  class="cursor-pointer appearance-none rounded-full border border-slate-200 bg-white py-2 ps-9 pe-8 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:py-2.5 sm:text-sm"
+                >
+                  <option value="">{{ tr('كل الأيام', 'All days') }} ({{ workshopsBeforeDayFilter().length }})</option>
+                  @for (b of dayBuckets(); track b.key; let di = $index) {
+                    <option [value]="b.key">{{ dayLabelWithCount(di, b.count) }} — {{ b.sub }}</option>
+                  }
+                </select>
+                <svg class="pointer-events-none absolute end-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            }
+
+            <!-- Sort -->
+            <div class="relative shrink-0">
+              <svg class="pointer-events-none absolute start-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h13M3 12h9M3 17h5M17 7v10m0 0l-3-3m3 3l3-3"/></svg>
               <select
                 [ngModel]="sortMode()"
                 (ngModelChange)="onSortModeChange($event)"
-                class="max-w-[6.5rem] cursor-pointer appearance-none rounded-full border border-slate-200 bg-white py-2 ps-2 pe-7 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:max-w-none sm:ps-4 sm:pe-9 sm:py-2.5 sm:text-sm"
+                [attr.aria-label]="tr('ترتيب', 'Sort')"
+                class="cursor-pointer appearance-none rounded-full border border-slate-200 bg-white py-2 ps-9 pe-8 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:py-2.5 sm:text-sm"
               >
                 <option value="closest">{{ tr('الأقرب', 'Closest') }}</option>
                 <option value="latest">{{ tr('الأحدث', 'Latest') }}</option>
                 <option value="title">{{ tr('أبجدي', 'Alphabetical') }}</option>
               </select>
-              <svg class="pointer-events-none absolute end-1.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400 sm:end-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
+              <svg class="pointer-events-none absolute end-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </div>
           </div>
         </div>
@@ -368,6 +418,151 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
           }
         </div>
       }
+
+      <!-- ───────────── BITA: "Almost there!" locked-state modal ───────────── -->
+      @if (showBitaLockedModal()) {
+        <div
+          role="dialog"
+          aria-modal="true"
+          [attr.aria-label]="i18n.t('bitaCert.modalLockedTitle')"
+          class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 motion-safe:animate-ve-fade-in"
+        >
+          <!-- Backdrop -->
+          <button
+            type="button"
+            (click)="closeBitaLockedModal()"
+            class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            [attr.aria-label]="i18n.t('bitaCert.modalCloseAria')"
+          ></button>
+
+          <!-- Card -->
+          <div
+            class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200 motion-safe:animate-ve-fade-up"
+            [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+            [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+          >
+            <!-- Amber glow header with sparkle particles -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/60 px-6 pt-8 pb-6 text-center">
+              <span aria-hidden="true" class="pointer-events-none absolute inset-0">
+                <span class="absolute top-3 left-6 h-1.5 w-1.5 rounded-full bg-amber-300 motion-safe:animate-ping"></span>
+                <span class="absolute top-8 right-8 h-1 w-1 rounded-full bg-orange-400 motion-safe:animate-pulse" style="animation-delay: 600ms"></span>
+                <span class="absolute bottom-4 left-1/3 h-1 w-1 rounded-full bg-amber-400 motion-safe:animate-pulse" style="animation-delay: 1.2s"></span>
+                <span class="absolute bottom-8 right-1/4 h-1.5 w-1.5 rounded-full bg-amber-200 motion-safe:animate-ping" style="animation-delay: 900ms"></span>
+              </span>
+
+              <!-- Progress ring + lock icon centre -->
+              <div class="relative mx-auto h-32 w-32">
+                <svg class="h-32 w-32 -rotate-90" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="52" stroke="#fde68a" stroke-width="10" fill="none" />
+                  <circle
+                    cx="60" cy="60" r="52"
+                    stroke="url(#bita-ring-grad)" stroke-width="10" stroke-linecap="round" fill="none"
+                    [attr.stroke-dasharray]="326.7"
+                    [attr.stroke-dashoffset]="326.7 - (326.7 * bitaProgressPct() / 100)"
+                    style="transition: stroke-dashoffset 800ms cubic-bezier(0.4, 0, 0.2, 1)"
+                  />
+                  <defs>
+                    <linearGradient id="bita-ring-grad" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#f59e0b"/>
+                      <stop offset="100%" stop-color="#b45309"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <div class="motion-safe:animate-ve-float text-amber-600">
+                    <svg class="h-9 w-9" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+                    </svg>
+                  </div>
+                  <div class="mt-0.5 text-xs font-bold text-amber-700 tabular-nums">{{ bitaProgressPct() }}%</div>
+                </div>
+              </div>
+
+              <h3 class="mt-5 text-xl font-extrabold text-slate-900">{{ i18n.t('bitaCert.modalLockedTitle') }}</h3>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 pt-5 pb-6 text-center">
+              <p class="text-sm leading-relaxed text-slate-600">{{ i18n.t('bitaCert.modalLockedBody') }}</p>
+
+              <!-- Numeric progress + bar -->
+              <div class="mt-5 rounded-xl bg-slate-50 px-4 py-3.5 ring-1 ring-slate-100">
+                <div class="flex items-baseline justify-center gap-1.5 text-slate-700">
+                  <span class="text-2xl font-black tabular-nums text-amber-700">{{ bitaStatus()?.completed_count ?? 0 }}</span>
+                  <span class="text-sm font-semibold opacity-60">/</span>
+                  <span class="text-base font-bold tabular-nums opacity-70">{{ bitaStatus()?.required_count ?? 100 }}</span>
+                  <span class="ms-1 text-xs font-medium text-slate-500">{{ i18n.t('bitaCert.modalProgressLabel') }}</span>
+                </div>
+                <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-amber-100">
+                  <div
+                    class="h-full rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500"
+                    [style.width.%]="bitaProgressPct()"
+                    style="transition: width 600ms ease-out;"
+                  ></div>
+                </div>
+              </div>
+
+              <p class="mt-4 text-[11px] font-medium italic text-slate-400">{{ i18n.t('bitaCert.modalLockedHint') }}</p>
+
+              <button
+                type="button"
+                (click)="closeBitaLockedModal()"
+                class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800 active:scale-[0.98]"
+              >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                {{ i18n.t('bitaCert.modalContinueCta') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ───────────── BITA: success modal after a successful POST ───────────── -->
+      @if (showBitaSuccessModal()) {
+        <div
+          role="dialog"
+          aria-modal="true"
+          [attr.aria-label]="i18n.t('bitaCert.modalSuccessTitle')"
+          class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 motion-safe:animate-ve-fade-in"
+        >
+          <button
+            type="button"
+            (click)="closeBitaSuccessModal()"
+            class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            [attr.aria-label]="i18n.t('bitaCert.modalCloseAria')"
+          ></button>
+
+          <div
+            class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200 motion-safe:animate-ve-fade-up"
+            [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+            [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+          >
+            <div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-emerald-50 px-6 pt-8 pb-6 text-center">
+              <span aria-hidden="true" class="pointer-events-none absolute inset-0">
+                <span class="absolute top-4 left-8 h-1.5 w-1.5 rounded-full bg-emerald-300 motion-safe:animate-ping"></span>
+                <span class="absolute top-10 right-10 h-1 w-1 rounded-full bg-emerald-400 motion-safe:animate-pulse" style="animation-delay: 400ms"></span>
+                <span class="absolute bottom-6 right-1/3 h-1 w-1 rounded-full bg-emerald-300 motion-safe:animate-pulse" style="animation-delay: 1s"></span>
+              </span>
+              <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 ring-8 ring-emerald-50 motion-safe:animate-ve-success-pop">
+                <svg class="h-10 w-10 text-emerald-600 motion-safe:animate-ve-success-check" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+              <h3 class="mt-5 text-xl font-extrabold text-slate-900">{{ i18n.t('bitaCert.modalSuccessTitle') }}</h3>
+            </div>
+            <div class="px-6 pt-2 pb-6 text-center">
+              <p class="text-sm leading-relaxed text-slate-600">{{ i18n.t('bitaCert.modalSuccessBody') }}</p>
+              <button
+                type="button"
+                (click)="closeBitaSuccessModal()"
+                class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-700 active:scale-[0.98]"
+              >
+                {{ i18n.t('bitaCert.modalSuccessCta') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
 })
@@ -393,6 +588,18 @@ export class DashboardComponent implements OnInit {
   upcomingCount = signal(0);
   ongoingCount = signal(0);
   completedCount = signal(0);
+
+  // ── BITA paper-certificate request ──────────────────────────────────────
+  /** Eligibility + progress from GET /v1/learn/bita-status. Null until the call resolves. */
+  readonly bitaStatus = signal<BitaStatus | null>(null);
+  /** True while the POST /v1/learn/bita-request is in-flight. */
+  readonly bitaRequesting = signal(false);
+  /** Drives the "Almost there!" locked modal. */
+  readonly showBitaLockedModal = signal(false);
+  /** Drives the post-request success modal. */
+  readonly showBitaSuccessModal = signal(false);
+  /** Toast surface for transient request errors. */
+  readonly bitaErrorToast = signal<string | null>(null);
 
   /** Workshops matching status + category (same basis as day chips and counts). */
   readonly workshopsBeforeDayFilter = computed(() => {
@@ -533,6 +740,71 @@ export class DashboardComponent implements OnInit {
       },
       error: () => this.loading.set(false),
     });
+    // BITA status is independent of the workshop list — fetch in parallel and
+    // ignore failures (the tile simply stays hidden if the call errors).
+    this.learnService.getBitaStatus().subscribe({
+      next: ({ data }) => this.bitaStatus.set(data),
+      error: () => this.bitaStatus.set(null),
+    });
+  }
+
+  /** Click handler for the dashboard "Request BITA Cert" tile. */
+  onBitaTileClick(): void {
+    const s = this.bitaStatus();
+    if (!s || !s.eligible_purchase) {
+      return;
+    }
+    if (s.requested_at) {
+      // Already requested — show the success modal again as a friendly recap.
+      this.showBitaSuccessModal.set(true);
+      return;
+    }
+    if (!s.can_request) {
+      this.showBitaLockedModal.set(true);
+      return;
+    }
+    this.submitBitaRequest();
+  }
+
+  closeBitaLockedModal(): void {
+    this.showBitaLockedModal.set(false);
+  }
+
+  closeBitaSuccessModal(): void {
+    this.showBitaSuccessModal.set(false);
+  }
+
+  /** POSTs to /v1/learn/bita-request, then flips to success modal + refreshes status. */
+  private submitBitaRequest(): void {
+    if (this.bitaRequesting()) return;
+    this.bitaRequesting.set(true);
+    this.bitaErrorToast.set(null);
+    this.learnService.requestBitaCertificate().subscribe({
+      next: () => {
+        // Refresh BITA status so the tile flips to its "Requested" state.
+        this.learnService.getBitaStatus().subscribe({
+          next: ({ data }) => this.bitaStatus.set(data),
+          error: () => undefined,
+        });
+        this.bitaRequesting.set(false);
+        this.showBitaSuccessModal.set(true);
+      },
+      error: () => {
+        this.bitaRequesting.set(false);
+        this.bitaErrorToast.set(this.i18n.t('bitaCert.requestErrorToast'));
+        window.setTimeout(() => this.bitaErrorToast.set(null), 4000);
+      },
+    });
+  }
+
+  /**
+   * BITA progress percentage for the locked-modal progress ring,
+   * clamped to [0, 100].
+   */
+  bitaProgressPct(): number {
+    const s = this.bitaStatus();
+    if (!s || s.required_count <= 0) return 0;
+    return Math.max(0, Math.min(100, Math.round((s.completed_count / s.required_count) * 100)));
   }
 
   /** Hero CTA: smooth-scroll to the “My workshops” search row (when workshops are loaded). */
@@ -613,6 +885,18 @@ export class DashboardComponent implements OnInit {
 
   onSelectCategory(cat: WorkshopFilterCategory): void {
     this.selectedCategory.set(this.selectedCategory() === cat ? 'all' : cat);
+    this.resetWorkshopPaging();
+  }
+
+  /** Category <select> change: sets the chosen category directly (no toggle). */
+  onCategoryDropdownChange(value: string): void {
+    this.selectedCategory.set(value as WorkshopFilterCategory);
+    this.resetWorkshopPaging();
+  }
+
+  /** Day <select> change: empty value means "all days". */
+  onDayDropdownChange(value: string): void {
+    this.selectedDayKey.set(value ? value : null);
     this.resetWorkshopPaging();
   }
 

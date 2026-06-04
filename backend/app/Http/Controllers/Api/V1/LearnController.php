@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventCompletion;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -257,7 +258,7 @@ class LearnController extends Controller
             ->first();
 
         $eventModel = Event::findOrFail($event);
-        $certNo = sprintf('KU-%d-%d', $eventModel->id, $userId);
+        $certNo = sprintf('NL-%d-%d', $eventModel->id, $userId);
 
         $html = view('certificates.workshop', [
             'user' => $user,
@@ -308,7 +309,7 @@ class LearnController extends Controller
         ]);
 
         $mpdf->SetTitle("Certificate {$certNo}");
-        $mpdf->SetAuthor('Kuwait University · Next Levels Education');
+        $mpdf->SetAuthor('Next Levels Education');
         $mpdf->WriteHTML($html);
 
         $slug = $eventModel->slug ?: 'workshop';
@@ -319,6 +320,92 @@ class LearnController extends Controller
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
             'Cache-Control' => 'private, no-store',
         ]);
+    }
+
+    /**
+     * Number of completed workshops a learner must reach before the BITA
+     * paper certificate can be requested.
+     */
+    private const BITA_REQUIRED_WORKSHOPS = 100;
+
+    /**
+     * GET /v1/learn/bita-status
+     * Eligibility + progress for the dashboard "Request BITA Certificate" tile.
+     * `eligible_purchase` is only true when the learner bought the optional BITA
+     * add-on at checkout; otherwise the tile stays hidden on the frontend.
+     */
+    public function bitaStatus(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::guard('api')->user();
+
+        return response()->json(['data' => $this->bitaStatusPayload($user)]);
+    }
+
+    /**
+     * POST /v1/learn/bita-request
+     * Records the learner's certificate request (idempotent). Gated behind both
+     * the paid add-on and completing the required number of workshops; the
+     * frontend mirrors this gate with an animated "almost there" modal.
+     */
+    public function requestBitaCertificate(): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::guard('api')->user();
+
+        if (! $this->bitaEligible($user)) {
+            return response()->json(
+                ['message' => 'You are not enrolled in any workshops.'],
+                403,
+            );
+        }
+
+        if ($this->bitaCompletedCount($user->id) < self::BITA_REQUIRED_WORKSHOPS) {
+            return response()->json([
+                'message' => 'Complete all workshops before requesting the certificate.',
+                'data' => $this->bitaStatusPayload($user),
+            ], 422);
+        }
+
+        if (! $user->bita_requested_at) {
+            $user->forceFill(['bita_requested_at' => now()])->save();
+        }
+
+        return response()->json(['data' => $this->bitaStatusPayload($user->refresh())]);
+    }
+
+    /** Assembles the shared BITA status shape used by both endpoints. */
+    private function bitaStatusPayload(User $user): array
+    {
+        $eligible = $this->bitaEligible($user);
+        $completed = $this->bitaCompletedCount($user->id);
+        $required = self::BITA_REQUIRED_WORKSHOPS;
+
+        return [
+            // Kept as `eligible_purchase` for frontend compatibility; it now means
+            // "the BITA request entry point should be shown to this learner".
+            'eligible_purchase' => $eligible,
+            'completed_count' => $completed,
+            'required_count' => $required,
+            'can_request' => $eligible && $completed >= $required,
+            'requested_at' => $user->bita_requested_at?->toIso8601String(),
+        ];
+    }
+
+    /**
+     * Whether the BITA request entry point is shown to the learner. Available to
+     * any learner enrolled in at least one workshop; the actual gate (watching
+     * all required workshops) is enforced separately via `can_request`.
+     */
+    private function bitaEligible(User $user): bool
+    {
+        return Enrollment::where('user_id', $user->id)->exists();
+    }
+
+    /** Count of workshops the learner has marked as fully watched. */
+    private function bitaCompletedCount(int $userId): int
+    {
+        return EventCompletion::where('user_id', $userId)->count();
     }
 
     private function computeWorkshopStatus(Event $event): string

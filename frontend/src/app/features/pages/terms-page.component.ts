@@ -31,152 +31,82 @@ export class TermsPageComponent {
   readonly i18n = inject(I18nService);
 
   readonly termsAr = `
-<h2>مقدمة</h2>
-<p>مرحباً بك في منصة نكست لفل للتدريب ("المنصة"). باستخدامك للمنصة أو التسجيل فيها، فإنك توافق على الالتزام بهذه الشروط والأحكام. يُرجى قراءتها بعناية قبل الاستخدام.</p>
+<h2>1. قبول الشروط</h2>
+<p>مرحباً بك في منصة نكست ليفل. باستخدامك لموقعنا وخدماتنا، فإنك توافق على الالتزام بهذه الشروط والأحكام. إذا كنت لا توافق على أي جزء من هذه الشروط، يرجى عدم استخدام المنصة.</p>
 
-<h2>التعريفات</h2>
+<h2>2. حساب المستخدم</h2>
 <ul>
-<li><strong>المنصة:</strong> الموقع الإلكتروني وتطبيقاته التابعة لشركة نكست لفل.</li>
-<li><strong>المستخدم:</strong> أي شخص يسجل في المنصة أو يستخدمها.</li>
-<li><strong>الورشة:</strong> أي برنامج تدريبي أو جلسة تعليمية متاحة على المنصة.</li>
-<li><strong>الباقة:</strong> مجموعة ورش مجمّعة بسعر مخفّض.</li>
+<li>يجب أن تقدم معلومات دقيقة وكاملة عند إنشاء حساب.</li>
+<li>أنت مسؤول عن الحفاظ على سرية كلمة المرور الخاصة بك وحسابك.</li>
+<li>يُمنع مشاركة حسابك مع أشخاص آخرين. كل حساب مخصص لمستخدم واحد فقط.</li>
+<li>نحتفظ بالحق في تعليق أو إنهاء حسابك إذا تبين وجود انتهاك لهذه الشروط.</li>
 </ul>
 
-<h2>التسجيل والحساب</h2>
+<h2>3. الوصول للدورات والورش</h2>
+<p>عند شراء ورشة أو باقة، يتم منحك ترخيصاً شخصياً، غير حصري، وغير قابل للتحويل لمشاهدة المحتوى.</p>
 <ul>
-<li>يجب تقديم بيانات صحيحة ودقيقة عند التسجيل.</li>
-<li>أنت مسؤول عن الحفاظ على سرية بيانات حسابك.</li>
-<li>يحق لنا تعليق أو إلغاء أي حساب يخالف هذه الشروط.</li>
+<li>يُمنع منعاً باتاً تحميل، نسخ، توزيع، أو بث المحتوى لأغراض تجارية أو غير تجارية.</li>
+<li>الوصول للورش المسجلة متاح طوال فترة اشتراكك أو حسب ما هو محدد في تفاصيل الورشة.</li>
 </ul>
 
-<h2>الورش والمحتوى</h2>
+<h2>4. الدفع والاسترداد</h2>
 <ul>
-<li>جميع الورش تُقدّم عبر الإنترنت من خلال تطبيق Zoom.</li>
-<li>مواعيد الورش محددة مسبقاً وقابلة للتغيير بإشعار مسبق.</li>
-<li>المحتوى التعليمي محمي بحقوق الملكية الفكرية ولا يجوز نسخه أو توزيعه.</li>
-<li>تسجيل الجلسات أو بثّها دون إذن مسبق ممنوع.</li>
+<li>جميع الأسعار المعروضة بالدينار الكويتي (د.ك) ما لم يذكر خلاف ذلك.</li>
+<li>نحن لا نقدم المبالغ المستردة بعد إتمام عملية الشراء والوصول إلى المحتوى الرقمي، إلا في حالات استثنائية (مثل عدم عمل المحتوى لأسباب تقنية من طرفنا).</li>
+<li>في حال استخدام خدمة التقسيط (مثل ديمه)، يجب الالتزام بشروط وأحكام مزود خدمة التقسيط.</li>
 </ul>
 
-<h2>الأسعار والدفع</h2>
-<ul>
-<li>جميع الأسعار معروضة بالدينار الكويتي (د.ك) وتشمل الضريبة إن وُجدت.</li>
-<li>يتم الدفع إلكترونياً عبر بوابة Tap الآمنة.</li>
-<li>عند إتمام الدفع، يتم تسجيلك تلقائياً في الورش المشتراة.</li>
-<li>خدمة التقسيط متاحة عبر ديمه وفق الشروط المعلنة.</li>
-</ul>
+<h2>5. الملكية الفكرية</h2>
+<p>جميع المحتويات على المنصة، بما في ذلك الفيديوهات، النصوص، التصاميم، الشعارات، والمواد التعليمية، هي ملكية حصرية لمنصة نكست ليفل ومحمية بموجب قوانين حقوق النشر. أي استخدام غير مصرح به يعرضك للمساءلة القانونية.</p>
 
-<h2>سياسة الاسترداد والإلغاء</h2>
-<ul>
-<li>يمكن طلب استرداد كامل المبلغ قبل 48 ساعة من بدء الورشة.</li>
-<li>لا يتم الاسترداد بعد بدء الورشة أو حضورها.</li>
-<li>في حال إلغاء ورشة من قبل المنصة، يتم استرداد المبلغ كاملاً.</li>
-<li>باقات الورش غير قابلة للاسترداد الجزئي.</li>
-</ul>
+<h2>6. السلوك المقبول</h2>
+<p>يُتوقع من المستخدمين التصرف باحترام ومهنية أثناء الجلسات المباشرة (Zoom) وفي أي تفاعل مع المدربين أو الطلاب الآخرين. يُمنع استخدام المنصة لأي أغراض غير قانونية أو مسيئة.</p>
 
-<h2>الشهادات</h2>
-<ul>
-<li>تُمنح شهادة حضور معتمدة لكل ورشة يتم إكمالها.</li>
-<li>الشهادات صادرة بالتعاون مع جامعة الكويت - كلية العلوم الاجتماعية - مكتب الاستشارات والتدريب.</li>
-</ul>
+<h2>7. شروط الإلغاء والتأجيل والتمديد</h2>
+<p>يحق للجهة المستفيدة إلغاء أو تأجيل البرنامج التدريبي قبل موعد التنفيذ بـ 14 يوم عمل أو أكثر دون أي رسوم، وفي حال الإلغاء خلال الفترة من 7 إلى 13 يوم عمل يتم استحقاق 50% من قيمة البرنامج، أما في حال الإلغاء خلال أقل من 7 أيام عمل من موعد التنفيذ فيتم استحقاق 100% من قيمة البرنامج. كما يحق للمستفيد إلغاء أو تأجيل الجلسات الاستشارية أو الفردية قبل موعدها بـ 12 ساعة على الأقل دون رسوم، وفي حال الإلغاء أو التأجيل خلال أقل من 12 ساعة أو عدم الحضور دون إشعار مسبق، تعتبر الجلسة منفذة بالكامل ويتم استحقاق كامل قيمتها. ويجوز تمديد مدة تنفيذ البرنامج لمدة لا تتجاوز شهراً واحداً فقط من نهاية المدة المتفق عليها في العرض أو العقد، شريطة وجود مبرر مقبول وموافقة الطرفين، وبعد انقضاء فترة التمديد يعتبر البرنامج منتهياً وتُسقط أي خدمات أو جلسات أو ساعات تدريبية غير مستفاد منها ما لم يتم الاتفاق خطياً على خلاف ذلك. ويجوز لشركة المستوى الأعلى الموافقة على إعادة الجدولة في الحالات الطارئة والاستثنائية وفق ما تراه مناسباً. أما مدة صلاحية هذا العرض فهي 60 يوماً من تاريخ إصداره ما لم يُذكر خلاف ذلك في العرض.</p>
 
-<h2>سلوك المستخدم</h2>
-<p>يلتزم المستخدم بما يلي:</p>
-<ul>
-<li>احترام المدربين والمشاركين الآخرين أثناء الجلسات.</li>
-<li>عدم استخدام المنصة لأغراض غير قانونية أو مسيئة.</li>
-<li>عدم محاولة الوصول غير المصرح به إلى أنظمة المنصة.</li>
-</ul>
-
-<h2>تحديد المسؤولية</h2>
-<p>المنصة توفّر المحتوى التعليمي "كما هو" ولا تضمن نتائج مهنية محددة. نكست لفل غير مسؤولة عن أي أضرار غير مباشرة ناتجة عن استخدام المنصة.</p>
-
-<h2>القانون الحاكم</h2>
-<p>تخضع هذه الشروط لقوانين دولة الكويت. أي نزاع ينشأ عن استخدام المنصة يُحال إلى المحاكم المختصة في دولة الكويت.</p>
-
-<h2>التواصل</h2>
-<p>لأي استفسار بخصوص هذه الشروط، يُرجى التواصل معنا عبر:</p>
-<ul>
-<li>البريد الإلكتروني: <strong>info@nextlevels.education</strong></li>
-<li>الهاتف / واتساب: <strong>+965 9997 4367</strong></li>
-</ul>
-
-<h2>تحديث الشروط</h2>
-<p>نحتفظ بحق تعديل هذه الشروط في أي وقت. يُعدّ استمرارك في استخدام المنصة بعد التعديل موافقة على الشروط المحدّثة.</p>
-<p><strong>آخر تحديث:</strong> أبريل 2026</p>
+<h2>8. التعديلات</h2>
+<p>نحتفظ بالحق في تحديث أو تعديل هذه الشروط والأحكام في أي وقت دون إشعار مسبق. يُعتبر استمرارك في استخدام المنصة بعد أي تعديلات بمثابة موافقة منك على الشروط الجديدة.</p>
+<p><strong>آخر تحديث:</strong> 31 مايو 2026</p>
 `;
 
   readonly termsEn = `
-<h2>Introduction</h2>
-<p>Welcome to the Next Levels training platform ("the Platform"). By using or registering on the Platform, you agree to comply with these terms and conditions. Please read them carefully before use.</p>
+<h2>1. Acceptance of Terms</h2>
+<p>Welcome to the Next Levels platform. By using our website and services, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use the platform.</p>
 
-<h2>Definitions</h2>
+<h2>2. User Account</h2>
 <ul>
-<li><strong>Platform:</strong> The website and its associated applications operated by Next Levels.</li>
-<li><strong>User:</strong> Any person who registers on or uses the Platform.</li>
-<li><strong>Workshop:</strong> Any training program or educational session available on the Platform.</li>
-<li><strong>Bundle:</strong> A group of workshops packaged at a discounted price.</li>
+<li>You must provide accurate and complete information when creating an account.</li>
+<li>You are responsible for keeping your password and account confidential.</li>
+<li>Sharing your account with others is prohibited. Each account is for a single user only.</li>
+<li>We reserve the right to suspend or terminate your account if a violation of these terms is detected.</li>
 </ul>
 
-<h2>Registration and Account</h2>
+<h2>3. Access to Courses and Workshops</h2>
+<p>When you purchase a workshop or bundle, you are granted a personal, non-exclusive, non-transferable licence to view the content.</p>
 <ul>
-<li>You must provide accurate and truthful information when registering.</li>
-<li>You are responsible for maintaining the confidentiality of your account credentials.</li>
-<li>We reserve the right to suspend or terminate any account that violates these terms.</li>
+<li>Downloading, copying, distributing, or broadcasting the content for commercial or non-commercial purposes is strictly prohibited.</li>
+<li>Access to recorded workshops is available throughout your subscription period or as specified in the workshop details.</li>
 </ul>
 
-<h2>Workshops and Content</h2>
+<h2>4. Payment and Refunds</h2>
 <ul>
-<li>All workshops are delivered online via Zoom.</li>
-<li>Workshop schedules are predetermined and subject to change with prior notice.</li>
-<li>Educational content is protected by intellectual property rights and may not be copied or distributed.</li>
-<li>Recording or broadcasting sessions without prior permission is prohibited.</li>
+<li>All prices are shown in Kuwaiti Dinar (K.D.) unless otherwise stated.</li>
+<li>We do not provide refunds after the purchase is completed and the digital content has been accessed, except in exceptional cases (such as the content not working due to technical reasons on our side).</li>
+<li>When using an instalment service (such as Deema), you must comply with the instalment provider's terms and conditions.</li>
 </ul>
 
-<h2>Pricing and Payment</h2>
-<ul>
-<li>All prices are displayed in Kuwaiti Dinar (K.D.) and include applicable taxes if any.</li>
-<li>Payment is processed electronically through the secure Tap payment gateway.</li>
-<li>Upon successful payment, you are automatically enrolled in the purchased workshops.</li>
-<li>Installment payments are available through Deema subject to the announced terms.</li>
-</ul>
+<h2>5. Intellectual Property</h2>
+<p>All content on the platform, including videos, text, designs, logos, and educational materials, is the exclusive property of Next Levels and is protected by copyright laws. Any unauthorized use exposes you to legal liability.</p>
 
-<h2>Refund and Cancellation Policy</h2>
-<ul>
-<li>A full refund may be requested up to 48 hours before the workshop start time.</li>
-<li>No refunds are issued after the workshop has started or been attended.</li>
-<li>If a workshop is cancelled by the Platform, a full refund will be issued.</li>
-<li>Workshop bundles are not eligible for partial refunds.</li>
-</ul>
+<h2>6. Acceptable Conduct</h2>
+<p>Users are expected to behave respectfully and professionally during live sessions (Zoom) and in any interaction with trainers or other learners. The platform may not be used for any illegal or abusive purposes.</p>
 
-<h2>Certificates</h2>
-<ul>
-<li>A certified attendance certificate is issued for each completed workshop.</li>
-<li>Certificates are issued in partnership with Kuwait University — College of Social Sciences — Office of Consultation and Training.</li>
-</ul>
+<h2>7. Cancellation, Postponement and Extension Terms</h2>
+<p>The beneficiary is entitled to cancel or postpone the training programme 14 working days or more before the scheduled date with no fees. In the case of cancellation 7 to 13 working days before the date, 50% of the programme value is due. In the case of cancellation less than 7 working days from the scheduled date, 100% of the programme value is due. The beneficiary is also entitled to cancel or postpone individual consultation or one-on-one sessions at least 12 hours before the appointment with no fees; if cancelled or postponed within less than 12 hours, or if the beneficiary does not attend without prior notice, the session is considered fully executed and the full value is due. The programme execution period may be extended for a maximum of one month from the end of the period agreed in the offer or contract, subject to an acceptable justification and agreement of both parties; after the extension period expires the programme is considered closed and any unused services, sessions or training hours are forfeited unless agreed otherwise in writing. Next Levels may agree to reschedule in emergency and exceptional cases as it deems appropriate. The validity period of this offer is 60 days from the date of issue unless otherwise stated in the offer.</p>
 
-<h2>User Conduct</h2>
-<p>Users agree to:</p>
-<ul>
-<li>Respect trainers and other participants during sessions.</li>
-<li>Not use the Platform for illegal or abusive purposes.</li>
-<li>Not attempt unauthorized access to Platform systems.</li>
-</ul>
-
-<h2>Limitation of Liability</h2>
-<p>The Platform provides educational content "as is" and does not guarantee specific professional outcomes. Next Levels is not liable for any indirect damages arising from Platform use.</p>
-
-<h2>Governing Law</h2>
-<p>These terms are governed by the laws of the State of Kuwait. Any disputes arising from Platform use shall be referred to the competent courts in the State of Kuwait.</p>
-
-<h2>Contact</h2>
-<p>For any inquiries about these terms, please contact us:</p>
-<ul>
-<li>Email: <strong>info@nextlevels.education</strong></li>
-<li>Phone / WhatsApp: <strong>+965 9997 4367</strong></li>
-</ul>
-
-<h2>Terms Updates</h2>
-<p>We reserve the right to modify these terms at any time. Continued use of the Platform after modifications constitutes acceptance of the updated terms.</p>
-<p><strong>Last updated:</strong> April 2026</p>
+<h2>8. Modifications</h2>
+<p>We reserve the right to update or modify these Terms and Conditions at any time without prior notice. Your continued use of the platform after any modifications constitutes acceptance of the new terms.</p>
+<p><strong>Last updated:</strong> 31 May 2026</p>
 `;
 }

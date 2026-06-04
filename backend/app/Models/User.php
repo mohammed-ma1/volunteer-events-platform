@@ -35,6 +35,7 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
+            'bita_requested_at' => 'datetime',
         ];
     }
 

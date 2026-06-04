@@ -130,6 +130,11 @@ Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(func
     Route::get('/events/{event}/completion', [LearnController::class, 'getEventCompletion']);
     Route::post('/events/{event}/complete', [LearnController::class, 'markEventCompleted']);
     Route::get('/events/{event}/certificate', [LearnController::class, 'downloadCertificate']);
+
+    // BITA paper-certificate request (gated behind the paid add-on + completing
+    // the required number of workshops).
+    Route::get('/bita-status', [LearnController::class, 'bitaStatus']);
+    Route::post('/bita-request', [LearnController::class, 'requestBitaCertificate']);
 });
 
 // ── Public API ───────────────────────────────────────────────────

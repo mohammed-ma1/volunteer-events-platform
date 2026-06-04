@@ -34,11 +34,13 @@
       z-index: 0;
     }
 
-    /* Brand navy from the template (#2E2A7B) is reused for all overlays so
-       the dynamic text reads as part of the original design. */
+    /* Deep navy that matches the headline + body text baked into the
+       template image (slightly darker than the brand-900 to compensate
+       for mpdf's blended rendering). Reused for every overlay so the
+       dynamic text reads as a seamless part of the original design. */
     .overlay {
       position: absolute;
-      color: #2E2A7B;
+      color: #1a2447;
       font-family: 'tajawal', sans-serif;
       text-align: center;
       z-index: 1;
@@ -51,47 +53,48 @@
       width: 297mm;
       font-size: 24pt;
       font-weight: bold;
+      letter-spacing: 0.3pt;
     }
 
     /* Workshop title — centred under "قد حضر الورشة التدريبية بعنوان".
        Direction is forced to RTL so multi-word Arabic titles wrap correctly. */
     .field-workshop {
-      top: 140mm;
-      left: 30mm;
-      width: 237mm;
-      font-size: 17pt;
+      top: 138mm;
+      left: 25mm;
+      width: 247mm;
+      font-size: 19pt;
       font-weight: bold;
       direction: rtl;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    /* Issue date — sits over the "بتاريخ / /" form line. A small white
-       backdrop blocks the original slashes from showing through. */
+    /* Issue date — sits cleanly over the watermark band. The placeholder
+       "بتاريخ / /" was redacted from the template PNG (donor-band patch),
+       so no white backdrop is needed and the watermark reads through. */
     .field-date-wrap {
-      top: 161mm;
+      top: 159mm;
       left: 0;
       width: 297mm;
     }
     .field-date {
       display: inline-block;
-      background: #ffffff;
-      padding: 1mm 3mm;
-      font-size: 13pt;
+      font-size: 14pt;
       font-weight: bold;
       direction: rtl;
+      letter-spacing: 0.5pt;
     }
 
-    /* Verification line tucked just inside the bottom navy border, small
-       enough to not visually clash with the gold ornament. */
+    /* Verification line — sits above the gold ornament strip so it never
+       gets clipped by the bottom border. */
     .verify {
       position: absolute;
-      bottom: 4mm;
+      top: 192mm;
       left: 0;
       width: 297mm;
       text-align: center;
       font-family: 'tajawal', sans-serif;
-      font-size: 7pt;
-      color: #6b7280;
+      font-size: 6.5pt;
+      color: #9ca3af;
       letter-spacing: 0.6pt;
       z-index: 1;
     }
@@ -108,8 +111,14 @@
   <div class="overlay field-date-wrap">
     @php
         $issued = $completion?->completed_at?->timezone(config('app.timezone')) ?? now();
+        // Render the date in Arabic-Indic numerals so it visually
+        // matches the rest of the Arabic certificate body.
+        $arabicDate = strtr(
+            $issued->format('d / m / Y'),
+            ['0'=>'٠','1'=>'١','2'=>'٢','3'=>'٣','4'=>'٤','5'=>'٥','6'=>'٦','7'=>'٧','8'=>'٨','9'=>'٩']
+        );
     @endphp
-    <span class="field-date">بتاريخ {{ $issued->format('d / m / Y') }}</span>
+    <span class="field-date">بتاريخ&nbsp;&nbsp;{{ $arabicDate }}</span>
   </div>
 
   <div class="verify">Certificate No. {{ $certNo }}</div>
