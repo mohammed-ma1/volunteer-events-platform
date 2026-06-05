@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\EventCompletion;
 use App\Models\Lesson;
 use App\Models\LessonProgress;
+use App\Models\Order;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -355,7 +356,7 @@ class LearnController extends Controller
 
         if (! $this->bitaEligible($user)) {
             return response()->json(
-                ['message' => 'You are not enrolled in any workshops.'],
+                ['message' => 'The BITA paper certificate add-on is not part of your purchase.'],
                 403,
             );
         }
@@ -393,13 +394,22 @@ class LearnController extends Controller
     }
 
     /**
-     * Whether the BITA request entry point is shown to the learner. Available to
-     * any learner enrolled in at least one workshop; the actual gate (watching
+     * Whether the BITA request entry point is shown to the learner. Only learners
+     * who purchased the paid BITA paper-certificate add-on at checkout qualify
+     * (matched by buyer email on a paid order). The actual request gate (watching
      * all required workshops) is enforced separately via `can_request`.
      */
     private function bitaEligible(User $user): bool
     {
-        return Enrollment::where('user_id', $user->id)->exists();
+        if (! $user->email) {
+            return false;
+        }
+
+        return Order::query()
+            ->where('email', $user->email)
+            ->where('status', Order::STATUS_PAID)
+            ->where('has_bita_addon', true)
+            ->exists();
     }
 
     /** Count of workshops the learner has marked as fully watched. */
