@@ -19,7 +19,7 @@ class ExpertSeeder extends Seeder
         // Originally provided portraits.
         'منيرة النخيلان' => 'moneera.jpg',
         'زينب الغضبان' => 'zainab.jpg',
-        'علي الانصاري' => 'ali.jpg',
+        'علي عادل' => 'ali.jpg',
         'مرزوق السعيد' => 'marzooq.jpg',
         'فاطمة عباس' => 'fatema.jpg',
         'غدير الكندري' => 'ghadeer.jpg',
