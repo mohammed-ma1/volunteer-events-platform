@@ -142,6 +142,12 @@ function normalizeArName(name: string): string {
   s = s.replace(/\u0649/g, '\u064A');
   // collapse whitespace
   s = s.replace(/\s+/g, ' ').trim();
+  // strip leading honorifics so name variants resolve to the same key
+  // (e.g. "الحكم خالد الشمري" ↔ "خالد الشمري", "د.بسام" ↔ "د. بسام الجزاف").
+  // Single-letter honorifics require a dot so real names (محمد) aren't touched.
+  s = s.replace(/^(?:د|م|ا)\.\s*/u, '');
+  s = s.replace(/^(?:المحامي|الحكم|الاستاذ|الكابتن|كابتن|الكوتش|كوتش)\s+/u, '');
+  s = s.replace(/\s+/g, ' ').trim();
   return s;
 }
 
