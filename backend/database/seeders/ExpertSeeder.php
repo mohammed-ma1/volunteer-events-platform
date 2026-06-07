@@ -18,7 +18,7 @@ class ExpertSeeder extends Seeder
     private const R2_AVATAR_OVERRIDES = [
         // Originally provided portraits.
         'منيرة النخيلان' => 'moneera.jpg',
-        'زينب الغضبان' => 'zainab.jpg',
+        'م. زينب الغضبان' => 'zainab.jpg',
         'علي عادل' => 'ali.jpg',
         'مرزوق السعيد' => 'marzooq.jpg',
         'فاطمة عباس' => 'fatema.jpg',
@@ -52,6 +52,15 @@ class ExpertSeeder extends Seeder
         'م. الجازي العجمي' => 'aljazzi.jpg',
     ];
 
+    /**
+     * Same-origin local portraits served from the Angular `public/images`
+     * folder (frontend + API share the summit host). Stored as-is (no R2 base)
+     * so the seeded `avatar_url` resolves to the deployed SPA static file.
+     */
+    private const LOCAL_AVATAR_OVERRIDES = [
+        'د. إسراء الدايل' => '/images/presenters/israa-al-dayel.png',
+    ];
+
     public function run(): void
     {
         $path = database_path('data/ku_student_week_facilitators.json');
@@ -77,6 +86,9 @@ class ExpertSeeder extends Seeder
         $normalizedOverrides = [];
         foreach (self::R2_AVATAR_OVERRIDES as $key => $filename) {
             $normalizedOverrides[$this->normalizeArabicName($key)] = self::R2_BASE.'/'.$filename;
+        }
+        foreach (self::LOCAL_AVATAR_OVERRIDES as $key => $path) {
+            $normalizedOverrides[$this->normalizeArabicName($key)] = $path;
         }
 
         $r2OverrideFor = function (string $nameAr) use ($normalizedOverrides): ?string {
