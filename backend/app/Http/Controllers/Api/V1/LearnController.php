@@ -311,6 +311,15 @@ class LearnController extends Controller
 
         $mpdf->SetTitle("Certificate {$certNo}");
         $mpdf->SetAuthor('Next Levels Education');
+
+        // Use the Cert2 design PDF directly as the certificate background. mpdf
+        // (via FPDI) imports the page as a vector template, so the border, logos,
+        // signature and body text stay crisp at any zoom — no rasterised PNG.
+        // The dynamic fields (name + workshop title) are then written on top.
+        $mpdf->SetSourceFile(resource_path('certificates/cert2-template.pdf'));
+        $tplId = $mpdf->ImportPage(1);
+        $mpdf->UseTemplate($tplId);
+
         $mpdf->WriteHTML($html);
 
         $slug = $eventModel->slug ?: 'workshop';

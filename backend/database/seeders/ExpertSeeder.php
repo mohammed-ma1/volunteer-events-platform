@@ -26,7 +26,6 @@ class ExpertSeeder extends Seeder
         'د. جواد ابو الحسن' => 'jawaad.jpg',
         'شهد العطار' => 'shahad.jpg',
         'عبدالرحمن حماد' => 'abd-alrhahman.jpg',
-        'هيا بوراشد' => 'hia.jpg',
         'هاجر النصار' => 'hajr.jpg',
         'عبدالعزيز الضبيب' => 'abd-alazeez.jpg',
         // Local presenter photos uploaded to R2 with the same filename.
@@ -46,7 +45,6 @@ class ExpertSeeder extends Seeder
         'محمد الجيماز' => 'mohammed-al-jaimaz.jpg',
         'ا. محمد الجيماز' => 'mohammed-al-jaimaz.jpg', // honorific prefix in the JSON
         'ابرار اشكناني' => 'abrar-ashkanani.jpg',
-        'سارة المنيس' => 'sarah-al-munais.jpg',
         'فاطمة القطان' => 'fatima-al-qattan.jpg',
         'فيصل الدويسان' => 'faisal-al-duwaisan.jpg',
         'م. الجازي العجمي' => 'aljazzi.jpg',
@@ -59,6 +57,8 @@ class ExpertSeeder extends Seeder
      */
     private const LOCAL_AVATAR_OVERRIDES = [
         'د. إسراء الدايل' => '/images/presenters/israa-al-dayel.png',
+        'سارة المنيس' => '/images/presenters/sara-al-munais.png',
+        'هيا بوراشد' => '/images/presenters/hia-bourashed.png',
     ];
 
     public function run(): void

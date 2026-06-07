@@ -48,8 +48,30 @@
             <td style="text-align:right;">{{ number_format((float) $line->unit_price * $line->quantity, 3) }} {{ $order->currency }}</td>
           </tr>
         @endforeach
+        @if($order->has_bita_addon)
+          <tr>
+            <td>BITA Paper Certificate (add-on)</td>
+            <td style="text-align:center;">1</td>
+            <td style="text-align:right;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
+            <td style="text-align:right;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
+          </tr>
+        @endif
       </tbody>
     </table>
+    @if($order->has_bita_addon)
+      <table style="margin-top:8px;">
+        <tbody>
+          <tr>
+            <td style="text-align:right;border:none;color:#64748b;">Workshops subtotal</td>
+            <td style="text-align:right;border:none;width:140px;">{{ number_format((float) $order->subtotal, 3) }} {{ $order->currency }}</td>
+          </tr>
+          <tr>
+            <td style="text-align:right;border:none;color:#64748b;">BITA paper certificate</td>
+            <td style="text-align:right;border:none;width:140px;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    @endif
     <p class="total">Total: {{ number_format((float) $order->total, 3) }} {{ $order->currency }}</p>
   </div>
 </body>
