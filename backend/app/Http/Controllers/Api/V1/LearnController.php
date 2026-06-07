@@ -288,12 +288,16 @@ class LearnController extends Controller
         // the TTF files so CSS like `font-family: tajawal;` resolves.
         $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
         $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        // NOTE: autoScriptToLang / autoLangToFont are intentionally NOT enabled.
+        // They auto-substitute mpdf's default font for Latin-script runs, which
+        // overrode the certificate's Bahij font for English trainee names. With
+        // them off and default_font = Bahij, every overlay run (Arabic names,
+        // Latin names, the date) uses the template's typeface; Arabic shaping
+        // still works via the font's OTL tables (useOTL).
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
             'format' => 'A4-L',
-            'default_font' => 'tajawal',
-            'autoScriptToLang' => true,
-            'autoLangToFont' => true,
+            'default_font' => 'bahijthesansarabic',
             'tempDir' => $tmpDir,
             'fontDir' => array_merge($defaultConfig['fontDir'], [
                 resource_path('fonts'),
