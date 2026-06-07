@@ -374,7 +374,7 @@ return [
         'description_en' => 'Take control of your life by learning a smart new technique to handle situations, instantly remove stress and fear, and reach relaxation.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/015_%D8%A7%D9%84%D8%B5%D9%85%D9%88%D8%AF_%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%AE%D8%A7%D8%A1.jpg',
-        'instructor' => 'زينب الغضبان',
+        'instructor' => 'م. زينب الغضبان',
     ],
     'ms-w-043' => [
         'title' => 'العمل تحت الضغط',
@@ -435,7 +435,7 @@ return [
         'description_en' => 'Learn the most valuable tool for managing leading companies and institutions in the business world.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/018_%D9%85%D9%82%D8%AF%D9%85%D8%A9_%D9%81%D9%8A_%D8%B9%D9%84%D9%85_%D8%A7%D9%84%D8%AA%D8%AE%D8%B7%D9%8A%D8%B7.jpg',
-        'instructor' => 'زينب الغضبان',
+        'instructor' => 'م. زينب الغضبان',
     ],
     'ms-w-050' => [
         'title' => 'بطاقة الأولية لصناعة الأفلام',
@@ -608,10 +608,10 @@ return [
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-069' => [
-        'title' => 'العلاج الطبيعي',
-        'title_en' => 'Physical Therapy',
-        'description_ar' => 'مقدمة في العلاج الطبيعي وأهميته للصحة البدنية والوقاية من الإصابات.',
-        'description_en' => 'An introduction to physical therapy and its importance for physical health and injury prevention.',
+        'title' => 'كيف نحافظ على قوام صحي نشاط بدني مستدام',
+        'title_en' => 'How to Be Fit in Your Future Life',
+        'description_ar' => 'ورشة عملية حول الحفاظ على قوام صحي وبناء نشاط بدني مستدام في حياتك اليومية والمستقبلية.',
+        'description_en' => 'A practical workshop on maintaining a healthy posture and building sustainable physical activity for your daily and future life.',
         'category' => 'personal',
         'instructor' => 'د. إسراء الدايل',
     ],
@@ -622,7 +622,7 @@ return [
         'description_en' => 'A workshop to develop teamwork skills and transition from an employee mindset to a partner mindset.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/018_%D9%85%D9%82%D8%AF%D9%85%D8%A9_%D9%81%D9%8A_%D8%B9%D9%84%D9%85_%D8%A7%D9%84%D8%AA%D8%AE%D8%B7%D9%8A%D8%B7_1.jpg',
-        'instructor' => 'زينب الغضبان',
+        'instructor' => 'م. زينب الغضبان',
     ],
     'ms-w-071' => [
         'title' => 'مبادئ الإنتاج الفني',
@@ -684,7 +684,7 @@ return [
         'description_en' => 'Learn how to contribute to building a world of awareness and unity / Embrace your uniqueness and change the world.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/016_%D9%83%D9%86_%D8%A3%D9%86%D8%AA_%D8%BA%D9%8A%D8%B1_%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85.jpg',
-        'instructor' => 'زينب الغضبان',
+        'instructor' => 'م. زينب الغضبان',
     ],
     'ms-w-078' => [
         'title' => 'من الفوضى إلى التركيز: أساسيات التسويق وبناء القيمة',

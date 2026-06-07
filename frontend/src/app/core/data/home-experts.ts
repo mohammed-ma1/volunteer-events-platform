@@ -49,7 +49,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'د.بسام الجزاف', nameEn: 'Dr. Bassam Al-Jazzaf', imageUrl: SRC_IMG_C },
   { nameAr: 'بدر الفيلكاوي', nameEn: 'Bader Al-Failakawi', imageUrl: SRC_IMG_B },
   { nameAr: 'حسن سيد', nameEn: 'Hassan Sayed', imageUrl: SRC_IMG_A },
-  { nameAr: 'زينب الغضبان', nameEn: 'Zainab Al-Ghadhban', imageUrl: SRC_IMG_D },
+  { nameAr: 'م. زينب الغضبان', nameEn: 'Eng. Zainab Al-Ghadhban', imageUrl: SRC_IMG_D },
   { nameAr: 'أحمد سمير', nameEn: 'Ahmed Sameer', imageUrl: SRC_IMG_C },
   { nameAr: 'دلال النخيلان', nameEn: 'Dalal Al-Nakhelan', imageUrl: SRC_IMG_B },
   { nameAr: 'علي عادل', nameEn: 'Ali Adel', imageUrl: SRC_IMG_A },
@@ -128,6 +128,7 @@ const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
   'هيا بوراشد': `${R2_BASE}/hia.jpg`,
   'هاجر النصار': `${R2_BASE}/hajr.jpg`,
   'عبدالعزيز الضبيب': `${R2_BASE}/abd-alazeez.jpg`,
+  'د. إسراء الدايل': '/images/presenters/israa-al-dayel.png',
 };
 
 /** Strip diacritics + unify alif/ya/spaces so name variants match. */
