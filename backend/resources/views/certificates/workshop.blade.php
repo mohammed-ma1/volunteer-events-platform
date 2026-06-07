@@ -31,7 +31,7 @@
     .overlay {
       position: absolute;
       color: #1a2447;
-      font-family: 'tajawal', sans-serif;
+      font-family: 'bahijthesansarabic', sans-serif;
       text-align: center;
       z-index: 1;
     }
