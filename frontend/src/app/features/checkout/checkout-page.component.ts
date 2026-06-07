@@ -600,7 +600,7 @@ export class CheckoutPageComponent {
         key: 'synth-bundle',
         kind: 'bundle',
         title: ev?.title ?? this.i18n.t('checkout.upsellTitle'),
-        price: ev?.price ?? 100,
+        price: Number(ev?.price ?? 100),
         imageUrl: ev?.image_url ?? null,
         realLineId: null,
       });
@@ -635,7 +635,7 @@ export class CheckoutPageComponent {
   readonly subtotalDisplay = computed(() =>
     this.displayedSummaryItems()
       .filter((r) => r.kind !== 'bita')
-      .reduce((acc, r) => acc + r.price, 0),
+      .reduce((acc, r) => acc + Number(r.price), 0),
   );
 
   /** Sum of extra fees (today: only the BITA add-on if selected). */
