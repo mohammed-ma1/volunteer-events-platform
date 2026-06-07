@@ -306,6 +306,16 @@ class LearnController extends Controller
                     'useOTL' => 0xFF,
                     'useKashida' => 75,
                 ],
+                // Bahij TheSansArabic matches the Cert2 template's typeface.
+                // Only the Bold weight was provided, so every style maps to it
+                // (the overlaid name/title/date are all bold anyway).
+                'bahijthesansarabic' => [
+                    'R' => 'Bahij_TheSansArabic-Bold.ttf',
+                    'B' => 'Bahij_TheSansArabic-Bold.ttf',
+                    'M' => 'Bahij_TheSansArabic-Bold.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ],
             ],
         ]);
 
