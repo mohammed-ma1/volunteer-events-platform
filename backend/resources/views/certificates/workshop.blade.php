@@ -58,6 +58,17 @@
       line-height: 1.4;
     }
 
+    /* Issue date — centred just under the workshop title. */
+    .field-date {
+      top: 162mm;
+      left: 0;
+      width: 297mm;
+      font-size: 13pt;
+      font-weight: bold;
+      direction: rtl;
+      letter-spacing: 0.3pt;
+    }
+
     /* Verification line — discreet, above the bottom gold ornament strip. */
     .verify {
       position: absolute;
@@ -78,6 +89,11 @@
   <div class="overlay field-name">{{ $user->name }}</div>
 
   <div class="overlay field-workshop">{{ $event->title }}</div>
+
+  @php
+      $issued = $completion?->completed_at?->timezone(config('app.timezone')) ?? now();
+  @endphp
+  <div class="overlay field-date">بتاريخ {{ $issued->format('d/m/Y') }}</div>
 
   <div class="verify">Certificate No. {{ $certNo }}</div>
 
