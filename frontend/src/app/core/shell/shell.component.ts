@@ -359,7 +359,15 @@ import { CartDrawerComponent } from './cart-drawer.component';
                 height="40"
                 loading="lazy"
               />
-              <p class="mb-8 max-w-sm text-sm leading-relaxed text-slate-400">{{ i18n.t('footer.brand') }}</p>
+              <p class="mb-5 max-w-sm text-sm leading-relaxed text-slate-400">{{ i18n.t('footer.brand') }}</p>
+              <div class="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-200">
+                <span class="relative flex h-2 w-2">
+                  <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" aria-hidden="true"></span>
+                  <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
+                </span>
+                <span>{{ i18n.t('footer.commercialRegLabel') }}</span>
+                <span class="font-bold tracking-wide text-white" dir="ltr">{{ i18n.t('footer.commercialRegNumber') }}</span>
+              </div>
               <div class="flex items-center gap-3">
                 <a href="https://www.instagram.com/nextlevels.education/" target="_blank" rel="noopener noreferrer" class="flex h-10 w-10 -translate-y-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 transition-all duration-300 hover:-translate-y-1 hover:border-gold-400 hover:bg-gold-400 hover:text-brand-900" aria-label="Instagram">
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>

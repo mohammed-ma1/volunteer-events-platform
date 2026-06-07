@@ -1,7 +1,16 @@
-{{-- Workshop completion certificate. Rendered via mpdf — uses simple flow
-     layout (no nested bordered tables) because mpdf paginated each row to a
-     new page on previous attempts. The decorative gold + navy double frame
-     is drawn via @page borders so it never interferes with pagination.
+{{-- Workshop attendance certificate. Uses resources/images/certificate-template.png
+     as a full-page background (the ornamental border, brand logos, watermark,
+     signature and "CEO & Founder" label are all baked into that image), and
+     overlays three dynamic fields on top:
+
+       1. Trainee name           — between "بأن المتدرب" and "قد حضر الورشة"
+       2. Workshop title         — under "قد حضر الورشة التدريبية بعنوان"
+       3. Issue date             — replaces the "بتاريخ / /" form line
+
+     Page: A4 landscape (297mm × 210mm), zero margins so the template image
+     fills edge-to-edge. mpdf renders Tajawal for Arabic text (configured in
+     LearnController::downloadCertificate).
+
      Variables: $user, $event, $completion, $certNo --}}
 <!DOCTYPE html>
 <html>
@@ -9,317 +18,110 @@
   <meta charset="utf-8">
   <title>Certificate {{ $certNo }}</title>
   <style>
-    /* mpdf paints the page background but ignores `@page { border }` — the
-       gold/navy double frame is drawn separately via absolute-positioned
-       divs below (using width/height, NOT right/bottom, which break mpdf's
-       single-page pagination). */
     @page {
       sheet-size: A4-L;
       margin: 0;
-      background: #fdfaf2;
     }
 
-    /* ── Palette ─────────────────────────────────────────────
-         navy  #0c2340   gold #b58c2a   dark-gold #7a5a10
-         ivory #fdfaf2   muted #6b7280
-       ───────────────────────────────────────────────────────── */
+    /* The template image is the entire visual design — letting mpdf paint
+       it as a normal block element at 297×210mm (matching A4-L) gives the
+       sharpest result. Everything else is layered on top via z-index. */
+    .bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 297mm;
+      height: 210mm;
+      z-index: 0;
+    }
 
-    body {
+    /* Deep navy that matches the headline + body text baked into the
+       template image (slightly darker than the brand-900 to compensate
+       for mpdf's blended rendering). Reused for every overlay so the
+       dynamic text reads as a seamless part of the original design. */
+    .overlay {
+      position: absolute;
+      color: #1a2447;
       font-family: 'tajawal', sans-serif;
-      color: #0c2340;
-      margin: 0;
-      padding: 0;
       text-align: center;
+      z-index: 1;
     }
 
-    /* Decorative double frame — absolute layer rendered before the content.
-       Coordinates use positive values from the page origin (top-left) so
-       mpdf places them where we expect. Using width/height (not right/
-       bottom) avoids the multi-page pagination bug we hit earlier. */
-    .frame-gold {
-      position: absolute;
-      top: 10mm; left: 10mm;
-      width: 277mm; height: 190mm;
-      border: 2.5pt solid #b58c2a;
-    }
-    .frame-navy {
-      position: absolute;
-      top: 14mm; left: 14mm;
-      width: 269mm; height: 182mm;
-      border: 0.5pt solid #0c2340;
-    }
-    /* Gold diamond ornaments at each gold-frame corner (centred on it). */
-    .corner {
-      position: absolute;
-      width: 3.4mm; height: 3.4mm;
-      background: #b58c2a;
-    }
-    .corner.tl { top: 8.3mm;   left: 8.3mm; }
-    .corner.tr { top: 8.3mm;   left: 285.3mm; }
-    .corner.bl { top: 198.3mm; left: 8.3mm; }
-    .corner.br { top: 198.3mm; left: 285.3mm; }
-
-    /* Content sits inside the navy frame with comfortable inset. */
-    .pad {
-      padding: 22mm 30mm 18mm;
-    }
-
-    /* ── Header row: institution names with central gold rule ── */
-    table.header {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 6mm;
-    }
-    table.header td {
-      vertical-align: middle;
-      font-family: 'tajawal', sans-serif;
-      font-size: 8.5pt;
-      letter-spacing: 1.5pt;
-      color: #6b7280;
-      text-transform: uppercase;
+    /* Trainee name — centred between the two body lines. */
+    .field-name {
+      top: 95mm;
+      left: 0;
+      width: 297mm;
+      font-size: 24pt;
       font-weight: bold;
-      line-height: 1.35;
-    }
-    table.header td.left  { width: 32%; text-align: left; }
-    table.header td.center { width: 36%; text-align: center; }
-    table.header td.right { width: 32%; text-align: right; }
-    table.header hr {
-      border: none;
-      border-top: 0.7pt solid #b58c2a;
-      margin: 0 auto;
-      width: 80%;
+      letter-spacing: 0.3pt;
     }
 
-    /* ── Eyebrow + main headlines ─────────────────────────────── */
-    .eyebrow {
-      font-family: 'tajawal', sans-serif;
-      font-size: 8.5pt;
-      letter-spacing: 4pt;
-      color: #b58c2a;
-      text-transform: uppercase;
+    /* Workshop title — centred under "قد حضر الورشة التدريبية بعنوان".
+       Direction is forced to RTL so multi-word Arabic titles wrap correctly. */
+    .field-workshop {
+      top: 138mm;
+      left: 25mm;
+      width: 247mm;
+      font-size: 19pt;
       font-weight: bold;
-      margin: 4mm 0 4mm;
-    }
-
-    .headline {
-      font-family: 'dejavuserif', serif;
-      font-size: 36pt;
-      font-weight: normal;
-      color: #0c2340;
-      margin: 0;
-      line-height: 1;
-    }
-    .headline-rule {
-      width: 22mm;
-      height: 1.2pt;
-      background: #b58c2a;
-      margin: 4mm auto 3mm;
-    }
-    .headline-ar {
-      font-family: 'tajawal', sans-serif;
-      font-size: 15pt;
-      color: #0c2340;
-      margin: 0;
-      direction: rtl;
-    }
-
-    /* ── Recipient ────────────────────────────────────────────── */
-    .awarded {
-      font-family: 'tajawal', sans-serif;
-      font-size: 9pt;
-      color: #6b7280;
-      letter-spacing: 2pt;
-      text-transform: uppercase;
-      margin: 8mm 0 4mm;
-    }
-    .recipient {
-      font-family: 'tajawal', sans-serif;
-      font-size: 28pt;
-      color: #0c2340;
-      margin: 0 auto;
-      line-height: 1.1;
-    }
-    .recipient-rule {
-      width: 130mm;
-      height: 0.6pt;
-      background: #b58c2a;
-      margin: 3mm auto 0;
-    }
-
-    /* ── Workshop title ───────────────────────────────────────── */
-    .for-completing {
-      font-family: 'tajawal', sans-serif;
-      font-size: 9pt;
-      color: #6b7280;
-      letter-spacing: 1pt;
-      margin: 6mm 0 3mm;
-    }
-    .workshop-en {
-      font-family: 'dejavuserif', serif;
-      font-size: 15pt;
-      font-weight: bold;
-      color: #0c2340;
-      margin: 0 0 1.5mm;
-      line-height: 1.25;
-    }
-    .workshop-ar {
-      font-family: 'tajawal', sans-serif;
-      font-size: 13pt;
-      font-weight: bold;
-      color: #0c2340;
-      margin: 0;
       direction: rtl;
       line-height: 1.4;
     }
 
-    /* ── Footer: 3-column table (date · seal · signature) ─────── */
-    table.footer {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10mm;
+    /* Issue date — sits cleanly over the watermark band. The placeholder
+       "بتاريخ / /" was redacted from the template PNG (donor-band patch),
+       so no white backdrop is needed and the watermark reads through. */
+    .field-date-wrap {
+      top: 159mm;
+      left: 0;
+      width: 297mm;
     }
-    table.footer td {
-      width: 33.33%;
-      vertical-align: top;
-      padding: 6mm 6mm 0;
-      text-align: center;
-    }
-    /* Push the centre seal cell up so it visually anchors at the same line
-       as the signature lines either side. */
-    table.footer td.middle {
-      vertical-align: top;
-      padding-top: 0;
-    }
-    hr.sig-line {
-      width: 60mm;
-      border: none;
-      border-top: 1pt solid #0c2340;
-      margin: 0 auto 2.5mm;
-    }
-    .meta-value {
-      font-family: 'tajawal', sans-serif;
-      font-size: 11pt;
-      color: #0c2340;
+    .field-date {
+      display: inline-block;
+      font-size: 14pt;
       font-weight: bold;
-    }
-    .meta-label {
-      font-family: 'tajawal', sans-serif;
-      font-size: 7.5pt;
-      letter-spacing: 1.4pt;
-      color: #6b7280;
-      text-transform: uppercase;
-      margin-top: 1.5mm;
+      direction: rtl;
+      letter-spacing: 0.5pt;
     }
 
-    /* ── Embossed gold seal (centre footer cell) ──────────────── */
-    /* Seal: drawn as inline SVG (mpdf can't reliably round-corner a div via
-       border-radius). The SVG produces a real circular medallion with a
-       darker outer ring, a lighter inner ring with a thin white inset, a
-       star, and the institution year — vector-crisp at any zoom. */
-    .seal-wrap {
-      text-align: center;
-      width: 100%;
-    }
-    /* Tiny gold ribbon strip below the seal. */
-    hr.seal-ribbon {
-      width: 16mm;
-      border: none;
-      border-top: 1.4pt solid #b58c2a;
-      margin: 1.5mm auto 0;
-    }
-
-    /* ── Verification strip ───────────────────────────────────── */
+    /* Verification line — sits above the gold ornament strip so it never
+       gets clipped by the bottom border. */
     .verify {
+      position: absolute;
+      top: 192mm;
+      left: 0;
+      width: 297mm;
       text-align: center;
       font-family: 'tajawal', sans-serif;
-      font-size: 7.5pt;
-      letter-spacing: 1.4pt;
-      color: #6b7280;
-      text-transform: uppercase;
-      margin-top: 6mm;
-    }
-    .verify strong {
-      color: #0c2340;
+      font-size: 6.5pt;
+      color: #9ca3af;
       letter-spacing: 0.6pt;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
 
-  <div class="frame-gold"></div>
-  <div class="frame-navy"></div>
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
+  <img class="bg" src="{{ resource_path('images/certificate-template.png') }}" alt="">
 
-  <div class="pad">
+  <div class="overlay field-name">{{ $user->name }}</div>
 
-    <table class="header">
-      <tr>
-        <td class="left">Kuwait University<br>Student Development</td>
-        <td class="center"><hr></td>
-        <td class="right">Next Levels<br>Education</td>
-      </tr>
-    </table>
+  <div class="overlay field-workshop">{{ $event->title }}</div>
 
-    <div class="eyebrow">Awarded by Kuwait University</div>
-    <div class="headline">Certificate of Completion</div>
-    <div class="headline-rule"></div>
-    <div class="headline-ar" dir="rtl" lang="ar">شهادة إتمام الورشة</div>
-
-    <div class="awarded">This certificate is proudly presented to</div>
-    <div class="recipient">{{ $user->name }}</div>
-    <div class="recipient-rule"></div>
-
-    <div class="for-completing">
-      For successfully completing the workshop &middot;
-      <span dir="rtl" lang="ar">لإتمام ورشة</span>
-    </div>
-    <div class="workshop-en">{{ $event->title_en ?: $event->title }}</div>
+  <div class="overlay field-date-wrap">
     @php
-        $titleAr = trim($event->title ?? '');
-        $titleEn = trim($event->title_en ?? '');
-        $showAr = $titleAr !== '' && $titleAr !== $titleEn;
+        $issued = $completion?->completed_at?->timezone(config('app.timezone')) ?? now();
+        // Render the date in Arabic-Indic numerals so it visually
+        // matches the rest of the Arabic certificate body.
+        $arabicDate = strtr(
+            $issued->format('d / m / Y'),
+            ['0'=>'٠','1'=>'١','2'=>'٢','3'=>'٣','4'=>'٤','5'=>'٥','6'=>'٦','7'=>'٧','8'=>'٨','9'=>'٩']
+        );
     @endphp
-    @if ($showAr)
-      <div class="workshop-ar" dir="rtl" lang="ar">{{ $titleAr }}</div>
-    @endif
-
-    <table class="footer">
-      <tr>
-        <td>
-          <hr class="sig-line">
-          <div class="meta-value">
-            {{ $completion?->completed_at?->timezone(config('app.timezone'))->format('d M Y') ?? now()->format('d M Y') }}
-          </div>
-          <div class="meta-label">Date Issued</div>
-        </td>
-        <td class="middle">
-          <div class="seal-wrap">
-            <svg width="32mm" height="32mm" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="50" cy="50" r="49" fill="#7a5a10"/>
-              <circle cx="50" cy="50" r="46" fill="#d4ad3f"/>
-              <circle cx="50" cy="50" r="42" fill="none" stroke="#fdfaf2" stroke-width="0.6"/>
-              <polygon points="50,28 53.5,38.5 64.5,38.5 55.5,45 59,55.5 50,49 41,55.5 44.5,45 35.5,38.5 46.5,38.5" fill="#fdfaf2"/>
-              <text x="50" y="68" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#fdfaf2">KU</text>
-              <text x="50" y="78" text-anchor="middle" font-family="sans-serif" font-size="7" font-weight="bold" fill="#fdfaf2">2026</text>
-            </svg>
-          </div>
-          <hr class="seal-ribbon">
-        </td>
-        <td>
-          <hr class="sig-line">
-          <div class="meta-value">{{ $event->host_name ?: 'KU Student Development' }}</div>
-          <div class="meta-label">{{ $event->host_name ? 'Workshop Presenter' : 'Authorised Signature' }}</div>
-        </td>
-      </tr>
-    </table>
-
-    <div class="verify">
-      Certificate No. <strong>{{ $certNo }}</strong>
-    </div>
-
+    <span class="field-date">بتاريخ&nbsp;&nbsp;{{ $arabicDate }}</span>
   </div>
+
+  <div class="verify">Certificate No. {{ $certNo }}</div>
+
 </body>
 </html>

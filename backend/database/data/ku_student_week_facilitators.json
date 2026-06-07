@@ -100,7 +100,7 @@
     "on_platform": true
   },
   {
-    "name_ar": "علي الأنصاري",
+    "name_ar": "علي عادل",
     "phone": "+96597367066",
     "on_platform": true
   },
@@ -152,6 +152,16 @@
   {
     "name_ar": "هيا بوراشد",
     "phone": "+96566144394",
+    "on_platform": true
+  },
+  {
+    "name_ar": "سحر الشمري",
+    "phone": null,
+    "on_platform": true
+  },
+  {
+    "name_ar": "د. إسراء الدايل",
+    "phone": null,
     "on_platform": true
   }
 ]

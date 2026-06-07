@@ -8,7 +8,7 @@ export class CheckoutService {
   private readonly http = inject(HttpClient);
 
   startCheckout(
-    body: { email: string; customer_name: string; phone?: string },
+    body: { email: string; customer_name: string; phone?: string; bita_addon?: boolean },
     idempotencyKey: string,
     checkoutLocale: 'ar' | 'en',
   ): Observable<CheckoutResponse> {

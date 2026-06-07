@@ -17,7 +17,7 @@
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#0b1221 0%,#1e3a5f 100%);border-radius:16px 16px 0 0;padding:28px 32px;text-align:left;">
-              <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.65);">Kuwait University</p>
+              <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.65);">Next Levels</p>
               <h1 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">Welcome to the platform!</h1>
               <p style="margin:12px 0 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,0.88);">Your account has been created. You can now access your workshops.</p>
             </td>

@@ -52,7 +52,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'زينب الغضبان', nameEn: 'Zainab Al-Ghadhban', imageUrl: SRC_IMG_D },
   { nameAr: 'أحمد سمير', nameEn: 'Ahmed Sameer', imageUrl: SRC_IMG_C },
   { nameAr: 'دلال النخيلان', nameEn: 'Dalal Al-Nakhelan', imageUrl: SRC_IMG_B },
-  { nameAr: 'علي الأنصاري', nameEn: 'Ali Al-Ansari', imageUrl: SRC_IMG_A },
+  { nameAr: 'علي عادل', nameEn: 'Ali Adel', imageUrl: SRC_IMG_A },
   { nameAr: 'سليمان المراغى', nameEn: 'Sulaiman Al-Muraghi', imageUrl: SRC_IMG_D },
   { nameAr: 'المحامي إبراهيم السماعيل', nameEn: 'Lawyer Ibrahim Al-Samaeel', imageUrl: SRC_IMG_C },
   { nameAr: 'عبدالرحمن التركيت', nameEn: 'Abdulrahman Al-Turkait', imageUrl: SRC_IMG_B },
@@ -84,6 +84,9 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'هلال الهلال', nameEn: 'Hilal Al-Hilal', imageUrl: SRC_IMG_B },
   { nameAr: 'منال المسلم', nameEn: 'Manal Al-Muslim', imageUrl: SRC_IMG_C },
   { nameAr: 'محمد الهاجري', nameEn: 'Mohammed Al-Hajri', imageUrl: SRC_IMG_D },
+  // ── June 2026 KU week (For Programer Final.xlsx) additions ──
+  { nameAr: 'سحر الشمري', nameEn: 'Sahar Al-Shammari', imageUrl: SRC_IMG_C },
+  { nameAr: 'د. إسراء الدايل', nameEn: 'Dr. Israa Al-Dayel', imageUrl: SRC_IMG_D },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────
@@ -99,7 +102,7 @@ const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
   'حسن سيد': `${R2_BASE}/hassan-syed.jpg`,
   'أحمد سمير': `${R2_BASE}/ahmed-sameer.jpg`,
   'دلال النخيلان': `${R2_BASE}/dalal-al-nakhelan.jpg`,
-  'علي الأنصاري': `${R2_BASE}/ali.jpg`,
+  'علي عادل': `${R2_BASE}/ali.jpg`,
   'سليمان المراغي': `${R2_BASE}/sulaiman-al-maraghi.jpg`,
   'المحامي إبراهيم السماعيل': `${R2_BASE}/ibrahim-al-samael.jpg`,
   'عبدالرحمن التركيت': `${R2_BASE}/abdulrahman-al-turkait.jpg`,
@@ -138,6 +141,12 @@ function normalizeArName(name: string): string {
   // unify ya variants (final ى -> ي)
   s = s.replace(/\u0649/g, '\u064A');
   // collapse whitespace
+  s = s.replace(/\s+/g, ' ').trim();
+  // strip leading honorifics so name variants resolve to the same key
+  // (e.g. "الحكم خالد الشمري" ↔ "خالد الشمري", "د.بسام" ↔ "د. بسام الجزاف").
+  // Single-letter honorifics require a dot so real names (محمد) aren't touched.
+  s = s.replace(/^(?:د|م|ا)\.\s*/u, '');
+  s = s.replace(/^(?:المحامي|الحكم|الاستاذ|الكابتن|كابتن|الكوتش|كوتش)\s+/u, '');
   s = s.replace(/\s+/g, ' ').trim();
   return s;
 }

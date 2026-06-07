@@ -10,6 +10,39 @@ export interface EventCompletionState {
   recording_url: string | null;
 }
 
+/**
+ * Eligibility + progress for the dashboard "Request BITA Cert" tile.
+ *
+ * - `eligible_purchase` — the learner has a paid order with `has_bita_addon=true`.
+ *   When false, the tile is hidden on the dashboard.
+ * - `completed_count` / `required_count` — drives the locked-modal progress
+ *   ring + numeric counter.
+ * - `can_request` — true when eligible AND completed >= required. The frontend
+ *   POSTs to `/bita-request` when this is true.
+ * - `requested_at` — non-null once the request was successfully submitted; the
+ *   tile flips to its "Requested" emerald state.
+ */
+export interface BitaStatus {
+  eligible_purchase: boolean;
+  completed_count: number;
+  required_count: number;
+  can_request: boolean;
+  requested_at: string | null;
+}
+
+/**
+ * BITA paper-certificate eligibility + progress for the dashboard tile and the
+ * workshop detail card. `eligible_purchase` is only true when the learner bought
+ * the optional BITA add-on at checkout — the UI hides the feature otherwise.
+ */
+export interface BitaStatus {
+  eligible_purchase: boolean;
+  completed_count: number;
+  required_count: number;
+  can_request: boolean;
+  requested_at: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class LearnService {
   constructor(private http: HttpClient) {}
@@ -52,5 +85,15 @@ export class LearnService {
       responseType: 'blob',
       observe: 'response',
     });
+  }
+
+  /** Eligibility + progress for the BITA paper-certificate request. */
+  getBitaStatus(): Observable<{ data: BitaStatus }> {
+    return this.http.get<{ data: BitaStatus }>('/v1/learn/bita-status');
+  }
+
+  /** Submits the BITA paper-certificate request (idempotent server-side). */
+  requestBitaCertificate(): Observable<{ data: BitaStatus }> {
+    return this.http.post<{ data: BitaStatus }>('/v1/learn/bita-request', {});
   }
 }

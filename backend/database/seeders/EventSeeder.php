@@ -75,8 +75,8 @@ class EventSeeder extends Seeder
             [
                 'title' => 'باقة الـ 100 ورشة التدريبية',
                 'title_en' => '100 Training Workshops Package',
-                'summary' => 'باقة شاملة لطلاب جامعة الكويت بالتعاون مع شركة نكست لفل.',
-                'summary_en' => 'Full bundle for Kuwait University students in partnership with Next Level.',
+                'summary' => 'باقة شاملة من معهد نكست لفلز للتدريب.',
+                'summary_en' => 'Full training bundle by Next Levels Training Institute.',
                 'description' => 'تشمل الوصول إلى مكتبة ورش محددة وفق الشروط المعتمدة على المنصة.',
                 'description_en' => 'Includes access to a defined workshop library under the platform terms.',
                 'image_url' => $images[0] ?? null,

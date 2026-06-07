@@ -1,4 +1,4 @@
-import { DecimalPipe, DOCUMENT, NgClass, NgTemplateOutlet } from '@angular/common';
+import { DecimalPipe, DOCUMENT, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import {
@@ -51,71 +51,7 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
 @Component({
   selector: 'app-events-home',
   standalone: true,
-  imports: [FormsModule, NgClass, NgTemplateOutlet, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
-  styles: [
-    `
-    /* "Offer ends in …" countdown widget — used in the promo carousel.
-       Bright urgency styling: pulsing alarm dot, shimmering gradient
-       backdrop, and individual numeric tiles for D/H/M/S. The tiles are
-       intentionally LTR-direction so digits read 12:34:56 in both AR/EN. */
-    /* Subtle pulse on the live-ticking seconds digit so the eye picks up
-       motion without the flashing-tile noise of the previous design. */
-    .ku-countdown__live {
-      animation: ku-countdown-live 1s ease-in-out infinite;
-    }
-    @keyframes ku-countdown-live {
-      0%, 100% { opacity: 1;    }
-      50%      { opacity: 0.55; }
-    }
-
-    /* Calendar tear-off icon — two tiny "binder rings" at the top of the
-       red header strip, plus a soft heartbeat pulse on the day number to
-       echo the live ticking of the seconds tile. */
-    .ku-countdown__cal::before,
-    .ku-countdown__cal::after {
-      content: '';
-      position: absolute;
-      top: 1px;
-      width: 2px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 9999px;
-      z-index: 1;
-    }
-    .ku-countdown__cal::before { left: 8px; }
-    .ku-countdown__cal::after  { right: 8px; }
-    .ku-countdown__cal-day {
-      animation: ku-countdown-day-pulse 2.4s ease-in-out infinite;
-    }
-    @keyframes ku-countdown-day-pulse {
-      0%, 100% { transform: scale(1);    opacity: 1;    }
-      50%      { transform: scale(1.08); opacity: 0.85; }
-    }
-
-    /* Soft diagonal shimmer that sweeps across the gradient backdrop
-       every few seconds to keep the eye drawn to the badge. */
-    .ku-countdown__shimmer {
-      background: linear-gradient(
-        110deg,
-        transparent 35%,
-        rgba(255, 255, 255, 0.18) 50%,
-        transparent 65%
-      );
-      background-size: 200% 100%;
-      animation: ku-countdown-shimmer 4.5s linear infinite;
-    }
-    @keyframes ku-countdown-shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ku-countdown__cal-day,
-      .ku-countdown__live,
-      .ku-countdown__shimmer { animation: none; }
-    }
-    `,
-  ],
+  imports: [FormsModule, NgClass, DecimalPipe, RouterLink, EventCardComponent, ScrollRevealDirective],
   template: `
     <section
       veScrollReveal
@@ -572,372 +508,93 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
         </div>
       </div>
 
-      <!-- Package offers carousel (100 + two 50-workshop bundles) -->
-      <div class="motion-safe:animate-ve-fade-up relative mt-8">
-        <button
-          type="button"
-          class="absolute start-1 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-sm transition hover:bg-white/25 sm:start-2 sm:h-11 sm:w-11"
-          (click)="prevPromoSlide()"
-          [attr.aria-label]="i18n.t('workshops.promoPrevAria')"
-        >
-          <svg class="h-5 w-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          class="absolute end-1 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/15 text-white shadow-lg backdrop-blur-sm transition hover:bg-white/25 sm:end-2 sm:h-11 sm:w-11"
-          (click)="nextPromoSlide()"
-          [attr.aria-label]="i18n.t('workshops.promoNextAria')"
-        >
-          <svg class="h-5 w-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
+      <!-- Featured offer: 100-workshop bundle (single card, no carousel) -->
+      <div
+        class="motion-safe:animate-ve-fade-up mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b1020] via-[#121a33] to-[#0b1020] shadow-[0_20px_50px_-18px_rgba(0,0,0,0.55)] ring-1 ring-white/10"
+        [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+        [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+      >
         <div
-          class="overflow-hidden rounded-3xl bg-gradient-to-br from-[#0b1020] via-[#121a33] to-[#0b1020] shadow-[0_20px_50px_-18px_rgba(0,0,0,0.55)] ring-1 ring-white/10 select-none"
-          dir="ltr"
-          role="region"
-          [attr.aria-label]="i18n.t('workshops.promoSliderAria')"
-          (touchstart)="onPromoTouchStart($event)"
-          (touchend)="onPromoTouchEnd($event)"
+          class="flex flex-col justify-center gap-6 px-5 py-8 sm:px-8 lg:grid lg:min-h-[17rem] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-10 lg:py-10"
         >
-          <div
-            class="flex w-[300%] transition-transform duration-500 ease-out motion-reduce:transition-none"
-            [style.transform]="promoCarouselTransform()"
-          >
-            <!-- Slide 0: 100 workshops -->
-            <div
-              class="flex w-[33.333333%] shrink-0 flex-col justify-center gap-6 px-5 py-8 sm:px-8 lg:grid lg:min-h-[17rem] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-10 lg:py-10"
-              [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-              [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+          <div class="flex flex-col justify-center gap-4 lg:order-2">
+            <span
+              class="inline-flex w-fit items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-100"
             >
-              <div class="flex flex-col justify-center gap-4 lg:order-2">
-                <span
-                  class="inline-flex w-fit items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-100"
-                >
-                  {{ i18n.t('workshops.promoSavePct') }}
-                </span>
-                <p class="inline-flex items-center gap-2 text-sm font-semibold text-amber-100/95">
-                  <svg class="h-5 w-5 shrink-0 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                    />
-                  </svg>
-                  {{ i18n.t('workshops.promoCertBanner') }}
-                </p>
-                <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
-                  {{ i18n.t('workshops.promoTitle') }}
-                </h3>
-                <p class="max-w-xl text-sm leading-relaxed text-white/70 md:text-[0.95rem]">
-                  {{ i18n.t('workshops.promoBody') }}
-                </p>
-              </div>
-              <div class="flex flex-col justify-center gap-5 lg:order-1">
-                <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
-                <div
-                  class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
-                >
-                  <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
-                    i18n.t('workshops.promoPrice')
+              {{ i18n.t('workshops.promoSavePct') }}
+            </span>
+            <p class="inline-flex items-center gap-2 text-sm font-semibold text-amber-100/95">
+              <svg class="h-5 w-5 shrink-0 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                />
+              </svg>
+              {{ i18n.t('workshops.promoCertBanner') }}
+            </p>
+            <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
+              {{ i18n.t('workshops.promoTitle') }}
+            </h3>
+            <p class="max-w-xl text-sm leading-relaxed text-white/70 md:text-[0.95rem]">
+              {{ i18n.t('workshops.promoBody') }}
+            </p>
+          </div>
+          <div class="flex flex-col justify-center gap-5 lg:order-1">
+            <div
+              class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
+            >
+              <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
+                i18n.t('workshops.promoPrice')
+              }}</span>
+              <span class="text-base font-medium text-white/35 line-through md:text-lg">{{
+                i18n.t('workshops.promoPriceWas')
+              }}</span>
+            </div>
+            <div class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <p class="text-base leading-relaxed text-white max-md:text-center md:text-start">
+                  <span>{{ i18n.t('workshops.promoInstallmentPrefix') }}</span>
+                  <span class="mt-1 block text-2xl font-extrabold text-pink-400 md:mt-0 md:inline">{{
+                    i18n.t('workshops.promoInstallmentAmount')
                   }}</span>
-                  <span class="text-base font-medium text-white/35 line-through md:text-lg">{{ i18n.t('workshops.promoPriceWas') }}</span>
-                </div>
-                <div
-                  class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5"
+                </p>
+                <span
+                  class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
+                  >{{ i18n.t('workshops.promoInterestFree') }}</span
                 >
-                  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                    <p class="text-base leading-relaxed text-white max-md:text-center md:text-start">
-                      <span>{{ i18n.t('workshops.promoInstallmentPrefix') }}</span>
-                      <span class="mt-1 block text-2xl font-extrabold text-pink-400 md:mt-0 md:inline">{{
-                        i18n.t('workshops.promoInstallmentAmount')
-                      }}</span>
-                    </p>
-                    <span
-                      class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
-                      >{{ i18n.t('workshops.promoInterestFree') }}</span
-                    >
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-[#4c3d9e] px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-[#43388d] active:scale-[0.98]"
-                  (click)="onPromoCheckout100()"
-                >
-                  <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                    />
-                  </svg>
-                  <span>{{ i18n.t('workshops.promoCta') }}</span>
-                </button>
               </div>
             </div>
-
-            @for (pkg of categoryPackages; track pkg.slug) {
-              <div
-                class="flex w-[33.333333%] shrink-0 flex-col justify-center gap-6 px-5 py-8 sm:px-8 lg:grid lg:min-h-[17rem] lg:grid-cols-2 lg:items-center lg:gap-10 lg:px-10 lg:py-10"
-                [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
-                [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
-              >
-                <div class="flex flex-col justify-center gap-4 lg:order-2">
-                  <span
-                    class="inline-flex w-fit items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/15 px-3 py-1 text-xs font-bold text-amber-100"
-                  >
-                    {{ categoryPromoCopy(pkg).savePct }}
-                  </span>
-                  <p class="inline-flex items-center gap-2 text-sm font-semibold text-amber-100/95">
-                    <svg class="h-5 w-5 shrink-0 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                      />
-                    </svg>
-                    {{ i18n.t('workshops.bundleFiftyCerts') }}
-                  </p>
-                  <h3 class="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
-                    {{ categoryPromoCopy(pkg).title }}
-                  </h3>
-                  <p class="max-w-xl text-sm leading-relaxed text-white/70 md:text-[0.95rem]">
-                    {{ categoryPromoCopy(pkg).tagline }}
-                  </p>
-                </div>
-                <div class="flex flex-col justify-center gap-5 lg:order-1">
-                  <ng-container *ngTemplateOutlet="offerCountdownTpl"></ng-container>
-                  <div
-                    class="flex flex-wrap items-end gap-x-4 gap-y-2 max-md:justify-center md:justify-start"
-                  >
-                    <span class="text-4xl font-black tracking-tight text-amber-300 md:text-[2.65rem]">{{
-                      categoryPromoCopy(pkg).priceNow
-                    }}</span>
-                    <span class="text-base font-medium text-white/35 line-through md:text-lg">{{ categoryPromoCopy(pkg).priceWas }}</span>
-                  </div>
-                  <div class="max-w-xl rounded-2xl border border-fuchsia-400/45 bg-[#1a1428]/95 p-4 shadow-inner md:p-5">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                      <p class="text-base leading-relaxed text-white max-md:text-center md:text-start">
-                        <span>{{ categoryPromoCopy(pkg).installmentPrefix }}</span>
-                        <span class="mt-1 block text-2xl font-extrabold text-pink-400 md:mt-0 md:inline">{{
-                          categoryPromoCopy(pkg).installmentAmount
-                        }}</span>
-                      </p>
-                      <span
-                        class="inline-flex w-fit shrink-0 rounded-full bg-pink-600 px-3 py-1.5 text-xs font-bold tracking-wide text-white"
-                        >{{ categoryPromoCopy(pkg).interestFree }}</span
-                      >
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-[#4c3d9e] px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-[#43388d] active:scale-[0.98]"
-                    (click)="onCategoryPackageCheckout(pkg.slug)"
-                  >
-                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                      />
-                    </svg>
-                    <span>{{ categoryPromoCopy(pkg).cta }}</span>
-                  </button>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="mt-3 flex justify-center gap-2" role="tablist" [attr.aria-label]="i18n.t('workshops.promoSliderAria')">
-          @for (s of promoSlideIndices; track s) {
             <button
               type="button"
-              role="tab"
-              class="h-2 rounded-full transition-all"
-              [class.w-6]="promoSlideIndex() === s"
-              [class.bg-brand-900]="promoSlideIndex() === s"
-              [class.w-2]="promoSlideIndex() !== s"
-              [class.bg-ink-300]="promoSlideIndex() !== s"
-              [attr.aria-selected]="promoSlideIndex() === s"
-              [attr.aria-label]="promoDotLabel(s)"
-              (click)="goToPromoSlide(s)"
-            ></button>
-          }
+              class="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-[#4c3d9e] px-8 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-[#43388d] active:scale-[0.98]"
+              (click)="onPromoCheckout100()"
+            >
+              <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                />
+              </svg>
+              <span>{{ i18n.t('workshops.promoCta') }}</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Shared "offer ends in …" countdown widget — reused on all 3 promo
-           slides via *ngTemplateOutlet. The numeric tiles bind to
-           offerCountdown() which ticks every second from a single timer. -->
-      <ng-template #offerCountdownTpl>
-        @let cd = offerCountdown();
-        <div
-          dir="ltr"
-          class="ku-countdown relative isolate w-fit max-w-full overflow-hidden rounded-2xl border border-rose-400/35 bg-gradient-to-r from-rose-600/30 via-rose-500/15 to-amber-500/15 px-3 py-2.5 shadow-[0_8px_24px_-12px_rgba(244,63,94,0.55)] backdrop-blur-sm max-md:self-center md:px-4"
-        >
-          <div class="ku-countdown__shimmer pointer-events-none absolute inset-0 -z-10"></div>
-          <!-- Compact one-line ribbon: [📅 30] [ينتهي العرض في ٣٠ أبريل] [DD:HH:MM:SS]
-               Tiles are minimal (numbers only, single-letter dividers) so
-               the whole composition fits the narrow promo column. -->
-          <div class="flex flex-nowrap items-center gap-x-2 whitespace-nowrap" [class.flex-row-reverse]="i18n.isRtl()">
-            <span class="ku-countdown__cal relative flex h-8 w-7 shrink-0 flex-col overflow-hidden rounded-md bg-white shadow-md ring-1 ring-rose-300/40">
-              <span class="bg-rose-600 py-[1px] text-center text-[6px] font-extrabold uppercase tracking-[0.1em] text-white">
-                {{ i18n.t('workshops.promoCalMonth') }}
-              </span>
-              <span class="ku-countdown__cal-day flex flex-1 items-center justify-center text-[13px] font-black leading-none text-rose-600">
-                {{ i18n.t('workshops.promoCalDay') }}
-              </span>
-            </span>
-
-            <span class="shrink-0 whitespace-nowrap text-[11.5px] font-extrabold tracking-wide text-amber-200">
-              {{ i18n.t('workshops.promoOfferEnds') }}
-            </span>
-
-            @if (!cd.ended) {
-              <span class="shrink-0 text-rose-200/40" aria-hidden="true">·</span>
-              <div
-                class="flex shrink-0 items-center gap-0.5 rounded-md bg-rose-950/40 px-1.5 py-0.5 font-mono text-[12px] font-extrabold leading-none text-rose-50 ring-1 ring-rose-400/30"
-                dir="ltr"
-                [attr.aria-label]="i18n.t('workshops.promoOfferEndsIn') + ' ' + cd.pad(cd.days) + ':' + cd.pad(cd.hours) + ':' + cd.pad(cd.mins) + ':' + cd.pad(cd.secs)"
-              >
-                <span>{{ cd.pad(cd.days) }}</span>
-                <span class="text-rose-300/60">:</span>
-                <span>{{ cd.pad(cd.hours) }}</span>
-                <span class="text-rose-300/60">:</span>
-                <span>{{ cd.pad(cd.mins) }}</span>
-                <span class="text-rose-300/60">:</span>
-                <span class="ku-countdown__live text-amber-200">{{ cd.pad(cd.secs) }}</span>
-              </div>
-            } @else {
-              <span class="shrink-0 whitespace-nowrap text-[11px] font-extrabold uppercase tracking-[0.14em] text-rose-100">
-                · {{ i18n.t('workshops.promoOfferEnded') }}
-              </span>
-            }
-          </div>
-        </div>
-      </ng-template>
-
-      <!-- Filters: mobile = horizontal scroll (ref. design); md+ = wrap -->
-      <div class="mt-8 flex flex-col gap-2.5 max-md:mb-4">
-        <div class="flex">
-          <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByCategoryHint') }}</span>
-        </div>
-        <div
-          class="flex flex-nowrap gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-2 md:pb-1"
-          role="tablist"
-          [attr.aria-label]="i18n.t('workshops.filterCategoryAria')"
-        >
-          @for (cat of CATEGORY_ORDER; track cat) {
-            <button
-              type="button"
-              role="tab"
-              [attr.aria-selected]="selectedCategory() === cat"
-              (click)="onSelectCategory(cat)"
-              class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98] motion-reduce:active:scale-100"
-              [ngClass]="
-                selectedCategory() === cat
-                  ? 'bg-brand-900 text-white shadow-md'
-                  : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
-              "
-            >
-              {{ categoryLabel(cat) }}
-              <span class="font-normal opacity-80">({{ categoryCounts()[cat] }})</span>
-            </button>
-          }
-        </div>
-      </div>
-
-      @if (workshopDayBuckets().length > 0) {
-        <div class="mt-4 flex flex-col gap-2.5 max-md:mb-4">
-          <div class="flex">
-            <span class="text-xs font-semibold text-ink-500">{{ i18n.t('workshops.filterByDayHint') }}</span>
-          </div>
-          <div
-            class="flex flex-nowrap gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-2 md:pb-1"
-            role="tablist"
-            [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
-          >
-            <button
-              type="button"
-              role="tab"
-              [attr.aria-selected]="selectedDayKey() === null"
-              (click)="onSelectDay(null)"
-              class="min-w-[10.75rem] shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200 sm:min-w-[11rem] md:min-w-0 md:py-2"
-              [ngClass]="
-                selectedDayKey() === null
-                  ? 'bg-brand-900 text-white shadow-md'
-                  : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
-              "
-            >
-              <span class="block text-sm font-bold tabular-nums">{{ i18n.t('workshops.allDaysShort') }} ({{ categoryFilteredEvents().length }})</span>
-              <span
-                class="mt-0.5 block text-[11px] font-medium"
-                [ngClass]="selectedDayKey() === null ? 'text-white/80' : 'text-ink-500'"
-              >
-                {{ i18n.t('workshops.showAllShort') }}
-              </span>
-            </button>
-
-            @for (b of workshopDayBuckets(); track b.key; let di = $index) {
-              <button
-                type="button"
-                role="tab"
-                [attr.aria-selected]="selectedDayKey() === b.key"
-                (click)="onSelectDay(b.key)"
-                class="min-w-[10.75rem] shrink-0 rounded-2xl px-4 py-2.5 text-center transition duration-200 sm:min-w-[11rem] md:min-w-0 md:py-2"
-                [ngClass]="
-                  selectedDayKey() === b.key
-                    ? 'bg-brand-900 text-white shadow-md'
-                    : 'border border-ink-200 bg-white text-ink-700 hover:bg-ink-50'
-                "
-              >
-                <span class="block text-sm font-bold tabular-nums">{{ dayLabelWithCount(di, b.count) }}</span>
-                <span
-                  class="mt-0.5 block text-[11px] font-medium"
-                  [ngClass]="selectedDayKey() === b.key ? 'text-white/80' : 'text-ink-500'"
-                >
-                  {{ b.sub }}
-                </span>
-              </button>
-            }
-          </div>
-        </div>
-      }
-
+      <!-- Filters: 4 controls on one row (search + category + days + sort).
+           In RTL the visual order reads right→left as: search, category, days, sort.
+           Each control uses the same rounded-full pill style + chevron so the
+           bar reads as one cohesive group. -->
       <div
-        class="motion-safe:animate-ve-fade-up mt-4 flex min-w-0 flex-row flex-nowrap items-stretch gap-2 sm:gap-3 md:mt-5 md:items-center md:justify-between md:gap-4"
+        class="motion-safe:animate-ve-fade-up mt-8 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-3 md:mt-5 md:gap-4"
       >
-        <!-- Sort (inline-start) + search one row; md+ justify-between keeps sort at end in LTR -->
-        <div class="relative w-[8.25rem] shrink-0 sm:w-36 md:order-2 md:w-auto md:min-w-[12rem]">
-          <select
-            class="h-full min-h-[2.75rem] w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-3 pe-8 text-xs font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10 sm:ps-4 sm:pe-9 sm:text-sm"
-            [ngModel]="workshopSortMode()"
-            (ngModelChange)="onWorkshopSortChange($event)"
-          >
-            <option value="closest">{{ i18n.t('workshops.sortClosest') }}</option>
-            <option value="latest">{{ i18n.t('workshops.sortLatest') }}</option>
-            <option value="title">{{ i18n.t('workshops.sortAlphabetical') }}</option>
-          </select>
-          <svg
-            class="pointer-events-none absolute end-2 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400 sm:end-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+        <!-- Search (flex-1 so it grows to fill remaining space) -->
         <label
-          class="flex min-h-[2.75rem] min-w-0 flex-1 items-center gap-2 rounded-full border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:gap-2.5 sm:px-4 md:order-1 md:max-w-md"
+          class="flex min-h-[2.75rem] min-w-0 flex-1 items-center gap-2 rounded-full border border-ink-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-brand-900/25 focus-within:ring-2 focus-within:ring-brand-900/10 sm:gap-2.5 sm:px-4 sm:order-1"
         >
           <svg class="h-5 w-5 shrink-0 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -955,6 +612,114 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
             (ngModelChange)="onSearchChange($event)"
           />
         </label>
+
+        <!-- Category dropdown -->
+        <div class="relative min-h-[2.75rem] w-full shrink-0 sm:order-2 sm:w-auto sm:min-w-[12rem]">
+          <svg
+            class="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M6 12h12M10 18h4" />
+          </svg>
+          <select
+            class="h-full min-h-[2.75rem] w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-9 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+            [ngModel]="selectedCategory()"
+            (ngModelChange)="onSelectCategory($event)"
+            [attr.aria-label]="i18n.t('workshops.filterCategoryAria')"
+          >
+            @for (cat of CATEGORY_ORDER; track cat) {
+              <option [value]="cat">{{ categoryLabel(cat) }} ({{ categoryCounts()[cat] }})</option>
+            }
+          </select>
+          <svg
+            class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <!-- Days dropdown -->
+        @if (workshopDayBuckets().length > 0) {
+          <div class="relative min-h-[2.75rem] w-full shrink-0 sm:order-3 sm:w-auto sm:min-w-[12rem]">
+            <svg
+              class="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <select
+              class="h-full min-h-[2.75rem] w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-9 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+              [ngModel]="selectedDayKey() ?? '__all__'"
+              (ngModelChange)="onSelectDay($event === '__all__' ? null : $event)"
+              [attr.aria-label]="i18n.t('workshops.filterDaysAria')"
+            >
+              <option value="__all__">{{ i18n.t('workshops.allDaysShort') }} ({{ categoryFilteredEvents().length }})</option>
+              @for (b of workshopDayBuckets(); track b.key; let di = $index) {
+                <option [value]="b.key">{{ dayLabelWithCount(di, b.count) }} · {{ b.sub }}</option>
+              }
+            </select>
+            <svg
+              class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        }
+
+        <!-- Sort dropdown -->
+        <div class="relative min-h-[2.75rem] w-full shrink-0 sm:order-4 sm:w-auto sm:min-w-[10rem]">
+          <svg
+            class="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+            />
+          </svg>
+          <select
+            class="h-full min-h-[2.75rem] w-full cursor-pointer appearance-none rounded-full border border-ink-200 bg-white py-2.5 ps-9 pe-9 text-sm font-semibold text-ink-700 shadow-sm transition hover:bg-ink-50 focus:outline-none focus:ring-2 focus:ring-brand-900/10"
+            [ngModel]="workshopSortMode()"
+            (ngModelChange)="onWorkshopSortChange($event)"
+          >
+            <option value="closest">{{ i18n.t('workshops.sortClosest') }}</option>
+            <option value="latest">{{ i18n.t('workshops.sortLatest') }}</option>
+            <option value="title">{{ i18n.t('workshops.sortAlphabetical') }}</option>
+          </select>
+          <svg
+            class="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
 
       @if (demoHint()) {
@@ -1227,43 +992,10 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
       </div>
     </section>
 
-    <section veScrollReveal class="ve-scroll-reveal mt-16 md:mt-20">
-      <div class="text-center motion-safe:animate-ve-fade-up">
-        <h2 class="text-2xl font-extrabold tracking-tight text-brand-900 md:text-3xl">{{ i18n.t('faq.title') }}</h2>
-        <p class="mx-auto mt-2 max-w-2xl text-sm text-ink-600 md:text-base">{{ i18n.t('faq.subtitle') }}</p>
-      </div>
-      <div
-        class="mx-auto mt-8 max-w-3xl overflow-hidden rounded-2xl border border-ink-200/90 bg-gradient-to-b from-white to-ink-50/90 px-1 py-1 shadow-sm"
-      >
-        @for (item of faqItems; track item.q; let i = $index) {
-          <div class="border-b border-ink-200/80 last:border-0">
-            <button
-              type="button"
-              class="flex w-full items-center justify-between gap-3 px-4 py-4 text-start text-sm font-bold text-brand-900 transition duration-200 hover:bg-white/80 md:px-5 md:text-base"
-              (click)="toggleFaq(i)"
-              [attr.aria-expanded]="openFaqIndex() === i"
-            >
-              <span>{{ i18n.t(item.q) }}</span>
-              <span
-                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink-100 text-ink-500 transition duration-300"
-                [class.rotate-180]="openFaqIndex() === i"
-                [class.bg-ink-200]="openFaqIndex() === i"
-                [class.text-brand-900]="openFaqIndex() === i"
-                aria-hidden="true"
-                >▼</span
-              >
-            </button>
-            @if (openFaqIndex() === i) {
-              <div
-                class="motion-safe:animate-ve-fade-in border-s-2 border-ink-900/12 px-4 pb-4 ps-5 text-sm leading-relaxed text-ink-600 md:px-5 md:ps-6"
-              >
-                {{ i18n.t(item.a) }}
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </section>
+    <!-- FAQ section intentionally hidden from the home page; the dedicated
+         /faq route still renders these items if you want to surface them
+         elsewhere. The faqItems[] and toggleFaq()/openFaqIndex() class
+         members are kept in case the section is restored later. -->
   `,
 })
 export class EventsHomeComponent implements OnDestroy {
@@ -1284,34 +1016,6 @@ export class EventsHomeComponent implements OnDestroy {
   readonly homeExperts = computed<HomeExpert[]>(() => {
     const enriched = applyExpertAvatarOverrides(HOME_EXPERTS, this.expertsApi.avatarOverrides());
     return filterExpertsByActive(enriched, this.expertsApi.activeNamesSet());
-  });
-
-  /**
-   * Live countdown to the bundle-offer deadline. The deadline is the end of
-   * 2 July in Asia/Kuwait (UTC+3) — encoded directly as a UTC instant so
-   * the value is identical regardless of the visitor's local timezone.
-   *
-   * Drives the "Offer ends in …" badge on all 3 promo slides; ticks every
-   * second via a `setInterval` that's torn down in `ngOnDestroy`.
-   */
-  private readonly OFFER_DEADLINE_MS = Date.UTC(2026, 6, 2, 20, 59, 59); // 2 Jul 2026 23:59:59 +03:00
-  private readonly nowMs = signal<number>(Date.now());
-  private offerCountdownTimer?: ReturnType<typeof setInterval>;
-  readonly offerCountdown = computed(() => {
-    const remaining = Math.max(0, this.OFFER_DEADLINE_MS - this.nowMs());
-    const totalSecs = Math.floor(remaining / 1000);
-    const days = Math.floor(totalSecs / 86400);
-    const hours = Math.floor((totalSecs % 86400) / 3600);
-    const mins = Math.floor((totalSecs % 3600) / 60);
-    const secs = totalSecs % 60;
-    return {
-      ended: remaining === 0,
-      days,
-      hours,
-      mins,
-      secs,
-      pad: (n: number) => (n < 10 ? `0${n}` : String(n)),
-    };
   });
 
   /** Initial grid size + step for load-more / load-less. */
@@ -1587,14 +1291,11 @@ export class EventsHomeComponent implements OnDestroy {
     // the static `HOME_EXPERTS` list at runtime.
     this.expertsApi.ensureLoaded();
 
-    // Drive the offer countdown — single timer feeds the signal that all 3
-    // promo slides bind to. Skipped on SSR (no window) so it doesn't keep
-    // the Node process alive during prerender.
+    // Cycle the hero calligraphic word every 1.8s — fast enough to feel
+    // alive but still readable. Animation duration (~0.42s) leaves ~1.4s
+    // of "rest" on each word. Skipped on SSR (no window) so it doesn't
+    // keep the Node process alive during prerender.
     if (typeof window !== 'undefined') {
-      this.offerCountdownTimer = setInterval(() => this.nowMs.set(Date.now()), 1000);
-      // Cycle the hero calligraphic word every 1.8s — fast enough to feel
-      // alive but still readable. Animation duration (~0.42s) leaves ~1.4s
-      // of "rest" on each word.
       this.heroRotateTimer = setInterval(() => {
         this.heroRotateIndex.update((i) => i + 1);
       }, 1800);
@@ -1637,10 +1338,6 @@ export class EventsHomeComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    if (this.offerCountdownTimer) {
-      clearInterval(this.offerCountdownTimer);
-      this.offerCountdownTimer = undefined;
-    }
     if (this.heroRotateTimer) {
       clearInterval(this.heroRotateTimer);
       this.heroRotateTimer = undefined;

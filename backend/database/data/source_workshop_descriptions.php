@@ -1,10 +1,9 @@
 <?php
-
 /**
- * June–26–2026 KU workshop week — generated from جدول الورش.xlsx.
+ * June–28–2026 KU workshop week — rich workshop data.
+ * Source of truth: "For Programer (Final).xlsx".
  * Map: ms-w-### slug -> rich workshop data (description, category, instructor; image optional).
  */
-
 return [
     'ms-w-001' => [
         'title' => 'الأخطاء الشائعة في اللغة العربية',
@@ -16,12 +15,12 @@ return [
         'instructor' => 'سنابل المسلم',
     ],
     'ms-w-002' => [
-        'title' => 'اصنع محتوي بصورة أجمل',
-        'title_en' => 'Create more beautiful content',
-        'description_ar' => 'أساسيات صناعة محتوى بصري جذاب وأدوات عملية لتحسين جودة المحتوى وإخراجه باحترافية.',
-        'description_en' => 'A practical, hands-on session on Create more beautiful content via Zoom.',
-        'category' => 'personal',
-        'instructor' => 'سالم الهاجري',
+        'title' => 'AI vs. Human Skills',
+        'title_en' => 'AI vs. Human Skills',
+        'description_ar' => 'مقارنة عملية بين قدرات الذكاء الاصطناعي والمهارات الإنسانية، وكيف نوظف كلاً منهما في العمل والحياة.',
+        'description_en' => 'A practical comparison between AI capabilities and human skills, and how to leverage each at work and in life.',
+        'category' => 'professional',
+        'instructor' => 'سحر الشمري',
     ],
     'ms-w-003' => [
         'title' => 'مهارات التواصل في بيئة العمل',
@@ -92,7 +91,7 @@ return [
         'description_en' => 'How to inspire and generate creative ideas for advertising and marketing campaigns.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9.jpg',
-        'instructor' => 'علي الأنصاري',
+        'instructor' => 'علي عادل',
     ],
     'ms-w-011' => [
         'title' => 'ربط أي خدمة بالذكاء الاصطناعي',
@@ -140,12 +139,12 @@ return [
         'instructor' => 'مرزوق السعيد',
     ],
     'ms-w-016' => [
-        'title' => 'تحديد الأهداف بطريقة SMART',
-        'title_en' => 'Setting Goals the SMART Way',
-        'description_ar' => 'تعلم كيف تحدد أهداف قابلة للتحقيق',
-        'description_en' => 'Learn how to set achievable goals.',
-        'category' => 'personal',
-        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/080_SMART_%D8%A7%D9%84%D8%A3%D9%87%D8%AF%D8%A7%D9%81.jpg',
+        'title' => 'إتيكيت بيئة العمل والتعامل مع الموظفين',
+        'title_en' => 'Workplace Etiquette and Dealing with Employees',
+        'description_ar' => 'أهم قواعد التعامل والكلام والزي مع المسئولين والزملاء',
+        'description_en' => 'The most important rules of dealing, speaking, and dressing with officials and colleagues.',
+        'category' => 'professional',
+        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/081_%D8%A5%D8%AA%D9%8A%D9%83%D9%8A%D8%AA_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'دانا العوضي',
     ],
     'ms-w-017' => [
@@ -218,10 +217,10 @@ return [
         'description_en' => 'Principles of screenwriting and how to build a story from idea to paper.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/047_%D8%B5%D9%8A%D8%AF_%D8%A7%D9%84%D8%A3%D9%81%D9%83%D8%A7%D8%B1_%D8%A7%D9%84%D8%A5%D8%B9%D9%84%D8%A7%D9%86%D9%8A%D8%A9_1.jpg',
-        'instructor' => 'علي الأنصاري',
+        'instructor' => 'علي عادل',
     ],
     'ms-w-025' => [
-        'title' => 'اصنع محتوى بصورة أحمل',
+        'title' => 'اصنع محتوى بصورة أجمل',
         'title_en' => 'Create more beautiful content',
         'description_ar' => 'أساسيات صناعة محتوى بصري جذاب وأدوات عملية لتحسين جودة المحتوى وإخراجه باحترافية.',
         'description_en' => 'A practical, hands-on session on Create more beautiful content via Zoom.',
@@ -405,13 +404,12 @@ return [
         'instructor' => 'حسن سيد',
     ],
     'ms-w-046' => [
-        'title' => 'إتيكيت بيئة العمل والتعامل مع الموظفين',
-        'title_en' => 'Workplace Etiquette and Dealing with Employees',
-        'description_ar' => 'أهم قواعد التعامل والكلام والزي مع المسئولين والزملاء',
-        'description_en' => 'The most important rules of dealing, speaking, and dressing with officials and colleagues.',
+        'title' => 'The Skills no body thought you at the university',
+        'title_en' => 'The Skills Nobody Taught You at University',
+        'description_ar' => 'المهارات العملية التي يحتاجها سوق العمل ولا تدرّس في الجامعة، وكيف تكتسبها بسرعة.',
+        'description_en' => 'The practical skills the job market needs but university never taught you, and how to gain them fast.',
         'category' => 'professional',
-        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/081_%D8%A5%D8%AA%D9%8A%D9%83%D9%8A%D8%AA_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
-        'instructor' => 'دانا العوضي',
+        'instructor' => 'سحر الشمري',
     ],
     'ms-w-047' => [
         'title' => 'صناعة الفيديو وتحريك المشاهد',
@@ -423,12 +421,11 @@ return [
         'instructor' => 'أحمد سمير',
     ],
     'ms-w-048' => [
-        'title' => 'غذاء التركيز',
-        'title_en' => 'Focus Food',
-        'description_ar' => 'ماذا تأكل لتعزز الطاقة والذاكرة والانتاجية.',
-        'description_en' => 'What to eat to boost energy, memory, and productivity.',
+        'title' => 'السناكات الذكية',
+        'title_en' => 'Smart Snacks',
+        'description_ar' => 'خيارات غذائية ذكية وسريعة ترفع تركيزك وطاقتك خلال اليوم.',
+        'description_en' => 'Smart, quick snack choices that boost your focus and energy throughout the day.',
         'category' => 'personal',
-        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/026_%D8%BA%D8%B0%D8%A7%D8%A1_%D8%A7%D9%84%D8%AA%D8%B1%D9%83%D9%8A%D8%B2.jpg',
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-049' => [
@@ -447,7 +444,7 @@ return [
         'description_en' => 'Basic requirements and first steps to enter the world of filmmaking.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/049_%D8%A8%D8%B7%D8%A7%D9%82%D8%A9_%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%8A%D8%A9_%D9%84%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%A3%D9%81%D9%84%D8%A7%D9%85.jpg',
-        'instructor' => 'علي الأنصاري',
+        'instructor' => 'علي عادل',
     ],
     'ms-w-051' => [
         'title' => 'أول 90 يوم من عملك الجديد: ابدأ صح',
@@ -611,6 +608,14 @@ return [
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-069' => [
+        'title' => 'العلاج الطبيعي',
+        'title_en' => 'Physical Therapy',
+        'description_ar' => 'مقدمة في العلاج الطبيعي وأهميته للصحة البدنية والوقاية من الإصابات.',
+        'description_en' => 'An introduction to physical therapy and its importance for physical health and injury prevention.',
+        'category' => 'personal',
+        'instructor' => 'د. إسراء الدايل',
+    ],
+    'ms-w-070' => [
         'title' => 'من زميل إلى شريك',
         'title_en' => 'From Colleague to Partner: The Art of Dealing with Others and Time Management',
         'description_ar' => 'ورشة لتطوير مهارات العمل الجماعي والانتقال من عقلية الموظف إلى عقلية الشريك.',
@@ -619,16 +624,16 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/018_%D9%85%D9%82%D8%AF%D9%85%D8%A9_%D9%81%D9%8A_%D8%B9%D9%84%D9%85_%D8%A7%D9%84%D8%AA%D8%AE%D8%B7%D9%8A%D8%B7_1.jpg',
         'instructor' => 'زينب الغضبان',
     ],
-    'ms-w-070' => [
+    'ms-w-071' => [
         'title' => 'مبادئ الإنتاج الفني',
         'title_en' => 'Principles of Art Production',
         'description_ar' => 'تعرف على أساسيات الإنتاج الفني وكيفية إدارة المشاريع الإبداعية.',
         'description_en' => 'Learn the basics of art production and how to manage creative projects.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/050_%D9%85%D8%A8%D8%A7%D8%AF%D8%A6_%D8%A7%D9%84%D8%A5%D9%86%D8%AA%D8%A7%D8%AC_%D8%A7%D9%84%D9%81%D9%86%D9%8A.jpg',
-        'instructor' => 'علي الأنصاري',
+        'instructor' => 'علي عادل',
     ],
-    'ms-w-071' => [
+    'ms-w-072' => [
         'title' => 'ورشة نموذج العمل التجاري',
         'title_en' => 'Second Workshop: Business Model Workshop',
         'description_ar' => 'تطبيق عملي لبناء نموذج عمل تجاري ناجح ومستدام لمشروعك.',
@@ -637,7 +642,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/090_%D9%86%D9%85%D9%88%D8%B0%D8%AC_%D8%A7%D9%84%D8%B9%D9%85%D9%84_%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1%D9%8A.jpg',
         'instructor' => 'أبرار أشكناني',
     ],
-    'ms-w-072' => [
+    'ms-w-073' => [
         'title' => 'إدارة المشاعر في بيئة العمل',
         'title_en' => 'Managing Emotions in the Workplace',
         'description_ar' => 'العمل لا يتطلب فقط مهارات! بل يتطلب أيضا مشاعر جيدة، فهي مفتاح نجاحك المهني. إبدأ رحلتك بثبات ووعي من أول خطوة في بيئة العمل.',
@@ -646,7 +651,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/098_%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9_%D8%A7%D9%84%D9%85%D8%B4%D8%A7%D8%B9%D8%B1_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'فاطمة القطان',
     ],
-    'ms-w-073' => [
+    'ms-w-074' => [
         'title' => 'محطة مابعد الشهادة',
         'title_en' => 'Post-Graduation Station',
         'description_ar' => 'تصميم خطة لتجنب الملل واستثمار فترة الانتظار للوقاية من القلق.',
@@ -655,7 +660,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/036_%D9%85%D8%AD%D8%B7%D8%A9_%D9%85%D8%A7_%D8%A8%D8%B9%D8%AF_%D8%A7%D9%84%D8%B4%D9%87%D8%A7%D8%AF%D8%A9.jpg',
         'instructor' => 'آلاء النصار',
     ],
-    'ms-w-074' => [
+    'ms-w-075' => [
         'title' => 'العلاج الطبيعي في بيئة العمل: نحو صحة مؤسسية مستدامة',
         'title_en' => 'Physical Therapy in the Workplace',
         'description_ar' => 'نحو صحة مؤسسية مستدامة',
@@ -664,7 +669,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/093_%D8%A7%D9%84%D8%B9%D9%84%D8%A7%D8%AC_%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%B9%D9%8A_%D9%81%D9%8A_%D8%A8%D9%8A%D8%A6%D8%A9_%D8%A7%D9%84%D8%B9%D9%85%D9%84.jpg',
         'instructor' => 'د. جواد أبو الحسن',
     ],
-    'ms-w-075' => [
+    'ms-w-076' => [
         'title' => 'لا تنطر الفرصة',
         'title_en' => 'Don\'t wait for the opportunity',
         'description_ar' => 'كيف تصنع فرصك بنفسك بدلاً من انتظارها، عبر خطوات عملية لبناء حضور مهني فاعل.',
@@ -672,7 +677,7 @@ return [
         'category' => 'personal',
         'instructor' => 'محمد الهاجري',
     ],
-    'ms-w-076' => [
+    'ms-w-077' => [
         'title' => 'كن أنت غير العالم',
         'title_en' => 'Be Yourself, Change the World',
         'description_ar' => 'تعلم كيف تساهم في بناء عالم من الوعي والوحدة / احتضن تميزك وتفرد به وغير العالم',
@@ -681,15 +686,15 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/016_%D9%83%D9%86_%D8%A3%D9%86%D8%AA_%D8%BA%D9%8A%D8%B1_%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85.jpg',
         'instructor' => 'زينب الغضبان',
     ],
-    'ms-w-077' => [
-        'title' => 'بوصلة المعنى: كيف تبني مسارا مهنيا يشبهك؟',
-        'title_en' => 'The meaning compass: build a career that suits you',
-        'description_ar' => 'جلسة تساعدك على بناء مسار مهني يتوافق مع قيمك وشغفك وتحديد المعنى الذي تسعى إليه.',
-        'description_en' => 'A practical, hands-on session on The meaning compass: build a career that suits you via Zoom.',
-        'category' => 'personal',
+    'ms-w-078' => [
+        'title' => 'من الفوضى إلى التركيز: أساسيات التسويق وبناء القيمة',
+        'title_en' => 'From Chaos to Focus: Marketing Basics & Building Value',
+        'description_ar' => 'كيف تنتقل من تشتت الأفكار إلى خطة تسويقية واضحة تبني قيمة حقيقية لمشروعك.',
+        'description_en' => 'How to move from scattered ideas to a clear marketing plan that builds real value for your project.',
+        'category' => 'professional',
         'instructor' => 'هلال الهلال',
     ],
-    'ms-w-078' => [
+    'ms-w-079' => [
         'title' => 'من المهارة إلى التجارة',
         'title_en' => 'From Skill to Business',
         'description_ar' => 'كيف تحوّل مهارتك أو هوايتك إلى مشروع تجاري مربح: التسعير والتسويق وأول العملاء.',
@@ -697,7 +702,7 @@ return [
         'category' => 'professional',
         'instructor' => 'م. الجازي العجمي',
     ],
-    'ms-w-079' => [
+    'ms-w-080' => [
         'title' => 'شلون أبدأ؟',
         'title_en' => 'How Do I Start?',
         'description_ar' => 'دليلك الشامل لمعرفة من أين تبدأ مسيرتك المهنية أو مشروعك الخاص بخطوات واضحة.',
@@ -706,7 +711,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/040_From_zero_to_hero_1.jpg',
         'instructor' => 'منيرة النخيلان',
     ],
-    'ms-w-080' => [
+    'ms-w-081' => [
         'title' => 'سأكتب',
         'title_en' => 'I Will Write',
         'description_ar' => 'خطوات ونصائح لتمكين الراغبين بكتابة الروايات والقصص بشكل عام من الوصول لهدفهم بناء على تجربة شخصية بعد نشر روايتيين مع دار من أنجح دور النشر في الكويت. يخللها نقاش وتفاعل مع الجمهور.',
@@ -715,7 +720,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/004_%D8%B3%D8%A3%D9%83%D8%AA%D8%A8.jpg',
         'instructor' => 'سنابل المسلم',
     ],
-    'ms-w-081' => [
+    'ms-w-082' => [
         'title' => 'تسويق وبيع مهارتك',
         'title_en' => 'Marketing & Selling Your Skill',
         'description_ar' => 'كيف تسوّق مهارتك وتبيعها للعملاء المناسبين عبر القنوات الرقمية بأسعار عادلة.',
@@ -723,7 +728,7 @@ return [
         'category' => 'professional',
         'instructor' => 'م. الجازي العجمي',
     ],
-    'ms-w-082' => [
+    'ms-w-083' => [
         'title' => 'لوحة الجيل',
         'title_en' => 'Generation Painting',
         'description_ar' => 'جمع أكثر من فكرة في عمل واحد. المتطلبات: قلم وورقة بيضاء أي حجم.',
@@ -732,7 +737,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/014_%D9%84%D9%88%D8%AD%D8%A9_%D8%A7%D9%84%D8%AC%D9%8A%D9%84.jpg',
         'instructor' => 'بدر الفيلكاوي',
     ],
-    'ms-w-083' => [
+    'ms-w-084' => [
         'title' => 'استغلال الذكاء الاصطناعي في عالم فن الديجتال',
         'title_en' => 'Exploiting AI in the World of Digital Art',
         'description_ar' => 'كيفية دمج أدوات الذكاء الاصطناعي لرفع جودة وإبداع أعمالك الفنية الرقمية.',
@@ -741,7 +746,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/046_%D8%A7%D8%B3%D8%AA%D8%BA%D9%84%D8%A7%D9%84_%D8%A7%D9%84%D8%B0%D9%83%D8%A7%D8%A1_%D8%A7%D9%84%D8%A7%D8%B5%D8%B7%D9%86%D8%A7%D8%B9%D9%8A_%D9%81%D9%8A_%D8%B9%D8%A7%D9%84%D9%85_%D9%81%D9%86_%D8%A7%D9%84%D8%AF%D9%8A%D8%AC%D8%AA%D8%A7%D9%84.jpg',
         'instructor' => 'حسن سيد',
     ],
-    'ms-w-084' => [
+    'ms-w-085' => [
         'title' => 'صانع الأفلام المستقل',
         'title_en' => 'The independent filmmaker',
         'description_ar' => 'رحلة صناعة الأفلام المستقلة من الفكرة إلى التنفيذ بإمكانات بسيطة.',
@@ -749,7 +754,7 @@ return [
         'category' => 'personal',
         'instructor' => 'سالم الهاجري',
     ],
-    'ms-w-085' => [
+    'ms-w-086' => [
         'title' => 'اصنع صوت احترافي بالذكاء الاصطناعي',
         'title_en' => 'Create Professional Voiceovers with AI',
         'description_ar' => 'اصنع صوت احترافي بجودة عالية يليق بمحتواك.',
@@ -758,7 +763,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/024_%D8%A7%D8%B5%D9%86%D8%B9_%D8%B5%D9%88%D8%AA_%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A.png',
         'instructor' => 'أحمد سمير',
     ],
-    'ms-w-086' => [
+    'ms-w-087' => [
         'title' => 'النوم و الاداء',
         'title_en' => 'Sleep and Performance',
         'description_ar' => 'لماذا الراحة أهم من زيادة ساعات الدراسة.',
@@ -767,7 +772,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/029_%D8%A7%D9%84%D9%86%D9%88%D9%85_%D9%88_%D8%A7%D9%84%D8%A7%D8%AF%D8%A7%D8%A1.jpg',
         'instructor' => 'دلال النخيلان',
     ],
-    'ms-w-087' => [
+    'ms-w-088' => [
         'title' => 'فن الالقاء و مواجهة الجمهور',
         'title_en' => 'The Art of Delivery and Facing the Audience',
         'description_ar' => 'تقنيات للتغلب على رهبة المسرح والتحدث بثقة أمام الآخرين.',
@@ -776,7 +781,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/096_%D9%81%D9%86_%D8%A7%D9%84%D8%A5%D9%84%D9%82%D8%A7%D8%A1.jpg',
         'instructor' => 'عبدالرحمن حماد',
     ],
-    'ms-w-088' => [
+    'ms-w-089' => [
         'title' => 'عالم الشموع',
         'title_en' => 'World of Candles',
         'description_ar' => 'اكتشفوا أسرار صناعة الشموع النباتية بطريقة سهلة، وانطلقوا في عالم يجمع بين الهدوء، الابتكار، والفن اليدوي المتقن.',
@@ -785,16 +790,15 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/097_%D8%B9%D8%A7%D9%84%D9%85_%D8%A7%D9%84%D8%B4%D9%85%D9%88%D8%B9.jpg',
         'instructor' => 'هيا بوراشد',
     ],
-    'ms-w-089' => [
-        'title' => 'التحكيم المحلي و الدولي',
-        'title_en' => 'Local and International Refereeing',
-        'description_ar' => 'الفرق بين التحكيم على المستوى المحلي والدولي وأهم التحديات.',
-        'description_en' => 'The difference between local and international refereeing and key challenges.',
+    'ms-w-090' => [
+        'title' => 'لماذا أصبح حكم؟',
+        'title_en' => 'Why Become a Referee?',
+        'description_ar' => 'رحلة الحكم الرياضي ودوافع اختيار هذا المسار وأهم مهاراته.',
+        'description_en' => 'The journey of sports refereeing, the motivation behind choosing this path, and its key skills.',
         'category' => 'personal',
-        'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/072_%D8%A7%D9%84%D8%AA%D8%AD%D9%83%D9%8A%D9%85_%D8%A7%D9%84%D9%85%D8%AD%D9%84%D9%8A_%D9%88_%D8%A7%D9%84%D8%AF%D9%88%D9%84%D9%8A.jpg',
         'instructor' => 'خالد الشمري',
     ],
-    'ms-w-090' => [
+    'ms-w-091' => [
         'title' => 'التداول الخوارزمي',
         'title_en' => 'Algorithmic Trading',
         'description_ar' => 'مقدمة في استخدام الخوارزميات والبرمجة في أسواق المال والتداول الآلي.',
@@ -803,7 +807,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/055_%D8%A7%D9%84%D8%AA%D8%AF%D8%A7%D9%88%D9%84_%D8%A7%D9%84%D8%AE%D9%88%D8%A7%D8%B1%D8%B2%D9%85%D9%8A.jpg',
         'instructor' => 'سليمان المراغي',
     ],
-    'ms-w-091' => [
+    'ms-w-092' => [
         'title' => 'نسختك الذهبية',
         'title_en' => 'Your golden version',
         'description_ar' => 'اكتشف نسختك الأفضل وابنِ حضورك الشخصي والمهني بثقة.',
@@ -811,7 +815,7 @@ return [
         'category' => 'professional',
         'instructor' => 'مرزوق السعيد',
     ],
-    'ms-w-092' => [
+    'ms-w-093' => [
         'title' => 'صناعة الحظ',
         'title_en' => 'Making Luck',
         'description_ar' => 'دورة حياة العطاء مستقاة من زهرة العرفج.',
@@ -820,7 +824,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/032_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%AD%D8%B8.jpg',
         'instructor' => 'عبدالرحمن التركيت',
     ],
-    'ms-w-093' => [
+    'ms-w-094' => [
         'title' => 'بوتات الأتمتة',
         'title_en' => 'Automation Bots',
         'description_ar' => 'كيفية برمجة واستخدام البوتات لأتمتة المهام الروتينية وتوفير الوقت.',
@@ -829,7 +833,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/064_%D8%A8%D9%88%D8%AA%D8%A7%D8%AA_%D8%A7%D9%84%D8%A3%D8%AA%D9%85%D8%AA%D8%A9.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
-    'ms-w-094' => [
+    'ms-w-095' => [
         'title' => 'صناعة الأثر',
         'title_en' => 'Making an Impact',
         'description_ar' => 'اكتشاف البصمة الشخصيةوتوظيفها لصناعة الأثر في المجتمع.',
@@ -838,7 +842,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/037_%D8%B5%D9%86%D8%A7%D8%B9%D8%A9_%D8%A7%D9%84%D8%A3%D8%AB%D8%B1.jpg',
         'instructor' => 'آلاء النصار',
     ],
-    'ms-w-095' => [
+    'ms-w-096' => [
         'title' => 'استراتيجية MVP',
         'title_en' => 'MVP Strategy',
         'description_ar' => 'كيفية بناء المنتج الأولي القابل للتطبيق لاختبار فكرتك بأقل تكلفة وجهد.',
@@ -847,7 +851,7 @@ return [
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/056_%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AA%D9%8A%D8%AC%D9%8A%D8%A9_MVP.jpg',
         'instructor' => 'سليمان المراغي',
     ],
-    'ms-w-096' => [
+    'ms-w-097' => [
         'title' => 'سير عمل الذكاء الاصطناعي',
         'title_en' => 'AI Workflow',
         'description_ar' => 'كيفية بناء سير عمل متكامل يعتمد على الذكاء الاصطناعي لزيادة الإنتاجية.',
@@ -856,24 +860,24 @@ return [
         'image_url' => 'https://vibe.filesafe.space/1775667546795098704/assets/9b513010-c4f6-4079-9f6b-302a2b262aec.jpg',
         'instructor' => 'عبدالرحمن خاجه',
     ],
-    'ms-w-097' => [
+    'ms-w-098' => [
         'title' => 'فنون تشبهنا',
         'title_en' => 'Arts Like Us',
         'description_ar' => 'استكشاف الفنون التي تعكس هويتنا وثقافتنا وكيفية التعبير عنها.',
         'description_en' => 'Exploring arts that reflect our identity and culture, and how to express them.',
         'category' => 'personal',
         'image_url' => 'https://pub-b189c521cca14c909cfd3bfa983ab5d3.r2.dev/worksops_renamed/051_%D9%81%D9%86%D9%88%D9%86_%D8%AA%D8%B4%D8%A8%D9%87%D9%86%D8%A7.jpg',
-        'instructor' => 'علي الأنصاري',
+        'instructor' => 'علي عادل',
     ],
-    'ms-w-098' => [
-        'title' => 'بوصلة المعنى: كيف تبني مسارا مهنيا يشبهك؟',
-        'title_en' => 'The meaning compass: build a career that suits you',
-        'description_ar' => 'جلسة تساعدك على بناء مسار مهني يتوافق مع قيمك وشغفك وتحديد المعنى الذي تسعى إليه.',
-        'description_en' => 'A practical, hands-on session on The meaning compass: build a career that suits you via Zoom.',
+    'ms-w-099' => [
+        'title' => 'مناعة المستقل: التفاؤل الواقعي وفن إدارة التشتت',
+        'title_en' => 'The Freelancer\'s Immunity: Realistic Optimism & Managing Distraction',
+        'description_ar' => 'كيف يحافظ المستقل على تفاؤله الواقعي ويدير التشتت ليحمي إنتاجيته واستقراره النفسي.',
+        'description_en' => 'How freelancers maintain realistic optimism and manage distraction to protect their productivity and well-being.',
         'category' => 'personal',
         'instructor' => 'هلال الهلال',
     ],
-    'ms-w-099' => [
+    'ms-w-100' => [
         'title' => 'تحويل اللقطه إلى قصة احترافية',
         'title_en' => 'Turning a Shot into a Professional Story',
         'description_ar' => 'فن السرد البصري وكيفية بناء قصة متكاملة من مجرد لقطة.',

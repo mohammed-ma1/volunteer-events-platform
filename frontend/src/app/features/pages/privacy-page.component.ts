@@ -30,102 +30,84 @@ export class PrivacyPageComponent {
   readonly i18n = inject(I18nService);
 
   readonly privacyAr = `
-<h2>مقدمة</h2>
-<p>تلتزم شركة نكست لفل ("الشركة"، "نحن") بحماية خصوصية مستخدمي منصة التدريب الإلكترونية. توضح هذه السياسة كيفية جمع بياناتك الشخصية واستخدامها وحمايتها عند استخدامك للمنصة.</p>
+<h2>1. مقدمة</h2>
+<p>نحن في منصة نكست ليفل نولي أهمية قصوى لخصوصية زوارنا ومستخدمينا. توضح سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحمايتنا لمعلوماتك الشخصية عند استخدامك لموقعنا وخدماتنا.</p>
 
-<h2>البيانات التي نجمعها</h2>
+<h2>2. المعلومات التي نجمعها</h2>
 <ul>
-<li><strong>بيانات التسجيل:</strong> الاسم الكامل، البريد الإلكتروني، رقم الهاتف.</li>
-<li><strong>بيانات الدفع:</strong> تتم معالجة المدفوعات عبر بوابة Tap، ولا نحتفظ ببيانات بطاقتك الائتمانية على خوادمنا.</li>
-<li><strong>بيانات الاستخدام:</strong> سجل الورش المسجّل فيها، وتقدّمك في المحتوى التعليمي.</li>
-<li><strong>بيانات تقنية:</strong> عنوان IP، نوع المتصفح، نظام التشغيل، لأغراض تحسين الأداء والأمان.</li>
+<li><strong>المعلومات الشخصية:</strong> مثل الاسم، البريد الإلكتروني، ورقم الهاتف عند التسجيل أو الشراء.</li>
+<li><strong>معلومات الدفع:</strong> تفاصيل البطاقة الائتمانية (والتي تتم معالجتها بشكل آمن عبر بوابات الدفع المعتمدة ولا يتم تخزينها لدينا).</li>
+<li><strong>معلومات الاستخدام:</strong> بيانات حول كيفية تفاعلك مع المنصة، مثل الدورات التي تشاهدها والوقت الذي تقضيه.</li>
+<li><strong>معلومات الجهاز:</strong> عنوان IP، نوع المتصفح، ونظام التشغيل.</li>
 </ul>
 
-<h2>كيف نستخدم بياناتك</h2>
+<h2>3. كيف نستخدم معلوماتك</h2>
+<p>نستخدم المعلومات التي نجمعها للأغراض التالية:</p>
 <ul>
-<li>إنشاء حسابك وإدارته على المنصة.</li>
-<li>تسجيلك في الورش التدريبية ومنحك الوصول إلى المحتوى.</li>
-<li>إرسال تأكيدات الطلبات وبيانات الدخول عبر البريد الإلكتروني.</li>
-<li>إرسال روابط الزوم للورش المسجّل فيها.</li>
-<li>تحسين تجربة المستخدم وتطوير خدمات المنصة.</li>
-<li>الامتثال للمتطلبات القانونية والتنظيمية في دولة الكويت.</li>
+<li>توفير وإدارة حسابك والخدمات التي تطلبها.</li>
+<li>معالجة المدفوعات وإصدار الفواتير.</li>
+<li>التواصل معك بشأن التحديثات، العروض، والدعم الفني.</li>
+<li>تحسين وتطوير المنصة وتجربة المستخدم.</li>
 </ul>
 
-<h2>مشاركة البيانات</h2>
-<p>لا نبيع أو نؤجّر بياناتك الشخصية لأي طرف ثالث. قد نشارك بياناتك فقط مع:</p>
-<ul>
-<li>بوابة الدفع (Tap) لمعالجة المدفوعات.</li>
-<li>خدمة البريد الإلكتروني (SendGrid) لإرسال الإشعارات.</li>
-<li>جامعة الكويت - كلية العلوم الاجتماعية، بصفتها الشريك الأكاديمي للبرنامج.</li>
-<li>الجهات الحكومية عند الطلب القانوني.</li>
-</ul>
+<h2>4. مشاركة المعلومات</h2>
+<p>نحن لا نبيع أو نؤجر معلوماتك الشخصية لأطراف ثالثة. قد نشارك معلوماتك فقط مع مزودي الخدمات الموثوقين الذين يساعدوننا في تشغيل المنصة (مثل بوابات الدفع وخدمات الاستضافة)، وذلك بموجب اتفاقيات سرية صارمة، أو إذا كان ذلك مطلوباً بموجب القانون.</p>
 
-<h2>حماية البيانات</h2>
-<p>نتخذ تدابير أمنية مناسبة لحماية بياناتك من الوصول غير المصرح به أو التعديل أو الإفصاح، بما في ذلك تشفير الاتصالات (SSL/TLS) وتخزين كلمات المرور بشكل مشفّر.</p>
+<h2>5. أمان البيانات</h2>
+<p>نتخذ تدابير أمنية تقنية وتنظيمية لحماية بياناتك من الوصول غير المصرح به، التعديل، أو الإتلاف. نستخدم تشفير SSL لتأمين نقل البيانات بين متصفحك وخوادمنا.</p>
 
-<h2>حقوقك</h2>
+<h2>6. حقوقك</h2>
+<p>لديك الحق في:</p>
 <ul>
-<li>طلب الاطلاع على بياناتك الشخصية المحفوظة لدينا.</li>
-<li>طلب تصحيح أو تحديث بياناتك.</li>
-<li>طلب حذف حسابك وبياناتك (مع مراعاة الالتزامات القانونية).</li>
+<li>الوصول إلى معلوماتك الشخصية التي نحتفظ بها.</li>
+<li>طلب تصحيح أو تحديث معلوماتك غير الدقيقة.</li>
+<li>طلب حذف حسابك وبياناتك من أنظمتنا.</li>
 </ul>
 <p>للتواصل بشأن خصوصيتك: <strong>info@nextlevels.education</strong></p>
 
-<h2>ملفات تعريف الارتباط (Cookies)</h2>
-<p>نستخدم ملفات تعريف الارتباط الضرورية لتشغيل المنصة (مثل رمز سلة المشتريات وجلسة تسجيل الدخول). لا نستخدم ملفات تتبع إعلانية.</p>
-
-<h2>تحديث السياسة</h2>
-<p>نحتفظ بحق تعديل هذه السياسة في أي وقت. سيتم نشر أي تحديثات على هذه الصفحة مع تاريخ آخر تعديل.</p>
-<p><strong>آخر تحديث:</strong> أبريل 2026</p>
+<h2>7. التعديلات على سياسة الخصوصية</h2>
+<p>نحتفظ بالحق في تعديل سياسة الخصوصية هذه في أي وقت. سيتم نشر أي تغييرات على هذه الصفحة مع تحديث تاريخ "آخر تحديث". استمرارك في استخدام المنصة بعد هذه التغييرات يُعد قبولاً للسياسة المعدلة.</p>
+<p><strong>آخر تحديث:</strong> 31 مايو 2026</p>
 `;
 
   readonly privacyEn = `
-<h2>Introduction</h2>
-<p>Next Levels ("the Company", "we") is committed to protecting the privacy of users of our training platform. This policy explains how we collect, use, and protect your personal data when you use the platform.</p>
+<h2>1. Introduction</h2>
+<p>At Next Levels, we place the utmost importance on the privacy of our visitors and users. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website and services.</p>
 
-<h2>Data We Collect</h2>
+<h2>2. Information We Collect</h2>
 <ul>
-<li><strong>Registration data:</strong> Full name, email address, phone number.</li>
-<li><strong>Payment data:</strong> Payments are processed through Tap payment gateway. We do not store your credit card details on our servers.</li>
-<li><strong>Usage data:</strong> Workshops you're enrolled in, your progress in educational content.</li>
-<li><strong>Technical data:</strong> IP address, browser type, operating system — for performance and security purposes.</li>
+<li><strong>Personal information:</strong> such as name, email address, and phone number when you register or make a purchase.</li>
+<li><strong>Payment information:</strong> credit card details (processed securely through certified payment gateways and not stored on our systems).</li>
+<li><strong>Usage information:</strong> data about how you interact with the platform, such as which courses you watch and how long you spend on them.</li>
+<li><strong>Device information:</strong> IP address, browser type, and operating system.</li>
 </ul>
 
-<h2>How We Use Your Data</h2>
+<h2>3. How We Use Your Information</h2>
+<p>We use the information we collect for the following purposes:</p>
 <ul>
-<li>Create and manage your account on the platform.</li>
-<li>Enroll you in workshops and grant access to content.</li>
-<li>Send order confirmations and login credentials via email.</li>
-<li>Send Zoom links for your enrolled workshops.</li>
-<li>Improve user experience and develop platform services.</li>
-<li>Comply with legal and regulatory requirements in Kuwait.</li>
+<li>Providing and managing your account and the services you request.</li>
+<li>Processing payments and issuing invoices.</li>
+<li>Communicating with you about updates, offers, and technical support.</li>
+<li>Improving and developing the platform and user experience.</li>
 </ul>
 
-<h2>Data Sharing</h2>
-<p>We do not sell or rent your personal data to any third party. We may share your data only with:</p>
-<ul>
-<li>Tap payment gateway for processing payments.</li>
-<li>SendGrid email service for sending notifications.</li>
-<li>Kuwait University — College of Social Sciences, as the academic partner of the program.</li>
-<li>Government authorities when legally required.</li>
-</ul>
+<h2>4. Information Sharing</h2>
+<p>We do not sell or rent your personal information to third parties. We may share your information only with trusted service providers who help us operate the platform (such as payment gateways and hosting services), under strict confidentiality agreements, or when required by law.</p>
 
-<h2>Data Protection</h2>
-<p>We implement appropriate security measures to protect your data from unauthorized access, alteration, or disclosure, including encrypted communications (SSL/TLS) and hashed password storage.</p>
+<h2>5. Data Security</h2>
+<p>We apply technical and organizational security measures to protect your data from unauthorized access, alteration, or destruction. We use SSL encryption to secure the transfer of data between your browser and our servers.</p>
 
-<h2>Your Rights</h2>
+<h2>6. Your Rights</h2>
+<p>You have the right to:</p>
 <ul>
-<li>Request access to your personal data stored with us.</li>
-<li>Request correction or update of your data.</li>
-<li>Request deletion of your account and data (subject to legal obligations).</li>
+<li>Access the personal information we hold about you.</li>
+<li>Request correction or update of any inaccurate information.</li>
+<li>Request deletion of your account and data from our systems.</li>
 </ul>
 <p>For privacy inquiries: <strong>info@nextlevels.education</strong></p>
 
-<h2>Cookies</h2>
-<p>We use essential cookies required for platform operation (such as cart token and login session). We do not use advertising tracking cookies.</p>
-
-<h2>Policy Updates</h2>
-<p>We reserve the right to modify this policy at any time. Updates will be posted on this page with the date of last modification.</p>
-<p><strong>Last updated:</strong> April 2026</p>
+<h2>7. Updates to This Privacy Policy</h2>
+<p>We reserve the right to modify this Privacy Policy at any time. Any changes will be posted on this page along with an updated "Last updated" date. Your continued use of the platform after such changes constitutes acceptance of the revised policy.</p>
+<p><strong>Last updated:</strong> 31 May 2026</p>
 `;
 }

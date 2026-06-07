@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -9,7 +9,7 @@ import { VolunteerEvent } from '../../core/models/api.types';
 import { EnrolledWorkshop } from '../../core/models/learn.types';
 import { CartService } from '../../core/services/cart.service';
 import { EventsService } from '../../core/services/events.service';
-import { EventCompletionState, LearnService } from '../../core/services/learn.service';
+import { BitaStatus, EventCompletionState, LearnService } from '../../core/services/learn.service';
 import { catchError, of } from 'rxjs';
 
 /** Zoom join button is unlocked this many minutes before workshop start. */
@@ -18,7 +18,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe, DecimalPipe],
+  imports: [RouterLink, DatePipe, DecimalPipe, NgClass],
   template: `
     @if (error()) {
       <p class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
@@ -170,26 +170,6 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                     ></video>
                   }
                 </div>
-
-                @if (completion()?.completed) {
-                  <button type="button" disabled
-                          class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-bold text-emerald-700">
-                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    {{ tr('تم إكمال المشاهدة', 'Watching completed') }}
-                  </button>
-                } @else {
-                  <button type="button"
-                          [disabled]="marking()"
-                          (click)="markCompleted()"
-                          class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
-                    @if (marking()) {
-                      <svg class="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
-                    } @else {
-                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    }
-                    {{ tr('أكملت المشاهدة', 'I completed watching') }}
-                  </button>
-                }
               </section>
             } @else {
               <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
@@ -201,6 +181,28 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                   <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
                 </div>
               </section>
+            }
+
+            <!-- "I completed viewing" — always available. Each completion counts
+                 toward the BITA certificate request (completed_count). -->
+            @if (completion()?.completed) {
+              <button type="button" disabled
+                      class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700">
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                {{ tr('تم إكمال المشاهدة', 'You completed viewing') }}
+              </button>
+            } @else {
+              <button type="button"
+                      [disabled]="marking()"
+                      (click)="markCompleted()"
+                      class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                @if (marking()) {
+                  <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                } @else {
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                }
+                {{ tr('اضغط هنا إذا أكملت المشاهدة', 'Click here if you completed viewing') }}
+              </button>
             }
           </div>
 
@@ -256,6 +258,82 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                 </div>
               }
             </div>
+
+            <!-- BITA accredited paper-certificate request. Only shown when the
+                 learner bought the add-on; the button gates on completing the
+                 required number of workshops via an animated modal. -->
+            @if (bitaStatus(); as bs) {
+              @if (bs.eligible_purchase) {
+                <div
+                  class="relative overflow-hidden rounded-2xl border p-5 shadow-sm motion-safe:animate-ve-fade-up"
+                  [ngClass]="bs.requested_at
+                    ? 'border-emerald-200 bg-gradient-to-b from-emerald-50 to-white'
+                    : 'border-amber-200 bg-gradient-to-b from-amber-50 via-white to-amber-50/40'"
+                >
+                  <span aria-hidden="true" class="pointer-events-none absolute inset-0 motion-safe:animate-pulse opacity-40">
+                    <span class="absolute top-3 end-4 h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                    <span class="absolute bottom-4 start-5 h-1 w-1 rounded-full bg-amber-300"></span>
+                    <span class="absolute top-6 start-10 h-1 w-1 rounded-full bg-emerald-300"></span>
+                  </span>
+
+                  <div class="relative flex items-center gap-3">
+                    <div class="relative flex h-11 w-11 shrink-0 items-center justify-center">
+                      <img src="/images/branding/bita-logo.png" alt="BITA" class="h-11 w-11 object-contain drop-shadow-sm" />
+                      @if (bs.requested_at) {
+                        <span class="absolute -bottom-1 -end-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white shadow-md ring-2 ring-white">
+                          <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </span>
+                      }
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-sm font-bold text-slate-900">{{ i18n.t('bitaCert.detailCardTitle') }}</p>
+                      <p class="text-xs text-slate-500">{{ i18n.t('bitaCert.detailCardSubtitle') }}</p>
+                    </div>
+                  </div>
+
+                  @if (!bs.requested_at) {
+                    <div class="relative mt-4">
+                      <div class="mb-1.5 flex items-center justify-between text-[11px] font-semibold text-amber-700">
+                        <span class="tabular-nums">{{ bs.completed_count }} / {{ bs.required_count }}</span>
+                        <span class="tabular-nums">{{ bitaProgressPct() }}%</span>
+                      </div>
+                      <div class="h-2 w-full overflow-hidden rounded-full bg-amber-100">
+                        <div
+                          class="h-full rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500"
+                          [style.width.%]="bitaProgressPct()"
+                          style="transition: width 600ms ease-out;"
+                        ></div>
+                      </div>
+                    </div>
+                  }
+
+                  <button
+                    type="button"
+                    [disabled]="bitaRequesting()"
+                    (click)="onBitaRequestClick()"
+                    class="relative mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold shadow-sm transition active:scale-[0.99] disabled:cursor-progress disabled:opacity-70"
+                    [ngClass]="bs.requested_at
+                      ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                      : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400'"
+                  >
+                    @if (bitaRequesting()) {
+                      <svg class="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                    } @else if (bs.requested_at) {
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    } @else {
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M5 7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2l-3 3-3-3H7a2 2 0 01-2-2V7z"/></svg>
+                    }
+                    {{ bs.requested_at ? i18n.t('bitaCert.detailRequestedCta') : i18n.t('bitaCert.detailRequestCta') }}
+                  </button>
+
+                  @if (bitaErrorToast(); as toast) {
+                    <div role="alert" class="relative mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-medium text-red-700">
+                      {{ toast }}
+                    </div>
+                  }
+                </div>
+              }
+            }
 
             <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
               <h3 class="mb-4 text-sm font-bold text-slate-900">{{ tr('تفاصيل', 'Details') }}</h3>
@@ -480,6 +558,145 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
         </div>
       }
     }
+
+    <!-- ───────────── BITA: "Almost there!" locked-state modal ───────────── -->
+    @if (showBitaLockedModal()) {
+      <div
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-label]="i18n.t('bitaCert.modalLockedTitle')"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 motion-safe:animate-ve-fade-in"
+      >
+        <button
+          type="button"
+          (click)="closeBitaLockedModal()"
+          class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+          [attr.aria-label]="i18n.t('bitaCert.modalCloseAria')"
+        ></button>
+
+        <div
+          class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200 motion-safe:animate-ve-fade-up"
+          [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+          [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+        >
+          <div class="relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/60 px-6 pt-8 pb-6 text-center">
+            <span aria-hidden="true" class="pointer-events-none absolute inset-0">
+              <span class="absolute top-3 left-6 h-1.5 w-1.5 rounded-full bg-amber-300 motion-safe:animate-ping"></span>
+              <span class="absolute top-8 right-8 h-1 w-1 rounded-full bg-orange-400 motion-safe:animate-pulse" style="animation-delay: 600ms"></span>
+              <span class="absolute bottom-4 left-1/3 h-1 w-1 rounded-full bg-amber-400 motion-safe:animate-pulse" style="animation-delay: 1.2s"></span>
+              <span class="absolute bottom-8 right-1/4 h-1.5 w-1.5 rounded-full bg-amber-200 motion-safe:animate-ping" style="animation-delay: 900ms"></span>
+            </span>
+
+            <div class="relative mx-auto h-32 w-32">
+              <svg class="h-32 w-32 -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" stroke="#fde68a" stroke-width="10" fill="none" />
+                <circle
+                  cx="60" cy="60" r="52"
+                  stroke="url(#bita-detail-ring-grad)" stroke-width="10" stroke-linecap="round" fill="none"
+                  [attr.stroke-dasharray]="326.7"
+                  [attr.stroke-dashoffset]="326.7 - (326.7 * bitaProgressPct() / 100)"
+                  style="transition: stroke-dashoffset 800ms cubic-bezier(0.4, 0, 0.2, 1)"
+                />
+                <defs>
+                  <linearGradient id="bita-detail-ring-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f59e0b"/>
+                    <stop offset="100%" stop-color="#b45309"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <div class="motion-safe:animate-ve-float text-amber-600">
+                  <svg class="h-9 w-9" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+                  </svg>
+                </div>
+                <div class="mt-0.5 text-xs font-bold text-amber-700 tabular-nums">{{ bitaProgressPct() }}%</div>
+              </div>
+            </div>
+
+            <h3 class="mt-5 text-xl font-extrabold text-slate-900">{{ i18n.t('bitaCert.modalLockedTitle') }}</h3>
+          </div>
+
+          <div class="px-6 pt-5 pb-6 text-center">
+            <p class="text-sm leading-relaxed text-slate-600">{{ i18n.t('bitaCert.modalLockedBody') }}</p>
+
+            <div class="mt-5 rounded-xl bg-slate-50 px-4 py-3.5 ring-1 ring-slate-100">
+              <div class="flex items-baseline justify-center gap-1.5 text-slate-700">
+                <span class="text-2xl font-black tabular-nums text-amber-700">{{ bitaStatus()?.completed_count ?? 0 }}</span>
+                <span class="text-sm font-semibold opacity-60">/</span>
+                <span class="text-base font-bold tabular-nums opacity-70">{{ bitaStatus()?.required_count ?? 100 }}</span>
+                <span class="ms-1 text-xs font-medium text-slate-500">{{ i18n.t('bitaCert.modalProgressLabel') }}</span>
+              </div>
+              <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-amber-100">
+                <div
+                  class="h-full rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500"
+                  [style.width.%]="bitaProgressPct()"
+                  style="transition: width 600ms ease-out;"
+                ></div>
+              </div>
+            </div>
+
+            <p class="mt-4 text-[11px] font-medium italic text-slate-400">{{ i18n.t('bitaCert.modalLockedHint') }}</p>
+
+            <button
+              type="button"
+              (click)="closeBitaLockedModal()"
+              class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800 active:scale-[0.98]"
+            >
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              {{ i18n.t('bitaCert.modalContinueCta') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ───────────── BITA: success modal after a successful POST ───────────── -->
+    @if (showBitaSuccessModal()) {
+      <div
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-label]="i18n.t('bitaCert.modalSuccessTitle')"
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 motion-safe:animate-ve-fade-in"
+      >
+        <button
+          type="button"
+          (click)="closeBitaSuccessModal()"
+          class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+          [attr.aria-label]="i18n.t('bitaCert.modalCloseAria')"
+        ></button>
+
+        <div
+          class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200 motion-safe:animate-ve-fade-up"
+          [attr.dir]="i18n.isRtl() ? 'rtl' : 'ltr'"
+          [attr.lang]="i18n.isRtl() ? 'ar' : 'en'"
+        >
+          <div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-emerald-50 px-6 pt-8 pb-6 text-center">
+            <span aria-hidden="true" class="pointer-events-none absolute inset-0">
+              <span class="absolute top-4 left-8 h-1.5 w-1.5 rounded-full bg-emerald-300 motion-safe:animate-ping"></span>
+              <span class="absolute top-10 right-10 h-1 w-1 rounded-full bg-emerald-400 motion-safe:animate-pulse" style="animation-delay: 400ms"></span>
+              <span class="absolute bottom-6 right-1/3 h-1 w-1 rounded-full bg-emerald-300 motion-safe:animate-pulse" style="animation-delay: 1s"></span>
+            </span>
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 ring-8 ring-emerald-50 motion-safe:animate-ve-success-pop">
+              <svg class="h-10 w-10 text-emerald-600 motion-safe:animate-ve-success-check" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-extrabold text-slate-900">{{ i18n.t('bitaCert.modalSuccessTitle') }}</h3>
+          </div>
+          <div class="px-6 pt-2 pb-6 text-center">
+            <p class="text-sm leading-relaxed text-slate-600">{{ i18n.t('bitaCert.modalSuccessBody') }}</p>
+            <button
+              type="button"
+              (click)="closeBitaSuccessModal()"
+              class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-700 active:scale-[0.98]"
+            >
+              {{ i18n.t('bitaCert.modalSuccessCta') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
   `,
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
@@ -498,6 +715,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   readonly completion = signal<EventCompletionState | null>(null);
   readonly marking = signal(false);
   readonly downloadingCertificate = signal(false);
+
+  // ── BITA paper-certificate request (mirrors the dashboard tile flow) ──────
+  readonly bitaStatus = signal<BitaStatus | null>(null);
+  readonly bitaRequesting = signal(false);
+  readonly showBitaLockedModal = signal(false);
+  readonly showBitaSuccessModal = signal(false);
+  readonly bitaErrorToast = signal<string | null>(null);
+  private bitaToastTimeout: ReturnType<typeof setTimeout> | null = null;
   /** Shows the red "you must watch first" toast under the certificate button. */
   readonly certAlertVisible = signal(false);
   /** Tracks the event id we last fetched completion for, so we don't refetch on every change. */
@@ -563,6 +788,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.myWorkshops.set(res.data);
           this.tryLoadCompletion();
         });
+
+      // BITA eligibility/progress is independent of the workshop payload;
+      // failures simply leave the card hidden.
+      this.learnApi
+        .getBitaStatus()
+        .pipe(catchError(() => of({ data: null as BitaStatus | null })))
+        .subscribe((res) => this.bitaStatus.set(res.data));
     }
 
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -596,6 +828,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (this.alertTimeout) {
       clearTimeout(this.alertTimeout);
     }
+    if (this.bitaToastTimeout) {
+      clearTimeout(this.bitaToastTimeout);
+    }
   }
 
   /** Cloudflare Stream iframe URLs use a distinct host; everything else is a direct mp4. */
@@ -623,11 +858,79 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.completion.set(res.data);
         this.marking.set(false);
+        // Completing a workshop bumps the BITA progress — refresh the card.
+        this.refreshBitaStatus();
       },
       error: () => {
         this.marking.set(false);
       },
     });
+  }
+
+  /** Re-fetches BITA eligibility/progress (called after a completion is recorded). */
+  private refreshBitaStatus(): void {
+    this.learnApi
+      .getBitaStatus()
+      .pipe(catchError(() => of({ data: null as BitaStatus | null })))
+      .subscribe((res) => this.bitaStatus.set(res.data));
+  }
+
+  /** Click handler for the detail-page "Request BITA Certificate" button. */
+  onBitaRequestClick(): void {
+    const s = this.bitaStatus();
+    if (!s || !s.eligible_purchase) {
+      return;
+    }
+    if (s.requested_at) {
+      this.showBitaSuccessModal.set(true);
+      return;
+    }
+    if (!s.can_request) {
+      this.showBitaLockedModal.set(true);
+      return;
+    }
+    this.submitBitaRequest();
+  }
+
+  closeBitaLockedModal(): void {
+    this.showBitaLockedModal.set(false);
+  }
+
+  closeBitaSuccessModal(): void {
+    this.showBitaSuccessModal.set(false);
+  }
+
+  /** POSTs the request, then flips to the success modal + refreshes status. */
+  private submitBitaRequest(): void {
+    if (this.bitaRequesting()) {
+      return;
+    }
+    this.bitaRequesting.set(true);
+    this.bitaErrorToast.set(null);
+    this.learnApi.requestBitaCertificate().subscribe({
+      next: (res) => {
+        this.bitaStatus.set(res.data);
+        this.bitaRequesting.set(false);
+        this.showBitaSuccessModal.set(true);
+      },
+      error: () => {
+        this.bitaRequesting.set(false);
+        this.bitaErrorToast.set(this.i18n.t('bitaCert.requestErrorToast'));
+        if (this.bitaToastTimeout) {
+          clearTimeout(this.bitaToastTimeout);
+        }
+        this.bitaToastTimeout = setTimeout(() => this.bitaErrorToast.set(null), 4000);
+      },
+    });
+  }
+
+  /** BITA progress percentage for the locked-modal ring, clamped to [0, 100]. */
+  bitaProgressPct(): number {
+    const s = this.bitaStatus();
+    if (!s || s.required_count <= 0) {
+      return 0;
+    }
+    return Math.max(0, Math.min(100, Math.round((s.completed_count / s.required_count) * 100)));
   }
 
   onDownloadCertificate(): void {

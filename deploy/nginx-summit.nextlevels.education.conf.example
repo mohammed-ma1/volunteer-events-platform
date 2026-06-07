@@ -1,0 +1,77 @@
+# HTTPS for summit.nextlevels.education (Angular SPA + Laravel /api on one host).
+#
+# === 1) DNS (name.com → Manage DNS Records for nextlevels.education) ===
+# Add ONE of:
+#   Type A,    Host summit, Value YOUR_DROPLET_PUBLIC_IP, TTL 300
+#   Type AAAA, Host summit, Value YOUR_VPS_IPV6 (optional)
+# Wait for propagation (often a few minutes; dig summit.nextlevels.education +short).
+#
+# === 2) On the VPS (Ubuntu-style) ===
+#   # Already provisioned for ku.nextlevels.education — reuse the same droplet.
+#   sudo cp deploy/nginx-summit.nextlevels.education.conf.example \
+#          /etc/nginx/sites-available/summit.nextlevels.education
+#   sudo ln -sf /etc/nginx/sites-available/summit.nextlevels.education /etc/nginx/sites-enabled/
+#   sudo nginx -t && sudo systemctl reload nginx
+#
+# === 3) TLS (Let's Encrypt) ===
+#   sudo certbot --nginx -d summit.nextlevels.education
+# Certbot will add ssl_certificate and listen 443 to this server block.
+#
+# === 4) Laravel .env on the server ===
+#   APP_URL=https://summit.nextlevels.education
+#   FRONTEND_URL=https://summit.nextlevels.education
+#   # Keep both origins in CORS while the old domain is still live (transition period):
+#   CORS_ALLOWED_ORIGINS=https://summit.nextlevels.education,https://ku.nextlevels.education
+#   APP_DEBUG=false
+#   cd /var/www/volunteer-events/backend && php artisan config:clear && php artisan config:cache
+#   sudo systemctl reload php8.4-fpm
+#
+# === 5) External dashboards (one-time) ===
+#   - Tap dashboard → Webhook URL → https://summit.nextlevels.education/api/v1/tap/webhook
+#   - Meta Business → Brand Safety → Domains → add + verify summit.nextlevels.education
+#
+# Frontend production build already uses apiUrl: '/api' (same origin) — no rebuild needed
+# beyond the next deploy.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name summit.nextlevels.education;
+
+    root /var/www/volunteer-events/frontend/dist/frontend/browser;
+    index index.html;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+
+    location = /up {
+        include fastcgi_params;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $scheme;
+        fastcgi_param HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
+        fastcgi_param SCRIPT_FILENAME /var/www/volunteer-events/backend/public/index.php;
+        fastcgi_param DOCUMENT_ROOT /var/www/volunteer-events/backend/public;
+        fastcgi_param REQUEST_URI $request_uri;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+    }
+
+    location ^~ /api/ {
+        include fastcgi_params;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $scheme;
+        fastcgi_param HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
+        fastcgi_param SCRIPT_FILENAME /var/www/volunteer-events/backend/public/index.php;
+        fastcgi_param DOCUMENT_ROOT /var/www/volunteer-events/backend/public;
+        fastcgi_param REQUEST_URI $request_uri;
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+}

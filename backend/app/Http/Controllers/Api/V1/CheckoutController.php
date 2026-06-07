@@ -27,7 +27,14 @@ class CheckoutController extends Controller
      * is attempted) but browsing, cart edits and the checkout form itself
      * keep working. Flip back to true and redeploy to re-enable payments.
      */
-    private const PAYMENTS_ENABLED = false;
+    private const PAYMENTS_ENABLED = true;
+
+    /**
+     * Fixed price for the optional BITA paper-certificate add-on. Captured
+     * onto each order at checkout time (`bita_addon_price`) so changing this
+     * later doesn't rewrite historical receipts.
+     */
+    private const BITA_ADDON_PRICE = 30.000;
 
     public function __construct(
         private readonly TapPaymentService $tapPaymentService
@@ -47,7 +54,11 @@ class CheckoutController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'customer_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:32'],
+            // Optional one-time paper-certificate add-on (+30 KD). Set true
+            // when the buyer ticks the "Premium Add-on" box on checkout.
+            'bita_addon' => ['sometimes', 'boolean'],
         ]);
+        $bitaAddon = (bool) ($data['bita_addon'] ?? false);
 
         /** @var Cart $cart */
         $cart = $request->attributes->get('cart');
@@ -66,7 +77,7 @@ class CheckoutController extends Controller
         }
 
         try {
-            $order = DB::transaction(function () use ($cart, $data, $idempotencyKey) {
+            $order = DB::transaction(function () use ($cart, $data, $idempotencyKey, $bitaAddon) {
                 $currency = $cart->items->first()->event->currency;
 
                 $order = Order::createFresh([
@@ -77,6 +88,8 @@ class CheckoutController extends Controller
                     'phone' => PhoneNumber::normalize($data['phone'] ?? null),
                     'currency' => $currency,
                     'status' => Order::STATUS_PENDING_PAYMENT,
+                    'has_bita_addon' => $bitaAddon,
+                    'bita_addon_price' => $bitaAddon ? self::BITA_ADDON_PRICE : 0,
                 ]);
 
                 $subtotal = 0.0;
@@ -102,9 +115,10 @@ class CheckoutController extends Controller
                     ]);
                 }
 
+                $addonAmount = $bitaAddon ? self::BITA_ADDON_PRICE : 0.0;
                 $order->update([
                     'subtotal' => round($subtotal, 3),
-                    'total' => round($subtotal, 3),
+                    'total' => round($subtotal + $addonAmount, 3),
                 ]);
 
                 return $order->fresh(['items']);

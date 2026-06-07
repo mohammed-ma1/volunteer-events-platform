@@ -203,6 +203,8 @@ export type TranslationKey =
   | 'faq.q4'
   | 'faq.a4'
   | 'footer.brand'
+  | 'footer.commercialRegLabel'
+  | 'footer.commercialRegNumber'
   | 'footer.quick'
   | 'footer.linkHome'
   | 'footer.linkWorkshops'
@@ -253,6 +255,20 @@ export type TranslationKey =
   | 'checkout.removeLine'
   | 'checkout.securePayment'
   | 'checkout.installmentPill'
+  | 'checkout.upsellBadge'
+  | 'checkout.upsellTitle'
+  | 'checkout.upsellBody'
+  | 'checkout.upsellPriceNow'
+  | 'checkout.upsellPriceWas'
+  | 'checkout.upsellInstallmentAmount'
+  | 'checkout.upsellInstallmentNote'
+  | 'checkout.upsellAppliedNote'
+  | 'checkout.bitaBadge'
+  | 'checkout.bitaTitle'
+  | 'checkout.bitaBody'
+  | 'checkout.bitaPrice'
+  | 'checkout.bitaSummaryLine'
+  | 'checkout.bitaAppliedNote'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
   | 'checkout.phoneHint'
@@ -322,6 +338,23 @@ export type TranslationKey =
   | 'learn.certificateDownload'
   | 'learn.certificateBlockedTitle'
   | 'learn.certificateBlocked'
+  | 'bitaCert.tileTitle'
+  | 'bitaCert.tileSubtitleRequest'
+  | 'bitaCert.tileSubtitleRequested'
+  | 'bitaCert.detailCardTitle'
+  | 'bitaCert.detailCardSubtitle'
+  | 'bitaCert.detailRequestCta'
+  | 'bitaCert.detailRequestedCta'
+  | 'bitaCert.modalLockedTitle'
+  | 'bitaCert.modalLockedBody'
+  | 'bitaCert.modalLockedHint'
+  | 'bitaCert.modalProgressLabel'
+  | 'bitaCert.modalContinueCta'
+  | 'bitaCert.modalCloseAria'
+  | 'bitaCert.modalSuccessTitle'
+  | 'bitaCert.modalSuccessBody'
+  | 'bitaCert.modalSuccessCta'
+  | 'bitaCert.requestErrorToast'
   | 'about.title'
   | 'about.intro'
   | 'about.missionTitle'
@@ -431,11 +464,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'changePassword.errMinLength': 'يجب أن تكون كلمة المرور 8 أحرف على الأقل',
     'changePassword.errMismatch': 'كلمتا المرور غير متطابقتين',
     'changePassword.errGeneric': 'تعذر تحديث كلمة المرور.',
-    'banner.promoAria': 'عرض ترويجي لخصم الورش لطلاب جامعة الكويت',
-    'banner.promoMain': 'عرض الـ 100 ورشة لطلاب جامعة الكويت! خصم خاص',
+    'banner.promoAria': 'عرض ترويجي لخصم باقة الـ 100 ورشة التدريبية',
+    'banner.promoMain': 'عرض الـ 100 ورشة التدريبية! خصم خاص',
     'banner.promoDetails': 'اضغط للتفاصيل',
     'banner.modalCloseAria': 'إغلاق النافذة',
-    'banner.modalImageEyebrow': 'جامعة الكويت · 100 ورشة تدريبية',
+    'banner.modalImageEyebrow': 'نكست لفلز · 100 ورشة تدريبية',
     'banner.modalHeroBanner': 'عرض الـ 100 ورشة 🔥',
     'banner.modalImageBarText': PROMO.ar.modalBar,
     'banner.modalBody': PROMO.ar.tagline,
@@ -452,7 +485,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.ctaFacilitators': 'تصفح المدربين والمحاضرين',
     'hero.stat': '100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
-    'hero.promoLine': 'احصل على جميع الورش بخصم خاص لطلاب جامعة الكويت · الأحد ٢٨–٦–٢٠٢٦ حتى الخميس ٢–٧–٢٠٢٦',
+    'hero.promoLine': 'احصل على جميع الورش بخصم خاص · الأحد ٢٨–٦–٢٠٢٦ حتى الخميس ٢–٧–٢٠٢٦',
     'feat1.title': 'تطوير مستمر',
     'feat1.desc': 'مسارات تعليمية متكاملة تواكب متطلبات العصر.',
     'feat2.title': 'محتوى تطبيقي',
@@ -563,7 +596,9 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.q4': 'هل الورشات مسجلة؟',
     'faq.a4': 'نعم، سيتم تسجيل جميع الورش لتكون متاحة أونلاين وللمشاهدة في أي وقت عبر المنصة التعليمية.',
     'footer.brand':
-      'مركز نكست لفل للتدريب يقدّم برامج وورشاً عملية لطلاب جامعة الكويت لبناء المهارات والاستعداد لسوق العمل.',
+      'المركز مصمم ليكون المكان الذي يأخذك من الفكرة إلى التطبيق، ومن الموهبة إلى الهوية المهنية.',
+    'footer.commercialRegLabel': 'سجل تجاري',
+    'footer.commercialRegNumber': '460122',
     'footer.quick': 'روابط سريعة',
     'footer.linkHome': 'الرئيسية',
     'footer.linkWorkshops': 'الورش التدريبية',
@@ -614,6 +649,21 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.removeLine': 'إزالة من السلة',
     'checkout.securePayment': 'الدفع آمن ومحمي',
     'checkout.installmentPill': 'قسط على 4 دفعات بدون فوائد مع ديمه',
+    'checkout.upsellBadge': 'عرض لمرة واحدة!',
+    'checkout.upsellTitle': 'نعم، أريد الترقية إلى باقة الـ 100 ورشة!',
+    'checkout.upsellBody':
+      'احصل على وصول كامل لجميع الورش الـ 100 مع شهادات معتمدة بدلاً من ورشة واحدة فقط. وفّر أكثر من 90٪ من أسعار الورش الفردية!',
+    'checkout.upsellPriceNow': '100 د.ك',
+    'checkout.upsellPriceWas': '1000 د.ك',
+    'checkout.upsellInstallmentAmount': '25 د.ك',
+    'checkout.upsellInstallmentNote': 'قسّمها على 4 دفعات بدون فوائد مع ديمة',
+    'checkout.upsellAppliedNote': 'تمت الترقية إلى باقة الـ 100 ورشة',
+    'checkout.bitaBadge': 'إضافة مميزة!',
+    'checkout.bitaTitle': 'نعم، أريد الشهادة الورقية المعتمدة من BITA!',
+    'checkout.bitaBody': 'احصل على شهادة ورقية معتمدة من BITA تُسلَّم إليك بعد إكمال الـ 100 ورشة.',
+    'checkout.bitaPrice': '30 د.ك',
+    'checkout.bitaSummaryLine': 'شهادة BITA الورقية',
+    'checkout.bitaAppliedNote': 'تمت إضافة شهادة BITA الورقية',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
     'checkout.phoneHint': '٨ أرقام بدون رمز الدولة (مثال: 99991234)',
@@ -675,17 +725,17 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'failed.browseWorkshops': 'تصفح الورش',
     'about.title': 'عن منصة التطوير الطلابي',
     'about.intro':
-      'منصة رسمية لطلاب جامعة الكويت تجمع الورش التدريبية والفعاليات في مكان واحد، لتسهيل التعلم المستمر والاستعداد للمسار المهني.',
+      'منصة نكست لفلز للتدريب تجمع الورش التدريبية والفعاليات في مكان واحد، لتسهيل التعلم المستمر والاستعداد للمسار المهني.',
     'about.missionTitle': 'رسالتنا',
     'about.missionText':
       'تمكين الطلاب من اكتساب مهارات عملية ومعتمدة، وتعزيز جاهزيتهم لسوق العمل من خلال برامج منظمة وتجربة تسجيل واضحة.',
     'about.offerTitle': 'ماذا نوفر؟',
     'about.offer1': 'ورش تدريبية متنوعة: قيادة، مهارات رقمية، ذكاء اصطناعي، تواصل، سيرة ذاتية ومقابلات، وغيرها.',
     'about.offer2': 'تتبع التسجيل والدفع عبر سلّة موحّدة مع إيصال إلكتروني بعد إتمام الطلب.',
-    'about.offer3': 'محتوى يُحدَّث باستمرار بالتنسيق مع وحدات الجامعة المعنية بالتطوير الطلابي.',
+    'about.offer3': 'محتوى يُحدَّث باستمرار وفقاً لأحدث متطلبات سوق العمل ومجالات التطوير المهني.',
     'about.partnerTitle': 'لمن هذه المنصة؟',
     'about.partnerText':
-      'لجميع طلاب جامعة الكويت الراغبين في تطوير مهاراتهم خارج المنهج التقليدي، والمشاركة في فعاليات معتمدة تدعم مسارهم الأكاديمي والمهني.',
+      'لجميع الراغبين في تطوير مهاراتهم خارج المنهج التقليدي، والمشاركة في فعاليات معتمدة تدعم مسارهم الأكاديمي والمهني.',
     'about.ctaWorkshops': 'تصفح الورش',
     'about.ctaCareer': 'المسار المهني',
     'careerPage.title': 'المسار المهني',
@@ -720,6 +770,23 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'learn.certificateDownload': 'اضغط هنا لتحميل الشهادة',
     'learn.certificateBlockedTitle': 'تنبيه',
     'learn.certificateBlocked': 'يجب عليك إكمال مشاهدة تسجيل الورشة أولاً لتتمكن من تحميل الشهادة',
+    'bitaCert.tileTitle': 'طلب شهادة BITA',
+    'bitaCert.tileSubtitleRequest': 'اضغط للطلب',
+    'bitaCert.tileSubtitleRequested': 'تم استلام طلبك',
+    'bitaCert.detailCardTitle': 'شهادة BITA المعتمدة',
+    'bitaCert.detailCardSubtitle': 'أكمل جميع الورش لطلب الشهادة الورقية المعتمدة من BITA',
+    'bitaCert.detailRequestCta': 'اطلب شهادة BITA',
+    'bitaCert.detailRequestedCta': 'تم إرسال طلب الشهادة',
+    'bitaCert.modalLockedTitle': 'أوشكت على الوصول!',
+    'bitaCert.modalLockedBody': 'لطلب شهادة BITA المعتمدة، عليك أولاً إكمال مشاهدة جميع الورش التدريبية. تابع التعلّم وستفتح لك الشهادة فور إتمامك للعدد المطلوب.',
+    'bitaCert.modalLockedHint': 'كل ورشة تُكملها تقرّبك أكثر من شهادتك المعتمدة',
+    'bitaCert.modalProgressLabel': 'ورشة مكتملة',
+    'bitaCert.modalContinueCta': 'متابعة التعلّم',
+    'bitaCert.modalCloseAria': 'إغلاق النافذة',
+    'bitaCert.modalSuccessTitle': 'تم استلام طلبك بنجاح!',
+    'bitaCert.modalSuccessBody': 'لقد استلمنا طلب شهادة BITA المعتمدة. سيقوم فريقنا بمعالجة طلبك والتواصل معك قريباً بخصوص شهادتك الورقية.',
+    'bitaCert.modalSuccessCta': 'رائع، شكراً لكم',
+    'bitaCert.requestErrorToast': 'تعذّر إرسال طلب الشهادة الآن، يرجى المحاولة مرة أخرى',
   },
   en: {
     'nav.home': 'Home',
@@ -744,7 +811,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'workshops.titleHighlight': 'workshops',
     'workshops.titleAfter': 'available',
     'workshops.programsBadge': 'Training programs',
-    'workshops.promoCertBanner': '🎗️ Students receive 100 certified certificates',
+    'workshops.promoCertBanner': '🎗️ The student will receive 100 accredited certificates',
     'workshops.promoOfferEnds': 'Offer ends on July 2',
     'workshops.promoOfferEndsIn': 'Time remaining',
     'workshops.promoOfferEndsInShort': 'Time remaining',
@@ -803,11 +870,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'changePassword.errMismatch': 'Passwords do not match',
     'changePassword.errGeneric': 'Could not update password.',
     'banner.promoAria':
-      '100-workshop offer for Kuwait University students — special discount. Click for details.',
-    'banner.promoMain': '100-workshop offer for Kuwait University students! Special discount',
+      '100-workshop training bundle — special discount. Click for details.',
+    'banner.promoMain': '100-workshop training bundle! Special discount',
     'banner.promoDetails': 'Click for details',
     'banner.modalCloseAria': 'Close dialog',
-    'banner.modalImageEyebrow': 'Kuwait University · 100 training workshops',
+    'banner.modalImageEyebrow': 'Next Levels · 100 training workshops',
     'banner.modalHeroBanner': 'The 100-workshop offer 🔥',
     'banner.modalImageBarText': PROMO.en.modalBar,
     'banner.modalBody': PROMO.en.tagline,
@@ -825,7 +892,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.stat': '100 certified workshops',
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
-      'Special pricing for KU students · Live week Sun 28 Jun–Thu 2 Jul 2026 (Asia/Kuwait)',
+      'Special pricing on all workshops · Live week Sun 28 Jun–Thu 2 Jul 2026 (Asia/Kuwait)',
     'feat1.title': 'Continuous development',
     'feat1.desc': 'Learning paths that keep pace with today’s workplace expectations.',
     'feat2.title': 'Applied content',
@@ -939,7 +1006,9 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'faq.a4':
       'Yes—sessions are recorded so you can watch online later on the learning platform when recordings are published.',
     'footer.brand':
-      'Next Level Training Center delivers programs and practical workshops for Kuwait University students to build skills and prepare for the job market.',
+      'Designed to be the place that takes you from idea to execution, and from talent to professional identity.',
+    'footer.commercialRegLabel': 'Commercial Reg.',
+    'footer.commercialRegNumber': '460122',
     'footer.quick': 'Quick Links',
     'footer.linkHome': 'Home',
     'footer.linkWorkshops': 'Workshops',
@@ -990,6 +1059,21 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.removeLine': 'Remove from cart',
     'checkout.securePayment': 'Secure, protected checkout',
     'checkout.installmentPill': 'Split in 4 interest-free payments with Deemah',
+    'checkout.upsellBadge': 'One-Time Special Offer!',
+    'checkout.upsellTitle': 'Yes, I want to upgrade to the 100 Workshops Bundle!',
+    'checkout.upsellBody':
+      'Get full access to all 100 workshops with accredited certificates instead of just one. Save over 90% off individual workshop prices!',
+    'checkout.upsellPriceNow': '100 KD',
+    'checkout.upsellPriceWas': '1000 KD',
+    'checkout.upsellInstallmentAmount': '25 KD',
+    'checkout.upsellInstallmentNote': 'Pay in 4 interest-free payments with Dima',
+    'checkout.upsellAppliedNote': 'Upgraded to the 100 Workshops Bundle',
+    'checkout.bitaBadge': 'Premium Add-on!',
+    'checkout.bitaTitle': 'Yes, I want the accredited BITA paper certificate!',
+    'checkout.bitaBody': 'Get an accredited paper certificate from BITA, delivered to you after completing the 100 workshops.',
+    'checkout.bitaPrice': '30 KD',
+    'checkout.bitaSummaryLine': 'BITA paper certificate',
+    'checkout.bitaAppliedNote': 'BITA paper certificate added',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
     'checkout.phoneHint': '8 digits without country code (e.g. 99991234)',
@@ -1051,7 +1135,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'failed.browseWorkshops': 'Browse workshops',
     'about.title': 'About the platform',
     'about.intro':
-      'The official Kuwait University student development hub—bringing training workshops and events together in one place for continuous learning and career readiness.',
+      'The official Next Levels learning hub—bringing training workshops and events together in one place for continuous learning and career readiness.',
     'about.missionTitle': 'Our mission',
     'about.missionText':
       'To help students gain practical, recognized skills and strengthen employability through organized programs and a clear registration experience.',
@@ -1059,10 +1143,10 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'about.offer1':
       'Diverse workshops: leadership, digital skills, AI, communication, CV & interviews, and more.',
     'about.offer2': 'A single cart for registration and payment, with email confirmation after checkout.',
-    'about.offer3': 'Content that evolves in step with university student-development units.',
+    'about.offer3': 'Content updated continuously to match the latest market needs and career-development domains.',
     'about.partnerTitle': 'Who it is for',
     'about.partnerText':
-      'All KU students who want to grow beyond the classroom and join credentialed activities that support academic and career goals.',
+      'All learners who want to grow beyond the classroom and join credentialed activities that support academic and career goals.',
     'about.ctaWorkshops': 'Browse workshops',
     'about.ctaCareer': 'Career path',
     'careerPage.title': 'Your career path',
@@ -1097,5 +1181,22 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'learn.certificateDownload': 'Click here to download your certificate',
     'learn.certificateBlockedTitle': 'Heads up',
     'learn.certificateBlocked': 'You must finish watching the workshop recording before downloading the certificate',
+    'bitaCert.tileTitle': 'Request BITA Cert',
+    'bitaCert.tileSubtitleRequest': 'Tap to request',
+    'bitaCert.tileSubtitleRequested': 'Request received',
+    'bitaCert.detailCardTitle': 'BITA Accredited Certificate',
+    'bitaCert.detailCardSubtitle': 'Complete all workshops to request your official BITA paper certificate',
+    'bitaCert.detailRequestCta': 'Request BITA Certificate',
+    'bitaCert.detailRequestedCta': 'Certificate requested',
+    'bitaCert.modalLockedTitle': 'Almost there!',
+    'bitaCert.modalLockedBody': 'To request your accredited BITA certificate, you first need to finish watching all of your workshops. Keep going — your certificate unlocks the moment you reach the goal.',
+    'bitaCert.modalLockedHint': 'Every workshop you complete brings you closer to your accredited certificate',
+    'bitaCert.modalProgressLabel': 'workshops completed',
+    'bitaCert.modalContinueCta': 'Keep learning',
+    'bitaCert.modalCloseAria': 'Close dialog',
+    'bitaCert.modalSuccessTitle': 'Request received!',
+    'bitaCert.modalSuccessBody': 'We have received your BITA accredited certificate request. Our team will process it and reach out to you soon about your paper certificate.',
+    'bitaCert.modalSuccessCta': 'Awesome, thank you',
+    'bitaCert.requestErrorToast': 'We could not submit your certificate request just now, please try again',
   },
 };

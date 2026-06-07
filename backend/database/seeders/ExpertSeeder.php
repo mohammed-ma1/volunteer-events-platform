@@ -19,7 +19,7 @@ class ExpertSeeder extends Seeder
         // Originally provided portraits.
         'منيرة النخيلان' => 'moneera.jpg',
         'زينب الغضبان' => 'zainab.jpg',
-        'علي الانصاري' => 'ali.jpg',
+        'علي عادل' => 'ali.jpg',
         'مرزوق السعيد' => 'marzooq.jpg',
         'فاطمة عباس' => 'fatema.jpg',
         'غدير الكندري' => 'ghadeer.jpg',
@@ -102,7 +102,7 @@ class ExpertSeeder extends Seeder
                 'phone' => $phone,
                 'specialization' => 'KU workshop week',
                 'title' => 'Workshop facilitator',
-                'bio' => 'Facilitator for Kuwait University student training week (April 2026).',
+                'bio' => 'Facilitator for the Next Levels training week (April 2026).',
                 'is_active' => $isActive,
             ];
 
