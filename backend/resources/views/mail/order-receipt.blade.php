@@ -92,6 +92,12 @@
                   <td align="right" style="padding:8px 0;font-size:14px;color:#4a5670;">Subtotal</td>
                   <td align="right" style="padding:8px 0 8px 24px;font-size:14px;color:#0b1221;width:120px;">{{ number_format((float) $order->subtotal, 3) }} {{ $order->currency }}</td>
                 </tr>
+                @if($order->has_bita_addon)
+                <tr>
+                  <td align="right" style="padding:8px 0;font-size:14px;color:#4a5670;">BITA paper certificate · شهادة BITA الورقية</td>
+                  <td align="right" style="padding:8px 0 8px 24px;font-size:14px;color:#0b1221;width:120px;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
+                </tr>
+                @endif
                 <tr>
                   <td align="right" style="padding:12px 0 0 0;font-size:16px;font-weight:700;color:#0b1221;">Total paid</td>
                   <td align="right" style="padding:12px 0 0 24px;font-size:18px;font-weight:700;color:#0f766e;">{{ number_format((float) $order->total, 3) }} {{ $order->currency }}</td>
