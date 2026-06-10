@@ -129,6 +129,9 @@ const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
   'هاجر النصار': `${R2_BASE}/hajr.jpg`,
   'عبدالعزيز الضبيب': `${R2_BASE}/abd-alazeez.jpg`,
   'د. إسراء الدايل': '/images/presenters/israa-al-dayel.png',
+  'سالم الهاجري': '/images/presenters/salem-al-hajri.png',
+  'محمد الهاجري': '/images/presenters/mohammed-al-hajri.png',
+  'منال المسلم': '/images/presenters/manal-al-muslim.png',
 };
 
 /** Strip diacritics + unify alif/ya/spaces so name variants match. */
