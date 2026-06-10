@@ -59,6 +59,9 @@ class ExpertSeeder extends Seeder
         'د. إسراء الدايل' => '/images/presenters/israa-al-dayel.png',
         'سارة المنيس' => '/images/presenters/sara-al-munais.png',
         'هيا بوراشد' => '/images/presenters/hia-bourashed.png',
+        'سالم الهاجري' => '/images/presenters/salem-al-hajri.png',
+        'محمد الهاجري' => '/images/presenters/mohammed-al-hajri.png',
+        'منال المسلم' => '/images/presenters/manal-al-muslim.png',
     ];
 
     public function run(): void
