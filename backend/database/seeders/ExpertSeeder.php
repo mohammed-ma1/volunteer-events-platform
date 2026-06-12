@@ -112,12 +112,23 @@ class ExpertSeeder extends Seeder
             $r2Url = $r2OverrideFor($name);
             $existing = Expert::query()->where('email', $email)->first();
 
+            // Real bio + title come from the «ارقام المحاضرين» sheet (نبذة عن المحاضر
+            // → bio, title column → role/specialization). Fall back to generic copy.
+            $bio = isset($row['bio']) && trim((string) $row['bio']) !== ''
+                ? trim((string) $row['bio'])
+                : 'Facilitator for the Next Levels training week.';
+            $roleTitle = isset($row['title']) && trim((string) $row['title']) !== ''
+                ? trim((string) $row['title'])
+                : 'Workshop facilitator';
+
             $payload = [
                 'name' => $name,
                 'phone' => $phone,
-                'specialization' => 'KU workshop week',
-                'title' => 'Workshop facilitator',
-                'bio' => 'Facilitator for the Next Levels training week (April 2026).',
+                'specialization' => isset($row['title']) && trim((string) $row['title']) !== ''
+                    ? trim((string) $row['title'])
+                    : 'KU workshop week',
+                'title' => $roleTitle,
+                'bio' => $bio,
                 'is_active' => $isActive,
             ];
 
