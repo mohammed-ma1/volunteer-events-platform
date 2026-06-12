@@ -87,6 +87,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   // ── June 2026 KU week (For Programer Final.xlsx) additions ──
   { nameAr: 'سحر الشمري', nameEn: 'Sahar Al-Shammari', imageUrl: SRC_IMG_C },
   { nameAr: 'د. إسراء الدايل', nameEn: 'Dr. Israa Al-Dayel', imageUrl: SRC_IMG_D },
+  { nameAr: 'أشواق العنزي', nameEn: 'Ashwaq Al-Anzi', imageUrl: SRC_IMG_A },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────
@@ -158,6 +159,116 @@ function normalizeArName(name: string): string {
 const NORMALIZED_AVATAR_OVERRIDES: Record<string, string> = (() => {
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(PRESENTER_AVATAR_OVERRIDES)) {
+    out[normalizeArName(k)] = v;
+  }
+  return out;
+})();
+
+// ── Per-presenter role + bio (from the «ارقام المحاضرين» sheet: title column →
+// specialty, «نبذة عن المحاضر» → bio). Matched by normalized name; any field left
+// out falls back to the generic SOURCE_ROLE_* / SOURCE_BIO_* values.
+interface PresenterInfo {
+  specialtyAr?: string;
+  specialtyEn?: string;
+  bioAr?: string;
+  bioEn?: string;
+}
+
+const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
+  'سنابل المسلم': {
+    specialtyAr: 'روائية',
+    specialtyEn: 'Novelist',
+    bioAr: 'خبرة في مجال إعلام الطفل المقروء (مجلة العربي الصغير) وفي مجال الإعلام والتسويق.',
+    bioEn: "Experience in children's print media (Al-Arabi Al-Sagheer magazine) and in media and marketing.",
+  },
+  'بدر الفيلكاوي': { specialtyAr: 'فنان تشكيلي', specialtyEn: 'Visual Artist' },
+  'م. زينب الغضبان': {
+    specialtyAr: 'مهندسة',
+    specialtyEn: 'Engineer',
+    bioAr: 'كبير مهندسين بترول ومدربة معتمدة في الوعي.',
+    bioEn: 'Senior petroleum engineer and certified awareness trainer.',
+  },
+  'أحمد سمير': {
+    specialtyAr: 'مصمم فنون بالذكاء الاصطناعي وموشن جرافيك',
+    specialtyEn: 'AI Art & Motion Graphic Designer',
+    bioAr: 'مصمم فنون بالذكاء الاصطناعي وموشن جرافيك.',
+    bioEn: 'AI art & motion graphic designer.',
+  },
+  'دلال النخيلان': {
+    specialtyAr: 'أخصائية تغذية علاجية',
+    specialtyEn: 'Clinical Nutritionist',
+    bioAr: 'خبرة مهنية تمتد لأكثر من 15 عاماً، وأؤمن بأن الصحة ليست مجرد نظام غذائي أو هدف مؤقت بل استثمار طويل الأمد.',
+    bioEn: 'Over 15 years of professional experience; I believe health is not just a diet or a temporary goal, but a long-term investment.',
+  },
+  'عبدالرحمن التركيت': {
+    specialtyAr: 'فنان تشكيلي',
+    specialtyEn: 'Visual Artist',
+    bioAr: 'فنان تشكيلي وتربوي ومدرب معتمد TOT.',
+    bioEn: 'Visual artist, educator, and certified TOT trainer.',
+  },
+  'آلاء النصار': {
+    bioAr: 'أخصائية اجتماعية في تعديل السلوك.',
+    bioEn: 'Social specialist in behavior modification.',
+  },
+  'مرزوق السعيد': {
+    bioAr: 'مستشار تطوير مهارات التواصل والخطابة.',
+    bioEn: 'Consultant in developing communication and public-speaking skills.',
+  },
+  'فاطمة عباس': {
+    bioAr: 'مصورة فوتوغرافية بخبرة منذ 2006، ومدربة معتمدة حاصلة على شهادات من مصورين عالميين ومحليين.',
+    bioEn: 'Photographer since 2006 and certified trainer, with certifications from international and local photographers.',
+  },
+  'الحكم خالد الشمري': {
+    bioAr: 'الحكم الدولي خالد الشمري.',
+    bioEn: 'International referee Khaled Al-Shammari.',
+  },
+  'دانا العوضي': {
+    bioAr: 'مختصة في رفع إنتاجية المنظمة وتقليل الهدر، ومهتمة بنشر ثقافة بيئة العمل الصحية، ومدربة معتمدة.',
+    bioEn: 'Specialist in raising organizational productivity and reducing waste, advocate for healthy work environments, and certified trainer.',
+  },
+  'سارة المنيس': {
+    bioAr: 'اختصاصية نفسية أولى ومدربة معتمدة لمرحلة الطفولة.',
+    bioEn: 'Senior psychologist and certified early-childhood trainer.',
+  },
+  'فاطمة القطان': {
+    bioAr: 'مدربة جلسات دعم نفسي وعاطفي، ومتخصصة في تقنيات التنفس لمنهج نسمة.',
+    bioEn: 'Psychological and emotional support trainer, specialized in breathing techniques (Nasma method).',
+  },
+  'هيا بوراشد': {
+    bioAr: 'مدربة معتمدة في صناعة الشموع الصديقة للبيئة من المواد الطبيعية، وشغوفة بنشر ثقافة الحرف اليدوية المستدامة.',
+    bioEn: 'Certified trainer in eco-friendly, natural-material candle making, passionate about sustainable handicrafts.',
+  },
+  'محمد الهاجري': {
+    bioAr: 'رائد أعمال يبني عقلية المبادرة ويحوّل الطموح إلى إنجاز — الفرص تُصنع لا تُنتظر.',
+    bioEn: 'Entrepreneur building an initiative mindset and turning ambition into achievement — opportunities are made, not awaited.',
+  },
+  'سالم الهاجري': {
+    bioAr: 'مصور وصانع محتوى.',
+    bioEn: 'Photographer and content creator.',
+  },
+  'منال المسلم': {
+    bioAr: 'مدربة في تقنيات التنفس ومهارات الحياة، ومؤسسة منهج نسمة.',
+    bioEn: 'Trainer in breathing techniques and life skills, founder of the Nasma method.',
+  },
+  'سحر الشمري': {
+    bioAr: 'مدربة متخصصة في الهيئة العامة للتعليم التطبيقي والتدريب.',
+    bioEn: 'Specialized trainer at the Public Authority for Applied Education and Training.',
+  },
+  'د. إسراء الدايل': {
+    specialtyAr: 'دكتوراه في العلاج الطبيعي',
+    specialtyEn: 'PhD in Physical Therapy',
+    bioAr: 'دكتوراه في التأهيل الحركي والعصبي، متخصصة في تحليل حركة الجسم وتعديل أخطاء المشي، وخبرة في العلاج الطبيعي للأمراض العصبية والعمود الفقري.',
+    bioEn: 'PhD in motor and neuro rehabilitation, specialized in body-movement analysis and gait correction, with experience in physical therapy for neurological and spinal conditions.',
+  },
+  'م. الجازي العجمي': {
+    bioAr: 'مستشارة ومدربة في ريادة الأعمال.',
+    bioEn: 'Consultant and trainer in entrepreneurship.',
+  },
+};
+
+const NORMALIZED_INFO_OVERRIDES: Record<string, PresenterInfo> = (() => {
+  const out: Record<string, PresenterInfo> = {};
+  for (const [k, v] of Object.entries(PRESENTER_INFO_OVERRIDES)) {
     out[normalizeArName(k)] = v;
   }
   return out;
@@ -284,15 +395,17 @@ function buildHomeExperts(): HomeExpert[] {
 
   return sorted.map((t) => {
     const id = presenterId(t.nameAr);
-    const localOverride = NORMALIZED_AVATAR_OVERRIDES[normalizeArName(t.nameAr)];
+    const key = normalizeArName(t.nameAr);
+    const localOverride = NORMALIZED_AVATAR_OVERRIDES[key];
+    const info = NORMALIZED_INFO_OVERRIDES[key];
     return {
       id,
       nameAr: t.nameAr,
       nameEn: t.nameEn,
-      specialtyAr: SOURCE_ROLE_AR,
-      specialtyEn: SOURCE_ROLE_EN,
-      bioAr: SOURCE_BIO_AR,
-      bioEn: SOURCE_BIO_EN,
+      specialtyAr: info?.specialtyAr ?? SOURCE_ROLE_AR,
+      specialtyEn: info?.specialtyEn ?? SOURCE_ROLE_EN,
+      bioAr: info?.bioAr ?? SOURCE_BIO_AR,
+      bioEn: info?.bioEn ?? SOURCE_BIO_EN,
       imageUrl: localOverride ?? '',
       socials: DEFAULT_SOCIALS,
       // Empty — the events-home component derives the trainer's workshops by
