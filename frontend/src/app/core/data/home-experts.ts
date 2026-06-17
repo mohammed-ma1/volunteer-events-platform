@@ -88,7 +88,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'سحر الشمري', nameEn: 'Sahar Al-Shammari', imageUrl: SRC_IMG_C },
   { nameAr: 'د. إسراء الدايل', nameEn: 'Dr. Israa Al-Dayel', imageUrl: SRC_IMG_D },
   { nameAr: 'أشواق العنزي', nameEn: 'Ashwaq Al-Anzi', imageUrl: SRC_IMG_A },
-  { nameAr: 'زينب العوضي', nameEn: 'Zainab Al-Awadhi', imageUrl: SRC_IMG_B },
+  { nameAr: 'أ. زينب العوضي', nameEn: 'Zainab Al-Awadhi', imageUrl: SRC_IMG_B },
   { nameAr: 'عائشة الوايل', nameEn: 'Aisha Al-Wail', imageUrl: SRC_IMG_C },
 ];
 
@@ -268,8 +268,10 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
     bioEn: 'Consultant and trainer in entrepreneurship.',
   },
   'زينب العوضي': {
-    specialtyAr: 'عضو هيئة تدريب بكلية التربية الأساسية',
-    specialtyEn: 'Faculty member, College of Basic Education',
+    specialtyAr: '',
+    specialtyEn: '',
+    bioAr: 'عضو هيئة تدريب بكلية التربية الأساسية',
+    bioEn: 'Faculty member, College of Basic Education',
   },
 };
 
