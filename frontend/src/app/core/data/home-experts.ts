@@ -270,8 +270,6 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
   'زينب العوضي': {
     specialtyAr: 'عضو هيئة تدريب بكلية التربية الأساسية',
     specialtyEn: 'Faculty member, College of Basic Education',
-    bioAr: 'عضو هيئة تدريب بكلية التربية الأساسية.',
-    bioEn: 'Faculty member at the College of Basic Education.',
   },
 };
 
