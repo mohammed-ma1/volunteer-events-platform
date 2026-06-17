@@ -194,5 +194,17 @@
     "name_ar": "أشواق العنزي",
     "phone": null,
     "on_platform": true
+  },
+  {
+    "name_ar": "زينب العوضي",
+    "phone": null,
+    "on_platform": true,
+    "title": "عضو هيئة تدريب بكلية التربية الأساسية",
+    "bio": "عضو هيئة تدريب بكلية التربية الأساسية."
+  },
+  {
+    "name_ar": "عائشة الوايل",
+    "phone": null,
+    "on_platform": true
   }
 ]
