@@ -62,6 +62,7 @@ class ExpertSeeder extends Seeder
         'سالم الهاجري' => '/images/presenters/salem-al-hajri.png',
         'محمد الهاجري' => '/images/presenters/mohammed-al-hajri.png',
         'منال المسلم' => '/images/presenters/manal-al-muslim.png',
+        'زينب العوضي' => '/images/presenters/zainab-al-awadhi.png',
     ];
 
     public function run(): void

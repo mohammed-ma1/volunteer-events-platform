@@ -510,7 +510,7 @@ return [
         'instructor' => 'دلال النخيلان',
     ],
     'ms-w-069' => [
-        'title' => 'كيف نحافظ على قوام صحي نشاط بدني مستدام',
+        'title' => 'كيف نحافظ على قوام صحي ونشاط بدني مستدام',
         'title_en' => 'How to Be Fit in Your Future Life',
         'description_ar' => 'ورشة عملية حول الحفاظ على قوام صحي وبناء نشاط بدني مستدام في حياتك اليومية والمستقبلية.',
         'description_en' => 'A practical workshop on maintaining a healthy posture and building sustainable physical activity for your daily and future life.',
@@ -811,5 +811,29 @@ return [
         'description_en' => 'A practical plan to succeed in your first 90 days at a new job and build a strong first impression.',
         'category' => 'professional',
         'instructor' => 'سحر الشمري',
+    ],
+    'ms-w-106' => [
+        'title' => 'فن صناعة الفيديو باستخدام CapCut',
+        'title_en' => 'Video Creation with CapCut',
+        'description_ar' => 'تعلّم صناعة وتحرير مقاطع فيديو احترافية باستخدام تطبيق CapCut خطوة بخطوة.',
+        'description_en' => 'Learn to create and edit professional videos with CapCut, step by step.',
+        'category' => 'professional',
+        'instructor' => 'زينب العوضي',
+    ],
+    'ms-w-107' => [
+        'title' => 'حدد أهدافك بطريقة SMART',
+        'title_en' => 'Set Your Goals the SMART Way',
+        'description_ar' => 'حدّد أهدافك وحوّلها إلى خطة واضحة وقابلة للقياس باستخدام منهجية SMART.',
+        'description_en' => 'Define your goals and turn them into a clear, measurable plan using the SMART method.',
+        'category' => 'professional',
+        'instructor' => 'دانا العوضي',
+    ],
+    'ms-w-108' => [
+        'title' => 'وظيفة أو مشروع، ليش مو الإثنين؟',
+        'title_en' => 'A Job or a Project — Why Not Both?',
+        'description_ar' => 'كيف توازن بين الوظيفة وريادة الأعمال وتبني مسارك المهني بثقة.',
+        'description_en' => 'How to balance a job and entrepreneurship and build your career path with confidence.',
+        'category' => 'professional',
+        'instructor' => 'عائشة الوايل',
     ],
 ];

@@ -88,6 +88,8 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'سحر الشمري', nameEn: 'Sahar Al-Shammari', imageUrl: SRC_IMG_C },
   { nameAr: 'د. إسراء الدايل', nameEn: 'Dr. Israa Al-Dayel', imageUrl: SRC_IMG_D },
   { nameAr: 'أشواق العنزي', nameEn: 'Ashwaq Al-Anzi', imageUrl: SRC_IMG_A },
+  { nameAr: 'زينب العوضي', nameEn: 'Zainab Al-Awadhi', imageUrl: SRC_IMG_B },
+  { nameAr: 'عائشة الوايل', nameEn: 'Aisha Al-Wail', imageUrl: SRC_IMG_C },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────
@@ -133,6 +135,7 @@ const PRESENTER_AVATAR_OVERRIDES: Record<string, string> = {
   'سالم الهاجري': '/images/presenters/salem-al-hajri.png',
   'محمد الهاجري': '/images/presenters/mohammed-al-hajri.png',
   'منال المسلم': '/images/presenters/manal-al-muslim.png',
+  'زينب العوضي': '/images/presenters/zainab-al-awadhi.png',
 };
 
 /** Strip diacritics + unify alif/ya/spaces so name variants match. */
@@ -263,6 +266,12 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
   'م. الجازي العجمي': {
     bioAr: 'مستشارة ومدربة في ريادة الأعمال.',
     bioEn: 'Consultant and trainer in entrepreneurship.',
+  },
+  'زينب العوضي': {
+    specialtyAr: 'عضو هيئة تدريب بكلية التربية الأساسية',
+    specialtyEn: 'Faculty member, College of Basic Education',
+    bioAr: 'عضو هيئة تدريب بكلية التربية الأساسية.',
+    bioEn: 'Faculty member at the College of Basic Education.',
   },
 };
 
