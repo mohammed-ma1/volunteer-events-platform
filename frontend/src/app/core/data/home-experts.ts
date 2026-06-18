@@ -193,8 +193,8 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
     bioEn: 'Senior petroleum engineer and certified awareness trainer.',
   },
   'أحمد سمير': {
-    specialtyAr: 'مصمم فنون بالذكاء الاصطناعي وموشن جرافيك',
-    specialtyEn: 'AI Art & Motion Graphic Designer',
+    specialtyAr: '',
+    specialtyEn: '',
     bioAr: 'مصمم فنون بالذكاء الاصطناعي وموشن جرافيك.',
     bioEn: 'AI art & motion graphic designer.',
   },
@@ -205,8 +205,8 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
     bioEn: 'Over 15 years of professional experience; I believe health is not just a diet or a temporary goal, but a long-term investment.',
   },
   'عبدالرحمن التركيت': {
-    specialtyAr: 'فنان تشكيلي',
-    specialtyEn: 'Visual Artist',
+    specialtyAr: '',
+    specialtyEn: '',
     bioAr: 'فنان تشكيلي وتربوي ومدرب معتمد TOT.',
     bioEn: 'Visual artist, educator, and certified TOT trainer.',
   },
