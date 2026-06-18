@@ -134,7 +134,8 @@
   {
     "name_ar": "فيصل الدويسان",
     "phone": "+96599650362",
-    "on_platform": true
+    "on_platform": true,
+    "bio": "كاتب ومخرج سينمائي وسفير في الأكاديمية الدولية للتنمية الذاتية."
   },
   {
     "name_ar": "م. الجازي العجمي",
@@ -203,6 +204,11 @@
   },
   {
     "name_ar": "عائشة الوايل",
+    "phone": null,
+    "on_platform": true
+  },
+  {
+    "name_ar": "أبرار العدواني",
     "phone": null,
     "on_platform": true
   }

@@ -106,6 +106,11 @@ return [
         ['ms-w-106', 'فن صناعة الفيديو باستخدام CapCut', 'زينب العوضي', '2026-06-29', '11:30', false],
         ['ms-w-107', 'حدد أهدافك بطريقة SMART', 'دانا العوضي', '2026-07-01', '12:30', false],
         ['ms-w-108', 'وظيفة أو مشروع، ليش مو الإثنين؟', 'عائشة الوايل', '2026-07-02', '12:30', false],
+        ['ms-w-109', 'التخطيط نصف النجاح', 'فيصل الدويسان', '2026-06-28', '09:30', false],
+        ['ms-w-110', 'التركيز والمشتتات', 'فيصل الدويسان', '2026-06-29', '09:30', false],
+        ['ms-w-111', 'غير الكود', 'أبرار العدواني', '2026-06-29', '11:30', false],
+        ['ms-w-112', 'Get it done not perfect', 'فيصل الدويسان', '2026-06-30', '09:30', false],
+        ['ms-w-113', 'واعي بمشاعري', 'سارة المنيس', '2026-06-30', '11:30', false],
     ],
     'title_en_by_slug' => [
         'ms-w-001' => 'Common Mistakes in Arabic Language',
@@ -203,5 +208,10 @@ return [
         'ms-w-106' => 'Video Creation with CapCut',
         'ms-w-107' => 'Set Your Goals the SMART Way',
         'ms-w-108' => 'A Job or a Project — Why Not Both?',
+        'ms-w-109' => 'Planning is Half the Success',
+        'ms-w-110' => 'Focus and Distractions',
+        'ms-w-111' => 'Change the Code',
+        'ms-w-112' => 'Get It Done, Not Perfect',
+        'ms-w-113' => 'Aware of My Feelings',
     ],
 ];
