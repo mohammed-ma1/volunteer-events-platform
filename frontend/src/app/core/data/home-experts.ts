@@ -90,6 +90,7 @@ const SOURCE_TRAINERS: SourceTrainer[] = [
   { nameAr: 'أشواق العنزي', nameEn: 'Ashwaq Al-Anzi', imageUrl: SRC_IMG_A },
   { nameAr: 'أ. زينب العوضي', nameEn: 'Zainab Al-Awadhi', imageUrl: SRC_IMG_B },
   { nameAr: 'عائشة الوايل', nameEn: 'Aisha Al-Wail', imageUrl: SRC_IMG_C },
+  { nameAr: 'أبرار العدواني', nameEn: 'Abrar Al-Adwani', imageUrl: SRC_IMG_D },
 ];
 
 // ── Local presenter photo overrides ───────────────────────────────────
@@ -266,6 +267,10 @@ const PRESENTER_INFO_OVERRIDES: Record<string, PresenterInfo> = {
   'م. الجازي العجمي': {
     bioAr: 'مستشارة ومدربة في ريادة الأعمال.',
     bioEn: 'Consultant and trainer in entrepreneurship.',
+  },
+  'فيصل الدويسان': {
+    bioAr: 'كاتب ومخرج سينمائي وسفير في الأكاديمية الدولية للتنمية الذاتية.',
+    bioEn: 'Writer, filmmaker, and ambassador at the International Academy for Self-Development.',
   },
   'زينب العوضي': {
     specialtyAr: '',
