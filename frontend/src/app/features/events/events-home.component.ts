@@ -910,7 +910,9 @@ const ENGLISH_DAY_ORDINALS = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Si
                   <h3 class="break-words text-lg font-extrabold leading-snug text-brand-900 max-md:text-base md:text-2xl">
                     {{ expertName(selectedExpert()) }}
                   </h3>
-                  <p class="mt-1 text-xs font-medium text-ink-500 md:text-sm">{{ expertSpecialty(selectedExpert()) }}</p>
+                  @if (expertSpecialty(selectedExpert())) {
+                    <p class="mt-1 text-xs font-medium text-ink-500 md:text-sm">{{ expertSpecialty(selectedExpert()) }}</p>
+                  }
                   <p class="mt-3 break-words text-sm leading-relaxed text-ink-600 max-md:mt-2 md:mt-4">
                     {{ expertBio(selectedExpert()) }}
                   </p>

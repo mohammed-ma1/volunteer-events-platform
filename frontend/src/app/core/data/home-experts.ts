@@ -27,8 +27,8 @@ const SCHEDULE = kuWorkshopSchedule as {
 // Mirror of next-levels source project's rawTrainers list. All share the same
 // role + bio. Image URLs are stock fallbacks; we override with local photos
 // where we have them.
-const SOURCE_ROLE_AR = 'مدرب معتمد';
-const SOURCE_ROLE_EN = 'Certified Trainer';
+const SOURCE_ROLE_AR = '';
+const SOURCE_ROLE_EN = '';
 const SOURCE_BIO_AR = 'مدرب خبير في مجاله يقدم ورش عمل متخصصة.';
 const SOURCE_BIO_EN = 'An expert trainer providing specialized workshops.';
 
