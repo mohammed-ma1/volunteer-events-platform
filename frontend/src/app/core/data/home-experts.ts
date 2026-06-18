@@ -29,8 +29,8 @@ const SCHEDULE = kuWorkshopSchedule as {
 // where we have them.
 const SOURCE_ROLE_AR = '';
 const SOURCE_ROLE_EN = '';
-const SOURCE_BIO_AR = 'مدرب خبير في مجاله يقدم ورش عمل متخصصة.';
-const SOURCE_BIO_EN = 'An expert trainer providing specialized workshops.';
+const SOURCE_BIO_AR = '';
+const SOURCE_BIO_EN = '';
 
 const SRC_IMG_A = 'https://vibe.filesafe.space/1775667546795098704/assets/2b5d5897-4792-47e5-a27d-ef7ceb12e3c9.png';
 const SRC_IMG_B = 'https://vibe.filesafe.space/1775667546795098704/assets/16cb75dc-c027-44b0-b98f-943ef62525ac.png';
