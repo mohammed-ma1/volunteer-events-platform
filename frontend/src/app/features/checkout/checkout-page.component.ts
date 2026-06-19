@@ -198,34 +198,67 @@ interface SummaryRow {
               </div>
               <div>
                 <label class="text-sm font-bold text-[#0a1628]" for="ph">{{ i18n.t('checkout.labelPhone') }}</label>
-                <div class="mt-1.5 flex items-stretch overflow-hidden rounded-lg border border-ink-200 bg-white focus-within:border-brand-900/40 focus-within:ring-2 focus-within:ring-brand-900/10">
-                  <select
-                    class="w-[8.5rem] shrink-0 select-none border-e border-ink-200 bg-ink-50 px-2 text-sm font-semibold text-ink-700 outline-none"
-                    dir="ltr"
-                    [value]="phoneCountryIso()"
-                    (change)="onCountryChange($event)"
-                    [attr.aria-label]="i18n.t('checkout.labelCountry')"
-                  >
-                    @for (c of countryOptions; track c.iso) {
-                      <option [value]="c.iso">{{ c.flag }} {{ c.name }} (+{{ c.dial }})</option>
-                    }
-                  </select>
-                  <span
-                    class="flex shrink-0 select-none items-center justify-center border-e border-ink-200 bg-ink-50 ps-2 pe-3 text-sm font-semibold text-ink-700"
-                    dir="ltr"
-                    aria-hidden="true"
-                  >+{{ selectedDial() }}</span>
-                  <input
-                    id="ph"
-                    class="min-w-0 flex-1 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none"
-                    type="tel"
-                    formControlName="phone"
-                    autocomplete="tel"
-                    inputmode="numeric"
-                    maxlength="15"
-                    placeholder="50000000"
-                    dir="ltr"
-                  />
+                <div class="relative mt-1.5">
+                  <div class="flex items-stretch overflow-hidden rounded-lg border border-ink-200 bg-white focus-within:border-brand-900/40 focus-within:ring-2 focus-within:ring-brand-900/10">
+                    <button
+                      type="button"
+                      class="flex shrink-0 select-none items-center gap-1.5 border-e border-ink-200 bg-ink-50 px-3 text-sm font-semibold text-ink-700 transition hover:bg-ink-100"
+                      dir="ltr"
+                      (click)="toggleCountryMenu()"
+                      [attr.aria-label]="i18n.t('checkout.labelCountry')"
+                      [attr.aria-expanded]="countryMenuOpen()"
+                    >
+                      <span class="text-base leading-none">{{ selectedCountry().flag }}</span>
+                      <span>+{{ selectedCountry().dial }}</span>
+                      <svg class="h-3.5 w-3.5 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <input
+                      id="ph"
+                      class="min-w-0 flex-1 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none"
+                      type="tel"
+                      formControlName="phone"
+                      autocomplete="tel"
+                      inputmode="numeric"
+                      maxlength="15"
+                      placeholder="50000000"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  @if (countryMenuOpen()) {
+                    <button type="button" class="fixed inset-0 z-40 cursor-default" (click)="closeCountryMenu()" aria-hidden="true"></button>
+                    <div class="absolute start-0 top-full z-50 mt-1.5 w-72 max-w-[calc(100vw-3rem)] overflow-hidden rounded-xl border border-ink-200 bg-white shadow-xl" dir="ltr">
+                      <div class="border-b border-ink-100 p-2">
+                        <input
+                          type="text"
+                          class="w-full rounded-lg border border-ink-200 px-3 py-2 text-sm text-[#0a1628] outline-none focus:border-brand-900/40 focus:ring-2 focus:ring-brand-900/10"
+                          [value]="countrySearch()"
+                          (input)="onCountrySearch($event)"
+                          [placeholder]="i18n.t('checkout.countrySearch')"
+                        />
+                      </div>
+                      <ul class="max-h-56 overflow-y-auto py-1">
+                        @for (c of filteredCountries(); track c.iso) {
+                          <li>
+                            <button
+                              type="button"
+                              class="flex w-full items-center gap-2.5 px-3 py-2 text-start text-sm transition hover:bg-ink-50"
+                              [ngClass]="c.iso === phoneCountryIso() ? 'bg-brand-50 font-semibold text-brand-900' : 'text-ink-800'"
+                              (click)="selectCountry(c.iso)"
+                            >
+                              <span class="text-base leading-none">{{ c.flag }}</span>
+                              <span class="min-w-0 flex-1 truncate">{{ c.name }}</span>
+                              <span class="shrink-0 text-ink-500">+{{ c.dial }}</span>
+                            </button>
+                          </li>
+                        } @empty {
+                          <li class="px-3 py-4 text-center text-sm text-ink-400">{{ i18n.t('checkout.countryNoResults') }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
                 </div>
                 <p class="mt-1 text-xs text-ink-500">{{ i18n.t('checkout.phoneHint') }}</p>
               </div>
@@ -760,13 +793,49 @@ export class CheckoutPageComponent {
   readonly countryOptions = COUNTRIES.map((c) => ({ ...c, flag: flagEmoji(c.iso) }));
   /** Selected country ISO (default Kuwait). */
   readonly phoneCountryIso = signal(DEFAULT_COUNTRY_ISO);
-  /** Dial code (without +) for the selected country. */
-  readonly selectedDial = computed(
-    () => COUNTRIES.find((c) => c.iso === this.phoneCountryIso())?.dial ?? '965',
-  );
+  /** Whether the country picker panel is open. */
+  readonly countryMenuOpen = signal(false);
+  /** Search text in the country picker. */
+  readonly countrySearch = signal('');
 
-  onCountryChange(ev: Event): void {
-    this.phoneCountryIso.set((ev.target as HTMLSelectElement).value);
+  /** The selected country object (with flag); falls back to the first entry. */
+  readonly selectedCountry = computed(
+    () => this.countryOptions.find((c) => c.iso === this.phoneCountryIso()) ?? this.countryOptions[0],
+  );
+  /** Dial code (without +) for the selected country. */
+  readonly selectedDial = computed(() => this.selectedCountry().dial);
+
+  /** Country list filtered by the search text (name or dial). */
+  readonly filteredCountries = computed(() => {
+    const q = this.countrySearch().trim().toLowerCase();
+    if (!q) {
+      return this.countryOptions;
+    }
+    const qDigits = q.replace(/\D+/g, '');
+    return this.countryOptions.filter(
+      (c) => c.name.toLowerCase().includes(q) || (qDigits !== '' && c.dial.includes(qDigits)),
+    );
+  });
+
+  toggleCountryMenu(): void {
+    this.countryMenuOpen.update((v) => !v);
+    if (this.countryMenuOpen()) {
+      this.countrySearch.set('');
+    }
+  }
+
+  closeCountryMenu(): void {
+    this.countryMenuOpen.set(false);
+  }
+
+  selectCountry(iso: string): void {
+    this.phoneCountryIso.set(iso);
+    this.countryMenuOpen.set(false);
+    this.countrySearch.set('');
+  }
+
+  onCountrySearch(ev: Event): void {
+    this.countrySearch.set((ev.target as HTMLInputElement).value);
   }
 
   constructor() {
