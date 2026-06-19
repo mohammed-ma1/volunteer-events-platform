@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Api\V1\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Api\V1\Admin\EnrollmentController as AdminEnrollmentController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\CartController;
 use App\Http\Controllers\Api\V1\CheckoutController;
+use App\Http\Controllers\Api\V1\CouponController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\ExpertController;
 use App\Http\Controllers\Api\V1\LearnController;
@@ -93,6 +95,14 @@ Route::prefix('v1/admin')->group(function () {
         Route::post('/orders/{uuid}/sync-tap', [AdminOrderController::class, 'syncTap']);
         Route::get('/orders/{uuid}/tap-details', [AdminOrderController::class, 'tapDetails']);
         Route::post('/orders/{uuid}/refund', [AdminOrderController::class, 'refund']);
+
+        // Coupons (literal paths before {id})
+        Route::get('/coupons/sales-report', [AdminCouponController::class, 'salesReport']);
+        Route::get('/coupons', [AdminCouponController::class, 'index']);
+        Route::post('/coupons', [AdminCouponController::class, 'store']);
+        Route::get('/coupons/{id}', [AdminCouponController::class, 'show'])->whereNumber('id');
+        Route::patch('/coupons/{id}', [AdminCouponController::class, 'update'])->whereNumber('id');
+        Route::delete('/coupons/{id}', [AdminCouponController::class, 'destroy'])->whereNumber('id');
     });
 });
 
@@ -144,6 +154,10 @@ Route::prefix('v1')->group(function () {
 
     // Experts feed for the public home page (active only, read-only).
     Route::get('/experts', [ExpertController::class, 'index']);
+
+    // Coupon validation for the checkout page (re-validated on pay).
+    Route::post('/coupons/validate', [CouponController::class, 'validateCode'])
+        ->middleware('throttle:30,1');
 
     Route::post('/carts', [CartController::class, 'store']);
 

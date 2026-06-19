@@ -429,6 +429,55 @@ interface SummaryRow {
                   }
                 </span>
               </div>
+              <!-- Coupon / discount code -->
+              <div class="pt-1">
+                @if (appliedCoupon(); as c) {
+                  <div class="flex items-center justify-between gap-2 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2">
+                    <span class="text-sm font-bold text-emerald-700" dir="ltr">{{ c.code }}</span>
+                    <button
+                      type="button"
+                      class="ve-focus-ring rounded-lg bg-red-500 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-red-600"
+                      (click)="removeCoupon()"
+                    >
+                      {{ i18n.t('checkout.couponRemove') }}
+                    </button>
+                  </div>
+                } @else {
+                  <div class="flex items-stretch gap-2">
+                    <input
+                      type="text"
+                      [value]="couponInput()"
+                      (input)="onCouponInput($event)"
+                      (keyup.enter)="applyCoupon()"
+                      [placeholder]="i18n.t('checkout.couponPlaceholder')"
+                      [ngClass]="couponInvalid() ? 'border-red-400' : 'border-ink-300'"
+                      class="ve-focus-ring min-w-0 flex-1 rounded-xl border border-dashed bg-white px-3 py-2 text-sm text-[#0a1628] placeholder:text-ink-400"
+                      dir="ltr"
+                    />
+                    <button
+                      type="button"
+                      class="ve-focus-ring rounded-xl bg-brand-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-50"
+                      [disabled]="couponBusy() || !couponInput().trim()"
+                      (click)="applyCoupon()"
+                    >
+                      {{ i18n.t('checkout.couponApply') }}
+                    </button>
+                  </div>
+                  @if (couponInvalid()) {
+                    <p class="mt-1 text-xs font-semibold text-red-600">{{ i18n.t('checkout.couponInvalid') }}</p>
+                  }
+                }
+              </div>
+
+              @if (discountAmount() > 0) {
+                <div class="flex justify-between text-emerald-700">
+                  <span class="font-semibold">{{ i18n.t('checkout.discountLine') }}</span>
+                  <span class="font-bold"
+                    >-{{ discountAmount() | number: '1.0-3' }} {{ currencySuffix(snap.currency) }}</span
+                  >
+                </div>
+              }
+
               <div class="flex items-baseline justify-between pt-2">
                 <span class="text-base font-bold text-[#0a1628]">{{ i18n.t('checkout.total') }}</span>
                 <span class="text-xl font-black text-brand-900"
@@ -643,8 +692,30 @@ export class CheckoutPageComponent {
     this.addBitaCertificate() ? CheckoutPageComponent.BITA_ADDON_PRICE : 0,
   );
 
-  /** Final amount the buyer pays — bundle price if upgrading, else cart subtotal, plus any add-ons. */
-  readonly effectiveTotal = computed(() => this.subtotalDisplay() + this.additionalFees());
+  // ── Coupon / discount code ──────────────────────────────────────────────
+  /** Raw text in the coupon input. */
+  readonly couponInput = signal('');
+  /** Applied coupon (code + percent) once validated, else null. */
+  readonly appliedCoupon = signal<{ code: string; percent: number } | null>(null);
+  /** True when the entered code was rejected (drives the "invalid code" hint). */
+  readonly couponInvalid = signal(false);
+  /** True while a validate request is in flight. */
+  readonly couponBusy = signal(false);
+
+  /** Discount amount = applied percent of (subtotal + add-ons), to 3 decimals (fils). */
+  readonly discountAmount = computed(() => {
+    const c = this.appliedCoupon();
+    if (!c) {
+      return 0;
+    }
+    const base = this.subtotalDisplay() + this.additionalFees();
+    return Math.round((base * c.percent / 100) * 1000) / 1000;
+  });
+
+  /** Final amount the buyer pays — subtotal + add-ons − coupon discount. */
+  readonly effectiveTotal = computed(() =>
+    Math.max(0, this.subtotalDisplay() + this.additionalFees() - this.discountAmount()),
+  );
 
   private idempotencyKey = createClientUuid();
   private pollSub?: Subscription;
@@ -756,6 +827,7 @@ export class CheckoutPageComponent {
       email: v.email,
       phone: localDigits ? `+965${localDigits}` : undefined,
       bita_addon: this.addBitaCertificate(),
+      coupon_code: this.appliedCoupon()?.code,
     };
 
     const locale = this.i18n.locale();
@@ -918,6 +990,48 @@ export class CheckoutPageComponent {
 
   toggleBita(ev: Event): void {
     this.addBitaSignal.set((ev.target as HTMLInputElement).checked);
+  }
+
+  /** Validate and apply the entered coupon code. */
+  applyCoupon(): void {
+    const code = this.couponInput().trim();
+    if (!code || this.couponBusy()) {
+      return;
+    }
+    this.couponBusy.set(true);
+    this.couponInvalid.set(false);
+    this.checkoutApi.validateCoupon(code).subscribe({
+      next: (res) => {
+        if (res.valid && res.code && typeof res.discount_percent === 'number') {
+          this.appliedCoupon.set({ code: res.code, percent: res.discount_percent });
+          this.couponInvalid.set(false);
+        } else {
+          this.appliedCoupon.set(null);
+          this.couponInvalid.set(true);
+        }
+        this.couponBusy.set(false);
+      },
+      error: () => {
+        this.appliedCoupon.set(null);
+        this.couponInvalid.set(true);
+        this.couponBusy.set(false);
+      },
+    });
+  }
+
+  /** Remove the applied coupon. */
+  removeCoupon(): void {
+    this.appliedCoupon.set(null);
+    this.couponInput.set('');
+    this.couponInvalid.set(false);
+  }
+
+  /** Two-way bind helper for the coupon text input. */
+  onCouponInput(ev: Event): void {
+    this.couponInput.set((ev.target as HTMLInputElement).value);
+    if (this.couponInvalid()) {
+      this.couponInvalid.set(false);
+    }
   }
 
   currencySuffix(currency: string): string {

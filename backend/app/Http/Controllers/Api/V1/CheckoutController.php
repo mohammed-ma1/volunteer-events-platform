@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -57,8 +58,17 @@ class CheckoutController extends Controller
             // Optional one-time paper-certificate add-on (+30 KD). Set true
             // when the buyer ticks the "Premium Add-on" box on checkout.
             'bita_addon' => ['sometimes', 'boolean'],
+            // Optional discount coupon code (validated server-side below).
+            'coupon_code' => ['sometimes', 'nullable', 'string', 'max:64'],
         ]);
         $bitaAddon = (bool) ($data['bita_addon'] ?? false);
+
+        // Re-validate the coupon server-side (never trust the client). An
+        // invalid/expired/inactive code is silently ignored (no discount).
+        $coupon = Coupon::findByCode($data['coupon_code'] ?? null);
+        if ($coupon !== null && ! $coupon->isRedeemable()) {
+            $coupon = null;
+        }
 
         /** @var Cart $cart */
         $cart = $request->attributes->get('cart');
@@ -77,7 +87,7 @@ class CheckoutController extends Controller
         }
 
         try {
-            $order = DB::transaction(function () use ($cart, $data, $idempotencyKey, $bitaAddon) {
+            $order = DB::transaction(function () use ($cart, $data, $idempotencyKey, $bitaAddon, $coupon) {
                 $currency = $cart->items->first()->event->currency;
 
                 $order = Order::createFresh([
@@ -116,9 +126,20 @@ class CheckoutController extends Controller
                 }
 
                 $addonAmount = $bitaAddon ? self::BITA_ADDON_PRICE : 0.0;
+                $gross = round($subtotal + $addonAmount, 3);
+
+                // Percentage discount applies to the full total (workshops + add-on).
+                $discount = 0.0;
+                if ($coupon !== null) {
+                    $discount = round($gross * ((float) $coupon->discount_percent) / 100, 3);
+                }
+
                 $order->update([
                     'subtotal' => round($subtotal, 3),
-                    'total' => round($subtotal + $addonAmount, 3),
+                    'coupon_id' => $coupon?->id,
+                    'coupon_code' => $coupon?->code,
+                    'discount_amount' => $discount,
+                    'total' => round($gross - $discount, 3),
                 ]);
 
                 return $order->fresh(['items']);
@@ -245,6 +266,11 @@ class CheckoutController extends Controller
             'uuid' => $order->uuid,
             'reference_code' => $order->invoiceReference(),
             'status' => $order->status,
+            'subtotal' => (float) $order->subtotal,
+            'discount_amount' => (float) $order->discount_amount,
+            'coupon_code' => $order->coupon_code,
+            'has_bita_addon' => (bool) $order->has_bita_addon,
+            'bita_addon_price' => (float) $order->bita_addon_price,
             'total' => (float) $order->total,
             'currency' => $order->currency,
             'email' => $order->email,

@@ -250,6 +250,11 @@ export type TranslationKey =
   | 'checkout.subtotalLine'
   | 'checkout.extraFees'
   | 'checkout.feesZero'
+  | 'checkout.couponPlaceholder'
+  | 'checkout.couponApply'
+  | 'checkout.couponInvalid'
+  | 'checkout.couponRemove'
+  | 'checkout.discountLine'
   | 'checkout.total'
   | 'checkout.payNow'
   | 'checkout.removeLine'
@@ -644,6 +649,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.subtotalLine': 'المجموع الفرعي',
     'checkout.extraFees': 'الرسوم الإضافية',
     'checkout.feesZero': '0 د.ك',
+    'checkout.couponPlaceholder': 'أضف كود الخصم',
+    'checkout.couponApply': 'تطبيق',
+    'checkout.couponInvalid': 'كود غير صالح',
+    'checkout.couponRemove': 'إزالة',
+    'checkout.discountLine': 'قيمة الخصم',
     'checkout.total': 'الإجمالي',
     'checkout.payNow': 'ادفع الآن',
     'checkout.removeLine': 'إزالة من السلة',
@@ -1054,6 +1064,11 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.subtotalLine': 'Subtotal',
     'checkout.extraFees': 'Additional fees',
     'checkout.feesZero': '0 K.D.',
+    'checkout.couponPlaceholder': 'Add discount code',
+    'checkout.couponApply': 'Apply',
+    'checkout.couponInvalid': 'Invalid code',
+    'checkout.couponRemove': 'Remove',
+    'checkout.discountLine': 'Discount',
     'checkout.total': 'Total',
     'checkout.payNow': 'Pay now',
     'checkout.removeLine': 'Remove from cart',

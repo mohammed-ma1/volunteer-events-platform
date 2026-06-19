@@ -105,6 +105,12 @@ import { CheckoutService } from '../../core/services/checkout.service';
                       </li>
                     }
                   </ul>
+                  @if (o.discount_amount && o.discount_amount > 0) {
+                    <p class="mt-3 flex justify-between border-t border-slate-100 pt-3 text-sm font-semibold text-emerald-700">
+                      <span>{{ i18n.t('checkout.discountLine') }}{{ o.coupon_code ? ' (' + o.coupon_code + ')' : '' }}</span>
+                      <span>-{{ o.discount_amount | number: '1.0-3' }} {{ i18n.currencyLabel(o.currency) }}</span>
+                    </p>
+                  }
                 </div>
 
                 <!-- Workshop Access -->

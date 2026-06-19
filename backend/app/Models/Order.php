@@ -24,6 +24,7 @@ class Order extends Model
         'status', 'subtotal', 'total', 'currency', 'tap_charge_id',
         'tap_payment_url', 'paid_at', 'receipt_email_sent_at', 'team_payment_notify_sent_at',
         'has_bita_addon', 'bita_addon_price',
+        'coupon_id', 'coupon_code', 'discount_amount',
     ];
 
     protected function casts(): array
@@ -36,6 +37,7 @@ class Order extends Model
             'team_payment_notify_sent_at' => 'datetime',
             'has_bita_addon' => 'boolean',
             'bita_addon_price' => 'decimal:3',
+            'discount_amount' => 'decimal:3',
         ];
     }
 

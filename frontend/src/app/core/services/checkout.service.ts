@@ -1,14 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CheckoutResponse, OrderSummary } from '../models/api.types';
+import { CheckoutResponse, CouponValidationResponse, OrderSummary } from '../models/api.types';
 
 @Injectable({ providedIn: 'root' })
 export class CheckoutService {
   private readonly http = inject(HttpClient);
 
+  /** Validates a coupon code; re-validated server-side on pay. */
+  validateCoupon(code: string): Observable<CouponValidationResponse> {
+    return this.http.post<CouponValidationResponse>('v1/coupons/validate', { code });
+  }
+
   startCheckout(
-    body: { email: string; customer_name: string; phone?: string; bita_addon?: boolean },
+    body: {
+      email: string;
+      customer_name: string;
+      phone?: string;
+      bita_addon?: boolean;
+      coupon_code?: string;
+    },
     idempotencyKey: string,
     checkoutLocale: 'ar' | 'en',
   ): Observable<CheckoutResponse> {
