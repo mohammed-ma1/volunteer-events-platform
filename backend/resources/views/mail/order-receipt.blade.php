@@ -98,6 +98,12 @@
                   <td align="right" style="padding:8px 0 8px 24px;font-size:14px;color:#0b1221;width:120px;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
                 </tr>
                 @endif
+                @if((float) $order->discount_amount > 0)
+                <tr>
+                  <td align="right" style="padding:8px 0;font-size:14px;color:#0f766e;">Discount{{ $order->coupon_code ? ' ('.$order->coupon_code.')' : '' }}</td>
+                  <td align="right" style="padding:8px 0 8px 24px;font-size:14px;color:#0f766e;width:120px;">-{{ number_format((float) $order->discount_amount, 3) }} {{ $order->currency }}</td>
+                </tr>
+                @endif
                 <tr>
                   <td align="right" style="padding:12px 0 0 0;font-size:16px;font-weight:700;color:#0b1221;">Total paid</td>
                   <td align="right" style="padding:12px 0 0 24px;font-size:18px;font-weight:700;color:#0f766e;">{{ number_format((float) $order->total, 3) }} {{ $order->currency }}</td>

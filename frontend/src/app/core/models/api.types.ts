@@ -65,9 +65,20 @@ export interface OrderSummary {
   /** Display reference e.g. KW-000471 */
   reference_code?: string;
   status: string;
+  subtotal?: number;
+  discount_amount?: number;
+  coupon_code?: string | null;
+  has_bita_addon?: boolean;
+  bita_addon_price?: number;
   total: number;
   currency: string;
   email: string;
   customer_name: string;
   items: { event_title: string; quantity: number; unit_price: number }[];
+}
+
+export interface CouponValidationResponse {
+  valid: boolean;
+  code?: string;
+  discount_percent?: number;
 }

@@ -58,17 +58,25 @@
         @endif
       </tbody>
     </table>
-    @if($order->has_bita_addon)
+    @if($order->has_bita_addon || (float) $order->discount_amount > 0)
       <table style="margin-top:8px;">
         <tbody>
           <tr>
             <td style="text-align:right;border:none;color:#64748b;">Workshops subtotal</td>
             <td style="text-align:right;border:none;width:140px;">{{ number_format((float) $order->subtotal, 3) }} {{ $order->currency }}</td>
           </tr>
+          @if($order->has_bita_addon)
           <tr>
             <td style="text-align:right;border:none;color:#64748b;">BITA paper certificate</td>
             <td style="text-align:right;border:none;width:140px;">{{ number_format((float) $order->bita_addon_price, 3) }} {{ $order->currency }}</td>
           </tr>
+          @endif
+          @if((float) $order->discount_amount > 0)
+          <tr>
+            <td style="text-align:right;border:none;color:#0f766e;">Discount{{ $order->coupon_code ? ' ('.$order->coupon_code.')' : '' }}</td>
+            <td style="text-align:right;border:none;width:140px;color:#0f766e;">-{{ number_format((float) $order->discount_amount, 3) }} {{ $order->currency }}</td>
+          </tr>
+          @endif
         </tbody>
       </table>
     @endif
