@@ -276,6 +276,7 @@ export type TranslationKey =
   | 'checkout.bitaAppliedNote'
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
+  | 'checkout.labelCountry'
   | 'checkout.phoneHint'
   | 'checkout.payTap'
   | 'checkout.paying'
@@ -676,7 +677,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.bitaAppliedNote': 'تمت إضافة شهادة BITA الورقية',
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
-    'checkout.phoneHint': '٨ أرقام بدون رمز الدولة (مثال: 99991234)',
+    'checkout.labelCountry': 'الدولة',
+    'checkout.phoneHint': 'اختر الدولة وأدخل رقم هاتفك بدون رمز الدولة',
     'checkout.payTap': 'الدفع عبر Tap',
     'checkout.paying': 'جاري بدء الدفع…',
     'checkout.noPaymentUrl': 'لم يُرجع رابط الدفع.',
@@ -1091,7 +1093,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.bitaAppliedNote': 'BITA paper certificate added',
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
-    'checkout.phoneHint': '8 digits without country code (e.g. 99991234)',
+    'checkout.labelCountry': 'Country',
+    'checkout.phoneHint': 'Select your country and enter your number without the country code',
     'checkout.payTap': 'Pay with Tap',
     'checkout.paying': 'Starting payment…',
     'checkout.noPaymentUrl': 'No payment URL returned.',

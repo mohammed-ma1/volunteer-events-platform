@@ -13,6 +13,7 @@ import { CheckoutService } from '../../core/services/checkout.service';
 import { EventsService } from '../../core/services/events.service';
 import { MetaPixelService } from '../../core/analytics/meta-pixel.service';
 import { ALL_PACKAGE_SLUGS, PACKAGE_100_EVENT_SLUG } from '../../core/constants/package-offer';
+import { COUNTRIES, DEFAULT_COUNTRY_ISO, flagEmoji } from '../../core/constants/country-codes';
 import { environment } from '../../../environments/environment';
 
 /** `randomUUID` is missing on non-HTTPS origins (e.g. http://droplet-ip); use RFC4122 v4 via getRandomValues when needed. */
@@ -198,11 +199,22 @@ interface SummaryRow {
               <div>
                 <label class="text-sm font-bold text-[#0a1628]" for="ph">{{ i18n.t('checkout.labelPhone') }}</label>
                 <div class="mt-1.5 flex items-stretch overflow-hidden rounded-lg border border-ink-200 bg-white focus-within:border-brand-900/40 focus-within:ring-2 focus-within:ring-brand-900/10">
+                  <select
+                    class="w-[8.5rem] shrink-0 select-none border-e border-ink-200 bg-ink-50 px-2 text-sm font-semibold text-ink-700 outline-none"
+                    dir="ltr"
+                    [value]="phoneCountryIso()"
+                    (change)="onCountryChange($event)"
+                    [attr.aria-label]="i18n.t('checkout.labelCountry')"
+                  >
+                    @for (c of countryOptions; track c.iso) {
+                      <option [value]="c.iso">{{ c.flag }} {{ c.name }} (+{{ c.dial }})</option>
+                    }
+                  </select>
                   <span
-                    class="flex shrink-0 select-none items-center justify-center border-e border-ink-200 bg-ink-50 px-3 text-sm font-semibold text-ink-700"
+                    class="flex shrink-0 select-none items-center justify-center border-e border-ink-200 bg-ink-50 ps-2 pe-3 text-sm font-semibold text-ink-700"
                     dir="ltr"
                     aria-hidden="true"
-                  >+965</span>
+                  >+{{ selectedDial() }}</span>
                   <input
                     id="ph"
                     class="min-w-0 flex-1 bg-white px-3 py-2.5 text-sm text-[#0a1628] outline-none"
@@ -210,8 +222,8 @@ interface SummaryRow {
                     formControlName="phone"
                     autocomplete="tel"
                     inputmode="numeric"
-                    maxlength="8"
-                    placeholder="9999 9999"
+                    maxlength="15"
+                    placeholder="50000000"
                     dir="ltr"
                   />
                 </div>
@@ -740,8 +752,22 @@ export class CheckoutPageComponent {
     firstName: ['', [Validators.required, Validators.maxLength(120)]],
     lastName: ['', [Validators.required, Validators.maxLength(120)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
+    phone: ['', [Validators.required, Validators.pattern(/^[0-9]{4,15}$/)]],
   });
+
+  // ── Phone country code ──────────────────────────────────────────────────
+  /** Country options (with flag) for the phone prefix dropdown. */
+  readonly countryOptions = COUNTRIES.map((c) => ({ ...c, flag: flagEmoji(c.iso) }));
+  /** Selected country ISO (default Kuwait). */
+  readonly phoneCountryIso = signal(DEFAULT_COUNTRY_ISO);
+  /** Dial code (without +) for the selected country. */
+  readonly selectedDial = computed(
+    () => COUNTRIES.find((c) => c.iso === this.phoneCountryIso())?.dial ?? '965',
+  );
+
+  onCountryChange(ev: Event): void {
+    this.phoneCountryIso.set((ev.target as HTMLSelectElement).value);
+  }
 
   constructor() {
     // Refresh first so we have an up-to-date snapshot, then fire the
@@ -825,7 +851,7 @@ export class CheckoutPageComponent {
     const body = {
       customer_name,
       email: v.email,
-      phone: localDigits ? `+965${localDigits}` : undefined,
+      phone: localDigits ? `+${this.selectedDial()}${localDigits}` : undefined,
       bita_addon: this.addBitaCertificate(),
       coupon_code: this.appliedCoupon()?.code,
     };
