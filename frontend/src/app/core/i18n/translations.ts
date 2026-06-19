@@ -277,6 +277,8 @@ export type TranslationKey =
   | 'checkout.labelEmail'
   | 'checkout.labelPhone'
   | 'checkout.labelCountry'
+  | 'checkout.countrySearch'
+  | 'checkout.countryNoResults'
   | 'checkout.phoneHint'
   | 'checkout.payTap'
   | 'checkout.paying'
@@ -678,6 +680,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.labelEmail': 'البريد الإلكتروني',
     'checkout.labelPhone': 'رقم الهاتف',
     'checkout.labelCountry': 'الدولة',
+    'checkout.countrySearch': 'ابحث عن الدولة…',
+    'checkout.countryNoResults': 'لا توجد نتائج',
     'checkout.phoneHint': 'اختر الدولة وأدخل رقم هاتفك بدون رمز الدولة',
     'checkout.payTap': 'الدفع عبر Tap',
     'checkout.paying': 'جاري بدء الدفع…',
@@ -1094,6 +1098,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'checkout.labelEmail': 'Email',
     'checkout.labelPhone': 'Phone number',
     'checkout.labelCountry': 'Country',
+    'checkout.countrySearch': 'Search country…',
+    'checkout.countryNoResults': 'No results',
     'checkout.phoneHint': 'Select your country and enter your number without the country code',
     'checkout.payTap': 'Pay with Tap',
     'checkout.paying': 'Starting payment…',
