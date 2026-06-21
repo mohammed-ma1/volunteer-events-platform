@@ -234,6 +234,36 @@ class LearnController extends Controller
     }
 
     /**
+     * DELETE /v1/learn/events/{event}/complete
+     * Undo the honor-system "I finished watching" flag so the learner can flip
+     * the control back to its default state. Idempotent — deleting a missing
+     * completion still returns the not-completed state.
+     */
+    public function unmarkEventCompleted(int $event): JsonResponse
+    {
+        $userId = Auth::guard('api')->id();
+
+        $enrollment = Enrollment::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->first();
+
+        if (! $enrollment) {
+            return response()->json(['message' => 'Not enrolled in this workshop.'], 404);
+        }
+
+        EventCompletion::where('user_id', $userId)
+            ->where('event_id', $event)
+            ->delete();
+
+        return response()->json([
+            'data' => [
+                'completed' => false,
+                'completed_at' => null,
+            ],
+        ]);
+    }
+
+    /**
      * GET /v1/learn/events/{event}/certificate
      * Streams a PDF certificate to any enrolled user. The "watched the
      * recording" gate is intentionally disabled for now — we'll re-enable it

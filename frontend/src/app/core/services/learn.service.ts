@@ -76,6 +76,13 @@ export class LearnService {
     );
   }
 
+  /** Undoes the "I finished watching" flag so the user can flip it back (idempotent). */
+  unmarkEventCompleted(eventId: number): Observable<{ data: EventCompletionState }> {
+    return this.http.delete<{ data: EventCompletionState }>(
+      `/v1/learn/events/${eventId}/complete`,
+    );
+  }
+
   /**
    * Downloads the workshop certificate as a PDF Blob. The interceptor attaches
    * the Bearer token to /v1/learn/* automatically.
