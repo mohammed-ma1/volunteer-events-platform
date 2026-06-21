@@ -91,7 +91,7 @@
   <div class="overlay field-workshop">{{ $event->title }}</div>
 
   @php
-      $issued = $completion?->completed_at?->timezone(config('app.timezone')) ?? now();
+      $issued = $event->starts_at?->copy()->timezone(config('app.timezone')) ?? now();
   @endphp
   <div class="overlay field-date">بتاريخ {{ $issued->format('d/m/Y') }}</div>
 
