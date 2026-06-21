@@ -186,9 +186,16 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
             <!-- "I completed viewing" — always available. Each completion counts
                  toward the BITA certificate request (completed_count). -->
             @if (completion()?.completed) {
-              <button type="button" disabled
-                      class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700">
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <button type="button"
+                      [disabled]="marking()"
+                      (click)="markUncompleted()"
+                      [title]="tr('اضغط للتراجع عن إكمال المشاهدة', 'Click to undo completion')"
+                      class="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                @if (marking()) {
+                  <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                } @else {
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                }
                 {{ tr('تم إكمال المشاهدة', 'You completed viewing') }}
               </button>
             } @else {
@@ -856,9 +863,33 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.marking.set(true);
     this.learnApi.markEventCompleted(ev.id).subscribe({
       next: (res) => {
-        this.completion.set(res.data);
+        // Preserve the recording URL — the toggle endpoints don't echo it back.
+        const recordingUrl = this.completion()?.recording_url ?? res.data.recording_url ?? null;
+        this.completion.set({ ...res.data, recording_url: recordingUrl });
         this.marking.set(false);
         // Completing a workshop bumps the BITA progress — refresh the card.
+        this.refreshBitaStatus();
+      },
+      error: () => {
+        this.marking.set(false);
+      },
+    });
+  }
+
+  /** Undoes a completion so the learner can flip the control back to its default
+   *  "Click here if you completed viewing" button. */
+  markUncompleted(): void {
+    const ev = this.event();
+    if (!ev || !this.isOwned() || this.marking() || !this.completion()?.completed) {
+      return;
+    }
+    this.marking.set(true);
+    this.learnApi.unmarkEventCompleted(ev.id).subscribe({
+      next: (res) => {
+        const recordingUrl = this.completion()?.recording_url ?? res.data.recording_url ?? null;
+        this.completion.set({ ...res.data, recording_url: recordingUrl });
+        this.marking.set(false);
+        // Un-completing lowers the BITA progress — refresh the card.
         this.refreshBitaStatus();
       },
       error: () => {

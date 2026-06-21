@@ -139,6 +139,7 @@ Route::prefix('v1/learn')->middleware(['auth:api', 'token.version'])->group(func
     // mark-as-watched is the prerequisite for the certificate endpoint.
     Route::get('/events/{event}/completion', [LearnController::class, 'getEventCompletion']);
     Route::post('/events/{event}/complete', [LearnController::class, 'markEventCompleted']);
+    Route::delete('/events/{event}/complete', [LearnController::class, 'unmarkEventCompleted']);
     Route::get('/events/{event}/certificate', [LearnController::class, 'downloadCertificate']);
 
     // BITA paper-certificate request (gated behind the paid add-on + completing
