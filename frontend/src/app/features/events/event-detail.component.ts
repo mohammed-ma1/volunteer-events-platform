@@ -13,8 +13,6 @@ import { BitaStatus, EventCompletionState, LearnService } from '../../core/servi
 import { catchError, of } from 'rxjs';
 
 /** Zoom join button is unlocked this many minutes before workshop start. */
-const ZOOM_UNLOCK_LEAD_MINUTES = 60;
-
 @Component({
   selector: 'app-event-detail',
   standalone: true,
@@ -125,7 +123,7 @@ const ZOOM_UNLOCK_LEAD_MINUTES = 60;
                   } @else if (workshopStatus() === 'completed') {
                     {{ tr('انتهت هذه الورشة', 'This workshop has ended') }}
                   } @else {
-                    {{ tr('سيظهر زر الانضمام عبر زوم هنا قبل بداية الورشة بساعة واحدة', 'The Zoom join button will appear here one hour before the workshop starts') }}
+                    {{ tr('سيتم إضافة رابط زوم لهذه الورشة قريباً', 'The Zoom link for this workshop will be added soon') }}
                   }
                 </p>
 
@@ -771,19 +769,15 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   /** Workshop status from the enrolled record (the public event payload doesn't include it). */
   readonly workshopStatus = computed(() => this.enrolledWorkshop()?.event.status ?? null);
 
-  /** Zoom button is unlocked from {ZOOM_UNLOCK_LEAD_MINUTES} before start until end. */
+  /** Zoom link is shown to enrolled learners as soon as it is set, and stays
+   *  available until the workshop ends (after which the recording takes over). */
   readonly zoomAvailable = computed(() => {
     const ev = this.event();
-    if (!ev || !this.isOwned()) {
+    if (!ev || !this.isOwned() || !this.zoomLink()) {
       return false;
     }
-    if (!ev.starts_at) {
-      return false;
-    }
-    const start = new Date(ev.starts_at).getTime();
-    const end = ev.ends_at ? new Date(ev.ends_at).getTime() : start + 4 * 60 * 60 * 1000;
-    const unlockAt = start - ZOOM_UNLOCK_LEAD_MINUTES * 60 * 1000;
-    return this.now() >= unlockAt && this.now() <= end;
+    const end = ev.ends_at ? new Date(ev.ends_at).getTime() : null;
+    return end === null || this.now() <= end;
   });
 
   ngOnInit(): void {
