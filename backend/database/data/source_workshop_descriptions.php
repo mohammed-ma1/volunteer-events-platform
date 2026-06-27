@@ -789,7 +789,7 @@ return [
         'instructor' => 'سحر الشمري',
     ],
     'ms-w-103' => [
-        'title' => 'ILETS Starter',
+        'title' => 'IELTS Starter',
         'title_en' => 'IELTS Starter',
         'description_ar' => 'مقدمة عملية للاستعداد لاختبار الآيلتس وأساسيات رفع الدرجة.',
         'description_en' => 'A practical introduction to preparing for the IELTS exam and the basics of raising your score.',

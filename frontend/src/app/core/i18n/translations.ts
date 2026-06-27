@@ -101,6 +101,7 @@ export type TranslationKey =
   | 'hero.stat'
   | 'hero.imageAlt'
   | 'hero.promoLine'
+  | 'hero.partnersLabel'
   | 'feat1.title'
   | 'feat1.desc'
   | 'feat2.title'
@@ -408,7 +409,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.browseWorkshops': 'تصفح الورش',
     'nav.trainers': 'المدربون والمحاضرون',
     'nav.faq': 'الأسئلة الشائعة',
-    'nav.studentLogin': 'دخول الطلاب',
+    'nav.studentLogin': 'تسجيل الدخول',
     'nav.signOut': 'تسجيل الخروج',
     'workshops.titleBefore': 'أحدث',
     'workshops.titleHighlight': 'الورش',
@@ -494,6 +495,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.stat': '100 ورشة معتمدة',
     'hero.imageAlt': 'طلاب يشاركون في ورشة تدريبية',
     'hero.promoLine': 'احصل على جميع الورش بخصم خاص · الأحد ٢٨–٦–٢٠٢٦ حتى الخميس ٢–٧–٢٠٢٦',
+    'hero.partnersLabel': 'الشريك الاستراتيجي',
     'feat1.title': 'تطوير مستمر',
     'feat1.desc': 'مسارات تعليمية متكاملة تواكب متطلبات العصر.',
     'feat2.title': 'محتوى تطبيقي',
@@ -821,7 +823,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'nav.browseWorkshops': 'Browse workshops',
     'nav.trainers': 'Trainers',
     'nav.faq': 'FAQ',
-    'nav.studentLogin': 'Student login',
+    'nav.studentLogin': 'Login',
     'nav.signOut': 'Sign out',
     'workshops.titleBefore': 'Latest',
     'workshops.titleHighlight': 'workshops',
@@ -909,6 +911,7 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'hero.imageAlt': 'Students taking part in a live training workshop',
     'hero.promoLine':
       'Special pricing on all workshops · Live week Sun 28 Jun–Thu 2 Jul 2026 (Asia/Kuwait)',
+    'hero.partnersLabel': 'Strategic Partner',
     'feat1.title': 'Continuous development',
     'feat1.desc': 'Learning paths that keep pace with today’s workplace expectations.',
     'feat2.title': 'Applied content',
