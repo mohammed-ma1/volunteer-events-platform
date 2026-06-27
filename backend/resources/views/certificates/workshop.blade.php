@@ -5,10 +5,12 @@
      resources/certificates/cert2-template.pdf, which LearnController imports as
      the page background via mpdf/FPDI (SetSourceFile + ImportPage + UseTemplate).
 
-     This view only overlays the two dynamic fields on top of that template:
+     This view only overlays the dynamic fields on top of that template:
 
-       1. Trainee name    — in the gap between "بأن المتدرب" and "قد حضر الورشة"
-       2. Workshop title  — under "قد حضر الورشة التدريبيه بعنوان"
+       1. Trainee name      — in the gap between "بأن المتدرب" and "قد حضر الورشة"
+       2. Workshop title    — under "قد حضر الورشة التدريبيه بعنوان"
+       3. Issue date        — the related workshop's start date
+       4. Workshop presenter — under the "مقدم الورشة" label (bottom-left)
 
      Page: A4 landscape (297mm × 210mm), zero margins so the overlay coordinates
      line up with the imported template. mpdf shapes Arabic correctly and renders
@@ -69,6 +71,19 @@
       letter-spacing: 0.3pt;
     }
 
+    /* Workshop presenter — sits just under the "مقدم الورشة" label on the
+       bottom-left of the template (mirror of the CEO signature block on the
+       right). Centred over the label (label centre ≈ 51.5mm). */
+    .field-presenter {
+      top: 173mm;
+      left: 0;
+      width: 103mm;
+      font-size: 13pt;
+      font-weight: bold;
+      direction: rtl;
+      letter-spacing: 0.3pt;
+    }
+
     /* Verification line — discreet, above the bottom gold ornament strip. */
     .verify {
       position: absolute;
@@ -94,6 +109,8 @@
       $issued = $event->starts_at?->copy()->timezone(config('app.timezone')) ?? now();
   @endphp
   <div class="overlay field-date">بتاريخ {{ $issued->format('d/m/Y') }}</div>
+
+  <div class="overlay field-presenter">{{ $event->host_name }}</div>
 
   <div class="verify">Certificate No. {{ $certNo }}</div>
 
