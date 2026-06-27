@@ -129,9 +129,19 @@ import { catchError, of } from 'rxjs';
 
                 @if (zoomAvailable() && zoomLink()) {
                   <a [href]="zoomLink()!" target="_blank" rel="noopener"
-                     class="mt-1 inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition active:scale-[0.98]">
-                    <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    {{ tr('انضم عبر زوم', 'Join via Zoom') }}
+                     class="group relative mt-1 inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#2D8CFF] via-[#2563eb] to-[#4f46e5] px-7 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-500/40 active:scale-[0.97] motion-safe:animate-ve-cta-ring">
+                    <!-- hover shimmer sweep -->
+                    <span
+                      class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full motion-reduce:hidden"
+                      aria-hidden="true"
+                    ></span>
+                    <!-- live "ready" pulse dot -->
+                    <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
+                      <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80 opacity-75 motion-reduce:animate-none"></span>
+                      <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span>
+                    </span>
+                    <svg class="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span class="relative">{{ tr('انضم عبر زوم', 'Join via Zoom') }}</span>
                   </a>
                 } @else {
                   <button type="button" disabled
