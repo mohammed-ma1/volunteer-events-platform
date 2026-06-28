@@ -106,7 +106,8 @@ import { catchError, of } from 'rxjs';
               <p class="text-sm leading-relaxed text-slate-600">{{ body(ev) }}</p>
             </section>
 
-            <!-- Live broadcast link -->
+            <!-- Live broadcast link — hidden once the workshop has ended. -->
+            @if (!workshopEnded()) {
             <section class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
               <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('رابط البث المباشر', 'Live broadcast link') }}</h3>
               <div class="flex flex-col items-center gap-3 py-2">
@@ -152,6 +153,7 @@ import { catchError, of } from 'rxjs';
                 }
               </div>
             </section>
+            }
 
             <!-- Recording: real player when an URL is set, dashed placeholder otherwise. -->
             @if (recordingUrl(); as recUrl) {
@@ -778,6 +780,16 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   /** Workshop status from the enrolled record (the public event payload doesn't include it). */
   readonly workshopStatus = computed(() => this.enrolledWorkshop()?.event.status ?? null);
+
+  /** True once the workshop is over (status completed or its end time has passed).
+   *  Used to drop the now-irrelevant "Live broadcast link" (Zoom) section. */
+  readonly workshopEnded = computed(() => {
+    if (this.workshopStatus() === 'completed') {
+      return true;
+    }
+    const ev = this.event();
+    return !!ev?.ends_at && this.now() > new Date(ev.ends_at).getTime();
+  });
 
   /** Zoom link is shown to enrolled learners as soon as it is set, and stays
    *  available until the workshop ends (after which the recording takes over). */
