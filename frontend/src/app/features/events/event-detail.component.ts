@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe, NgClass } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ import { catchError, of } from 'rxjs';
 @Component({
   selector: 'app-event-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe, DecimalPipe, NgClass],
+  imports: [RouterLink, DatePipe, DecimalPipe, NgClass, NgTemplateOutlet],
   template: `
     @if (error()) {
       <p class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
@@ -155,43 +155,51 @@ import { catchError, of } from 'rxjs';
             </section>
             }
 
-            <!-- Recording: real player when an URL is set, dashed placeholder otherwise. -->
-            @if (recordingUrl(); as recUrl) {
-              <section class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
-                <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-                <div class="overflow-hidden rounded-xl bg-black ring-1 ring-slate-200">
-                  @if (isStreamUrl(recUrl)) {
-                    <iframe
-                      class="block aspect-video w-full"
-                      [src]="safeStreamUrl(recUrl)"
-                      allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                      allowfullscreen
-                      loading="lazy"
-                      referrerpolicy="no-referrer"
-                    ></iframe>
-                  } @else {
-                    <video
-                      class="block aspect-video w-full"
-                      [src]="recUrl"
-                      controls
-                      controlsList="nodownload"
-                      preload="metadata"
-                      playsinline
-                    ></video>
-                  }
-                </div>
-              </section>
-            } @else {
-              <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
-                <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-                <div class="flex flex-col items-center gap-3 py-10">
-                  <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-                    <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <!-- Recording: defined once here, rendered in the main column on
+                 desktop and under the Certificate card on mobile (sidebar). -->
+            <ng-template #recordingTpl>
+              @if (recordingUrl(); as recUrl) {
+                <section class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
+                  <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                  <div class="overflow-hidden rounded-xl bg-black ring-1 ring-slate-200">
+                    @if (isStreamUrl(recUrl)) {
+                      <iframe
+                        class="block aspect-video w-full"
+                        [src]="safeStreamUrl(recUrl)"
+                        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                        allowfullscreen
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      ></iframe>
+                    } @else {
+                      <video
+                        class="block aspect-video w-full"
+                        [src]="recUrl"
+                        controls
+                        controlsList="nodownload"
+                        preload="metadata"
+                        playsinline
+                      ></video>
+                    }
                   </div>
-                  <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
-                </div>
-              </section>
-            }
+                </section>
+              } @else {
+                <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
+                  <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                  <div class="flex flex-col items-center gap-3 py-10">
+                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                      <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
+                  </div>
+                </section>
+              }
+            </ng-template>
+
+            <!-- Desktop: recording stays in the wide main column. -->
+            <div class="hidden lg:block">
+              <ng-container [ngTemplateOutlet]="recordingTpl"></ng-container>
+            </div>
 
             <!-- "I completed viewing" — always available. Each completion counts
                  toward the BITA certificate request (completed_count). -->
@@ -274,6 +282,11 @@ import { catchError, of } from 'rxjs';
                   </span>
                 </div>
               }
+            </div>
+
+            <!-- Mobile: recording shown directly under the Certificate card. -->
+            <div class="lg:hidden">
+              <ng-container [ngTemplateOutlet]="recordingTpl"></ng-container>
             </div>
 
             <!-- BITA accredited paper-certificate request. Only shown when the
