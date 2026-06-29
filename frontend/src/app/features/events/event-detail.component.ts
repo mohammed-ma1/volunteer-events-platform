@@ -158,77 +158,79 @@ import { catchError, of } from 'rxjs';
             <!-- Recording: defined once here, rendered in the main column on
                  desktop and under the Certificate card on mobile (sidebar). -->
             <ng-template #recordingTpl>
-              @if (recordingUrl(); as recUrl) {
-                <section class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
-                  <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-                  <div class="overflow-hidden rounded-xl bg-black ring-1 ring-slate-200">
-                    @if (isStreamUrl(recUrl)) {
-                      <iframe
-                        class="block aspect-video w-full"
-                        [src]="safeStreamUrl(recUrl)"
-                        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                        allowfullscreen
-                        loading="lazy"
-                        referrerpolicy="no-referrer"
-                      ></iframe>
-                    } @else {
-                      <video
-                        class="block aspect-video w-full"
-                        [src]="recUrl"
-                        controls
-                        controlsList="nodownload"
-                        preload="metadata"
-                        playsinline
-                      ></video>
-                    }
-                  </div>
-                </section>
-              } @else {
-                <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
-                  <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
-                  <div class="flex flex-col items-center gap-3 py-10">
-                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-                      <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div class="space-y-6">
+                @if (recordingUrl(); as recUrl) {
+                  <section class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
+                    <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                    <div class="overflow-hidden rounded-xl bg-black ring-1 ring-slate-200">
+                      @if (isStreamUrl(recUrl)) {
+                        <iframe
+                          class="block aspect-video w-full"
+                          [src]="safeStreamUrl(recUrl)"
+                          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                          allowfullscreen
+                          loading="lazy"
+                          referrerpolicy="no-referrer"
+                        ></iframe>
+                      } @else {
+                        <video
+                          class="block aspect-video w-full"
+                          [src]="recUrl"
+                          controls
+                          controlsList="nodownload"
+                          preload="metadata"
+                          playsinline
+                        ></video>
+                      }
                     </div>
-                    <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
-                  </div>
-                </section>
-              }
+                  </section>
+                } @else {
+                  <section class="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6">
+                    <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('تسجيل الورشة', 'Workshop recording') }}</h3>
+                    <div class="flex flex-col items-center gap-3 py-10">
+                      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+                        <svg class="h-7 w-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </div>
+                      <p class="max-w-xs text-center text-sm text-slate-500">{{ tr('سيتم إضافة تسجيل الورشة هنا لمشاهدتها لاحقاً بعد انتهائها', 'The workshop recording will be added here so you can watch it later after the session ends') }}</p>
+                    </div>
+                  </section>
+                }
+
+                <!-- "I completed viewing" — kept with the recording so it follows
+                     it in both layouts. Each completion counts toward BITA. -->
+                @if (completion()?.completed) {
+                  <button type="button"
+                          [disabled]="marking()"
+                          (click)="markUncompleted()"
+                          [title]="tr('اضغط للتراجع عن إكمال المشاهدة', 'Click to undo completion')"
+                          class="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                    @if (marking()) {
+                      <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                    } @else {
+                      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    }
+                    {{ tr('تم إكمال المشاهدة', 'You completed viewing') }}
+                  </button>
+                } @else {
+                  <button type="button"
+                          [disabled]="marking()"
+                          (click)="markCompleted()"
+                          class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
+                    @if (marking()) {
+                      <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
+                    } @else {
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    }
+                    {{ tr('اضغط هنا إذا أكملت المشاهدة', 'Click here if you completed viewing') }}
+                  </button>
+                }
+              </div>
             </ng-template>
 
-            <!-- Desktop: recording stays in the wide main column. -->
+            <!-- Desktop: recording + watch button stay in the wide main column. -->
             <div class="hidden lg:block">
               <ng-container [ngTemplateOutlet]="recordingTpl"></ng-container>
             </div>
-
-            <!-- "I completed viewing" — always available. Each completion counts
-                 toward the BITA certificate request (completed_count). -->
-            @if (completion()?.completed) {
-              <button type="button"
-                      [disabled]="marking()"
-                      (click)="markUncompleted()"
-                      [title]="tr('اضغط للتراجع عن إكمال المشاهدة', 'Click to undo completion')"
-                      class="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3.5 text-sm font-bold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-100 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
-                @if (marking()) {
-                  <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
-                } @else {
-                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                }
-                {{ tr('تم إكمال المشاهدة', 'You completed viewing') }}
-              </button>
-            } @else {
-              <button type="button"
-                      [disabled]="marking()"
-                      (click)="markCompleted()"
-                      class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-900 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 disabled:cursor-wait disabled:opacity-60 active:scale-[0.99]">
-                @if (marking()) {
-                  <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="3" class="opacity-25"/><path stroke-linecap="round" stroke-width="3" d="M21 12a9 9 0 01-9 9" class="opacity-75"/></svg>
-                } @else {
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                }
-                {{ tr('اضغط هنا إذا أكملت المشاهدة', 'Click here if you completed viewing') }}
-              </button>
-            }
           </div>
 
           <!-- Sidebar -->
