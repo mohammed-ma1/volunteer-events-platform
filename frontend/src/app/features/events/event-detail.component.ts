@@ -97,18 +97,20 @@ import { catchError, of } from 'rxjs';
         </div>
 
         <!-- Body grid -->
-        <div class="mt-8 grid gap-6 lg:grid-cols-[1fr,340px]">
-          <!-- Main column -->
-          <div class="space-y-6 order-2 lg:order-1">
+        <div class="mt-8 flex flex-col gap-6 lg:grid lg:grid-cols-[1fr,340px]">
+          <!-- Main column. On mobile the wrapper uses display:contents so its
+               children join the single flex column and can be ordered freely;
+               on lg it becomes the left grid column again. -->
+          <div class="contents lg:block lg:space-y-6 lg:order-1">
             <!-- About -->
-            <section class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <section class="order-5 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
               <h2 class="mb-3 text-base font-bold text-slate-900">{{ tr('عن الورشة', 'About this workshop') }}</h2>
               <p class="text-sm leading-relaxed text-slate-600">{{ body(ev) }}</p>
             </section>
 
             <!-- Live broadcast link — hidden once the workshop has ended. -->
             @if (!workshopEnded()) {
-            <section class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <section class="order-3 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
               <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('رابط البث المباشر', 'Live broadcast link') }}</h3>
               <div class="flex flex-col items-center gap-3 py-2">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
@@ -227,15 +229,16 @@ import { catchError, of } from 'rxjs';
               </div>
             </ng-template>
 
-            <!-- Desktop: recording + watch button stay in the wide main column. -->
-            <div class="hidden lg:block">
+            <!-- Recording + watch button (single instance; ordered per layout). -->
+            <div class="order-4">
               <ng-container [ngTemplateOutlet]="recordingTpl"></ng-container>
             </div>
           </div>
 
-          <!-- Sidebar -->
-          <aside class="space-y-4 order-1 lg:order-2">
-            <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+          <!-- Sidebar. Same display:contents trick on mobile so its cards can be
+               interleaved with the main-column sections via order utilities. -->
+          <aside class="contents lg:block lg:space-y-4 lg:order-2">
+            <div class="order-1 rounded-2xl border-2 border-emerald-200 bg-emerald-50 p-4 shadow-sm">
               <div class="flex items-center justify-center gap-2 text-emerald-700">
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                 <span class="text-sm font-bold">{{ tr('أنت مسجّل في هذه الورشة', 'You are enrolled in this workshop') }}</span>
@@ -243,7 +246,7 @@ import { catchError, of } from 'rxjs';
             </div>
 
             <button type="button"
-                    class="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                    class="order-2 flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                     (click)="goBackToMyWorkshops()">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
               {{ tr('العودة إلى ورشي', 'Back to My Workshops') }}
@@ -251,7 +254,7 @@ import { catchError, of } from 'rxjs';
 
             <!-- Certificate card. Yellow CTA matches the design; clicking before
                  marking as watched shows a red toast instead of calling the API. -->
-            <div class="rounded-2xl border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-5 shadow-sm">
+            <div class="order-7 rounded-2xl border border-amber-200 bg-gradient-to-b from-amber-50 to-white p-5 shadow-sm">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
                   <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M5 7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2l-3 3-3-3H7a2 2 0 01-2-2V7z"/></svg>
@@ -286,18 +289,13 @@ import { catchError, of } from 'rxjs';
               }
             </div>
 
-            <!-- Mobile: recording shown directly under the Certificate card. -->
-            <div class="lg:hidden">
-              <ng-container [ngTemplateOutlet]="recordingTpl"></ng-container>
-            </div>
-
             <!-- BITA accredited paper-certificate request. Only shown when the
                  learner bought the add-on; the button gates on completing the
                  required number of workshops via an animated modal. -->
             @if (bitaStatus(); as bs) {
               @if (bs.eligible_purchase) {
                 <div
-                  class="relative overflow-hidden rounded-2xl border p-5 shadow-sm motion-safe:animate-ve-fade-up"
+                  class="order-8 relative overflow-hidden rounded-2xl border p-5 shadow-sm motion-safe:animate-ve-fade-up"
                   [ngClass]="bs.requested_at
                     ? 'border-emerald-200 bg-gradient-to-b from-emerald-50 to-white'
                     : 'border-amber-200 bg-gradient-to-b from-amber-50 via-white to-amber-50/40'"
@@ -367,7 +365,7 @@ import { catchError, of } from 'rxjs';
               }
             }
 
-            <div class="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <div class="order-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
               <h3 class="mb-4 text-sm font-bold text-slate-900">{{ tr('تفاصيل', 'Details') }}</h3>
               <div class="space-y-4">
                 @if (hostName(); as h) {
