@@ -325,14 +325,15 @@ export class EventCardComponent {
   }
 
   displayLocation(): string | null {
+    const recorded = this.i18n.locale() === 'ar' ? 'مسجلة' : 'Recorded';
     if (this.i18n.locale() === 'ar') {
-      return this.event.locationAr ?? this.event.location;
+      return this.appendRecordedLabel(this.event.locationAr ?? this.event.location, recorded);
     }
     const en = this.event.location_en?.trim();
     if (en && en.length > 0) {
-      return en;
+      return this.appendRecordedLabel(en, recorded);
     }
-    return this.event.location;
+    return this.appendRecordedLabel(this.event.location, recorded);
   }
 
   categoryLabel(): string {
@@ -372,6 +373,17 @@ export class EventCardComponent {
       return null;
     }
     return trimmed;
+  }
+
+  private appendRecordedLabel(value: string | null | undefined, recorded: string): string | null {
+    const location = value?.trim();
+    if (!location) {
+      return recorded;
+    }
+    if (location.includes(recorded) || /\brecorded\b/i.test(location)) {
+      return location;
+    }
+    return `${location} + ${recorded}`;
   }
 
   private looksArabic(value: string): boolean {
