@@ -108,55 +108,6 @@ import { catchError, of } from 'rxjs';
               <p class="text-sm leading-relaxed text-slate-600">{{ body(ev) }}</p>
             </section>
 
-            <!-- Live broadcast link — hidden once the workshop has ended. -->
-            @if (!workshopEnded()) {
-            <section class="order-3 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-              <h3 class="mb-4 text-base font-bold text-slate-900">{{ tr('رابط البث المباشر', 'Live broadcast link') }}</h3>
-              <div class="flex flex-col items-center gap-3 py-2">
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
-                  @if (zoomAvailable()) {
-                    <svg class="h-5 w-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
-                  } @else {
-                    <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v3M5 11h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2z"/></svg>
-                  }
-                </div>
-                <p class="max-w-xs text-center text-sm text-slate-500">
-                  @if (zoomAvailable()) {
-                    {{ tr('الجلسة جاهزة للانضمام عبر زوم', 'The session is ready — join via Zoom') }}
-                  } @else if (workshopStatus() === 'completed') {
-                    {{ tr('انتهت هذه الورشة', 'This workshop has ended') }}
-                  } @else {
-                    {{ tr('سيتم إضافة رابط زوم لهذه الورشة قريباً', 'The Zoom link for this workshop will be added soon') }}
-                  }
-                </p>
-
-                @if (zoomAvailable() && zoomLink()) {
-                  <a [href]="zoomLink()!" target="_blank" rel="noopener"
-                     class="group relative mt-1 inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#2D8CFF] via-[#2563eb] to-[#4f46e5] px-7 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-blue-500/40 active:scale-[0.97] motion-safe:animate-ve-cta-ring">
-                    <!-- hover shimmer sweep -->
-                    <span
-                      class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full motion-reduce:hidden"
-                      aria-hidden="true"
-                    ></span>
-                    <!-- live "ready" pulse dot -->
-                    <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
-                      <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80 opacity-75 motion-reduce:animate-none"></span>
-                      <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span>
-                    </span>
-                    <svg class="relative h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    <span class="relative">{{ tr('انضم عبر زوم', 'Join via Zoom') }}</span>
-                  </a>
-                } @else {
-                  <button type="button" disabled
-                          class="mt-1 inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-400">
-                    <svg class="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                    {{ tr('انضمام عبر زوم', 'Join via Zoom') }}
-                  </button>
-                }
-              </div>
-            </section>
-            }
-
             <!-- Recording: defined once here, rendered in the main column on
                  desktop and under the Certificate card on mobile (sidebar). -->
             <ng-template #recordingTpl>
