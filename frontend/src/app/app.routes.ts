@@ -1,30 +1,22 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from './core/auth/auth.guard';
-import { comingSoonGuard } from './core/launch/coming-soon.guard';
 
 export const routes: Routes = [
-  // "Available soon" landing (full-page, always reachable for preview)
-  {
-    path: 'coming-soon',
-    loadComponent: () =>
-      import('./features/pages/coming-soon.component').then((m) => m.ComingSoonComponent),
-  },
   // Auth routes (full-page, outside shell)
   {
     path: 'login',
-    canActivate: [comingSoonGuard, guestGuard],
+    canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'forgot-password',
-    canActivate: [comingSoonGuard, guestGuard],
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./features/auth/forgot-password.component').then((m) => m.ForgotPasswordComponent),
   },
   // Main shell
   {
     path: '',
-    canActivate: [comingSoonGuard],
     loadComponent: () => import('./core/shell/shell.component').then((m) => m.ShellComponent),
     children: [
       {
