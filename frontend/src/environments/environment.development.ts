@@ -14,9 +14,4 @@ export const environment = {
   tapPreferFullPageRedirectOnLocalhost: true,
   /** Meta (Facebook) Pixel ID. Kept empty in dev so local clicks don't pollute Ads Manager. */
   metaPixelId: '',
-  /**
-   * Coming-soon mode. Kept false in dev so the full site is reachable while building;
-   * you can still preview the landing page directly at /coming-soon.
-   */
-  comingSoon: false,
 };
