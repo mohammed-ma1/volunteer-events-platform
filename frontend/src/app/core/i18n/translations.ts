@@ -389,7 +389,10 @@ export type TranslationKey =
   | 'careerPage.step1'
   | 'careerPage.step2'
   | 'careerPage.step3'
-  | 'careerPage.ctaBrowse';
+  | 'careerPage.ctaBrowse'
+  | 'siteDisabled.title'
+  | 'siteDisabled.body'
+  | 'siteDisabled.contact';
 
 export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
   ar: {
@@ -805,6 +808,9 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'bitaCert.modalSuccessBody': 'لقد استلمنا طلب شهادة BITA المعتمدة. سيقوم فريقنا بمعالجة طلبك والتواصل معك قريباً بخصوص شهادتك الورقية.',
     'bitaCert.modalSuccessCta': 'رائع، شكراً لكم',
     'bitaCert.requestErrorToast': 'تعذّر إرسال طلب الشهادة الآن، يرجى المحاولة مرة أخرى',
+    'siteDisabled.title': 'الموقع متوقف مؤقتاً',
+    'siteDisabled.body': 'نعتذر، منصة Next Levels غير متاحة حالياً. سنعود قريباً.',
+    'siteDisabled.contact': 'للاستفسار تواصلوا معنا على واتساب أو البريد الإلكتروني.',
   },
   en: {
     'nav.home': 'Home',
@@ -1225,5 +1231,8 @@ export const TRANSLATIONS: Record<Locale, Record<TranslationKey, string>> = {
     'bitaCert.modalSuccessBody': 'We have received your BITA accredited certificate request. Our team will process it and reach out to you soon about your paper certificate.',
     'bitaCert.modalSuccessCta': 'Awesome, thank you',
     'bitaCert.requestErrorToast': 'We could not submit your certificate request just now, please try again',
+    'siteDisabled.title': 'The site is temporarily unavailable',
+    'siteDisabled.body': 'Sorry — the Next Levels platform is currently offline. We’ll be back soon.',
+    'siteDisabled.contact': 'For questions, reach us on WhatsApp or email.',
   },
 };

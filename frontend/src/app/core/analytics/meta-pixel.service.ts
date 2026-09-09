@@ -40,6 +40,9 @@ export class MetaPixelService {
     if (this.initialized) {
       return;
     }
+    if (environment.siteDisabled) {
+      return;
+    }
     const pixelId = environment.metaPixelId;
     if (!pixelId) {
       return;
